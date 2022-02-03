@@ -7,8 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	안녕하세요!
-	안녕하세요!
-	안녕ㅎ사ㅔ요~~~휴ㅠ!!
+
+	<!-- 테스트 용 -->
+	<jsp:forward page="WEB-INF/views/test.jsp" />
+	
 </body>
 </html>
