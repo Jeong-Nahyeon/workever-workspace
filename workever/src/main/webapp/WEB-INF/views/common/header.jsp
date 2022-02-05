@@ -5,6 +5,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	.img-circle{
+		width: 30px;
+		height: 30px;
+		margin-left: 5px;
+	}
+	#line-area{
+		width: 0; height: auto;
+		margin-left: 10px;
+		border-right: 1px solid #e3e6f0;
+	}
+
+	#profile-image, #profile-icon{
+		text-align: center;
+		margin: 20px 20px;
+	}
+	#profile-image img{width: 30px; height: 30px;}
+
+	#company-area a{color: lightslategray;}
+	#company-font{
+		margin-left: 10px;
+		font-weight: 900;
+	}
+
+</style>
 </head>
 <body>
 	<!-- Preloader -->
@@ -19,13 +44,14 @@
 	    <li class="nav-item">
 	      <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 	    </li>
-	    <li class="nav-item d-none d-sm-inline-block">
-	      <a href="index3.html" class="nav-link">Home</a>
-	    </li>
-	    <li class="nav-item d-none d-sm-inline-block">
-	      <a href="#" class="nav-link">Contact</a>
-	    </li>
 	  </ul>
+
+	  <div id="company-area" style="margin-left:50px">
+		<a class="nav-link" href="">
+			<i class="far fa-building fa-lg"></i>
+			<span id="company-font">당근나라</span>
+		</a>
+	  </div>
 	
 	  <!-- Right navbar links -->
 	  <ul class="navbar-nav ml-auto">
@@ -109,6 +135,7 @@
 	        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
 	      </div>
 	    </li>
+
 	    <!-- Notifications Dropdown Menu -->
 	    <li class="nav-item dropdown">
 	      <a class="nav-link" data-toggle="dropdown" href="#">
@@ -136,16 +163,33 @@
 	        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
 	      </div>
 	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-	        <i class="fas fa-expand-arrows-alt"></i>
-	      </a>
-	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-	        <i class="fas fa-th-large"></i>
-	      </a>
-	    </li>
+	    
+		<!-- 프로필 영역 -->
+		<div id="line-area"></div>
+		<li class="nav-item dropdown">
+			<a class="nav-link" data-toggle="dropdown" href="#">
+				<span>Alexander Pierce</span>
+				<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+			</a>
+			<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+				<div id="profile-image">
+					<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+					<br>
+					<span>Alexander Pierce</span>
+				</div>
+				<div style="height: 0; border-bottom: 1px solid #e3e6f0;"></div>
+				<div id="profile-icon">
+					<a class="nav-link" href="">
+						<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+						<span style="font-size: 11px;">마이페이지</span>
+					</a>
+					<a class="nav-link" href="">
+						<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+						<span style="font-size: 11px;">로그아웃</span>
+					</a>
+				</div>
+			</div>
+		</li>
 	  </ul>
 	</nav>
 	<!-- /.navbar -->
