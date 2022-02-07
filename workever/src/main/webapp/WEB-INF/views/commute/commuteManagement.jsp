@@ -9,24 +9,24 @@
 <style>
 
 	.cm_title {
-		margin: 20px 0 0 20px;
+		padding: 20px 0 0 20px;
 	}
 
 	.cm_underLine {
 		border: 0px; /* 기본 hr의 border 제거 */
 		height: 2px; /* 두께 지정 */
+		width: 98%;
 		background-color: lightgray;
 		margin-bottom: 50px;
 	}
 
 	.cmBtn {
 		margin: 20px 5px;
-		width: 130px;
+		width: 150px;
 		height: 35px;
 		line-height: 35px;
 		border: 0px;
 		font-weight: bold;
-		color: white;
 		border-radius: 5px;
 	}
 
@@ -37,10 +37,12 @@
 
 	#startBtn {
 		background-color: #4E73DF;
+		color: white;
 	}
 
 	#endBtn {
 		background-color: #858796;
+		color: white;
 	}
 
 	#display_date {
@@ -53,9 +55,39 @@
 	}
 
 	.sm_title {
-		font-size: 15px;
+		font-size: 20px;
 		font-weight: bold;
 		margin: 50px;
+	}
+
+	.dateInput {
+		font-size: 20px;
+		margin: 0 20px 0 0;
+	}
+
+	input[type="radio"] {
+		transform: scale(1.5);
+		margin: 0 10px 0 0;
+	}
+
+	label {
+		font-size: 20px;
+		margin: 0 20px 0 0;
+	}
+
+	#cmSelBtn {
+		margin: 20px 0px 0px 0px;
+		width: 150px;
+		height: 35px;
+		line-height: 35px;
+		border: 1px solid lightgray;
+		font-weight: bold;
+		border-radius: 5px;
+	}
+
+	#cmSelBtn:hover {
+		cursor: pointer;
+		filter: brightness(85%);
 	}
 
 
@@ -138,24 +170,133 @@
 				<button class="cmBtn" id="startBtn" >출 근</button>
 				<button class="cmBtn" id="endBtn">퇴 근</button>
 			</div>
-		</div>
-		<!-- /.content-wrapper -->
+
+			<h4 class="cm_title">출퇴근 조회</h4>
+			<hr class="cm_underLine"> <br>
+	
+			<div id="cm_select" style="width: 800px; margin: auto;">
+				<div>
+					<span class="sm_title">기간 조회</span>
+					<input type="date" class="dateInput"> <span class="dateInput">~</span> <input type="date" class="dateInput"> 
+				</div>
+
+				<br>
+				
+				<div>
+					<span class="sm_title" style="margin-bottom: 50px;">근무 상태</span>
+					<label><input type="radio" name="cm_status" id="normal" value="normal" checked="checked">정상</label>
+					<label><input type="radio" name="cm_status" id="tardiness" value="tardiness">지각</label>
+					<label><input type="radio" name="cm_status" value="absence">결근</label>
+					<label><input type="radio" name="cm_status" value="earlyLeave">조퇴</label>
+					<label><input type="radio" name="cm_status" value="leave">휴가</label>
+					<button id="cmSelBtn">조 회</button>
+				</div>
+				
+			</div>
+
+			<br><br><br><br>
 
 
-
-
-
-		<h4 class="cm_title">출퇴근 조회</h4>
-		<hr class="cm_underLine">
-
-		<div>
-			<span class="sm_title">기간 조회</span>
-			<input type="date">
+			
+			
+			<div class="select-area" style="width: 80%; margin: auto;">
+				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+			
+				<table class="table" style="text-align: center;">
+				  	<thead>
+						<tr>
+						<th width="20%">날짜</th>
+						<th width="20%">근무 상태</th>
+						<th width="20%">출근 시간</th>
+						<th width="20%">퇴근 시간</th>
+						<th width="20%">근무 시간</th>
+						</tr>
+				  	</thead>
+				  	<tbody>
+						<tr>
+						<td>2022-01-19</td>
+						<td>정상</td>
+						<td>09:00:53</td>
+						<td>18:00:10</td>
+						<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+						<tr>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
+						</tr>
+				  	</tbody>
+				</table>
+			</div>
 
 			<br>
-			
-			<span class="sm_title">근무 상태</span>
+
+			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
+				페이징
+			</div>
+
+
 		</div>
+		<!-- /.content-wrapper -->
+		
 				
 		<jsp:include page="../common/footer.jsp" />
 	</div>
