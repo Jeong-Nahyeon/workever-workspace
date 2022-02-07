@@ -143,13 +143,13 @@
 				</a>
 				<ul class="nav nav-treeview">
 				  <li class="nav-item">
-					<a href="./index.html" class="nav-link">
+					<a href="list.pro" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>프로젝트 조회</p>
 					</a>
 				  </li>
 				  <li class="nav-item">
-					<a href="./index2.html" class="nav-link">
+					<a href="" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>내 프로젝트</p>
 					  <i class="right fas fa-angle-left"></i>

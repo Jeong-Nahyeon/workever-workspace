@@ -14,7 +14,10 @@
 	
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
-	  
+	
+	<div class>
+	
+	</div>
 	</div>
 	<!-- /.content-wrapper -->
 	
