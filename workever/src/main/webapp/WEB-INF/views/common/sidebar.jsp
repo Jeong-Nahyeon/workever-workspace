@@ -143,6 +143,13 @@
 				</a>
 				<ul class="nav nav-treeview">
 				  <li class="nav-item">
+					<a href="enroll.pro" class="nav-link">
+					  &nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;
+					  <p>새 프로젝트</p>
+					</a>
+				  </li>
+				
+				  <li class="nav-item">
 					<a href="list.pro" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>프로젝트 조회</p>

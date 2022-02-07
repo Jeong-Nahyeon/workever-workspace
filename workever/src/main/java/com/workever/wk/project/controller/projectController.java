@@ -12,5 +12,9 @@ public class projectController {
 		
 	}
 	
-
+	@RequestMapping("enroll.pro")
+	public String enrollProject() {
+		return "project/projectEnrollForm";
+		
+	}
 }

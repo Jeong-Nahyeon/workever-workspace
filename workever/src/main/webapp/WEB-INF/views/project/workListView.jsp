@@ -71,7 +71,7 @@
 		</div>
 		
 		<div class="workList">
-			<h4>내 업무(3)</h2>
+			<h4>내 업무(3)</h4>
 			<br>
             <table id="workList" class="table" align="center">
                 <thead>
