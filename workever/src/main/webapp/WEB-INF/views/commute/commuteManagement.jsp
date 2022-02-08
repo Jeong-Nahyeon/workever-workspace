@@ -6,6 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<jsp:include page="../common/links.jsp" />
+	
 <style>
 
 	.cm_title {
@@ -63,6 +66,9 @@
 	.dateInput {
 		font-size: 20px;
 		margin: 0 20px 0 0;
+		border: 2px solid lightgray;
+		border-radius: 5px;
+		padding-left: 10px;
 	}
 
 	input[type="radio"] {
@@ -93,11 +99,8 @@
 
 </style>
 </head>
-<body onload="showClock()">
-
-	<jsp:include page="../common/head.jsp" />
 	
-	<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini">
 	
 	<div class="wrapper">
 	
@@ -176,8 +179,8 @@
 	
 			<div id="cm_select" style="width: 800px; margin: auto;">
 				<div>
-					<span class="sm_title">기간 조회</span>
-					<input type="date" class="dateInput"> <span class="dateInput">~</span> <input type="date" class="dateInput"> 
+					<span class="sm_title">날짜</span>
+					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
 				</div>
 
 				<br>
@@ -300,6 +303,8 @@
 				
 		<jsp:include page="../common/footer.jsp" />
 	</div>
+	
+	<jsp:include page="../common/scripts.jsp" />
 
 </body>
 </html>

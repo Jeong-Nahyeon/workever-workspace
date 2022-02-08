@@ -6,8 +6,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CommuteController {
 	
-	@RequestMapping("main.cm")
+	@RequestMapping("commute.cm")
 	public String commuteManagement() {
 		return "commute/commuteManagement";
+	}
+	
+	@RequestMapping("commute.wh")
+	public String workingHours() {
+		return "commute/workingHours";
+	}
+	
+	@RequestMapping("commute.do")
+	public String dayoffList() {
+		return "commute/dayoffList";
+	}
+	
+	@RequestMapping("commute.ot")
+	public String overtimeList() {
+		return "commute/overtimeList";
 	}
 }
