@@ -43,6 +43,28 @@
 	.profile-textArea{
 		padding: 0;
 		display: table;
+
+	.scrollCustom {
+		width: 300px; 
+		height: 250px; 
+		overflow-y: auto; /* 가로 넘으면 알아서 스크롤 만들어 줘 */
+	}
+
+	/* 스크롤바 설정 */
+	.scrollCustom::-webkit-scrollbar{
+    	width: 4px;
+	}
+
+	/* 스크롤바 막대 설정*/
+	.scrollCustom::-webkit-scrollbar-thumb{
+		height: 10%; /* 막대 높이 설정 */
+		background-color: #4E73DF;
+		border-radius: 10px;    
+	}
+
+	/* 스크롤바 뒷 배경 설정*/
+	.scrollCustom::-webkit-scrollbar-track{
+		background-color: rgba(0,0,0,0);
 	}
 
 
@@ -108,8 +130,14 @@
 
 	      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 			<div class="media">
-			  <a href="#" class="dropdown-item dropdown-footer"><i class="far fa-comments"></i>&ensp;채팅 추가</a>
+			  <a href="javascript:void(0);" onclick="invitationPopup();" class="dropdown-item dropdown-footer"><i class="far fa-comments"></i>&ensp;채팅 추가</a>
 			</div>
+
+			<script>
+				function invitationPopup(){
+					window.open("invitation.ch", "chatInvitation", "width=400, height=500");
+				}
+			</script>
 
 			<div class="media" style="width: 90%; margin-left: 5%;">
 				<input type="search" class="form-control form-control-sm" placeholder="사원 이름 검색">
@@ -121,58 +149,72 @@
 			</div>
 			<div class="dropdown-divider" style="margin-top: 10px;"></div>
 
-	        <a href="#" class="dropdown-item">
-	          <!-- Message Start -->
-	          <div class="media">
-				<!-- 사원 프로필 사진 -->
-	            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-	            <div class="media-body">
-	              <span class="dropdown-item-title">
-	                사원 이름
-	              </span>
-				  <span class="badge badge-danger" style="float: right;">3</span>
-	              <p class="text-sm text-overflow">안녕하세요 글 길게 쓰면 글 줄여주세요</p>
-	              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-	            </div>
-	          </div>
-	          <!-- Message End -->
-	        </a>
-	        <div class="dropdown-divider"></div>
+			<div>
+				<a href='javascript:void(0);' onclick="chatPopup();" class="dropdown-item">
 
-	        <a href="#" class="dropdown-item">
-	          <!-- Message Start -->
-	          <div class="media">
-	            <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-	            <div class="media-body">
-	              <h3 class="dropdown-item-title">
-	                John Pierce
-	                <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-	              </h3>
-	              <p class="text-sm">I got your message bro</p>
-	              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-	            </div>
-	          </div>
-	          <!-- Message End -->
-	        </a>
-	        <div class="dropdown-divider"></div>
-	        <a href="#" class="dropdown-item">
-	          <!-- Message Start -->
-	          <div class="media">
-	            <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-	            <div class="media-body">
-	              <h3 class="dropdown-item-title">
-	                Nora Silvester
-	                <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-	              </h3>
-	              <p class="text-sm">The subject goes here</p>
-	              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-	            </div>
-	          </div>
-	          <!-- Message End -->
-	        </a>
-	        <div class="dropdown-divider"></div>
-	        <a href="addressBook.do" class="dropdown-item dropdown-footer"><i class="far fa-user"></i>&ensp;연락처</a>
-	      </div>
+					<script>
+						function chatPopup(){
+							window.open("detail.ch", "chat", "width=400, height=500");
+						}
+					</script>
+				
+				<div class="scrollCustom">
+					<!-- Message Start -->
+					<div class="media">
+						<!-- 사원 프로필 사진 -->
+						<img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+						<div class="media-body">
+						<span class="dropdown-item-title">
+							사원 이름
+						</span>
+						<span class="badge badge-danger" style="float: right;">3</span>
+						<p class="text-sm text-overflow">안녕하세요 글 길게 쓰면 글 줄여주세요</p>
+						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+						</div>
+					</div>
+					<!-- Message End -->
+					</a>
+					<div class="dropdown-divider"></div>
+	
+					<a href="#" class="dropdown-item">
+					<!-- Message Start -->
+					<div class="media">
+						<img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+						<div class="media-body">
+						<h3 class="dropdown-item-title">
+							John Pierce
+							<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+						</h3>
+						<p class="text-sm">I got your message bro</p>
+						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+						</div>
+					</div>
+					<!-- Message End -->
+					</a>
+					<div class="dropdown-divider"></div>
+					<a href="#" class="dropdown-item">
+					<!-- Message Start -->
+					<div class="media">
+						<img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+						<div class="media-body">
+						<h3 class="dropdown-item-title">
+							Nora Silvester
+							<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+						</h3>
+						<p class="text-sm">The subject goes here</p>
+						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+						</div>
+					</div>
+					<!-- Message End -->
+					</a>
+
+				</div>
+
+				<div class="dropdown-divider"></div>
+				<a href="addressBook.do" class="dropdown-item dropdown-footer">
+					<i class="far fa-user"></i>&ensp;연락처</a>
+			</div>
+		  </div>
 	    </li>
 
 	    <!-- Notifications Dropdown Menu -->

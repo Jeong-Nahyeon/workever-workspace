@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="approvalMapper">
+	
+	<select id="userWriteListCount" resultType="_int">
+		select
+			   count(*)
+		  from approval
+		 where not apvl_status = 'D'
+		   and apvl_writer = #{loginUserNo}
+	</select>
+</mapper>
