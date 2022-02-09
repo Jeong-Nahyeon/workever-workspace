@@ -14,6 +14,14 @@
 		<typeAlias type="com.workever.wk.community.model.vo.CommunityReply" alias="CommunityReply" />
 		<typeAlias type="com.workever.wk.community.model.vo.CommunityFiles" alias="CommunityFiles" />
 		<typeAlias type="com.workever.wk.report.model.vo.Report" alias="Report" />
+		<typeAlias type="com.workever.wk.approval.model.vo.Approval" alias="Approval" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalBuisnessTripForm" alias="ApprovalBuisnessTripForm" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalDayOffForm" alias="ApprovalDayOffForm" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalExpenseReportForm" alias="ApprovalExpenseReportForm" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalOverTimeForm" alias="ApprovalOverTimeForm" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalWorkReportForm" alias="ApprovalWorkReportForm" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalForm" alias="ApprovalForm" />
+		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalLine" alias="ApprovalLine" />
 	</typeAliases>
 	
 	<mappers>
@@ -23,6 +31,7 @@
 		<mapper resource="/mappers/anonymousBoard-mapper.xml" />
 		<mapper resource="/mappers/communityReply-mapper.xml" />
 		<mapper resource="/mappers/report-mapper.xml" />
+		<mapper resource="/mappers/approval-mapper.xml" />
 	</mappers>
 
 </configuration>
