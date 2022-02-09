@@ -103,7 +103,7 @@
 		margin-left: 5%;
 		/*border:1px solid black;*/
 		overflow:scroll;
-		height:860px;
+		height:850px;
 	}
 	
 	.all::-webkit-scrollbar { display: none; }
@@ -350,15 +350,28 @@
 			</div><!--전체감싸는 div 끝-->
 		
 			<div class="sidemenu">
-				<div class="backpage"><!-- 이전페이지 -->
+			
+			
+				<!-- 이전페이지 -->
+				<div class="backpage">
 					<p><i class="fas fa-chevron-left"></i>&nbsp;&nbsp;이전페이지</p>
 				</div>
+				
 			
 				<br>
-				<div class="workLookup"><!-- 업무조회 -->
+				
+				<!-- 업무조회 -->
+				<div class="workLookup">
 					<p>업무조회</p>
 				</div>
 				
+				<script>
+				$(function(){
+					$(".workLookup").click(function(){
+						location.href='list.work';
+					});
+				})
+				</script>
 				<br>
 				<div class="invite"><!-- 전체 참여자-->
 					<div style=""><br>

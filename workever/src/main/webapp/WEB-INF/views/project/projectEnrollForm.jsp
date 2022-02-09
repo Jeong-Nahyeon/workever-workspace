@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -189,21 +190,22 @@
 					</div>
 
 					<div class="ParticipationPerson">
-						<c:choose>
+												<c:choose>
 							<!-- 해댕사원 셀렉문 써서 조회해오기 -->
-							<c:when test="">
-								<c:forEach var="p" items="">
-									<i class="fas fa-portrait"></i>
-									<b>홍길동</b><input type="checkbox" class="employee" name="employee" value="zz"><br><br>
+							<!-- <c:when test="">-->
+							<!--	<c:forEach var="p" items="">-->
+							<!--		<i class="fas fa-portrait"></i>-->
+							<!--		<b>홍길동</b><input type="checkbox" class="employee" name="employee" value="zz"><br><br>-->
 					
-								</c:forEach>
-							<br>
-							</c:when>
-							<c:otherwise>
-	               	 			검색 결과가 없습니다.
-							</c:otherwise>
-						</c:choose>
+							<!--	</c:forEach>-->
+							<!--<br>-->
+							<!--</c:when>-->
+							<!--<c:otherwise>-->
+	               	 		<!--	검색 결과가 없습니다.-->
+							<!--</c:otherwise>-->
+						<!--</c:choose>-->
                	 		
+
 					</div>
 				</div>
 						

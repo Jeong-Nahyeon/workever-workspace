@@ -23,4 +23,11 @@ public class projectController {
 		return "project/projectDetailView";
 		
 	}
+	
+	//업무조회 리스트이동 
+	@RequestMapping("list.work")
+	public String workList() {
+		return "project/workListView";
+		
+	}
 }
