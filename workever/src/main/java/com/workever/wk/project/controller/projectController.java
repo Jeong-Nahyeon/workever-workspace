@@ -8,13 +8,19 @@ public class projectController {
 	
 	@RequestMapping("list.pro")
 	public String projectList() {
-		return "project/projectListView";
+		return "project/projectDetailView";
 		
 	}
 	
 	@RequestMapping("enroll.pro")
 	public String enrollProject() {
 		return "project/projectEnrollForm";
+		
+	}
+	
+	@RequestMapping("detail.pro")
+	public String detailProject() {
+		return "project/projectDetailView";
 		
 	}
 }
