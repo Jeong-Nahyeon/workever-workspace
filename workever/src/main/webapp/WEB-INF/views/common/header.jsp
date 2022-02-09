@@ -29,6 +29,15 @@
 		font-weight: 900;
 	}
 
+	.text-overflow {
+		width: 190px; /* 말줄임 처리 위해 width 설정 */
+		height: 21px; /* 상동 */
+		display: block; /* 너비를 가질 수 있도록 설정 */
+		white-space: nowrap !important; /* 내용이 넘치면 자동줄바꿈되는 것을 해제 */
+		overflow: hidden; /* 넘치는 부분을 hidden */
+		text-overflow: ellipsis; /* 텍스트의 말줄임표(...) 처리 */
+	}
+
 </style>
 </head>
 <body>
@@ -77,25 +86,43 @@
 	    <li class="nav-item dropdown">
 	      <a class="nav-link" data-toggle="dropdown" href="#">
 	        <i class="far fa-comments"></i>
+			<!-- 읽지 않은 채팅 알림 개수 -->
 	        <span class="badge badge-danger navbar-badge">3</span>
 	      </a>
+
 	      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+			<div class="media">
+			  <a href="#" class="dropdown-item dropdown-footer"><i class="far fa-comments"></i>&ensp;채팅 추가</a>
+			</div>
+
+			<div class="media" style="width: 90%; margin-left: 5%;">
+				<input type="search" class="form-control form-control-sm" placeholder="사원 이름 검색">
+					<div class="input-group-append">
+						<button type="submit" class="btn btn-sm btn-default">
+							<i class="fa fa-search"></i>
+						</button>
+					</div>
+			</div>
+			<div class="dropdown-divider" style="margin-top: 10px;"></div>
+
 	        <a href="#" class="dropdown-item">
 	          <!-- Message Start -->
 	          <div class="media">
+				<!-- 사원 프로필 사진 -->
 	            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
 	            <div class="media-body">
-	              <h3 class="dropdown-item-title">
-	                Brad Diesel
-	                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-	              </h3>
-	              <p class="text-sm">Call me whenever you can...</p>
+	              <span class="dropdown-item-title">
+	                사원 이름
+	              </span>
+				  <span class="badge badge-danger" style="float: right;">3</span>
+	              <p class="text-sm text-overflow">안녕하세요 글 길게 쓰면 글 줄여주세요</p>
 	              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
 	            </div>
 	          </div>
 	          <!-- Message End -->
 	        </a>
 	        <div class="dropdown-divider"></div>
+
 	        <a href="#" class="dropdown-item">
 	          <!-- Message Start -->
 	          <div class="media">
@@ -128,7 +155,7 @@
 	          <!-- Message End -->
 	        </a>
 	        <div class="dropdown-divider"></div>
-	        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+	        <a href="addressBook.do" class="dropdown-item dropdown-footer"><i class="far fa-user"></i>&ensp;연락처</a>
 	      </div>
 	    </li>
 
