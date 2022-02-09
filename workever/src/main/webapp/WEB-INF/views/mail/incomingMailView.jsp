@@ -34,7 +34,6 @@
     }
 
     .mail-btns-area-left button{
-        border:1px solid #DEE2E6;
         width:75px;
     }  
 
@@ -156,8 +155,8 @@
 		            <!-- 답장/전달/삭제 버튼 영역 -->
 		            <div class="card-header mail-btns-area"> 
 		              <div class="col-sm-6 mail-btns-area-left">
-		                <button class="btn btn-sm">답장</button>
-		                <button class="btn btn-sm">전달</button>
+		                <button class="btn btn-sm btn-default">답장</button>
+		                <button class="btn btn-sm btn-default">전달</button>
 		              </div>
 		              <div class="col-sm-6 mail-btns-area-right">
 		                <button class="btn btn-sm">삭제</button>
