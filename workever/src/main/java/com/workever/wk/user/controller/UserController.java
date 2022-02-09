@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.workever.wk.user.model.service.UserService;
 import com.workever.wk.user.model.vo.User;
@@ -40,5 +41,23 @@ public class UserController {
 			model.addAttribute("errorMsg", "로그인 실패");
 			return "common/errorPage";
 		}
+	}
+	
+	// 이메일 중복체크
+	@ResponseBody
+	@RequestMapping("emailDoubleCheck.do")
+	public String emailDoubleCheckA(String checkEmail) {
+		int count = uService.emailDoubleCheck(checkEmail);
+		
+		return count > 0 ? "NNNNN" : "NNNNY";
+	}
+	
+	// 회사코드 중복체크
+	@ResponseBody
+	@RequestMapping("companyCodeCheck.ad")
+	public String companyCodeCheckAdmin(String companyCode) {
+		int count = uService.companyCodeCheckAdmin(companyCode);
+		
+		return count > 0 ? "NNNNN" : "NNNNY";
 	}
 }

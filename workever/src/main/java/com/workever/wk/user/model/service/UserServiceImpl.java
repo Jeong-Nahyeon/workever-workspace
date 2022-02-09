@@ -23,5 +23,19 @@ public class UserServiceImpl implements UserService {
 		return loginUser;
 	}
 
+	// 이메일 중복체크 서비스
+	@Override
+	public int emailDoubleCheck(String checkEmail) {
+		int count = uDao.emailDoubleCheck(sqlSession, checkEmail);
+		return count;
+	}
+
+	// 회사코드 중복체크 서비스
+	@Override
+	public int companyCodeCheckAdmin(String companyCode) {
+		int count = uDao.companyCodeCheckAdmin(sqlSession, companyCode);
+		return count;
+	}
+
 	
 }

@@ -44,5 +44,19 @@
 		   and user_pwd = #{userPwd}
 		   and user_enabled = 'Y'
 	</select>
+	
+	<select id="emailDoubleCheck" resultType="_int">
+		select
+		       count(*)
+		  from users
+		 where user_email = #{checkEmail}
+	</select>
+	
+	<select id="companyCodeCheckAdmin" resultType="_int">
+		select
+		       count(*)
+		  from company
+		 where com_encode = #{companyCode}
+	</select>
   
 </mapper>
