@@ -8,10 +8,21 @@
 	
 	<typeAliases>
 		<typeAlias type="com.workever.wk.user.model.vo.User" alias="User" />
+		<typeAlias type="com.workever.wk.noticeBoard.model.vo.NoticeBoard" alias="NoticeBoard" />
+		<typeAlias type="com.workever.wk.deptBoard.model.vo.DeptBoard" alias="DeptBoard" />
+		<typeAlias type="com.workever.wk.anonymousBoard.model.vo.AnonymousBoard" alias="AnonymousBoard" />
+		<typeAlias type="com.workever.wk.community.model.vo.CommunityReply" alias="CommunityReply" />
+		<typeAlias type="com.workever.wk.community.model.vo.CommunityFiles" alias="CommunityFiles" />
+		<typeAlias type="com.workever.wk.report.model.vo.Report" alias="Report" />
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="/mappers/user-mapper.xml" />
+		<mapper resource="/mappers/noticeBoard-mapper.xml" />
+		<mapper resource="/mappers/deptBoard-mapper.xml" />
+		<mapper resource="/mappers/anonymousBoard-mapper.xml" />
+		<mapper resource="/mappers/communityReply-mapper.xml" />
+		<mapper resource="/mappers/report-mapper.xml" />
 	</mappers>
 
 </configuration>
