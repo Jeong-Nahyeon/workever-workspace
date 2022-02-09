@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="userMapper">
+
+	<resultMap type="User" id="userResult">
+		<result column="user_no" property="userNo" />
+		<result column="dept_no" property="deptNo" />
+		<result column="com_no" property="comNo" />
+		<result column="user_email" property="userEmail" />
+		<result column="user_name" property="userName" />
+		<result column="user_phone" property="userPhone" />
+		<result column="user_pwd" property="userPwd" />
+		<result column="user_rank" property="userRank" />
+		<result column="user_joindate" property="userJoinDate" />
+		<result column="user_resdate" property="userResDate" />
+		<result column="user_status" property="userStatus" />
+		<result column="user_enabled" property="userEnabled" />
+		<result column="user_filepath" property="userFilePath" />
+		<result column="user_auth" property="userAuth" />
+		<result column="user_annual_date" property="userAnnualDate" />
+		<result column="user_use_date" property="userUseDate" />
+	</resultMap>
+
+	<select id="loginUser" resultMap="userResult">
+		select
+		       user_no
+		     , dept_no
+		     , com_no
+		     , user_email
+		     , user_name
+		     , user_phone
+		     , user_pwd
+		     , user_rank
+		     , user_joindate
+		     , user_resdate
+		     , user_status
+		     , user_enabled
+		     , user_filepath
+		     , user_auth
+		     , user_annual_date
+		     , user_use_date
+		  from users
+		 where user_email = #{userEmail}
+		   and user_pwd = #{userPwd}
+		   and user_enabled = 'Y'
+	</select>
   
 </mapper>

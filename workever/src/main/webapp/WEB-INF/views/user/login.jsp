@@ -54,25 +54,24 @@
             </div>
     
             <div class="card card-light">
-                <form action="">
+                <form action="login.us" method="post">
     
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">이메일</label>
-                            <input type="email" class="form-control" id="user-email" placeholder="Enter email">
+                            <label for="user-email">이메일</label>
+                            <input type="email" class="form-control" id="user-email" name="userEmail" placeholder="Enter email">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">비밀번호</label>
-                            <input type="password" class="form-control" id="user-pwd" placeholder="Password">
+                            <label for="user-pwd">비밀번호</label>
+                            <input type="password" class="form-control" id="user-pwd" name="userPwd" placeholder="Password">
                         </div>
                         <div class="btn-login">
-                            <button>로그인</button>
+                            <button type="submit">로그인</button>
                         </div>
                         <div class="change-pwd">
                             <a href="">비밀번호 재설정</a>
                         </div>
                     </div>
-        
                 </form>
             </div>
         </div>
