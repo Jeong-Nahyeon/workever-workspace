@@ -171,7 +171,24 @@
 
 			<div style="text-align: center;">
 				<button class="cmBtn" id="startBtn" >출 근</button>
-				<button class="cmBtn" id="endBtn">퇴 근</button>
+				<button class="cmBtn" id="endBtn" data-toggle="modal" data-target="#endModal">퇴 근</button>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-body" align="center">
+							<br>
+							지금 시간은 xx시 xx분입니다.<br>
+							정말로 퇴근하시겠습니까? <br>
+							<button class="cmBtn">확인</button>
+							<button class="cmBtn" id="endBtn" data-dismiss="modal">취소</button>
+						</div>
+						
+					</div>
+				</div>
 			</div>
 
 			<h4 class="cm_title">출퇴근 조회</h4>
@@ -187,8 +204,8 @@
 				
 				<div>
 					<span class="sm_title" style="margin-bottom: 50px;">근무 상태</span>
-					<label><input type="radio" name="cm_status" id="normal" value="normal" checked="checked">정상</label>
-					<label><input type="radio" name="cm_status" id="tardiness" value="tardiness">지각</label>
+					<label><input type="radio" name="cm_status" value="normal" checked="checked">정상</label>
+					<label><input type="radio" name="cm_status" value="tardiness">지각</label>
 					<label><input type="radio" name="cm_status" value="absence">결근</label>
 					<label><input type="radio" name="cm_status" value="earlyLeave">조퇴</label>
 					<label><input type="radio" name="cm_status" value="leave">휴가</label>
@@ -208,20 +225,20 @@
 				<table class="table" style="text-align: center;">
 				  	<thead>
 						<tr>
-						<th width="20%">날짜</th>
-						<th width="20%">근무 상태</th>
-						<th width="20%">출근 시간</th>
-						<th width="20%">퇴근 시간</th>
-						<th width="20%">근무 시간</th>
+							<th width="20%">날짜</th>
+							<th width="20%">근무 상태</th>
+							<th width="20%">출근 시간</th>
+							<th width="20%">퇴근 시간</th>
+							<th width="20%">근무 시간</th>
 						</tr>
 				  	</thead>
 				  	<tbody>
 						<tr>
-						<td>2022-01-19</td>
-						<td>정상</td>
-						<td>09:00:53</td>
-						<td>18:00:10</td>
-						<td>8:00</td>
+							<td>2022-01-19</td>
+							<td>정상</td>
+							<td>09:00:53</td>
+							<td>18:00:10</td>
+							<td>8:00</td>
 						</tr>
 						<tr>
 							<td>2022-01-19</td>

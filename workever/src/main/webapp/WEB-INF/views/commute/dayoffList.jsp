@@ -60,6 +60,11 @@
 		border-radius: 5px;
 	}
 
+	#doSelBtn:hover {
+		cursor: pointer;
+		filter: brightness(85%);
+	}
+
 	.text-overflow {
 		width: 350px; /* 말줄임 처리 위해 width 설정 */
 		display: block; /* 너비를 가질 수 있도록 설정 */
@@ -72,6 +77,7 @@
 		color: black;
 		text-decoration: none;
 		font-weight: bold;
+		cursor: pointer;
 	}
 
 </style>
@@ -159,9 +165,43 @@
 						<tr>
 							<td>2022-01-19 ~ 2022-01-21</td>
 							<td>연차</td>
-							<td class="text-overflow"><a href="#">휴가 내용이 길 경우에는 클릭해서 모달창에서 보여지도록 해야되겠지요...</a></td>
-							<td>결재상태</td>
+							<td class="text-overflow"><a a data-toggle="modal" data-target="#do_reason">
+								휴가 내용이 길 경우에는 클릭해서 모달창에서 보여지도록 해야되겠지요...</a></td>
+							<td><a data-toggle="modal" data-target="#do_return">반려</a></td>
 						</tr>
+
+						<!-- Modal -->
+						<div class="modal fade" id="do_reason" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									
+									<div class="modal-body" align="center">
+										<br>
+										<b>연장근무 업무내용</b><br>
+										연장근무 하는 업무내용이 여기에 보여질거에요
+										<button id="doSelBtn" data-dismiss="modal">확인</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+
+						<!-- Modal -->
+						<div class="modal fade" id="do_return" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									
+									<div class="modal-body" align="center">
+										<br>
+										<b>반려 사유</b><br>
+										반려 사유가 여기에 보여질거에요<br>
+										<button id="doSelBtn" data-dismiss="modal">확인</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+
 						<tr>
 							<td>2022-01-19 ~ 2022-01-21</td>
 							<td>연차</td>
