@@ -23,6 +23,7 @@
 		margin: 20px 20px;
 	}
 	#profile-image img{width: 30px; height: 30px;}
+	#profile-image i{width: 50px; height: 50px;}
 
 	#company-area a{color: lightslategray;}
 	#company-font{
@@ -38,6 +39,12 @@
 		overflow: hidden; /* 넘치는 부분을 hidden */
 		text-overflow: ellipsis; /* 텍스트의 말줄임표(...) 처리 */
 	}
+
+	.profile-textArea{
+		padding: 0;
+		display: table;
+	}
+
 
 </style>
 </head>
@@ -199,15 +206,36 @@
 		<!-- 프로필 영역 -->
 		<div id="line-area"></div>
 		<li class="nav-item dropdown">
-			<a class="nav-link" data-toggle="dropdown" href="#">
-				<span>Alexander Pierce</span>
-				<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+			<a class="nav-link profile-textArea" data-toggle="dropdown" href="#">
+				<div style="display: table-cell; vertical-align: middle;  padding-right: 5px;">
+					<span>${loginUser.userName}</span>
+				</div>
+				<c:choose>
+					<c:when test="${ loginUser.userFilePath != null }">
+						<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+					</c:when>
+					<c:otherwise>
+						<div style="display: table-cell; vertical-align: middle;">
+							<i class="fas fa-user-circle fa-2x" ></i>
+						</div>
+					</c:otherwise>
+				</c:choose>
 			</a>
 			<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 				<div id="profile-image">
-					<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-					<br>
-					<span>Alexander Pierce</span>
+				
+					<c:choose>
+						<c:when test="${ loginUser.userFilePath != null }">
+							<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+							<br>
+						</c:when>
+						<c:otherwise>
+							<div>
+								<i class="fas fa-user-circle fa-3x"></i>
+							</div>
+						</c:otherwise>
+					</c:choose>
+					<span>${loginUser.userName}</span>
 				</div>
 				<div style="height: 0; border-bottom: 1px solid #e3e6f0;"></div>
 				<div id="profile-icon">
