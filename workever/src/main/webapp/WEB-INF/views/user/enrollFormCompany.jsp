@@ -71,7 +71,6 @@
 		border: none;
 		background-color: lightgray;
 		border-radius: 2px;
-		
 	}
 </style>
 </head>
@@ -89,13 +88,14 @@
 		<div class="card card-light">
 
 			<!-- form start -->
-			<form>
+			<form action="insert.ad" method="post" id="enrollForm" onsubmit="return enrollForm();">
 				<div class="card-body">
 					<div class="form-group">
 						<label for="company-email">이메일</label>
 						<input type="email" class="form-control" id="company-email" placeholder="Enter email">
+						<input type="hidden" id="email-status" value="emailN">
 						<div id="checkEmail">
-
+							
 						</div>
 					</div>
 					<div class="form-group">
@@ -108,8 +108,9 @@
 					<div class="form-group">
 						<label for="company-pwd">비밀번호</label>
 						<input type="password" class="form-control" id="company-pwd" placeholder="Password">
+						<input type="hidden" id="pwd-status" value="pwdN">
 						<div id="checkPwd">
-
+							
 						</div>
 					</div>
 					<div class="form-group">
@@ -128,33 +129,35 @@
 						<input type="text" class="form-control" id="company-code" placeholder="Password">
 						<!--<button id="btn-checkCodeD">회사코드확인</button>-->
 						<input type="button" value="회사코드중복확인" id="btn-checkCode" onclick="checkCompanyCode();">
+						<input type="hidden" id="companyCode-status" value="codeN">
 					</div>
 					<div class="form-group">
 						<label>회사 업종</label>
-						<select class="form-control">
-							<option>제조</option>
-							<option>서비스</option>
-							<option>IT</option>
-							<option>유통</option>
-							<option>교육/연구</option>
-							<option>건설</option>
-							<option>의료</option>
-							<option>금융</option>
-							<option>공공행정</option>
-							<option>엔터테인먼트</option>
-							<option>기타</option>
+						<select class="form-control" name="comClass" id="company-class">
+							<option value="classN">회사 업종 선택</option>
+							<option value="manufacturing">제조</option>
+							<option value="service">서비스</option>
+							<option value="it">IT</option>
+							<option value="distribution">유통</option>
+							<option value="education">교육/연구</option>
+							<option value="construction">건설</option>
+							<option value="medical">의료</option>
+							<option value="financial">금융</option>
+							<option value="grovernment">공공행정</option>
+							<option value="entertainment">엔터테인먼트</option>
+							<option value="etc">기타</option>
 						</select>
 					</div>
 					<div class="enroll-check">
 						<input type="checkbox" class="form-check-input" id="form-check">
-						<label class="form-check-label" for="form-check">
+						<label class="form-check-label" for="form-check" id="form-agree">
 							서비스 이용약관, 개인정보 취급방침을 확인하였고, 이에 동의합니다.
 						</label>
 					</div>
 				</div>
 
 				<div class="btn-sub">
-					<button type="submit">회원가입</button>
+					<button type="submit" id="btn-formsubmit">회원가입</button>
 				</div>
 
 			</form>
@@ -278,7 +281,7 @@
 
 		// 정규식 
 		// 이메일 정규식
-		let emailExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+		let emailExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		// 비밀번호 정규식
 		let pwdExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,16}$/i;
 		// 휴대폰번호 정규식
@@ -340,10 +343,8 @@
 						$("#emailDoubleCheck-modal").modal('show');
 						//$('#company-adminname').focus();
 						emailInput.attr("readonly", true);
-						$('#btn-emailDoubleCheck').click(function(){
-							$('#emailDoubleCheck-modal').modal('hide');
-							$('#company-adminname').focus();
-						})
+						$('#email-status').attr('value', 'emailY');
+						
 					} else {
 						alert("이미 사용중인 이메일입니다.");
 						emailInput.val('');
@@ -372,6 +373,7 @@
 							// 사용가능
 							$('#after-checkCodeE').modal();
 							companyCode.attr("readonly", true);
+							$('#companyCode-status').attr('value', 'codeY');
 						} else {
 							// 중복
 							$('#after-checkCodeD').modal();
@@ -381,7 +383,6 @@
 					}
 				})
 			}
-
 		}
 
 		// 모달 닫기 버튼 클릭 시 포커스 이동
@@ -390,7 +391,42 @@
 		})
 		$('#btn-emailDoubleCheck').click(function(){
 			$('#company-adminname').focus();
+			$('#company-email').css('background-color', 'white');
 		})
+
+		
+
+		function enrollForm(){
+			if($('#email-status').val()=='emailY' && $('#companyCode-status').val() == 'codeY' &&
+				$('#company-name').val()!='' && $('#form-check').is(":checked") && $('#company-class').val() != 'classN'){
+
+				//$('#btn-formsubmit').disabled = false;
+				//$("#enrollForm").submit();
+				console.log('폼 실행 되는겨?')
+				return true;
+
+			}else{
+
+				if($('#company-name').val()==''){
+					alert("회사이름을 입력해주세요.");
+					$('#company-name').focus();
+				}
+				if($('#companyCode-status').val() == 'codeN'){
+					alert("회사코드 중복체크를 해주세요.");
+					$("#company-code").focus();
+				}
+				if($('#form-check').is(":checked")==false){
+					alert('이용약관에 동의해주세요.');
+				}
+				if($('#company-class').val() == 'classN'){
+					alert('회사 업종을 선택해주세요.');
+					$('#company-class').focus();
+				}
+
+				console.log('폼 이상함');
+				return false;
+			}
+		}
 
 		
 	</script>
