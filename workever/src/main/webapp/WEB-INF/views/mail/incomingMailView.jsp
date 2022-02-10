@@ -176,6 +176,7 @@
 		                    <th>제목</th>
 		                    <td>메일제목들어가는자리</td>
 		                  </tr>
+		                  <tr>
 		                    <th>발신일시</th>
 		                    <td>2022-00-00 00:00</td>
 		                  </tr>
@@ -183,7 +184,6 @@
 		                    <th>보낸사람</th>
 		                    <td>
 		                      <div class="sender-area">
-		                        <span>
 		                        <span>
 		                          <label>김말똥 &lt;workever_f@gmail.com&gt;</label>
 		                        </span>
@@ -221,10 +221,9 @@
 		                  <tr>
 		                </thead>
 		                <tbody>
+		                	<tr>
 		                    <td colspan="2">
 		                      <div class="mail-content-area">
-		                        <h1><u>Heading Of Message</u></h1>
-		                        <h4>Subheading</h4>
 		                        <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
 		                          was born and I will give you a complete account of the system, and expound the actual teachings
 		                          of the great explorer of the truth, the master-builder of human happiness. No one rejects,
