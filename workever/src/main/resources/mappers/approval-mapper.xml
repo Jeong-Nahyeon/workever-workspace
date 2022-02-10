@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="approvalMapper">
+
+	<resultMap id="userWriterApprovalListResult" type="Approval">
+		<result column="apvl_no" property="apvlNo" /> 
+		<result column="apvl_writer" property="apvlWriter" /> 
+		<result column="apvl_form_name" property="apvlFormNo" /> 
+		<result column="apvl_title" property="apvlTitle" /> 
+		<result column="apvl_create_date" property="apvlCreateDate" /> 
+		<result column="apvl_status" property="apvlStatus" /> 
+	</resultMap>
+	
+	<resultMap id="userReceiveApprovalListResult" type="Approval">
+		<result column="apvl_no" property="apvlNo" /> 
+		<result column="user_name" property="apvlWriterName" /> 
+		<result column="apvl_form_name" property="apvlFormNo" /> 
+		<result column="apvl_title" property="apvlTitle" /> 
+		<result column="apvl_create_date" property="apvlCreateDate" /> 
+		<result column="apvl_status" property="apvlStatus" /> 
+	</resultMap>
+	
+	<resultMap id="approvalLineListResult" type="ApprovalLine">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="user_no" property="userNo" />
+		<result column="user_name" property="userName" />
+		<result column="user_rank" property="userRank" />
+		<result column="apvl_line_turn" property="apvlLineTurn" />
+		<result column="apvl_date" property="apvlDate" />
+		<result column="apvl_line_status" property="apvlLineStatus" />
+	</resultMap>
 	
 	<select id="userWriteListCount" resultType="_int">
 		select
@@ -8,5 +36,96 @@
 		  from approval
 		 where not apvl_status = 'D'
 		   and apvl_writer = #{loginUserNo}
+	</select>
+	
+	<select id="userWriteApprovalList" resultMap="userWriterApprovalListResult">
+		select
+		       apvl_no
+		     , apvl_writer
+		     , apvl_form_name
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_status
+		  from approval
+		  join approval_form using (apvl_form_no)
+		 where not apvl_status = 'D'
+		   and apvl_writer = #{loginUserNo}
+		 order
+		    by apvl_no desc   
+	</select>
+	
+	<select id="writeIngCategoryList" resultMap="userWriterApprovalListResult">
+		select
+		       apvl_no
+		     , apvl_writer
+		     , apvl_form_name
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_status
+		  from approval
+		  join approval_form using (apvl_form_no)
+		 where apvl_status in ('I', 'S')
+		   and apvl_writer = #{loginUserNo}
+		 order
+		    by apvl_no desc
+	</select>
+	
+	<select id="writeCompleteCategoryList" resultMap="userWriterApprovalListResult">
+		select
+		       apvl_no
+		     , apvl_writer
+		     , apvl_form_name
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_status
+		  from approval
+		  join approval_form using (apvl_form_no)
+		 where apvl_status in ('C', 'R')
+		   and apvl_writer = #{loginUserNo}
+		 order
+		    by apvl_no desc
+	</select>
+	
+	<select id="userReceiveListCount" resultType="_int">
+		select
+			   count(*)
+		  from approval
+		  join approval_line using (apvl_no)
+		 where not apvl_status = 'D'
+		   and user_no = #{loginUserNo}
+	</select>
+	
+	<select id="userReceiveApprovalList" resultMap="userReceiveApprovalListResult">
+		select
+		       a.apvl_no as "apvl_no"
+		     , user_name
+		     , apvl_form_name
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_status
+		  from approval a
+		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
+          join approval_line al on (a.apvl_no = al.apvl_no)
+          join Users u on (a.apvl_writer = u.user_no)
+		 where not apvl_status = 'D'
+		   and al.user_no = #{loginUserNo}
+		 order
+		    by a.apvl_no desc
+	</select>
+	
+	<select id="approvalLineList" resultMap="approvalLineListResult">
+		select
+		       apvl_no
+		     , user_no
+		     , user_name
+		     , user_rank
+		     , apvl_line_turn
+		     , apvl_date
+		     , apvl_line_status
+		  from approval_line
+		  join users using (user_no)
+		  where apvl_no = #{ apvlNo }
+		  order
+		     by apvl_line_turn
 	</select>
 </mapper>

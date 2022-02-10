@@ -11,9 +11,12 @@ import lombok.ToString;
 @ToString
 public class ApprovalLine { // 결재선 vo
 	private int apvlLineNo;
-	private int userNo;
+	private int apvlNo;
+	private String userNo;
 	private int apvlLineTurn;
 	private String apvlLineStatus;
 	private String apvlReturnComment;
 	private String apvlDate;
+	private String userName;
+	private String userRank;
 }
