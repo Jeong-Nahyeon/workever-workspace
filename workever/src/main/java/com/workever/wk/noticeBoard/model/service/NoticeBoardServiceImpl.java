@@ -1,6 +1,7 @@
 package com.workever.wk.noticeBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,37 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		return nDao.selectAscList(sqlSession, pi);
 		
 	}
+
+	/**
+	 * 공지사항 게시글 검색 목록 페이징 처리용 총 게시글 수 조회
+	 */
+	@Override
+	public int selectSearchCount(HashMap<String, String> map) {
+		
+		return nDao.selectSearchCount(sqlSession, map);
+		
+	}
+
+	/**
+	 * 공지사항 게시글 검색 목록 조회(최신순/페이징 처리)
+	 */
+	@Override
+	public ArrayList<NoticeBoard> selectSearchList(HashMap<String, String> map, PageInfo pi) {
+		
+		return nDao.selectSearchList(sqlSession, map, pi);
+		
+	}
+
+	/**
+	 * 공지사항 게시글 검색 목록 조회(오래된순/페이징 처리)
+	 */
+	@Override
+	public ArrayList<NoticeBoard> selectSearchAscList(HashMap<String, String> map, PageInfo pi) {
+		
+		return nDao.selectSearchAscList(sqlSession, map, pi);
+		
+	}
+	
+	
 
 }

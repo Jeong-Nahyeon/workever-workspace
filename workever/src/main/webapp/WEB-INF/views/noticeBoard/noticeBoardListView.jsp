@@ -165,7 +165,8 @@
 		
 		            <!-- 공지게시글 정렬/검색/등록버튼 영역 -->
 		            <div class="card-header board-header-area">
-		              	
+		              
+		              <!-- 게시글 정렬 -->	
 		              <div class="col-sm-3 board-header-area-left">
 		                <select name="orderList" class="form-control">
 		                  <option value="desc">최신순</option>
@@ -173,17 +174,19 @@
 		                </select>
 		              </div>
 		              
+		              <!-- 게시글 검색 -->
 		              <div class="col-sm-6 board-header-area-center" align="center">
 		              	  <form id="search-area" action="search.nbo" method="get">
 			                  <select name="condition" class="form-control">
 			                  	<option value="title">제목</option>
 			                  	<option value="content">내용</option>
 			                  </select>
-			                  <input type="text" class="form-control">
+			                  <input type="text" name="keyword" class="form-control">
 			                  <button type="submit" class="btn btn-sm">검색</button>
 			              </form>
 			          </div>
 		              
+		              <!-- 게시글 등록 -->
 		              <div class="col-sm-3 board-header-area-right">
 		                <!-- 관리자일 경우에만 보임 -->
 		                <c:if test="${ loginUser.userRank eq '관리자' }">
@@ -244,14 +247,36 @@
 		              	
 		              	<c:choose>
 		              		<c:when test="${ empty orderList }"> <!-- 최신순 -->
-								<c:if test="${ pi.currentPage ne 1 }">
-				                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
-				                </c:if>
+		              		
+		              			<c:choose>
+			              			<c:when test="${ empty condition }"> <!-- 검색 전 -->
+										<c:if test="${ pi.currentPage ne 1 }">
+						                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+						                </c:if>
+					                </c:when>
+					                <c:otherwise> <!-- 검색 후 -->
+					                	<c:if test="${ pi.currentPage ne 1 }">
+						                	<a class="btn" href="search.nbo?cpage=${ pi.currentPage - 1 }&condition=${ condition }&keyword=${ keyword }">&lt;</a>
+						                </c:if>
+					                </c:otherwise>
+				                </c:choose>
+				                
 			                </c:when>
 			                <c:otherwise> <!-- 오래된순 -->
-								<c:if test="${ pi.currentPage ne 1 }">
-				                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
-				                </c:if>
+			                	
+				                <c:choose>
+			              			<c:when test="${ empty condition }"> <!-- 검색 전 -->
+										<c:if test="${ pi.currentPage ne 1 }">
+						                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
+						                </c:if>
+					                </c:when>
+					                <c:otherwise> <!-- 검색 후 -->
+					                	<c:if test="${ pi.currentPage ne 1 }">
+						                	<a class="btn" href="search.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">&lt;</a>
+						                </c:if>
+					                </c:otherwise>
+				                </c:choose>
+				                
 		                	</c:otherwise>
 		                </c:choose>
 		                
@@ -259,10 +284,28 @@
 		              	  
 			                <c:choose>
 			                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
-			                		<a class="btn" href="list.nbo?cpage=${ p }">${ p }</a>
+			                	
+			                		<c:choose>
+			              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
+				                			<a class="btn" href="list.nbo?cpage=${ p }">${ p }</a>
+				                		</c:when>
+						                <c:otherwise> <!-- 검색 후 -->
+				                			<a class="btn" href="search.nbo?cpage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
+						                </c:otherwise>
+				                	</c:choose>
+				                	
 				                </c:when>
 				                <c:otherwise> <!-- 오래된순 -->
-			                		<a class="btn" href="list.nbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+				                
+			                		<c:choose>
+			              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
+				                			<a class="btn" href="list.nbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+				                		</c:when>
+						                <c:otherwise> <!-- 검색 후 -->
+				                			<a class="btn" href="search.nbo?cpage=${ p }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
+						                </c:otherwise>
+				                	</c:choose>
+			                		
 				                </c:otherwise>
 			                </c:choose>
 			                
@@ -270,14 +313,36 @@
 		                
 		                <c:choose>
 		                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
-			                	<c:if test="${ pi.currentPage ne pi.maxPage }">
-			             	   	<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
-			             	 	</c:if>
+		                	
+		                		<c:choose>
+		              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
+					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+					             	   		<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+					             	 	</c:if>
+				             	 	</c:when>
+							        <c:otherwise> <!-- 검색 후 -->
+					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+					             	   		<a class="btn" href="search.nbo?cpage=${ pi.currentPage + 1 }&condition=${ condition }&keyword=${ keyword }">&gt;</a>
+					             	 	</c:if>
+							        </c:otherwise>
+			                	</c:choose>
+			                	
 		             	    </c:when>
 		             	    <c:otherwise> <!-- 오래된순 -->
-			                	<c:if test="${ pi.currentPage ne pi.maxPage }">
-			             	   	<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
-			             	 	</c:if>
+		             	    
+			             	 	<c:choose>
+		              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
+					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+					             	   		<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
+					             	 	</c:if>
+				             	 	</c:when>
+							        <c:otherwise> <!-- 검색 후 -->
+					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+					             	   		<a class="btn" href="search.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">&gt;</a>
+					             	 	</c:if>
+							        </c:otherwise>
+			                	</c:choose>
+			             	 	
 		             	    </c:otherwise>
 						</c:choose>
 		              </div>
@@ -307,27 +372,20 @@
 	<jsp:include page="../common/scripts.jsp" />
 	
 	<!-- 스크립트 작성 영역 -->
-	<!-- 최신순 / 오래된순 조회용 -->
-	<script>
-		$(function(){
-			
-			$("select[name=orderList]").change(function(){
+	
+	<!-- 검색 후  => 사용자가 요청한 검색조건 및 검색 키워드 유지 -->
+	<c:if test="${ not empty condition }">
+		<script>
+			$(function(){
 				
-				const $option = $(this).children("option:selected").val();
-				
-				if($option == "asc"){
-					location.href = "list.nbo?orderList=" + $option;
-				}else{
-					location.href = "list.nbo";
-				}
+				$("select[name=condition] option[value=${ condition }]").attr("selected", true);
+				$("#search-area input[type=text]").val("${ keyword }");
 				
 			});
-			
-		});
-		
-	</script>
+		</script>
+	</c:if>	
 	
-	<!-- 오래된순으로 조회 시 => 오래된순 옵션이 기본적으로 selected -->
+	<!-- 오래된순으로 조회 시 => 오래된순 옵션 유지 -->
 	<c:if test="${ not empty orderList }">
 		<script>
 			$(function(){
@@ -337,5 +395,40 @@
 			});
 		</script>
 	</c:if>
+	
+	<!-- 최신순 / 오래된순 조회용 -->
+	<script>
+		$(function(){
+			
+				
+			$("select[name=orderList]").change(function(){
+				
+				const $option = $(this).children("option:selected").val();
+				
+				if("" == "${ condition }"){ // 검색 전
+					
+					if($option == "asc"){ // 오래된순
+						location.href = "list.nbo?orderList=" + $option;
+					}else{ // 최신순
+						location.href = "list.nbo";
+					}
+					
+				}else{ // 검색 후
+					
+					if($option == "asc"){ // 오래된순
+						location.href = "search.nbo?orderList=" + $option + "&condition=${ condition }&keyword=${ keyword }";
+					}else{ // 최신순
+						location.href = "search.nbo?condition=${ condition }&keyword=${ keyword }";
+					}
+						
+				}
+				
+			});
+			
+		});
+		
+	</script>
+	
+	
 </body>
 </html>

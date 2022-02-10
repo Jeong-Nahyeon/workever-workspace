@@ -1,6 +1,7 @@
 package com.workever.wk.noticeBoard.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -55,5 +56,50 @@ public class NoticeBoardDao {
 		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectAscList", null, rowBounds);
 		
 	}
+	
+	/** 공지사항 게시글 검색 목록 페이징 처리용 총 게시글 수 조회
+	 * @param sqlSession
+	 * @return
+	 */
+	public int selectSearchCount(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		
+		return sqlSession.selectOne("noticeBoardMapper.selectSearchCount", map);
+		
+	}
+	
+	/** 공지사항 게시글 검색 목록 조회(최신순/페이징 처리)
+	 * @param sqlSession
+	 * @param pi
+	 * @return
+	 */
+	public ArrayList<NoticeBoard> selectSearchList(SqlSessionTemplate sqlSession, HashMap<String, String> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectSearchList", map, rowBounds);
+		
+	}
+	
+	/** 공지사항 게시글 검색 목록 조회(오래된순/페이징 처리)
+	 * @param sqlSession
+	 * @param pi
+	 * @return
+	 */
+	public ArrayList<NoticeBoard> selectSearchAscList(SqlSessionTemplate sqlSession, HashMap<String, String> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectSearchAscList", map, rowBounds);
+		
+	}
+	
 
 }

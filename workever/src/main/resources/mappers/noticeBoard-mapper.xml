@@ -46,4 +46,64 @@
 		    by nb_no asc
 	</select>
 	
+	<select id="selectSearchCount" resultType="_int">
+		select
+		       count(*)
+		  from n_board
+		 where nb_status = 'Y'
+		 <if test="condition == 'title'">
+		   and nb_title
+		 </if>  
+		 <if test="condition == 'content'">
+		   and nb_content
+		 </if>  
+		   	   like '%' || #{keyword} || '%'
+	</select>
+	
+	<select id="selectSearchList" resultMap="noticeBoardResult">
+		select
+		       nb_no
+		     , user_no  
+		     , nb_title
+		     , nb_content
+		     , nb_count
+		     , to_char(nb_date, 'YYYY-MM-DD') as "nb_date"
+		  from n_board
+		 where nb_status = 'Y'
+		 <choose>
+		 	<when test="condition == 'title'">
+		 		and nb_title
+		 	</when>
+		 	<otherwise>
+		 		and nb_content
+		 	</otherwise>
+		 </choose>
+		 		like '%' || #{keyword} || '%'
+		 order
+		    by nb_no desc
+	</select>
+	
+	<select id="selectSearchAscList" resultMap="noticeBoardResult">
+		select
+		       nb_no
+		     , user_no  
+		     , nb_title
+		     , nb_content
+		     , nb_count
+		     , to_char(nb_date, 'YYYY-MM-DD') as "nb_date"
+		  from n_board
+		 where nb_status = 'Y'
+		 <choose>
+		 	<when test="condition == 'title'">
+		 		and nb_title
+		 	</when>
+		 	<otherwise>
+		 		and nb_content
+		 	</otherwise>
+		 </choose>
+		 		like '%' || #{keyword} || '%'
+		 order
+		    by nb_no asc
+	</select>
+	
 </mapper>
