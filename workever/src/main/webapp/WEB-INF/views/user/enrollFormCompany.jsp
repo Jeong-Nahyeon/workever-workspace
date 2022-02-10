@@ -88,7 +88,7 @@
 		<div class="card card-light">
 
 			<!-- form start -->
-			<form action="insert.ad" method="post" id="enrollForm" onsubmit="return enrollForm();">
+			<form action="insert.ad" method="post" id="enrollFormAdmin">
 				<div class="card-body">
 					<div class="form-group">
 						<label for="company-email">이메일</label>
@@ -157,7 +157,8 @@
 				</div>
 
 				<div class="btn-sub">
-					<button type="submit" id="btn-formsubmit">회원가입</button>
+					<!--<button type="submit" id="btn-formsubmit">회원가입</button>-->
+					<input type="button" id="btn-formsubmit" value="회원가입" onclick="enrollForm();">
 				</div>
 
 			</form>
@@ -268,6 +269,51 @@
 								닫기
 							</button>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 이메일 인증 모달 -->
+		<div class="modal" id="emailcheck">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+	
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<div style="margin-left:180px;">
+							<span style="text-align: center; font-size: 17px; font-weight: 700;">
+								인증번호 입력
+							</span>
+						</div>
+						<button type="button" class="close" data-dismiss="modal">
+							&times;
+						</button>
+					</div>
+	
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div style="text-align: center;">
+							<span id="validemail"
+							style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+								
+							</span><br>
+							<span style="font-size: 13px; display: inline-block; margin: 10px 0 60px 0;">
+								위 메일로 인증번호가 전송되었습니다.
+							</span>
+						</div>
+						<div style="text-align: center; margin-bottom: 60px;">
+							<input type="text" name="" id="inputCode" style="border: none; border-bottom: 1px solid gray;"><br>
+							<span id="codeResult">
+								
+							</span>
+						</div>
+						<div style="text-align: center;">
+							<button type="button" class="btn btn-secondary" id="modal-send" style="width: 90px;" disabled="disabled">
+								인증
+							</button>
+						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -397,16 +443,19 @@
 		
 
 		function enrollForm(){
-			if($('#email-status').val()=='emailY' && $('#companyCode-status').val() == 'codeY' &&
+			if($('#email-status').val()=='emailY' && $('#companyCode-status').val() == 'codeY' && $('#company-adminname').val() !='' &&
 				$('#company-name').val()!='' && $('#form-check').is(":checked") && $('#company-class').val() != 'classN'){
 
 				//$('#btn-formsubmit').disabled = false;
 				//$("#enrollForm").submit();
 				console.log('폼 실행 되는겨?')
-				return true;
-
+				//return true;
+				emailSend();
 			}else{
-
+				if($('#company-adminname').val() ==''){
+					alert('이름을 입력하세요.');
+					$('#company-adminname').focus();
+				}
 				if($('#company-name').val()==''){
 					alert("회사이름을 입력해주세요.");
 					$('#company-name').focus();
@@ -424,9 +473,57 @@
 				}
 
 				console.log('폼 이상함');
-				return false;
+				//return false;
 			}
 		}
+
+		// 이메일 인증 메일 전송
+		var emailcode = '';
+		function emailSend(){
+			var email = $('#company-email').val();
+			console.log('폼 실행 되는겨? 이거 함수 실행됨!')
+			$('#emailcheck').modal();
+			
+			$.ajax({
+				url:"sendEmail.do",
+				data:{email:email},
+				type:'post',
+				success:function(result){
+					console.log(result);
+					emailcode = result;
+				},error:function(){
+					console.log("이메일전송 ajax 통신 실패");
+				}
+			})
+		}
+
+		// 인증번호 비교
+		$('#inputCode').blur(function(){
+			console.log("인증번호 비교 실행됨");
+			var inputCode = $('#inputCode').val();		// 입력코드
+			var checkResult = $('#codeResult');			// 비교결과입력창
+			var modalCheckBtn = $('#modal-send');		// 확인버튼
+
+			if(inputCode == emailcode){
+				console.log("인증번호 일치함");
+				checkResult.html("인증번호가 일치합니다.")
+				checkResult.css("color", "rgb(78, 115, 223)");
+				checkResult.css("font-weight", "500");
+				modalCheckBtn.attr("disabled", false);
+				modalCheckBtn.css("background-color", "rgb(78, 115, 223)");
+				modalCheckBtn.css("border", "none");
+			}else{
+				checkResult.html("인증번호를 다시 확인해주세요.");
+				checkResult.css("color", "red");
+				checkResult.css("font-weight", "500");
+				modalCheckBtn.attr("disabled", true);
+			}
+		})
+
+		$('#modal-send').click(function(){
+			$('#enrollFormAdmin').submit();
+			alert("회원가입이 완료되었습니다.");
+		})
 
 		
 	</script>
