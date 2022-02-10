@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
+import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.noticeBoard.model.service.NoticeBoardService;
 import com.workever.wk.noticeBoard.model.vo.NoticeBoard;
 
@@ -108,7 +109,38 @@ public class NoticeBoardController {
 		
 	}
 	
-	
+	/** 공지사항 게시글 상세 조회 후 공지사항 게시글 상세 페이지 포워딩
+	 * @param nbno : 공지사항 게시글 번호
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping("detail.nbo")
+	public ModelAndView selectNoticeBoard(int nbno, ModelAndView mv) {
+		
+		int result = nService.increaseCount(nbno); // 조회수 증가
+		
+		if(result > 0) { // 유효한 게시글
+			
+			NoticeBoard nb = nService.selectNoticeBoard(nbno); // 게시글 상세 조회
+			
+			ArrayList<CommunityFiles> list = nService.selectCommunityFilesList(nbno); // 첨부파일 조회
+			
+			mv.addObject("nb", nb)
+			  .addObject("list", list)
+			  .setViewName("noticeBoard/noticeBoardDetailView");
+			
+			return mv;
+		
+		} else { // 유효하지 않은 게시글
+			
+			mv.addObject("errorMsg", "유효하지 않은 게시글 입니다")
+			  .setViewName("common/errorPage");
+			
+			return mv;
+			
+		}
+			
+	}
 	
 	
 	
@@ -122,16 +154,6 @@ public class NoticeBoardController {
 	public String noticeBoardForm() {
 		
 		return "noticeBoard/noticeBoardForm";
-		
-	}
-	
-	/** 공지사항 게시글 상세 페이지 응답하는 메소드
-	 * @return : noticeBoardDetailView.jsp
-	 */
-	@RequestMapping("detail.nbo")
-	public String noticeBoardDetailView() {
-		
-		return "noticeBoard/noticeBoardDetailView";
 		
 	}
 	

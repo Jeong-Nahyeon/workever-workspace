@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+      
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,14 +79,14 @@
         text-align:center;
     }
 
-    .btns-area button{
+    .btns-area a{
       border:1px solid #4E73DF;
       background: #4E73DF;
       color: white;
       width:75px;
     }
 
-    .btns-area button:hover{
+    .btns-area a:hover{
         color: white;
     }  
 
@@ -120,8 +123,12 @@
 		            <!-- 수정/삭제 버튼 영역 -->
 		            <!-- 관리자일 경우에만 보임 -->
 		            <div class="card-header board-btns-area"> 
+		            
+		            <c:if test="${ loginUser.userRank eq '관리자' }">
 		              <button class="btn btn-sm btn-default update-btn">수정</button>
 		              <button class="btn btn-sm delete-btn">삭제</button>
+		            </c:if>  
+		            
 		            </div>
 		            <!-- /.card-header -->
 		
@@ -131,16 +138,25 @@
 		                <thead>
 		                  <tr>
 		                    <th style="padding-top:0">제목</th>
-		                    <td style="padding-top:0">제목들어가는자리</td>
+		                    <td style="padding-top:0">${ nb.nbTitle }</td>
 		                  </tr>
+		                  <tr>
 		                    <th>작성일</th>
-		                    <td>2022-00-00</td>
+		                    <td>${ nb.nbDate }</td>
 		                  </tr>
 		                  <tr>
 		                    <th>첨부파일</th>
 		                    <td>
-		                      <a href="#">dddddd.jpg</a><br>
-		                      <a href="#">bbbbbb.png</a>
+		                      <c:choose>
+			                      <c:when test="${ empty list }">
+			                      	  첨부파일이 없습니다.
+			                      </c:when>
+			                      <c:otherwise>
+			                      	  <c:forEach var="cf" items="${ list }">
+					                      <a href="${ cf.cfPath + cf.cfChangeName }" download="${ cf.cfOriginName }">${ cf.cfOriginName }</a><br>
+				                      </c:forEach>
+			                      </c:otherwise>
+		                      </c:choose>
 		                    </td>
 		                  </tr>
 		                  <tr align="center">
@@ -149,32 +165,9 @@
 		                  <tr>
 		                </thead>
 		                <tbody>
+		                  <tr>
 		                    <td colspan="2">
-		                      <div class="mail-content-area">
-		                        <h1><u>Heading Of Message</u></h1>
-		                        <h4>Subheading</h4>
-		                        <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
-		                          was born and I will give you a complete account of the system, and expound the actual teachings
-		                          of the great explorer of the truth, the master-builder of human happiness. No one rejects,
-		                          dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
-		                          how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
-		                          is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
-		                          but because occasionally circumstances occur in which toil and pain can procure him some great
-		                          pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
-		                          except to obtain some advantage from it? But who has any right to find fault with a man who
-		                          chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
-		                          produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
-		                          dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
-		                          blinded by desire, that they cannot foresee</p>
-		                        <ul>
-		                          <li>List item one</li>
-		                          <li>List item two</li>
-		                          <li>List item three</li>
-		                          <li>List item four</li>
-		                        </ul>
-		                        <p>Thank you,</p>
-		                        <p>John Doe</p>
-		                    </div>
+		                      <div class="mail-content-area">${ nb.nbContent }</div>
 		                    </td>
 		                  </tr>
 		               </tbody>
@@ -187,7 +180,7 @@
 		          <div class="card-footer">
 		
 		            <div class="btns-area">
-		              <button class="btn btn-sm">목록</button>
+		              <a class="btn btn-sm" href="#" onclick="history.back(); return false;">목록</a>
 		            </div>
 		
 		          </div>

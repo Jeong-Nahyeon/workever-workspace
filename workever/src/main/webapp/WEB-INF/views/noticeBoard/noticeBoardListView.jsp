@@ -74,6 +74,10 @@
       width:75px;
       height:30px;
     }
+    
+    .board-header-area-center button:hover{
+        color: white;
+    }      
 
     /* 게시글 등록버튼 영역 */
     .board-header-area-right{
@@ -396,11 +400,10 @@
 		</script>
 	</c:if>
 	
-	<!-- 최신순 / 오래된순 조회용 -->
 	<script>
 		$(function(){
 			
-				
+			// 공지사항 게시판 목록 및 검색 목록 순차 정렬 조회 (최신순/오래된순)
 			$("select[name=orderList]").change(function(){
 				
 				const $option = $(this).children("option:selected").val();
@@ -424,6 +427,18 @@
 				}
 				
 			});
+			
+			
+			
+			// 공지사항 게시글 상세 조회
+			$("#board-list tbody .board-title").click(function(){
+				
+				const $nbNo = $(this).parent().prev().text();
+				
+				location.href = "detail.nbo?nbno=" + $nbNo;
+				
+			});
+			
 			
 		});
 		

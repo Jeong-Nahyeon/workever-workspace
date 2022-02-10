@@ -11,6 +11,13 @@
 		<result column="nb_date" property="nbDate" />
 	</resultMap>
 	
+	<resultMap id="communityFilesResult" type="CommunityFiles">
+		<result column="cf_no" property="cfNo" />
+		<result column="cf_origin_name" property="cfOriginName" />
+		<result column="cf_change_name" property="cfChangeName" />
+		<result column="cf_path" property="cfPath" />
+	</resultMap>
+	
 	<select id="selectListCount" resultType="_int">
 		select
 		       count(*)
@@ -104,6 +111,36 @@
 		 		like '%' || #{keyword} || '%'
 		 order
 		    by nb_no asc
+	</select>
+	
+	<update id="increaseCount">
+		update
+		       n_board
+		   set nb_count = nb_count + 1
+		 where nb_status = 'Y'     
+		   and nb_no = #{nbNo}
+	</update>
+	
+	<select id="selectNoticeBoard" resultMap="noticeBoardResult">
+		select
+		       nb_no
+		     , nb_title
+		     , nb_content
+		     , to_char(nb_date, 'YYYY-MM-DD') as "nb_date"
+		  from n_board
+		 where nb_status = 'Y'
+		   and nb_no = #{nbNo}
+	</select>
+	
+	<select id="selectCommunityFilesList" resultMap="communityFilesResult">
+		select
+		       cf_no
+		     , cf_origin_name
+		     , cf_change_name
+		     , cf_path
+		  from community_files
+		 where cf_category = 'N'
+		   and cf_ref_no = #{nbNo}
 	</select>
 	
 </mapper>

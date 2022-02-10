@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.noticeBoard.model.dao.NoticeBoardDao;
 import com.workever.wk.noticeBoard.model.vo.NoticeBoard;
 
@@ -78,6 +79,36 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 	public ArrayList<NoticeBoard> selectSearchAscList(HashMap<String, String> map, PageInfo pi) {
 		
 		return nDao.selectSearchAscList(sqlSession, map, pi);
+		
+	}
+
+	/**
+	 * 공지사항 게시글 조회수 증가
+	 */
+	@Override
+	public int increaseCount(int nbNo) {
+
+		return nDao.increaseCount(sqlSession, nbNo);
+		
+	}
+
+	/**
+	 * 공지사항 게시글 상세 조회
+	 */
+	@Override
+	public NoticeBoard selectNoticeBoard(int nbNo) {
+
+		return nDao.selectNoticeBoard(sqlSession, nbNo);
+		
+	}
+
+	/**
+	 * 공지사항 게시글 첨부파일 조회
+	 */
+	@Override
+	public ArrayList<CommunityFiles> selectCommunityFilesList(int nbNo) {
+
+		return nDao.selectCommunityFilesList(sqlSession, nbNo);
 		
 	}
 	
