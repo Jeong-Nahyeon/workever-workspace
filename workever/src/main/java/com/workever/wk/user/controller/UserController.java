@@ -130,7 +130,7 @@ public class UserController {
 		
 		if(result > 0) {
 			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
-			return "user/main";
+			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");
 			return "common/errorPage";
