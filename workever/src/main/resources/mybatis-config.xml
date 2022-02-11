@@ -22,6 +22,7 @@
 		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalWorkReportForm" alias="ApprovalWorkReportForm" />
 		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalForm" alias="ApprovalForm" />
 		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalLine" alias="ApprovalLine" />
+		<typeAlias type="com.workever.wk.user.model.vo.Company" alias="Company"/>
 	</typeAliases>
 	
 	<mappers>
