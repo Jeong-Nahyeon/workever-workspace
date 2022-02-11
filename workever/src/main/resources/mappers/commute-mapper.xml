@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="commuteMapper">
+	
+	
+	<resultMap type="Commute" id="commuteResult">
+		<result column="cm_no" property="cmNo" />
+		<result column="user_no" property="userNo" />
+		<result column="cm_date" property="cmDate" />
+		<result column="cm_state" property="cmState" />
+		<result column="cm_start_time" property="cmStartTime" />
+		<result column="cm_end_time" property="cmEndTime" />
+		<result column="cm_working_hours" property="cmWorkingHours" />
+		
+		<result column="user_name" property="userName" />
+	</resultMap>
+	
+	<select id="cmSelectListCount" resultType="_int">
+		select
+			   count(*)
+		  from commute
+		 where user_no = #{ userNo }
+	</select>
+	
+	<select id="cmSelectList" resultMap="commuteResult">
+		select 
+		       cm_no
+		     , user_name
+		     , cm_date
+		     , cm_state
+		     , cm_start_time
+		     , cm_end_time
+		     , cm_working_hours
+		  from commute
+		  join users using (user_no)
+		 where user_no = #{ userNo }
+	</select>
+	
+	<!-- 
+	<select id="insertEnter" resultMap="commuteResult">
+		insert
+		  into commute
+		     (
+		       cm_no
+		     , user_no
+		     , cm_date
+		     , cm_start_time
+		     )
+		     values
+		     (
+		       seq_commute.nextval
+		     , #{userNo}
+		     , to_char(sysdate, 'yyyy-mm-dd')
+		     , to_char(sysdate, 'hh24:mi:ss')
+		     )
+	</select>
+	-->
+	
+</mapper>

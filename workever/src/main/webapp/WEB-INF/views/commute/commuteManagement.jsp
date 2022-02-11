@@ -170,9 +170,12 @@
 		    
 
 			<div style="text-align: center;">
-				<button class="cmBtn" id="startBtn" >출 근</button>
-				<button class="cmBtn" id="endBtn" data-toggle="modal" data-target="#endModal">퇴 근</button>
+				<input type="hidden" name="uno" value="${ loginUser.userNo }">
+				<button class="cmBtn" id="startBtn" onclick="enterInsert();" >출 근</button>
+				<button class="cmBtn" id="endBtn" data-toggle="modal" data-target="#endModal">퇴 근</button>		
 			</div>
+			
+	
 
 			<!-- Modal -->
 			<div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -215,12 +218,10 @@
 			</div>
 
 			<br><br><br><br>
-
-
 			
 			
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
@@ -233,69 +234,14 @@
 						</tr>
 				  	</thead>
 				  	<tbody>
-						<tr>
+				  		<tr>
 							<td>2022-01-19</td>
 							<td>정상</td>
 							<td>09:00:53</td>
 							<td>18:00:10</td>
 							<td>8:00</td>
 						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
+				  		
 						<tr>
 							<td>2022-01-19</td>
 							<td>정상</td>
@@ -306,11 +252,100 @@
 				  	</tbody>
 				</table>
 			</div>
+			
+			
+						
+			<script>
+				$(function(){
+					selectCommuteList(1);
+				})
+				
+				function selectCommuteList(cpageNo) {
+					$.ajax({
+						url: "list.cm",
+						data: { 
+								userNo: ${"loginUser.userNo"},
+								currentPage: cpageNo
+						}, success:function(result) {
+							
+							let value="";
+		    				for(let i in result.list) {
+		    					value += "<tr>"
+		    						   +	"<td>" + result.list[i].cmDate + "</td>"
+		    						   +	"<td>" + result.list[i].cmState + "</td>"
+		    						   +	"<td>" + result.list[i].cmStartTime + "</td>"
+		    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
+		    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
+		    						   + "</tr>";
+		    				}
+		    				
+		    				$("#select-area tbody").html(value);
+		    				$("#selectCount").text(list.length);
+		    				
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage != 1) {
+		    					paging += "<button onclick='selectCommuteList(" + (result.pi.currentPage-1) + ")'>&lt;</button>";
+		    				}
+		    				
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					if(p == result.pi.currentPage) {
+		    						paging += "<button disable>" + p + "</button>";
+		    					} else {
+		    						paging += "<button onclick='selectCommuteList(" + p + ")'>" + p + "</button>";
+		    					}
+		    				}
+		    				
+		    				if(result.pi.currentPage != result.pi.maxPage) {
+		    					paging += "<button onclick='selectReplyList(" + (result.pi.currentPage+1) + ")'>&gt;</button>";
+		    				}
+		    				
+		    				$("#paging-area").html(paging);
+	
+		    					
+		    					
+						}, error:function() {
+							console.log("근태리스트 조회용 ajax 통신실패");
+						}
+
+					})
+				}
+				
+				<%--
+				<script>
+				function enterInsert(){
+			          $.ajax({
+			             url:"enter.cm",
+			             data:{
+			                bno:$("#bno").val()
+			             },success:function(result){
+			                
+			            	
+			            	// 응답데이터가 배열의 형태일 경우 => 인덱스에 접근 가능 =>  [인덱스]
+			            	/*
+							let value = "이름: " + result[0] + "<br>나이: " + result[1];
+			            	$("#result1").html(value);
+			            	*/
+			            	
+			            	// 응답데이터가 단순 객체 형태일 경우 => 속성에 접근 가능 => .속성명
+			            	let value = "이름: " + result.name + "<br>나이: " + result.age;
+			            	$("#result1").html(value);
+			                
+			             },error:function(){
+			                console.log("ajax통신 실패");
+			             }
+			             
+			          });
+			       }
+				--%>
+			</script>
+			
+			
 
 			<br>
 
 			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+				
 			</div>
 
 
