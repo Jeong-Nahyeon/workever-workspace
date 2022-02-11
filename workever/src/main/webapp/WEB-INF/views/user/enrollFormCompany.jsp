@@ -177,7 +177,7 @@
 					</div>
 					<div class="form-group" id="checkCode">
 						<label for="company-code">회사 코드</label><br>
-						<input type="text" class="form-control" id="company-code" placeholder="Password" name="comEncode">
+						<input type="text" class="form-control" id="company-code" placeholder="회사코드를 입력하세요." name="comEncode">
 						<!--<button id="btn-checkCodeD">회사코드확인</button>-->
 						<input type="button" value="회사코드중복확인" id="btn-checkCode" onclick="checkCompanyCode();">
 						<input type="hidden" id="companyCode-status" value="codeN">
