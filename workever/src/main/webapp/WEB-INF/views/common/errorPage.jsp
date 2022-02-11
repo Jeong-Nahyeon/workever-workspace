@@ -14,6 +14,7 @@
 	
 	<div class="content-wrapper">
 		<h3>에러! 추후 수정 예정!</h3>
+		<h1>${ errorMsg }</h1>
 	</div>
 </body>
 </html>
