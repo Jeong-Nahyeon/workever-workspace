@@ -19,6 +19,8 @@
 		<result column="user_auth" property="userAuth" />
 		<result column="user_annual_date" property="userAnnualDate" />
 		<result column="user_use_date" property="userUseDate" />
+		
+		<result column="dept_name" property="deptName" />
 	</resultMap>
 
 	<select id="loginUser" resultMap="userResult">
@@ -58,5 +60,29 @@
 		  from company
 		 where com_encode = #{companyCode}
 	</select>
+	
+	<!-- 주소록 (사원 총 인원) -->
+	<select id="abSelectListCount" resultType="_int">
+		select
+			   count(*)
+	      from users
+	     where user_enabled = 'Y'
+	</select>
+	
+	<!-- 주소록 (사원 정보) -->
+	<select id="abSelectList" resultMap="userResult">
+		select
+		       user_no
+		     , user_name
+		     , dept_name
+		     , user_email
+		     , user_phone
+		     , user_filepath
+		  from users
+		  join dept using (dept_no)
+		 order
+    		by user_no desc
+	</select>
+	
   
 </mapper>
