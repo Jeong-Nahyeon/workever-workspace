@@ -1,5 +1,7 @@
 package com.workever.wk.user.model.dao;
 
+import java.util.HashMap;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +23,10 @@ public class UserDao {
 	// 회사코드 중복확인 서비스
 	public int companyCodeCheckAdmin(SqlSessionTemplate sqlSession, String companyCode) {
 		return sqlSession.selectOne("userMapper.companyCodeCheckAdmin", companyCode);
+	}
+	
+	// 회원가입 서비스(관리자)
+	public int insertCompany(SqlSessionTemplate sqlSession, HashMap<String, Object> admin) {
+		return sqlSession.insert("userMapper.insertCompany", admin);
 	}
 }

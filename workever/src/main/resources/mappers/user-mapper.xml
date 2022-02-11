@@ -22,6 +22,17 @@
 		
 		<result column="dept_name" property="deptName" />
 	</resultMap>
+	
+	<resultMap type="Company" id="companyResult">
+		<result column="com_no" property="comNo"/>
+		<result column="com_name" property="comName"/>
+		<result column="com_phone" property="comPhone"/>
+		<result column="com_class" property="comClass"/>
+		<result column="com_encode" property="comEncode"/>
+		<result column="com_originname" property="comOriginName"/>
+		<result column="com_changename" property="comChangeName"/>
+		<result column="com_logopath" property="comLogoPath"/>
+	</resultMap>
 
 	<select id="loginUser" resultMap="userResult">
 		select
@@ -61,7 +72,7 @@
 		 where com_encode = #{companyCode}
 	</select>
 	
-	<!-- 주소록 (사원 총 인원) -->
+	<!-- [가연] 주소록 (사원 총 인원) -->
 	<select id="abSelectListCount" resultType="_int">
 		select
 			   count(*)
@@ -69,7 +80,7 @@
 	     where user_enabled = 'Y'
 	</select>
 	
-	<!-- 주소록 (사원 정보) -->
+	<!-- [가연] 주소록 (사원 정보) -->
 	<select id="abSelectList" resultMap="userResult">
 		select
 		       user_no
@@ -84,5 +95,44 @@
     		by user_no desc
 	</select>
 	
+	<select id="insertCompany" parameterType="hashMap">
+		insert all
+		into company
+		    values
+		    (
+		      SEQ_COMPANY.nextval
+		    , #{comName}
+		    , #{userPhone}
+		    , #{comClass}
+		    , #{comEncode}
+		    , null
+		    , null
+		    , null
+		    ) 
+		into users
+		    (
+		      user_no
+		    , com_no
+		    , user_email
+		    , user_name
+		    , user_phone
+		    , user_pwd
+		    , user_rank
+		    , user_auth
+		    )
+		    values
+		    (
+		      SEQ_USERS.nextval
+		    , SEQ_COMPANY.currval
+		    , #{userEmail}
+		    , #{comName}
+		    , #{userPhone}
+		    , #{userPwd}
+		    , '관리자'
+		    , 'A'
+		    )
+		select *
+		  from DUAL
+	</select>
   
 </mapper>

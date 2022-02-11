@@ -92,7 +92,7 @@
 				<div class="card-body">
 					<div class="form-group">
 						<label for="company-email">이메일</label>
-						<input type="email" class="form-control" id="company-email" placeholder="Enter email">
+						<input type="email" class="form-control" id="company-email" placeholder="이메일을 입력하세요." name="userEmail">
 						<input type="hidden" id="email-status" value="emailN">
 						<div id="checkEmail">
 							
@@ -100,14 +100,14 @@
 					</div>
 					<div class="form-group">
 						<label for="company-adminname">이름</label>
-						<input type="text" class="form-control" id="company-adminname" placeholder="Password">
+						<input type="text" class="form-control" id="company-adminname" placeholder="이름을 입력하세요." name="userName">
 						<div id="checkName">
 
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="company-pwd">비밀번호</label>
-						<input type="password" class="form-control" id="company-pwd" placeholder="Password">
+						<input type="password" class="form-control" id="company-pwd" placeholder="영문, 숫자, 특수문자 포함 8~16자리 입니다." name="userPwd">
 						<input type="hidden" id="pwd-status" value="pwdN">
 						<div id="checkPwd">
 							
@@ -115,18 +115,25 @@
 					</div>
 					<div class="form-group">
 						<label for="company-pwdcheck">비밀번호 확인</label>
-						<input type="password" class="form-control" id="company-pwdcheck" placeholder="Password">
+						<input type="password" class="form-control" id="company-pwdcheck" placeholder="영문, 숫자, 특수문자 포함 8~16자리 입니다.">
 						<div id="checkPwd-check">
 
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="exampleInputPassword1">전화번호</label>
+						<input type="number" class="form-control" id="company-phone" name="userPhone" placeholder="전화번호를 입력하세요.">
+						<div id="checkPhone">
+							
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="company-name">회사명</label>
-						<input type="text" class="form-control" id="company-name" placeholder="Password">
+						<input type="text" class="form-control" id="company-name" placeholder="회사 이름을 입력하세요." name="comName">
 					</div>
 					<div class="form-group" id="checkCode">
 						<label for="company-code">회사 코드</label><br>
-						<input type="text" class="form-control" id="company-code" placeholder="Password">
+						<input type="text" class="form-control" id="company-code" placeholder="Password" name="comEncode">
 						<!--<button id="btn-checkCodeD">회사코드확인</button>-->
 						<input type="button" value="회사코드중복확인" id="btn-checkCode" onclick="checkCompanyCode();">
 						<input type="hidden" id="companyCode-status" value="codeN">
@@ -135,17 +142,17 @@
 						<label>회사 업종</label>
 						<select class="form-control" name="comClass" id="company-class">
 							<option value="classN">회사 업종 선택</option>
-							<option value="manufacturing">제조</option>
-							<option value="service">서비스</option>
-							<option value="it">IT</option>
-							<option value="distribution">유통</option>
-							<option value="education">교육/연구</option>
-							<option value="construction">건설</option>
-							<option value="medical">의료</option>
-							<option value="financial">금융</option>
-							<option value="grovernment">공공행정</option>
-							<option value="entertainment">엔터테인먼트</option>
-							<option value="etc">기타</option>
+							<option value="제조">제조</option>
+							<option value="서비스">서비스</option>
+							<option value="IT">IT</option>
+							<option value="유통">유통</option>
+							<option value="교육">교육/연구</option>
+							<option value="건설">건설</option>
+							<option value="의료">의료</option>
+							<option value="금융">금융</option>
+							<option value="공공행정">공공행정</option>
+							<option value="엔터테인먼트">엔터테인먼트</option>
+							<option value="기타">기타</option>
 						</select>
 					</div>
 					<div class="enroll-check">
@@ -330,11 +337,12 @@
 		let emailExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		// 비밀번호 정규식
 		let pwdExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,16}$/i;
-		// 휴대폰번호 정규식
-		let phoneExp = /^01[0179]([0-9]{7,8}$)/;
+		// 전화번호 정규식
+		//let phoneExp = /^01[0179]([0-9]{7,8}$)/;
+		let phoneExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
 
+		// 이메일 정규표현식 확인
 		$("#company-email").blur(function () {
-			// 이메일 정규표현식 확인
 			if (!emailExp.test($(this).val())) {
 				console.log(emailExp.test($(this).val()));
 				$('#checkEmail').text("이메일을 확인해주세요.");
@@ -374,6 +382,19 @@
 				$('#company-pwdcheck').css('border', '1px solid #ced4da');
 			}
 		});
+
+		// 전화번호 정규식
+		$('#company-phone').blur(function(){
+			if(!phoneExp.test($(this).val())){
+				$('#checkPhone').text('전화번호를 확인해주세요.');
+				$('#checkPhone').css('color', 'red');
+				$('#company-phone').css('border', '2px solid red');
+				$('#company-phone').focus();
+			}else{
+				$('#checkPhone').text('');
+				$('#company-phone').css('border', '1px solid #ced4da');
+			}
+		})
 
 		// 이메일 중복체크
 		function checkEmailDouble() {
@@ -440,11 +461,9 @@
 			$('#company-email').css('background-color', 'white');
 		})
 
-		
-
 		function enrollForm(){
 			if($('#email-status').val()=='emailY' && $('#companyCode-status').val() == 'codeY' && $('#company-adminname').val() !='' &&
-				$('#company-name').val()!='' && $('#form-check').is(":checked") && $('#company-class').val() != 'classN'){
+				$('#company-name').val()!='' && $('#form-check').is(":checked") && $('#company-class').val() != 'classN' && $('#company-phone') != ''){
 
 				//$('#btn-formsubmit').disabled = false;
 				//$("#enrollForm").submit();
@@ -455,6 +474,10 @@
 				if($('#company-adminname').val() ==''){
 					alert('이름을 입력하세요.');
 					$('#company-adminname').focus();
+				}
+				if($('#company-phone').val() ==''){
+					alert('전화번호를 입력하세요.');
+					$('#company-phone').focus();
 				}
 				if($('#company-name').val()==''){
 					alert("회사이름을 입력해주세요.");
