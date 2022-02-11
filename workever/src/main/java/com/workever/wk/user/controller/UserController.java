@@ -83,13 +83,22 @@ public class UserController {
 		return count > 0 ? "NNNNN" : "NNNNY";
 	}
 	
-	// 회사코드 중복체크
+	// 회사코드 중복체크(관리자)
 	@ResponseBody
 	@RequestMapping("companyCodeCheck.ad")
 	public String companyCodeCheckAdmin(String companyCode) {
 		int count = uService.companyCodeCheckAdmin(companyCode);
 		
 		return count > 0 ? "NNNNN" : "NNNNY";
+	}
+	
+	// 회사코드 확인(사원)
+	@ResponseBody
+	@RequestMapping("companyCodeCheck.us")
+	public String companyCodeCheckUser(String companyCode) {
+		int count = uService.companyCodeCheckAdmin(companyCode);
+		
+		return count > 0 ? "NNNNY" : "NNNNN";
 	}
 	
 	// 이메일 인증 메일 보내기
@@ -119,6 +128,7 @@ public class UserController {
 		return num;
 	}
 	
+	// 회원가입(관리자) 서비스
 	@RequestMapping("insert.ad")
 	public String insertCompany(User u, Company c, HttpSession session, Model model) {
 		System.out.println(u);
@@ -150,4 +160,31 @@ public class UserController {
 			return "common/errorPage";
 		}
 	}
+	
+	// 회원가입(사원) 서비스
+	@RequestMapping("insert.us")
+	public String insertUser(User u, HttpSession session, Model model) {
+		// 암호화 작업
+		String encPwd = bcryptPasswordEncoder.encode(u.getUserPwd());
+		u.setUserPwd(encPwd);
+		
+		HashMap<String, Object> user = new HashMap<>();
+		user.put("userEmail", u.getUserEmail());
+		user.put("userName", u.getUserName());
+		user.put("userPwd", u.getUserPwd());
+		user.put("userPhone", u.getUserPhone());
+		user.put("companyCode", u.getCompanyCode());
+		
+		int result = uService.insertUser(user);
+		
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			return "user/login";
+		}else {
+			model.addAttribute("errorMsg", "회원가입 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	
 }

@@ -24,9 +24,14 @@ public class UserDao {
 	public int companyCodeCheckAdmin(SqlSessionTemplate sqlSession, String companyCode) {
 		return sqlSession.selectOne("userMapper.companyCodeCheckAdmin", companyCode);
 	}
-	
+
 	// 회원가입 서비스(관리자)
 	public int insertCompany(SqlSessionTemplate sqlSession, HashMap<String, Object> admin) {
 		return sqlSession.insert("userMapper.insertCompany", admin);
+	}
+	
+	// 회원가입 서비스(사원)
+	public int insertUser(SqlSessionTemplate sqlSession, HashMap<String, Object> user) {
+		return sqlSession.insert("userMapper.insertUser", user);
 	}
 }

@@ -65,13 +65,14 @@
 		 where user_email = #{checkEmail}
 	</select>
 	
+	<!-- 회사코드 중복확인 -->
 	<select id="companyCodeCheckAdmin" resultType="_int">
 		select
 		       count(*)
 		  from company
 		 where com_encode = #{companyCode}
 	</select>
-	
+
 	<!-- [가연] 주소록 (사원 총 인원) -->
 	<select id="abSelectListCount" resultType="_int">
 		select
@@ -95,6 +96,7 @@
     		by user_no desc
 	</select>
 	
+	<!-- 회원가입(관리자) -->
 	<select id="insertCompany" parameterType="hashMap">
 		insert all
 		into company
@@ -134,5 +136,29 @@
 		select *
 		  from DUAL
 	</select>
-  
+	
+	<!-- 회원가입(사원) -->
+  	<insert id="insertUser">
+  		insert 
+		  into users
+		      (
+		        user_no
+		      , com_no
+		      , user_email
+		      , user_name
+		      , user_phone
+		      , user_pwd
+		      , user_enabled
+		      )
+		      values
+		      (
+		        SEQ_users.nextval
+		      , (select com_no from company where com_encode = 'dang')
+		      , #{userEmail}
+		      , #{userName}
+		      , #{userPhone}
+		      , #{userPwd}
+		      , 'N'
+		      )
+  	</insert>
 </mapper>

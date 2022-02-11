@@ -28,6 +28,7 @@ public class User {
 	private String userAuth;
 	private String userAnnualDate;
 	private String userUseDate;
+	private String companyCode;
 	
 	private String deptName;
 }

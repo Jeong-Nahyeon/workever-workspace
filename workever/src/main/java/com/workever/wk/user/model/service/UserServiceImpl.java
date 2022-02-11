@@ -47,6 +47,15 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	// 회원가입 서비스(사원)
+	@Override
+	public int insertUser(HashMap<String, Object> user) {
+		int result = uDao.insertUser(sqlSession, user);
+		return result;
+	}
+
+	
+
 	
 	
 
