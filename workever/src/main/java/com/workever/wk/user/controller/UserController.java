@@ -33,7 +33,7 @@ public class UserController {
 	// 암호화
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
-	
+
 	// 로그인 서비스
 	@RequestMapping("login.us")
 	public String loginUser(User u, HttpSession session, Model model) {
@@ -47,11 +47,25 @@ public class UserController {
 			return "common/errorPage";
 		}
 	}
+	
+	// 로그아웃 서비스
+	@RequestMapping("logout.do")
+	public void logoutUser(HttpSession session) {
+		session.invalidate();
+		//return "user/startPage";
+	}
+	
 
-	// 회원가입 폼 페이지 연결
+	// 회원가입 폼 페이지 연결(관리자)
 	@RequestMapping("enrollForm.ad")
 	public String enrollFormAdmin() {
 		return "user/enrollFormCompany";
+	}
+	
+	// 회원가입 폼 페이지 연결(사원)
+	@RequestMapping("enrollForm.us")
+	public String enrollFormUser() {
+		return "user/enrollFormUser";
 	}
 	
 	// 로그인 페이지 연결

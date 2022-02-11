@@ -9,7 +9,9 @@
 <body>
 
 	<!-- 테스트 용 -->
-	<jsp:forward page="WEB-INF/views/test.jsp" />
+	<jsp:forward page="WEB-INF/views/startPage.jsp" />
+	
+	
 	
 </body>
 </html>

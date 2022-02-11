@@ -9,6 +9,41 @@
 
 <style>
     div{box-sizing: border-box;}
+    /* 헤더스타일 */
+    #start-header{
+        background-color: rgb(78, 115, 223);
+        height: 100px;
+        overflow: hidden;
+        margin: auto;
+    }
+    #start-header a{
+        color: white;
+        text-decoration: none;
+        font-size: 40px; font-weight: 600;
+    }
+    
+    #header-font{
+        width: 48%;
+        padding-left: 80px;
+        display: inline-block;
+        height: 80px;
+        margin-top: 15px;
+        /*margin-left: 80px;*/
+        /*line-height: 100px;*/
+    }
+    #header-button{
+        width: 48%;
+        text-align: right;
+        display: inline-block;
+    }
+    #header-button button{
+        width: 100px; height: 30px;
+        border: 1px solid white;
+        background-color: rgb(78, 115, 223);
+        color: white;
+    }
+
+    /* 본문스타일 */
     #findpwd-outer{height: 770px;}
     .findpwd-area{
         margin: auto;
@@ -45,7 +80,17 @@
 </style>
 </head>
 <body>
-    <jsp:include page="startHeader.jsp"></jsp:include>
+    <div id="start-header">
+        <div id="header-font">
+            <a href="${pageContext.request.contextPath}">
+                <span>Workever</span>
+            </a>
+        </div>
+        
+        <div id="header-button">
+            <button onclick="location.href='${pageContext.request.contextPath}'">회원가입</button>
+        </div>
+    </div>
 
     <div id="findpwd-outer">
         <div class="findpwd-area">
