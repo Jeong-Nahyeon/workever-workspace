@@ -1,15 +1,19 @@
 package com.workever.wk.commute.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.commute.model.service.CommuteService;
@@ -27,9 +31,10 @@ public class CommuteController {
 		return "commute/commuteManagement";
 	}
 	
+	/* 첫번째 시도.. 
 	@ResponseBody
-	@RequestMapping("list.cm")
-	public String selectCommuteList(/*@RequestParam(value="cpage", defaultValue="1")*/ int currentPage , int userNo) {
+	@RequestMapping(value="list.cm", produces="application/json; charset=UTF-8")
+	public String selectCommuteList(int currentPage , int userNo, HttpServletResponse response ) {
 		
 		int listCount = cService.cmSelectListCount(userNo);
 		
@@ -42,6 +47,45 @@ public class CommuteController {
 		
 		return new Gson().toJson(result);
 	}
+	*/
+	
+	/* 두번째 시도...ㅠ
+	@ResponseBody
+	@RequestMapping(value="list.cm")
+	public String selectCommuteList(int currentPage , int userNo, HttpServletResponse response ) throws IOException {
+		
+		int listCount = cService.cmSelectListCount(userNo);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList<Commute> list = cService.cmSelectList(userNo, pi);
+		
+		JSONObject jObj = new JSONObject();
+		jObj.put("pi", pi);
+		jObj.put("list", list);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		return jObj.toJSONString();
+	}
+	*/
+	
+	// 세번째 시도..
+	@ResponseBody
+	@RequestMapping(value="list.cm", method = RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Map<String,Object> selectCommuteList(int currentPage , int userNo, HttpServletResponse response ) throws IOException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int listCount = cService.cmSelectListCount(userNo);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList<Commute> list = cService.cmSelectList(userNo, pi);
+		
+		map.put("pi", pi);
+		map.put("list", list);
+		
+		return map;
+	}
+	
 	
 	/*
 	@RequestMapping("enter.cm")

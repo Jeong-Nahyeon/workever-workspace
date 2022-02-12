@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 	
 <style>
 
@@ -101,6 +102,7 @@
 </head>
 	
 <body class="hold-transition sidebar-mini">
+
 	
 	<div class="wrapper">
 	
@@ -235,36 +237,45 @@
 				  	</thead>
 				  	<tbody>
 				  		<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-				  		
-						<tr>
-							<td>2022-01-19</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
+				  			<td>2022-02-10</td>
+				  			<td>정상</td>
+				  			<td>08:59:04</td>
+				  			<td>18:00:16</td>
+				  			<td>8:01</td>
+				  		</tr>
 				  	</tbody>
 				</table>
+				
+				<br>
+	
+				<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
+					
+				</div>
+				
+				<div class="card-footer" style="background-color: #f4f6f9;">
+					<nav aria-label="Contacts Page Navigation">
+						<ul class="pagination justify-content-center m-0">
+	
+						</ul>
+					</nav>
+				</div>
 			</div>
+					
 			
 			
-						
+
 			<script>
 				$(function(){
 					selectCommuteList(1);
 				})
 				
 				function selectCommuteList(cpageNo) {
+					
 					$.ajax({
 						url: "list.cm",
+						type:"POST",
 						data: { 
-								userNo: ${"loginUser.userNo"},
+								userNo: '${loginUser.userNo}',
 								currentPage: cpageNo
 						}, success:function(result) {
 							
@@ -272,37 +283,46 @@
 		    				for(let i in result.list) {
 		    					value += "<tr>"
 		    						   +	"<td>" + result.list[i].cmDate + "</td>"
-		    						   +	"<td>" + result.list[i].cmState + "</td>"
-		    						   +	"<td>" + result.list[i].cmStartTime + "</td>"
+    						   
+		    						   if(result.list[i].cmState == 1) { value += "<td>" + "정상" + "</td>" }
+		    						   else if(result.list[i].cmState == 2) { value += "<td>" + "지각" + "</td>" }
+		    						   else if(result.list[i].cmState == 3) { value += "<td>" + "결근" + "</td>" }
+		    						   else if(result.list[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
+		    						   else { value += "<td>" + "휴가" + "</td>" }
+		    						   
+		    						   
+		    					value  +=	"<td>" + result.list[i].cmStartTime + "</td>"
 		    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
 		    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
 		    						   + "</tr>";
 		    				}
 		    				
-		    				$("#select-area tbody").html(value);
-		    				$("#selectCount").text(list.length);
+		    				console.log(result);
 		    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.list.length);
 		    				
+
 		    				let paging="";
-		    				if(result.pi.currentPage != 1) {
-		    					paging += "<button onclick='selectCommuteList(" + (result.pi.currentPage-1) + ")'>&lt;</button>";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' href='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' href='selectCommuteList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
 		    				}
-		    				
+							
 		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
-		    					if(p == result.pi.currentPage) {
-		    						paging += "<button disable>" + p + "</button>";
-		    					} else {
-		    						paging += "<button onclick='selectCommuteList(" + p + ")'>" + p + "</button>";
-		    					}
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' href='selectCommuteList(" + p + ")'>" + p + "</a></li>";
 		    				}
-		    				
-		    				if(result.pi.currentPage != result.pi.maxPage) {
-		    					paging += "<button onclick='selectReplyList(" + (result.pi.currentPage+1) + ")'>&gt;</button>";
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' href='#'>Next</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' href='selectCommuteList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
 		    				}
+							
+		    				$(".pagination").html(paging);
 		    				
-		    				$("#paging-area").html(paging);
-	
-		    					
+		    				
 		    					
 						}, error:function() {
 							console.log("근태리스트 조회용 ajax 통신실패");
@@ -311,52 +331,15 @@
 					})
 				}
 				
-				<%--
-				<script>
-				function enterInsert(){
-			          $.ajax({
-			             url:"enter.cm",
-			             data:{
-			                bno:$("#bno").val()
-			             },success:function(result){
-			                
-			            	
-			            	// 응답데이터가 배열의 형태일 경우 => 인덱스에 접근 가능 =>  [인덱스]
-			            	/*
-							let value = "이름: " + result[0] + "<br>나이: " + result[1];
-			            	$("#result1").html(value);
-			            	*/
-			            	
-			            	// 응답데이터가 단순 객체 형태일 경우 => 속성에 접근 가능 => .속성명
-			            	let value = "이름: " + result.name + "<br>나이: " + result.age;
-			            	$("#result1").html(value);
-			                
-			             },error:function(){
-			                console.log("ajax통신 실패");
-			             }
-			             
-			          });
-			       }
-				--%>
 			</script>
 			
 			
-
-			<br>
-
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				
-			</div>
-
-
 		</div>
 		<!-- /.content-wrapper -->
 		
 				
 		<jsp:include page="../common/footer.jsp" />
 	</div>
-	
-	<jsp:include page="../common/scripts.jsp" />
 
 </body>
 </html>
