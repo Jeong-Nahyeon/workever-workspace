@@ -143,4 +143,44 @@
 		   and cf_ref_no = #{nbNo}
 	</select>
 	
+	<insert id="insertNoticeBoard">
+		insert
+		  into n_board
+		  (
+	  	    nb_no
+	  	  , user_no
+	  	  , nb_title
+	  	  , nb_content
+		  )
+		  values
+		  (
+		    seq_n_board.nextval
+		  , #{userNo}
+		  , #{nbTitle}
+		  , #{nbContent}  	
+		  )
+	</insert>
+	
+	<insert id="insertCommunityFileList">
+		insert
+		  into community_files
+		  (
+		    cf_no
+		  , cf_category
+		  , cf_ref_no
+		  , cf_origin_name
+		  , cf_change_name
+		  , cf_path
+		  )  
+		  values
+		  (
+		    seq_community_files.nextval
+		  , 'N'
+		  , seq_n_board.currval
+		  , #{cfOriginName}
+		  , #{cfChangeName}
+		  , #{cfPath}
+		  )
+	</insert>
+	
 </mapper>

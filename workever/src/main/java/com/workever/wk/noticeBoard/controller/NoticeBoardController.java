@@ -1,27 +1,23 @@
 package com.workever.wk.noticeBoard.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.JsonObject;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.community.model.vo.CommunityFiles;
+import com.workever.wk.community.template.SaveCommunityFiles;
 import com.workever.wk.noticeBoard.model.service.NoticeBoardService;
 import com.workever.wk.noticeBoard.model.vo.NoticeBoard;
 
@@ -162,7 +158,58 @@ public class NoticeBoardController {
 		
 	}
 	
-	
+	@RequestMapping("insert.nbo")
+	public String insertNoticeBoard(NoticeBoard nb, MultipartFile[] upfile, HttpSession session, Model m) {
+					
+		ArrayList<CommunityFiles> list = new ArrayList<>();
+		
+		if(upfile != null) { // 첨부파일이 존재할 경우
+			
+			String savePath = "resources/community_upfiles/noticeBoard_upfiles/";
+			
+			for(int i=0; i<upfile.length; i++) {
+				
+				String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
+				
+				CommunityFiles cf = new CommunityFiles();
+				cf.setCfOriginName(upfile[i].getOriginalFilename());
+				cf.setCfChangeName(changeName);
+				cf.setCfPath(savePath);
+				
+				list.add(cf);
+				
+			}
+			
+		}
+		
+		System.out.println(list);
+		
+		int result = nService.insertNoticeBoard(nb, list);
+		
+		if(result > 0) {
+			
+			session.setAttribute("successMsg", "성공적으로 공지사항 게시글이 등록되었습니다");
+			return "redirect:list.nbo";
+			
+		} else {
+			
+			if(!list.isEmpty()) { // 첨부파일 있는 경우
+				
+				for(CommunityFiles file : list) {
+					
+					new File(file.getCfPath() + file.getCfChangeName()).delete();
+					// 삭제 시키고자하는 파일을 찾아서 File 객체에 담아서 삭제		
+				
+				}
+				
+			}
+			
+			m.addAttribute("errorMsg", "공지사항 게시글 등록 실패");
+			return "common/errorPage";
+			
+		}
+		
+	}
 	
 	
 }

@@ -134,5 +134,25 @@ public class NoticeBoardDao {
 		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectCommunityFilesList", nbNo);
 		
 	}
+	
+	public int insertNoticeBoard(SqlSessionTemplate sqlSession, NoticeBoard nb) {
+		
+		return sqlSession.insert("noticeBoardMapper.insertNoticeBoard", nb);
+		
+	}
+	
+	public int insertCommunityFileList(SqlSessionTemplate sqlSession, ArrayList<CommunityFiles> list) {
+		
+		int result = 0;
+		
+		for( CommunityFiles file : list) {
+			
+			result = sqlSession.insert("noticeBoardMapper.insertCommunityFileList", file);
+			
+		}
+		
+		return result;
+		
+	}
 
 }

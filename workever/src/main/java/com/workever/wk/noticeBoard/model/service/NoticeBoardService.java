@@ -26,6 +26,7 @@ public interface NoticeBoardService {
 	ArrayList<CommunityFiles> selectCommunityFilesList(int nbNo); // 첨부파일 조회
 	
 	// 공지사항 게시글 작성 서비스 
+	int insertNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list); // 게시글 등록
 	
 	// 공지사항 게시글 수정 서비스
 	

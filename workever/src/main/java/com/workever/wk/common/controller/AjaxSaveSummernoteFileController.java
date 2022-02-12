@@ -28,9 +28,9 @@ public class AjaxSaveSummernoteFileController {
 	@RequestMapping(value="uploadSummernoteImageFile.bo", produces = "application/json; charset=utf8")
 	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) {
 		
-		String filePath = "resources/community_upfiles/summernote_upfiles/";
+		String savePath = "resources/community_upfiles/summernote_upfiles/";
 		
-		return saveFile(multipartFile, request, filePath);
+		return saveFile(multipartFile, request, savePath);
 		
 	}
 	
@@ -50,13 +50,13 @@ public class AjaxSaveSummernoteFileController {
 	 * @param filePath : 저장할 내부 경로
 	 * @return
 	 */
-	public String saveFile(MultipartFile multipartFile, HttpServletRequest request, String filePath) {
+	public String saveFile(MultipartFile multipartFile, HttpServletRequest request, String savePath) {
 		
 		JsonObject jsonObject = new JsonObject();
 
 		// 내부경로 저장
 		String contextRoot = request.getSession().getServletContext().getRealPath("/");
-		String fileRoot = contextRoot + filePath;
+		String fileRoot = contextRoot + savePath;
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		String extension = originalFileName.substring(originalFileName.lastIndexOf(".")); //파일 확장자
@@ -66,7 +66,7 @@ public class AjaxSaveSummernoteFileController {
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile); //파일 저장
-			jsonObject.addProperty("url", filePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", savePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 				
 		} catch (IOException e) {

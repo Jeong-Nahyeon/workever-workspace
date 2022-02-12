@@ -111,6 +111,21 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		return nDao.selectCommunityFilesList(sqlSession, nbNo);
 		
 	}
+
+	@Override
+	public int insertNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list) {
+
+		int result1 = nDao.insertNoticeBoard(sqlSession, nb);
+				
+		int result2 = 1;
+		
+		if(!list.isEmpty()) { // 첨부파일 있을 경우에만 실행되도록 조건 검사
+			result2 = nDao.insertCommunityFileList(sqlSession, list);
+		}
+		
+		return result1 * result2;
+		
+	}
 	
 	
 

@@ -8,9 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <!-- summernote -->
 <link rel="stylesheet" href="resources/plugins/summernote/summernote-bs4.min.css">
+<script src="resources/plugins/summernote/summernote-bs4.min.js"></script>
   
 <style>
 
@@ -138,7 +140,7 @@
 				<div class="card"> 
 					
 					<div class="card-body">
-					<form action="insert.nbo" method="post" enctype="multipart/form-data">
+					<form id="board-enroll-form" action="insert.nbo" method="post" enctype="multipart/form-data">
 						
 						<input type="hidden" name="userNo" value="${ loginUser.userNo }" />
 						
@@ -188,7 +190,7 @@
 					
 					<div class="board-btns-area">
 						<button type="button" class="btn btn-sm" onclick="location.href = 'list.nbo';">취소</button>
-						<button type="submit" class="btn btn-sm">등록</button>
+						<button type="submit" class="btn btn-sm" form="board-enroll-form">등록</button>
 					</div>
 
 					</div>
@@ -212,20 +214,9 @@
 
 	</div>
 	<!-- ./wrapper -->
-	
-	<jsp:include page="../common/scripts.jsp" />
-	
-	<!-- Summernote -->
-	<script src="resources/plugins/summernote/summernote-bs4.min.js"></script>
-	
-	
 
-	<!-- 
-		스크립트 영역 ↓
-	 -->
-	
-	
-	<!-- 첨부파일 영역 -->
+
+	<!-- 첨부파일 기능 -->
 	<script>
 		
 		$(function(){
@@ -320,7 +311,7 @@
 	
 	
 	  
-	<!-- summernote -->
+	<!-- summernote 기능 -->
 	<script>
 	  $(function() {
 		

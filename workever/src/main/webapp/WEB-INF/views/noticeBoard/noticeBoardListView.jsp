@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
   
 <style>
 
@@ -136,11 +137,49 @@
         text-align:center;
         line-height: 25px;
     }
+    
+    /* 요청처리 여부 확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
 
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+      
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
-
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+		
+	</c:if>
+	
 	<div class="wrapper">
 		
 		<jsp:include page="../common/header.jsp" />
@@ -373,7 +412,36 @@
 	</div>
 	<!-- ./wrapper -->
 	
-	<jsp:include page="../common/scripts.jsp" />
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+	
+	
+	
 	
 	<!-- 스크립트 작성 영역 -->
 	
@@ -427,8 +495,6 @@
 				}
 				
 			});
-			
-			
 			
 			// 공지사항 게시글 상세 조회
 			$("#board-list tbody .board-title").click(function(){
