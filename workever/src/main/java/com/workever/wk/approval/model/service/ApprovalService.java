@@ -17,12 +17,19 @@ public interface ApprovalService {
 	// 1. 내가 작성한 결재 리스트 서비스 (페이징)
 	int userWriteListCount(int loginUserNo);
 	ArrayList<Approval> userWriteApprovalList(PageInfo pi, int loginUserNo);
-	ArrayList<Approval> writeChangeCategoryList(String category, int loginUserNo); //ajax
+	
+	int writeChangeCategoryListCount(String category, int loginUserNo);
+	ArrayList<Approval> writeChangeCategoryList(PageInfo pi, String category, int loginUserNo);
 	
 	// 2. 내가 수신한 결재 리스트 서비스 (페이징)
 	int userReceiveListCount(int loginUserNo);
 	ArrayList<Approval> userReceiveApprovalList(PageInfo pi, int loginUserNo);
+	
 	ArrayList<ApprovalLine> approvalLineList(int apvlNo);
+	
+	int receiveChangeCategoryListCount(String category, int loginUserNo);
+	ArrayList<Approval> receiveChangeCategoryList(String category, PageInfo pi, int loginUserNo); //ajax
+	
 	
 	// 3. 전자 결재 작성하기 서비스
 	int insertApproval(Approval apvl, ApprovalDayOffForm apvlDayOff, ApprovalLine apvlLine); // 1.휴가신청서

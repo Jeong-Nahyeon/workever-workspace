@@ -17,4 +17,5 @@ public class Approval {	 // 전자결재 통합 vo
 	private String apvlCreateDate;
 	private String apvlStatus;
 	private String apvlWriterName;
+	private String apvlWriterRank;
 }

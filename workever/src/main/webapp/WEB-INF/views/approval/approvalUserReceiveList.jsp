@@ -48,13 +48,35 @@
 			<hr>
 			<div id="userReceiveList-area">
                 <div id="category-btn">
-                    <button class="btn a" style="background: #4E73DF; color:white;">전체</button>|
-                    <button class="btn c">대기중</button>|
-                    <button class="btn c">완료</button>
+                    <div id="category-btn">
+	                	<c:choose>
+	                		<c:when test="${ empty category }">
+			                    <button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='receiveList.ap'">전체</button>|
+			                    <button class="btn c" value="SI" onclick="location.href='receiveChangeCategory.ap?category=SI'">대기중</button>|
+			                    <button class="btn c" value="CR" onclick="location.href='receiveChangeCategory.ap?category=CR'">완료</button>
+			                    <br><br>
+				              	  수신한 전자 결재 총 ${ pi.listCount }건
+				                <br><br>
+	                    	</c:when>
+	                    	<c:when test="${ category eq 'SI'}">
+	                    		<button class="btn a" onclick="location.href='receiveList.ap'">전체</button>|
+			                    <button class="btn c" value="SI" style="background: #4E73DF; color:white;" onclick="location.href='receiveChangeCategory.ap?category=SI'">대기중</button>|
+			                    <button class="btn c" value="CR" onclick="location.href='receiveChangeCategory.ap?category=CR'">완료</button>
+			                    <br><br>
+				              	  대기중 전자 결재 총 ${ pi.listCount }건
+				                <br><br>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                    		<button class="btn a" onclick="location.href='receiveList.ap'">전체</button>|
+			                    <button class="btn c" value="SI" onclick="location.href='receiveChangeCategory.ap?category=SI'">대기중</button>|
+			                    <button class="btn c" value="CR" style="background: #4E73DF; color:white;" onclick="location.href='receiveChangeCategory.ap?category=CR'">완료</button>
+			                    <br><br>
+				              	  완료된 전자 결재 총 ${ pi.listCount }건
+				                <br><br>
+	                    	</c:otherwise>
+	                    </c:choose>
+                	</div>
                 </div>
-                <br>
-                수신한 전자 결재 총 ${ pi.listCount }건
-                <br><br>
 
                 
                 <!-- 게시판영역 -->
@@ -83,29 +105,44 @@
 			                                        <tr align="center">
 			                                            <td>${ a.apvlFormNo }</td>
 			                                            <td>${ a.apvlTitle }</td>
-			                                            <td>${ a.apvlWriterName }</td>
+			                                            <td>${ a.apvlWriterName } ${ a.apvlWriterRank}</td>
 			                                            <td>${ a.apvlCreateDate }</td>
 			                                            <td>${ a.apvlStatus }</td>
 			                                            <td>
-			                                            	<c:forEach var="lList" items="${ lineList }">
-			                                            		<c:if test="${ a.apvlNo eq lList.apvlNo }">
+			                                            	<c:forEach var="lList" items="${ lineList }" varStatus="st">
+			                                            		<c:if test="${ a.apvlNo eq lineList[st.index].apvlNo }">
 			                                            			<c:choose>
-				                                            			<c:when test="${ lList.apvlLineStatus eq 'S' }">
+				                                            			<c:when test="${ lineList[st.index].apvlLineStatus eq 'S' }">
+				                                            				
 				                                            				<div>
-						                                            			<i class="fas fa-edit fa-lg"></i><br>
-						                                            			${ lList.userName }${ lList.userRank }
+				                                            					<c:choose>
+				                                            						<c:when test="${lineList[st.index].apvlLineTurn ne 1}">
+				                                            							<c:choose>
+				                                            								<c:when test="${ lineList[st.index-1].apvlLineStatus eq 'S' }">
+							                                            						<i class="fas fa-ellipsis-h fa-lg"></i><br>
+							                                            					</c:when>
+							                                            					<c:otherwise>
+							                                            						<i class="fas fa-edit fa-lg"></i><br>
+							                                            					</c:otherwise>
+							                                            				</c:choose>
+							                                            			</c:when>
+							                                            			<c:otherwise>
+							                                            				<i class="fas fa-edit fa-lg"></i><br>
+							                                            			</c:otherwise>
+							                                            		</c:choose>
+							                                            			${ lineList[st.index].userName } ${ lineList[st.index].userRank }
 				                                            				</div>
 				                                            			</c:when>
-				                                            			<c:when test="${ lList.apvlLineStatus eq 'A' }">
+				                                            			<c:when test="${ lineList[st.index].apvlLineStatus eq 'A' }">
 				                                            				<div>
 						                                            			<i class="fas fa-check-circle fa-lg" style="color:green;"></i><br>
-						                                            			${ lList.userName }${ lList.userRank }
+						                                            			${ lineList[st.index].userName } ${ lineList[st.index].userRank }
 				                                            				</div>
 				                                            			</c:when>
 				                                            			<c:otherwise>
 				                                            				<div>
 						                                            			<i class="fas fa-reply fa-lg" style="color:red;"></i><br>
-						                                            			${ lList.userName }${ lList.userRank }
+						                                            			${ lineList[st.index].userName }${ lineList[st.index].userRank }
 				                                            				</div>
 				                                            			</c:otherwise>
 			                                            			</c:choose>
@@ -138,7 +175,16 @@
 	                    </c:choose>
 	                    
 	                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-	                    	<li class="page-item"><a class="page-link" href="receiveList.ap?cpage=${ p }">${ p }</a></li>
+	                    	<c:choose>
+								<c:when test="${ empty category }">
+									<li class="page-item"><a class="page-link" href="receiveList.ap?cpage=${ p }">${ p }</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"><a class="page-link" href="receiveChangeCategory.ap?cpage=${ p }&category=${ category }">${ p }</a></li>
+								</c:otherwise>
+							</c:choose>
+	                    	
+	                    	
 	                    </c:forEach>
 	                    
 	                    <c:choose>
@@ -149,7 +195,7 @@
 	                    		<li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-solid fa-angle-right"></i></a></li>
 	                    	</c:when>
 	                    	<c:otherwise>
-	                    		<li class="page-item"><a class="page-link" href="receiveList.ap?cpage=${ pi.currentPage+1 }"><i class="fas fa-solid fa-angle-right"></i></a></li>
+	                    		<li class="page-item"><a class="page-link" href="receiveList.ap.ap?cpage=${ pi.currentPage+1 }"><i class="fas fa-solid fa-angle-right"></i></a></li>
 	                    	</c:otherwise>
 	                    </c:choose>
 	                </ul>
@@ -182,6 +228,7 @@
 	<jsp:include page="../common/scripts.jsp" />
 
      <script>
+     	/*
 	     $(function(){
 	   	  
 	         $("#category-btn>button").click(function(){
@@ -193,55 +240,112 @@
 	         
 	         let all = $("tbody").html();
 	         let paging = $("#paging-area").html();
-	
-	         $(".c").click(function(){
-	       	  console.log($(this).val());
-	       	  $.ajax({
-	       		  url:"receiveChangeCategory.ap",
-	       		  data:{category:$(this).val(),
-	       			    loginUser:'${loginUser.userNo}'
-	       		  },success:function(list){
-	       			  console.log("성공");
-	       			  let value = "";
-	       			  for(let i in list) {
-	       				  value += "<tr>"
-			                         +     "<td>" + list[i].apvlFormNo + "</td>"
-			                         +     "<td>" + list[i].apvlTitle + "</td>"
-			                         +     "<td>" + list[i].apvlWriterName + "</td>"
-			                         +     "<td>" + list[i].apvlCreateDate + "</td>"
-			                         +     "<td>" + list[i].apvlStatus + "</td>"
-			                         + "</tr>"
-	       			  }
-	       			  
-	       			  $("#userWriteList-area tbody").html(value);
-	       			  $("#paging-area").html("");
+			
+	       	  
+	       	$(".c").click(function(){
+		       	  console.log($(this).val());
+		       	  $.ajax({
+		       		  url:"receiveChangeCategory.ap",
+		       		  data:{category:$(this).val(),
+		       			    loginUser:'${loginUser.userNo}',
+		       			    cpage:1
+		       		  },success:function(result){
+		       			  console.log("성공");
+		       			  let value = "";
+		       			  let lineValue = "";
+		       			  let pagingValue = "";
+		       			  if(result.pi.listCount == 0){
+		       				  value += "<td colspan='6' align='center'>리스트가 없습니다.</td>"
+		       			  }else {
+		       				  
+			       			  for(let i in result.list) {
+						                      console.log(result.list[i].apvlFormNo)   
+			       				 
+				       				  value += "<tr align='center'>"
+						                         +     "<td>" + result.list[i].apvlFormNo + "</td>"
+						                         +     "<td>" + result.list[i].apvlTitle + "</td>"
+						                         +     "<td>" + result.list[i].apvlWriterName + "&nbsp;" + result.list[i].apvlWriterRank + "</td>"
+						                         +     "<td>" + result.list[i].apvlCreateDate + "</td>"
+						                         +     "<td>" + result.list[i].apvlStatus + "</td>"
+						                         +     "<td>";
+						              for(let l in result.lineList) {
+						            	  if(result.list[i].apvlNo == result.lineList[l].apvlNo){
+		       				  				  
+		       				  				  if(result.lineList[l].apvlLineStatus == 'S'){
+					       				  		  value += "<div>" 
+					                                  	+		"<i class='fas fa-edit fa-lg'></i>"+"<br>"
+					                                	+		result.lineList[l].userName + "&nbsp;" + result.lineList[l].userRank
+					                        			+	"</div>";	       					  
+		       				 				  }else if(result.lineList[l].apvlLineStatus == 'A') {
+		       				 					  value += "<div>" 
+					                                  	+		"<i class='fas fa-check-circle fa-lg' style='color:green;'></i>"+"<br>"
+					                                	+		result.lineList[l].userName + "&nbsp;" + result.lineList[l].userRank
+					                        			+	"</div>"; 
+		       				 				  }else {
+			       				 				  value += "<div>" 
+					                                  	+		"<i class='fas fa-reply fa-lg' style='color:red;'></i>"+"<br>"
+					                                	+		result.lineList[l].userName + "&nbsp;" + result.lineList[l].userRank
+					                        			+	"</div>";
+		       				 				  }
+		       				  			  }
+						              }           
+					            	  value += "</td>"
+					                         + "</tr>";
+						       }
+		       			  }
+					                         
+					   pagingValue += "<ul class='pagination'>";
+						                	if(result.pi.currentPage == 1){
+					                    		pagingValue += "<li class='page-item disabled'><a class='page-link' href='#'><i class='fas fa-solid fa-angle-left'></i></a></li>";
+						                		
+						                	}else {
+						                		pagingValue += "<li class='page-item'><a class='page-link' href='receiveList.ap?cpage=" + result.pi.currentPage-1 + "'><i class='fas fa-solid fa-angle-left'></i></a></li>";
+						                		
+						                	}
+					                		
+						                    for(var i = result.pi.startPage; i<=result.pi.endPage; i++){
+						                    	pagingValue += "<li class='page-item'><a class='page-link' href='receiveList.ap?cpage='" + i + "'>" + i + "</a></li>";
+						                    	
+						                    }
+					                    	
+					                    	if(result.pi.currentPage == result.pi.maxPage) {
+					                    		pagingValue += "<li class='page-item disabled'><a class='page-link' href='#'><i class='fas fa-solid fa-angle-right'></i></a></li>";
+					                    	}else if(result.pi.endPage == 0) {
+		       									pagingValue += "<li class='page-item disabled'><a class='page-link' href='#'><i class='fas fa-solid fa-angle-right'></i></a></li>";
+					                    	}else{
+					                    		pagingValue += "<li class='page-item'><a class='page-link' href='receiveList.ap?cpage='" + result.pi.currentPage+1  + "'><i class='fas fa-solid fa-angle-right'></i></a></li>";
+					                    	}
+					                    
+					                    
+					                    	
+					                    
+					                    
+					    pagingValue += "</ul>";                    
+		       				  	  
+		       		
+		       			  
+			       		  
+		      			console.log(value);	  
+	       			   $("#userReceiveList-area tbody").html(value);
+	       			   $("#paging-area").html(pagingValue);
+	      			  
+	       			 
 	       			
-	       		  },error:function(){
+	       		   },error:function(){
 	       			  console.log("ajax통신 실패");
 	       			  
-	       		  }        		  
+	       		   }        		  
 	       	  })
 	       	  
-	       	  $.ajax({
-	       		  url:"changecategoryPaging.ap",
-	       		  data:{cpage: 1,
-	       			    loginUser:'${loginUser.userNo}'            			  
-	       		  },success:function(pi){
-	       			  console.log("성공");
-	       			  let value = "";
-	       			  
-	       		  },error:function(){
-	       			  console.log("ajax통신 실패");
-	       		  }
-	       	  })
-	         })
+	       	 
 	         
+	         })
 	         $(".a").click(function(){
-	       	  $("tbody").html(all);
-	       	  $("#paging-area").html(paging);
+		       	  $("tbody").html(all);
+		       	  $("#paging-area").html(paging);
 	       	            	  
 	         })
-	     })
+	     })*/
 	 </script>
 </body>
 </html>

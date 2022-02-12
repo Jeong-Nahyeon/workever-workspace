@@ -27,6 +27,11 @@
     
     #paging-area{width:fit-content;margin:auto;}
 
+	tbody div{
+			display:inline-block;
+			margin-right:20px;
+			
+		}
 </style>
 </head>
 
@@ -44,13 +49,34 @@
 			<hr>
 			<div id="userWriteList-area">
                 <div id="category-btn">
-                    <button class="btn a" style="background: #4E73DF; color:white;">전체</button>|
-                    <button class="btn c" value="SI">진행중</button>|
-                    <button class="btn c" value="CR">완료</button>
+                	<c:choose>
+                		<c:when test="${ empty category }">
+		                    <button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='writeList.ap'">전체</button>|
+		                    <button class="btn c" value="SI" onclick="location.href='writeChangeCategory.ap?category=SI'">진행중</button>|
+		                    <button class="btn c" value="CR" onclick="location.href='writeChangeCategory.ap?category=CR'">완료</button>
+		                    <br><br>
+			              	  작성한 전자 결재 총 ${ pi.listCount }건
+			                <br><br>
+                    	</c:when>
+                    	<c:when test="${ category eq 'SI'}">
+                    		<button class="btn a" onclick="location.href='writeList.ap'">전체</button>|
+		                    <button class="btn c" value="SI" style="background: #4E73DF; color:white;" onclick="location.href='writeChangeCategory.ap?category=SI'">진행중</button>|
+		                    <button class="btn c" value="CR" onclick="location.href='writeChangeCategory.ap?category=CR'">완료</button>
+		                    <br><br>
+			              	  진행중 전자 결재 총 ${ pi.listCount }건
+			                <br><br>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<button class="btn a" onclick="location.href='writeList.ap'">전체</button>|
+		                    <button class="btn c" value="SI" onclick="location.href='writeChangeCategory.ap?category=SI'">진행중</button>|
+		                    <button class="btn c" value="CR" style="background: #4E73DF; color:white;" onclick="location.href='writeChangeCategory.ap?category=CR'">완료</button>
+		                    <br><br>
+			              	  완료된 전자 결재 총 ${ pi.listCount }건
+			                <br><br>
+                    	</c:otherwise>
+                    </c:choose>
                 </div>
-                <br>
-              	  작성한 전자 결재 총 ${ pi.listCount }건
-                <br><br>
+                
 
                 
                 <!-- 게시판영역 -->
@@ -60,11 +86,12 @@
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-hover text-nowrap">
                                     <thead>
-                                        <tr>
+                                        <tr align="center">
                                             <th>결재 종류</th>
                                             <th>제목</th>
                                             <th>기안일</th>
                                             <th>상태</th>
+                                            <th>진행 상황</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -74,11 +101,52 @@
                                     		</c:when>
                                     		<c:otherwise>
 		                                    	<c:forEach var="a" items="${ list }">
-			                                        <tr>
+			                                        <tr align="center">
 			                                            <td>${ a.apvlFormNo }</td>
 			                                            <td>${ a.apvlTitle }</td>
 			                                            <td>${ a.apvlCreateDate }</td>
 			                                            <td>${ a.apvlStatus }</td>
+			                                            <td>
+			                                            	<c:forEach var="lList" items="${ lineList }" varStatus="st">
+			                                            		<c:if test="${ a.apvlNo eq lineList[st.index].apvlNo }">
+			                                            			<c:choose>
+				                                            			<c:when test="${ lineList[st.index].apvlLineStatus eq 'S' }">
+				                                            				
+				                                            				<div>
+				                                            					<c:choose>
+				                                            						<c:when test="${lineList[st.index].apvlLineTurn ne 1}">
+				                                            							<c:choose>
+				                                            								<c:when test="${ lineList[st.index-1].apvlLineStatus eq 'S' }">
+							                                            						<i class="fas fa-ellipsis-h fa-lg"></i><br>
+							                                            					</c:when>
+							                                            					<c:otherwise>
+							                                            						<i class="fas fa-edit fa-lg"></i><br>
+							                                            					</c:otherwise>
+							                                            				</c:choose>
+							                                            			</c:when>
+							                                            			<c:otherwise>
+							                                            				<i class="fas fa-edit fa-lg"></i><br>
+							                                            			</c:otherwise>
+							                                            		</c:choose>
+							                                            			${ lineList[st.index].userName } ${ lineList[st.index].userRank }
+				                                            				</div>
+				                                            			</c:when>
+				                                            			<c:when test="${ lineList[st.index].apvlLineStatus eq 'A' }">
+				                                            				<div>
+						                                            			<i class="fas fa-check-circle fa-lg" style="color:green;"></i><br>
+						                                            			${ lineList[st.index].userName } ${ lineList[st.index].userRank }
+				                                            				</div>
+				                                            			</c:when>
+				                                            			<c:otherwise>
+				                                            				<div>
+						                                            			<i class="fas fa-reply fa-lg" style="color:red;"></i><br>
+						                                            			${ lineList[st.index].userName }${ lineList[st.index].userRank }
+				                                            				</div>
+				                                            			</c:otherwise>
+			                                            			</c:choose>
+			                                            		</c:if>
+			                                            	</c:forEach>
+			                                            </td>
 			                                        </tr>
 			                                    </c:forEach>
 		                                    </c:otherwise>
@@ -106,7 +174,16 @@
 	                    </c:choose>
 	                    
 	                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-	                    	<li class="page-item"><a class="page-link" href="writeList.ap?cpage=${ p }">${ p }</a></li>
+	                    	<c:choose>
+								<c:when test="${ empty category }">
+									<li class="page-item"><a class="page-link" href="writeList.ap?cpage=${ p }">${ p }</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"><a class="page-link" href="writeChangeCategory.ap?cpage=${ p }&category=${ category }">${ p }</a></li>
+								</c:otherwise>
+							</c:choose>
+	                    	
+	                    	
 	                    </c:forEach>
 	                    
 	                    <c:choose>
@@ -147,65 +224,12 @@
 	</div>
 	<jsp:include page="../common/scripts.jsp" />
       <script>
-          $(function(){
+          
         	  
-              $("#category-btn>button").click(function(){
-                  $(this).css({backgroundColor:"#4E73DF", color:"white"});
-                  $(this).css("font-weight", "700");
-                  $(this).siblings().css({backgroundColor:"transparent", color:"black"});
-                  $(this).siblings().css("font-weight", "500");
-              })
               
-              let all = $("tbody").html();
-              let paging = $("#paging-area").html();
+              
 
-              $(".c").click(function(){
-            	  console.log($(this).val());
-            	  $.ajax({
-            		  url:"writeChangeCategory.ap",
-            		  data:{category:$(this).val(),
-            			    loginUser:'${loginUser.userNo}'
-            		  },success:function(list){
-            			  console.log("성공");
-            			  let value = "";
-            			  for(let i in list) {
-            				  value += "<tr>"
-			                         +     "<td>" + list[i].apvlFormNo + "</td>"
-			                         +     "<td>" + list[i].apvlTitle + "</td>"
-			                         +     "<td>" + list[i].apvlCreateDate + "</td>"
-			                         +     "<td>" + list[i].apvlStatus + "</td>"
-			                         + "</tr>"
-            			  }
-            			  
-            			  $("#userWriteList-area tbody").html(value);
-            			  $("#paging-area").html("");
-            			
-            		  },error:function(){
-            			  console.log("ajax통신 실패");
-            			  
-            		  }        		  
-            	  })
-            	  
-            	  $.ajax({
-            		  url:"changecategoryPaging.ap",
-            		  data:{cpage: 1,
-            			    loginUser:'${loginUser.userNo}'            			  
-            		  },success:function(pi){
-            			  console.log("성공");
-            			  let value = "";
-            			  
-            		  },error:function(){
-            			  console.log("ajax통신 실패");
-            		  }
-            	  })
-              })
-              
-              $(".a").click(function(){
-            	  $("tbody").html(all);
-            	  $("#paging-area").html(paging);
-            	            	  
-              })
-          })
+          
       </script>
 </body>
 </html>

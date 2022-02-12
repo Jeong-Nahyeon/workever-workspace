@@ -39,9 +39,9 @@ public class approvalController {
 		
 		int listCount = aService.userWriteListCount(loginUserNo);
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
 		ArrayList<Approval> list = aService.userWriteApprovalList(pi, loginUserNo);
-		System.out.println(pi);
+		ArrayList<ApprovalLine> lineList = new ArrayList<>();
 		for(Approval a : list) {
 			
 			switch(a.getApvlStatus()) {
@@ -51,20 +51,28 @@ public class approvalController {
 				case "R": a.setApvlStatus("반려"); break;
 				case "D": a.setApvlStatus("회수"); break;
 			}
+			lineList.addAll(aService.approvalLineList(a.getApvlNo()));
 		}
 		
 		model.addAttribute("pi", pi);
 		model.addAttribute("list", list);
+		model.addAttribute("lineList", lineList);
 		
 		return "approval/approvalUserWriteList";
 	}
 	
-	// 내가 작성한 결재 리스트 카테고리별 조회(ajax)
-	@ResponseBody
-	@RequestMapping(value="writeChangeCategory.ap", produces="application/json; charset=utf-8")
-	public String ajaxWriteChangeCategoryList(String category, String loginUser) {
-		int loginUserNo = Integer.parseInt(loginUser);
-		ArrayList<Approval> list = aService.writeChangeCategoryList(category, loginUserNo);
+	// 내가 작성한 결재 리스트 카테고리별 조회
+	@RequestMapping("writeChangeCategory.ap")
+	public String writeChangeCategoryList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, String category, HttpSession session) {
+		
+		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		System.out.println(category);
+		int listCount = aService.writeChangeCategoryListCount(category, loginUserNo);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList<Approval> list = aService.writeChangeCategoryList(pi, category, loginUserNo);
+		
+		ArrayList<ApprovalLine> lineList = new ArrayList<>();
 		for(Approval a : list) {			
 			switch(a.getApvlStatus()) {
 				case "S": a.setApvlStatus("결재 대기"); break;
@@ -73,10 +81,15 @@ public class approvalController {
 				case "R": a.setApvlStatus("반려"); break;
 				case "D": a.setApvlStatus("회수"); break;
 			}
+			lineList.addAll(aService.approvalLineList(a.getApvlNo()));
 		}
 		
-		System.out.println(new Gson().toJson(list));
-		return new Gson().toJson(list);
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("lineList", lineList);
+		model.addAttribute("category", category);
+		
+		return "approval/approvalUserWriteList";
 	}
 	
 	// 내가 수신한 결재 리스트 조회
@@ -87,7 +100,7 @@ public class approvalController {
 		
 		int listCount = aService.userReceiveListCount(loginUserNo);
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
 		ArrayList<Approval> list = aService.userReceiveApprovalList(pi, loginUserNo);
 		ArrayList<ApprovalLine> lineList = new ArrayList<>();
 		for(Approval a : list) {
@@ -99,16 +112,76 @@ public class approvalController {
 				case "D": a.setApvlStatus("회수"); break;
 			}
 			lineList.addAll(aService.approvalLineList(a.getApvlNo()));
-			System.out.println(a.getApvlNo());
 		}
 		
 		model.addAttribute("pi", pi);
 		model.addAttribute("list", list);
 		model.addAttribute("lineList", lineList);
-		System.out.println(list);
-		System.out.println(lineList);
+
 		return "approval/approvalUserReceiveList";
 	}
+	
+	// 내가 수신한 결재 리스트 카테고리별 조회
+		@RequestMapping("receiveChangeCategory.ap")
+		public String receiveChangeCategoryList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, String category, HttpSession session) {
+			
+			int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+			
+			int listCount = aService.receiveChangeCategoryListCount(category, loginUserNo);
+			
+			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+			ArrayList<Approval> list = aService.receiveChangeCategoryList(category, pi, loginUserNo);
+			ArrayList<ApprovalLine> lineList = new ArrayList<>();
+			for(Approval a : list) {
+				switch(a.getApvlStatus()) {
+					case "S": a.setApvlStatus("결재 대기"); break;
+					case "I": a.setApvlStatus("진행중"); break;
+					case "C": a.setApvlStatus("승인"); break;
+					case "R": a.setApvlStatus("반려"); break;
+					case "D": a.setApvlStatus("회수"); break;
+				}
+				lineList.addAll(aService.approvalLineList(a.getApvlNo()));
+			}
+			
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("lineList", lineList);
+			model.addAttribute("category", category);
+
+			return "approval/approvalUserReceiveList";
+		}
+	/*
+	// 내가 작성한 결재 리스트 카테고리별 조회(ajax)
+	@ResponseBody
+	@RequestMapping(value="receiveChangeCategory.ap", produces="application/json; charset=utf-8")
+	public String ajaReceiveChangeCategoryList(String category, String loginUser, int cpage, Model model) {
+		int loginUserNo = Integer.parseInt(loginUser);
+		
+		int listCount = aService.receiveChangeCategoryListCount(category, loginUserNo);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, cpage, 5, 10);
+		
+		ArrayList<Approval> list = aService.receiveChangeCategoryList(category, pi, loginUserNo);
+		ArrayList<ApprovalLine> lineList = new ArrayList<>();
+		for(Approval a : list) {			
+			switch(a.getApvlStatus()) {
+				case "S": a.setApvlStatus("결재 대기"); break;
+				case "I": a.setApvlStatus("진행중"); break;
+				case "C": a.setApvlStatus("승인"); break;
+				case "R": a.setApvlStatus("반려"); break;
+				case "D": a.setApvlStatus("회수"); break;
+			}
+			lineList.addAll(aService.approvalLineList(a.getApvlNo()));
+		}
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("lineList", lineList);
+		
+		System.out.println(new Gson().toJson(model));
+		return new Gson().toJson(model);
+	}
+	*/
 	
 	@RequestMapping("dayOffForm.ap")
 	public String dayOffForm() {

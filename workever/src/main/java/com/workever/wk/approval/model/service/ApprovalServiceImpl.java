@@ -37,10 +37,15 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.userWriteApprovalList(sqlSession, pi, loginUserNo);
 	}
 	
+	// 내가 작성한 결재 카테고리 조회 카운트
+	@Override
+	public int writeChangeCategoryListCount(String category, int loginUserNo) {
+		return aDao.writeChangeCategoryListCount(sqlSession, category, loginUserNo);
+	}
 	// 내가 작성한 결재 리스트 카테고리별 조회(ajax)
 	@Override
-	public ArrayList<Approval> writeChangeCategoryList(String category, int loginUserNo) {
-		return aDao.writeChangeCategoryList(sqlSession, category, loginUserNo);
+	public ArrayList<Approval> writeChangeCategoryList(PageInfo pi, String category, int loginUserNo) {
+		return aDao.writeChangeCategoryList(sqlSession, pi, category, loginUserNo);
 	}
 	
 	// 내가 수신한 결재 리스트 카운트
@@ -59,6 +64,18 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public ArrayList<ApprovalLine> approvalLineList(int apvlNo) {
 		return aDao.approvalLineList(sqlSession, apvlNo);
+	}
+	
+	// 내가 수신한 결재 카테고리 조회 카운트
+		@Override
+		public int receiveChangeCategoryListCount(String category, int loginUserNo) {
+			return aDao.receiveChangeCategoryListCount(sqlSession, category, loginUserNo);
+		}
+	
+	// 내가 수신한 결재 리스트 카테고리별 조회(ajax)
+	@Override
+	public ArrayList<Approval> receiveChangeCategoryList(String category, PageInfo pi, int loginUserNo) {
+		return aDao.receiveChangeCategoryList(sqlSession, category, pi, loginUserNo);
 	}
 
 	@Override
@@ -85,6 +102,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int insertApproval(Approval apvl, ApprovalBuisnessTripForm apvlBuisnessTrip, ApprovalLine apvlLine) {
 		return 0;
 	}
+
+
 
 
 
