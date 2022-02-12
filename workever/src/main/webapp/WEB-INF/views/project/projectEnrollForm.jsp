@@ -109,7 +109,7 @@
 			left: 30px;
 			position: relative;
 		}
-		.dept{
+		.dept2, .dept3, .dept4, .dept5, .dept6{
 			margin-left: 30px;
 		}
 		
@@ -157,14 +157,14 @@
 				<div class="content" style="background-color: white;">
 				<hr>
 				
-				<form>
+				<form id="enrollForm1" method="post" action="insert.pro">
 					<span class="title">프로젝트명</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<input class="projectName" name="projectName" placeholder="프로젝트명 입력" required>
 					<br><br><br>
 					
 					<span class="title">담당자 승인 후 참여 여부</span>&nbsp;&nbsp;
 					<label class="switch">
-					  <input type="checkbox">
+					  <input type="checkbox" name="proGrant">
 					  <span class="slider round"></span>
 					</label>
 			
@@ -172,41 +172,39 @@
 					<br><br><br>
 	
 					<span class="title">부서 선택</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="checkbox" class="dept" name="dept" value="2"> 경영지원팀
-					<input type="checkbox" class="dept" name="dept" value="3"> 인사팀
-					<input type="checkbox" class="dept" name="dept" value="4"> 영업팀<br><br>
-					<input style="margin-left: 132.5px;" class="dept" type="checkbox" name="dept" value="5"> 개발팀 
-					<input style="margin-left:60px;"type="checkbox" name="dept" value="6"> 재무팀 
+					<input type="checkbox" class="dept2" name="dept" onclick="deptCheck" value="2"> 경영지원팀
+					<input type="checkbox" class="dept3" name="dept" onclick="deptCheck" value="3"> 인사팀
+					<input type="checkbox" class="dept4" name="dept" onclick="deptCheck" value="4"> 영업팀<br><br>
+					<input style="margin-left: 132.5px;" class="dept5" type="checkbox" name="dept"onclick="deptCheck"  value="5"> 개발팀 
+					<input style="margin-left:60px;" type="checkbox" class="dept6" name="dept"onclick="deptCheck"  value="6"> 재무팀 
 				
 					<br><br><br>
-
+				</form>
+				
+				
 				<span class="title">참여인원</span><br><br>
 				
+				<form id="enrollForm2" method="post" action="insert.mem">
 				<div style="width:380px;  height:350px; box-shadow:0px 0px 10px grey;">
 					
 					<div style="text-align: center; height:20%; top:25px; position: relative;">
 						<i class="fas fa-search"></i>&nbsp;&nbsp;
-						<input type="text" class="chat-search-input" placeholder="이름 검색">
+						<input type="text" class="chat-search-input" name="keyword" placeholder="이름 검색">
 					</div>
 
 					<div class="ParticipationPerson">
-												<c:choose>
-							<!-- 해댕사원 셀렉문 써서 조회해오기 -->
-							<!-- <c:when test="">-->
-							<!--	<c:forEach var="p" items="">-->
-							<!--		<i class="fas fa-portrait"></i>-->
-							<!--		<b>홍길동</b><input type="checkbox" class="employee" name="employee" value="zz"><br><br>-->
-					
-							<!--	</c:forEach>-->
-							<!--<br>-->
-							<!--</c:when>-->
-							<!--<c:otherwise>-->
-	               	 		<!--	검색 결과가 없습니다.-->
-							<!--</c:otherwise>-->
-						<!--</c:choose>-->
-               	 		
-
+						<i class="fas fa-portrait"></i>
+						<b>홍길동</b><input type="checkbox" class="employee" name="employee" value="zz"><br><br>
 					</div>
+				<script> 
+				function deptCheck(){
+					
+				}
+
+		
+				</script>
+
+
 				</div>
 						
 				

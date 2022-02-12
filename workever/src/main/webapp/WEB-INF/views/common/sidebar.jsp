@@ -150,7 +150,7 @@
 				  </li>
 				
 				  <li class="nav-item">
-					<a href="detail.pro" class="nav-link">
+					<a href="list.pro" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>프로젝트 조회</p>
 					</a>

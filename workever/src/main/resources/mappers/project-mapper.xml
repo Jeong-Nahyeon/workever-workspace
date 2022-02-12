@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="projectMapper">
+
+	<resultMap id="projectResult" type="Project">
+		<result column="PRO_NO" property="proNo" />
+		<result column="PRO_TITLE" property="proTitle" />
+		<result column="PRO_GRANT_WHETHER" property="proGrantWhether" />
+		<result column="PRO_CREATE_DATE" property="proCreateDate" />
+		<result column="PRO_STATUS" property="proStatus" />
+		<result column="PRO_MANAGER" property="proManager" />
+		<result column="PRO_NUMBERPEOPLE" property="proNumberPeople" />
+		<result column="DEPT_NAME" property="proDept" />
+		<result column="USER_NAME" property="deptUserName" />
+		<result column="USER_NO" property="deptUserNo" />
+	</resultMap>
+	
+	
+	<select id="selectList" resultMap="projectResult">
+		select
+		       PRO_NO
+			 , PRO_TITLE
+			 , PRO_GRANT_WHETHER
+			 , PRO_CREATE_DATE
+			 , PRO_MANAGER
+			 , PRO_NUMBERPEOPLE
+             , DEPT_NAME
+		  from project
+          JOIN PROJECT_DEPT USING (PRO_NO)
+          JOIN DEPT USING (DEPT_NO)
+		 where PRO_STATUS = 'Y'
+		 order
+		    by PRO_NO desc
+	
+	</select>
+	
+	<select id="selectMem" resultMap="projectResult">
+		select
+               USER_NAME
+             , USER_NO
+		  from USERS
+		 where DEPT_NO = #{num}
+	</select>
+	
+	<insert id="insertBoard"> 이거도 고쳐야됨
+		insert
+		  into board 이거도 고쳐야됨
+		  	 (
+			   PRO_NO
+			 , PRO_TITLE
+			 , PRO_GRANT_WHETHER
+			 , PRO_CREATE_DATE
+			 , PRO_STATUS
+			 , PRO_MANAGER
+			 , PRO_NUMBERPEOPLE
+		     )
+		values
+		     (
+		       seq_project.nextval
+		     , #{projectName}
+		     , #{proGrant}
+		     <!-- , #{dept} -->
+		     , #{originName}
+		     , #{changeName}		  
+		     )
+	</insert>
+	
+</mapper>

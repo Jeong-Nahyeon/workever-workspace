@@ -33,7 +33,7 @@
 	.project{
 		width:225px;
 		height:260px;
-		border-radius:25px;
+		border-radius:20px;
 		background-color: rgb(214, 214, 214);
 		
 	}
@@ -98,86 +98,21 @@
 				<div class="myPro">
 					<b><p style="font-size:30px">Project</p></b>
 					
-					
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					<div class="myProEl"> 
-						<div class="project"><br>
-							<p style="font-size:20px; font-weight:bold;">프로젝트 제목</p>
-							<p>개발팀, 인사팀</p>
-							<br><br>
-							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<b><span> *명 참여중 </span></b>
-						</div>
-					</div> 
-					
-					
+					<c:forEach var="p" items="${list}">
+						<div class="myProEl"> 
+							<div class="project"><br>
+								<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
+								<p>${p.proDept}</p>
+								<br><br>
+								<c:if test="${proGrantWhether}=='Y'">
+									<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i>
+	                        	</c:if>
+	                        	<br><br>
+								<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
+								<b><span> ${p.proNumberPeople}명 참여중 </span></b>
+							</div>
+						</div> 
+					</c:forEach>
 					
 				</div><!-- 여기까지가 myPro-->
 				
