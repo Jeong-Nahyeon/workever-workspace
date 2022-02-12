@@ -1,14 +1,24 @@
 package com.workever.wk.noticeBoard.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.JsonObject;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.community.model.vo.CommunityFiles;
@@ -142,19 +152,17 @@ public class NoticeBoardController {
 			
 	}
 	
-	
-	
-	
-	// 테스트용 삭제 예정
-	
-	/** 공지사항 게시글 작성 페이지 응답하는 메소드
-	 * @return : noticeBoardForm.jsp
+	/** 공지사항 게시글 작성 페이지 포워딩
+	 * @return
 	 */
 	@RequestMapping("enrollForm.nbo")
 	public String noticeBoardForm() {
 		
-		return "noticeBoard/noticeBoardForm";
+		return "noticeBoard/noticeBoardEnrollForm";
 		
 	}
+	
+	
+	
 	
 }

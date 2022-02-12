@@ -10,7 +10,10 @@
 <jsp:include page="../common/links.jsp" />
 
 <!-- summernote -->
+<!-- 
 <link rel="stylesheet" href="resources/plugins/summernote/summernote-bs4.min.css">
+ -->
+<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
   
 <style>
 
@@ -155,30 +158,7 @@
 							<tr>
 							<td colspan="2">
 								<div class="form-group">
-								<textarea id="board-textarea" class="form-control" style="height: 300px">
-									<h1><u>Heading Of Message</u></h1>
-									<h4>Subheading</h4>
-									<p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
-									was born and I will give you a complete account of the system, and expound the actual teachings
-									of the great explorer of the truth, the master-builder of human happiness. No one rejects,
-									dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
-									how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
-									is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
-									but because occasionally circumstances occur in which toil and pain can procure him some great
-									pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
-									except to obtain some advantage from it? But who has any right to find fault with a man who
-									chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
-									produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
-									dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
-									blinded by desire, that they cannot foresee</p>
-									<ul>
-									<li>List item one</li>
-									<li>List item two</li>
-									<li>List item three</li>
-									<li>List item four</li>
-									</ul>
-									<p>Thank you,</p>
-									<p>John Doe</p>
+								<textarea id="board-textarea" class="form-control">
 								</textarea>
 							</div>
 							</td>
@@ -223,16 +203,42 @@
 	<jsp:include page="../common/scripts.jsp" />
 	
 	<!-- Summernote -->
+	<!-- 
 	<script src="resources/plugins/summernote/summernote-bs4.min.js"></script>
-
+ 	-->
+	<script src="resources/plugins/summernote/summernote-lite.js"></script>
+ 	<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+ 	
+ 	
 	<!-- 스크립트 영역 -->  
 	<!-- summernote -->
+
 	<script>
 	  $(function () {
-	    //Add text editor
-	    $("#board-textarea").summernote();
+
+	    $("#board-textarea").summernote({
+			height: 300,                 // 에디터 높이
+			lang: "ko-KR"				 // 한글 설정
+			toolbar: [
+					    // [groupName, [list of button]]
+					    ['fontname', ['fontname']],
+					    ['fontsize', ['fontsize']],
+					    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+					    ['color', ['forecolor','color']],
+					    ['table', ['table']],
+					    ['para', ['ul', 'ol', 'paragraph']],
+					    ['height', ['height']],
+					    ['insert',['picture','link','video']],
+					    ['view', ['fullscreen', 'help']]
+					  ],
+					fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
+					fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
+	    });
+
 	  });
 	</script>
+	
+	
 	
 </body>
 </html>

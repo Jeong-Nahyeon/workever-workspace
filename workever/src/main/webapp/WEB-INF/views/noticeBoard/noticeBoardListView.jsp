@@ -194,7 +194,7 @@
 		              <div class="col-sm-3 board-header-area-right">
 		                <!-- 관리자일 경우에만 보임 -->
 		                <c:if test="${ loginUser.userRank eq '관리자' }">
-		                	<button class="btn btn-sm">글작성</button>
+		                	<button type="button" id="enroll-form-btn" class="btn btn-sm" onclick="location.href = 'enrollForm.nbo';">글작성</button>
 		                </c:if>
 		              </div>
 		              
