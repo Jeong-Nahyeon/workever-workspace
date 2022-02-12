@@ -23,6 +23,8 @@
 		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalForm" alias="ApprovalForm" />
 		<typeAlias type="com.workever.wk.approval.model.vo.ApprovalLine" alias="ApprovalLine" />
 		<typeAlias type="com.workever.wk.user.model.vo.Company" alias="Company"/>
+		<typeAlias type="com.workever.wk.project.model.vo.Project" alias="Project" />
+		
 	</typeAliases>
 	
 	<mappers>
@@ -33,6 +35,7 @@
 		<mapper resource="/mappers/communityReply-mapper.xml" />
 		<mapper resource="/mappers/report-mapper.xml" />
 		<mapper resource="/mappers/approval-mapper.xml" />
+		<mapper resource="/mappers/project-mapper.xml" />
 	</mappers>
 
 </configuration>
