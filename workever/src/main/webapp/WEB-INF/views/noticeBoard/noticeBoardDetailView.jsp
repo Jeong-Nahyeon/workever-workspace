@@ -11,6 +11,7 @@
 <title>공지사항 게시글 상세</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
 
@@ -153,7 +154,7 @@
 			                      </c:when>
 			                      <c:otherwise>
 			                      	  <c:forEach var="cf" items="${ list }">
-					                      <a href="${ cf.cfPath + cf.cfChangeName }" download="${ cf.cfOriginName }">${ cf.cfOriginName }</a><br>
+					                      <a href="${ cf.cfPath }${ cf.cfChangeName }" download="${ cf.cfOriginName }">${ cf.cfOriginName }</a><br>
 				                      </c:forEach>
 			                      </c:otherwise>
 		                      </c:choose>
@@ -180,7 +181,7 @@
 		          <div class="card-footer">
 		
 		            <div class="btns-area">
-		              <a class="btn btn-sm" href="#" onclick="history.back(); return false;">목록</a>
+		              <a class="btn btn-sm" href="list.nbo">목록</a>
 		            </div>
 		
 		          </div>
@@ -203,8 +204,6 @@
     
     </div>
     <!-- ./wrapper -->
-
-	<jsp:include page="../common/scripts.jsp" />
 
 </body>
 </html>
