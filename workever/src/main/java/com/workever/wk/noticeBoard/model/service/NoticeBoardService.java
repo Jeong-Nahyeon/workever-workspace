@@ -23,12 +23,15 @@ public interface NoticeBoardService {
 	// 공지사항 게시글 상세 조회 서비스
 	int increaseCount(int nbNo); // 조회수 증가
 	NoticeBoard selectNoticeBoard(int nbNo); // 게시글 상세 조회
-	ArrayList<CommunityFiles> selectCommunityFilesList(int nbNo); // 첨부파일 조회
+	ArrayList<CommunityFiles> selectCommunityFileList(int nbNo); // 첨부파일 조회
 	
 	// 공지사항 게시글 작성 서비스 
 	int insertNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list); // 게시글 등록
 	
 	// 공지사항 게시글 수정 서비스
+	CommunityFiles selectCommunityFile(int cfNo); // 삭제용 첨부파일 조회
+	int deleteCommunityFileList(int cfNo); // DB에서 첨부파일 삭제
+	int updateNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list); // 게시글 수정
 	
 	// 공지사항 게시글 삭제 서비스
 	

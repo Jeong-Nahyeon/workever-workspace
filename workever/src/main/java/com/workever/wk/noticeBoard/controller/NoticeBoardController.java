@@ -129,7 +129,7 @@ public class NoticeBoardController {
 			
 			NoticeBoard nb = nService.selectNoticeBoard(nbno); // 게시글 상세 조회
 			
-			ArrayList<CommunityFiles> list = nService.selectCommunityFilesList(nbno); // 첨부파일 조회
+			ArrayList<CommunityFiles> list = nService.selectCommunityFileList(nbno); // 첨부파일 조회
 			
 			mv.addObject("nb", nb)
 			  .addObject("list", list)
@@ -152,12 +152,19 @@ public class NoticeBoardController {
 	 * @return
 	 */
 	@RequestMapping("enrollForm.nbo")
-	public String noticeBoardForm() {
+	public String noticeBoardEnrollForm() {
 		
 		return "noticeBoard/noticeBoardEnrollForm";
 		
 	}
 	
+	/** 공지사항 게시글 등록 및 첨부파일 등록 후 공지사항 게시글 목록 조회 페이지 url 재요청
+	 * @param nb : 사용자가 입력한 공지사항 게시글
+	 * @param upfile : 사용자가 등록한 첨부파일 
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("insert.nbo")
 	public String insertNoticeBoard(NoticeBoard nb, MultipartFile[] upfile, HttpSession session, Model m) {
 					
@@ -181,9 +188,7 @@ public class NoticeBoardController {
 			}
 			
 		}
-		
-		System.out.println(list);
-		
+				
 		int result = nService.insertNoticeBoard(nb, list);
 		
 		if(result > 0) {
@@ -197,7 +202,7 @@ public class NoticeBoardController {
 				
 				for(CommunityFiles file : list) {
 					
-					new File(file.getCfPath() + file.getCfChangeName()).delete();
+					new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
 					// 삭제 시키고자하는 파일을 찾아서 File 객체에 담아서 삭제		
 				
 				}
@@ -210,6 +215,95 @@ public class NoticeBoardController {
 		}
 		
 	}
+	
+	/** 공지사항 게시글 수정 페이지 포워딩
+	 * @return
+	 */
+	@RequestMapping("updateForm.nbo")
+	public ModelAndView noticeBoardUpdateForm(int nbno, ModelAndView mv) {
+		
+		NoticeBoard nb = nService.selectNoticeBoard(nbno);
+		ArrayList<CommunityFiles> list = nService.selectCommunityFileList(nbno);
+				
+		mv.addObject("nb", nb)
+		  .addObject("list", list)
+		  .setViewName("noticeBoard/noticeBoardUpdateForm");
+		
+		
+		return mv;
+		
+	}
+	
+	@RequestMapping("update.nbo")
+	public String updateNoticeBoard(String[] deleteNo, NoticeBoard nb, MultipartFile[] upfile, HttpSession session, Model m) {
+						
+		if(deleteNo != null) { // 삭제할 첨부파일이 있을 경우 
+			
+			for(String deleteFileNo : deleteNo) {
+				
+				int cfNo = Integer.parseInt(deleteFileNo);
+				
+				// 내부 저장경로에서 삭제
+				CommunityFiles cf = nService.selectCommunityFile(cfNo);
+				new File(session.getServletContext().getRealPath(cf.getCfPath() + cf.getCfChangeName())).delete();
+								
+				// DB에서 삭제
+				nService.deleteCommunityFileList(cfNo);
+				
+			}
+			
+		}
+		
+		ArrayList<CommunityFiles> list = new ArrayList<>();
+		
+		if(upfile != null) { // 첨부파일이 존재할 경우
+			
+			String savePath = "resources/community_upfiles/noticeBoard_upfiles/";
+			
+			for(int i=0; i<upfile.length; i++) {
+				
+				String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
+				
+				CommunityFiles cf = new CommunityFiles();
+				cf.setCfRefNo(nb.getNbNo());
+				cf.setCfOriginName(upfile[i].getOriginalFilename());
+				cf.setCfChangeName(changeName);
+				cf.setCfPath(savePath);
+				
+				list.add(cf);
+				
+			}
+			
+		}
+		
+		int result = nService.updateNoticeBoard(nb, list);
+		
+		if(result > 0) {
+			
+			session.setAttribute("successMsg", "성공적으로 공지사항 게시글이 수정되었습니다");
+			return "redirect:list.nbo";
+			
+		} else {
+			
+			if(!list.isEmpty()) { // 첨부파일 있는 경우
+				
+				for(CommunityFiles file : list) {
+					
+					new File(file.getCfPath() + file.getCfChangeName()).delete();
+				
+				}
+				
+			}
+			
+			m.addAttribute("errorMsg", "공지사항 게시글 수정 실패");
+			return "common/errorPage";
+			
+		}
+		
+	}
+	
+	
+	
 	
 	
 }

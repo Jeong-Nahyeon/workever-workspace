@@ -129,23 +129,33 @@ public class NoticeBoardDao {
 	 * @param nbNo
 	 * @return
 	 */
-	public ArrayList<CommunityFiles> selectCommunityFilesList(SqlSessionTemplate sqlSession, int nbNo) {
+	public ArrayList<CommunityFiles> selectCommunityFileList(SqlSessionTemplate sqlSession, int nbNo) {
 		
-		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectCommunityFilesList", nbNo);
+		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectCommunityFileList", nbNo);
 		
 	}
 	
+	/** 공지사항 게시글 등록 
+	 * @param sqlSession
+	 * @param nb
+	 * @return
+	 */
 	public int insertNoticeBoard(SqlSessionTemplate sqlSession, NoticeBoard nb) {
 		
 		return sqlSession.insert("noticeBoardMapper.insertNoticeBoard", nb);
 		
 	}
 	
+	/** 공지사항 게시글 첨부파일 등록
+	 * @param sqlSession
+	 * @param list
+	 * @return
+	 */
 	public int insertCommunityFileList(SqlSessionTemplate sqlSession, ArrayList<CommunityFiles> list) {
 		
 		int result = 0;
 		
-		for( CommunityFiles file : list) {
+		for(CommunityFiles file : list) {
 			
 			result = sqlSession.insert("noticeBoardMapper.insertCommunityFileList", file);
 			
@@ -154,5 +164,42 @@ public class NoticeBoardDao {
 		return result;
 		
 	}
+	
+	public CommunityFiles selectCommunityFile(SqlSessionTemplate sqlSession, int cfNo) {
+		
+		return sqlSession.selectOne("noticeBoardMapper.selectCommunityFile", cfNo);
+		
+	}
+	
+	public int deleteCommunityFileList(SqlSessionTemplate sqlSession, int cfNo) {
+		
+		return sqlSession.delete("noticeBoardMapper.deleteCommunityFileList", cfNo);
+		
+	}
+	
+	public int updateNoticeBoard(SqlSessionTemplate sqlSession, NoticeBoard nb) {
+		
+		return sqlSession.update("noticeBoardMapper.updateNoticeBoard", nb);
+		
+	}
+	
+	public int updateCommunityFileList(SqlSessionTemplate sqlSession, ArrayList<CommunityFiles> list) {
+		
+		int result = 0;
+		
+		for(CommunityFiles file : list) {
+			
+			result = sqlSession.insert("noticeBoardMapper.updateCommunityFileList", file);
+			
+		}
+		
+		return result;
+		
+	}
+	
+	
+	
+	
+	
 
 }

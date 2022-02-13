@@ -126,8 +126,8 @@
 		            <div class="card-header board-btns-area"> 
 		            
 		            <c:if test="${ loginUser.userRank eq '관리자' }">
-		              <button class="btn btn-sm btn-default update-btn">수정</button>
-		              <button class="btn btn-sm delete-btn">삭제</button>
+		              <button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href = 'updateForm.nbo?nbno=${ nb.nbNo }';">수정</button>
+		              <button type="button" class="btn btn-sm delete-btn">삭제</button>
 		            </c:if>  
 		            
 		            </div>

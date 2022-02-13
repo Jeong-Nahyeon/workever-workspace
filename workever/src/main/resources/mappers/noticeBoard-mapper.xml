@@ -132,7 +132,7 @@
 		   and nb_no = #{nbNo}
 	</select>
 	
-	<select id="selectCommunityFilesList" resultMap="communityFilesResult">
+	<select id="selectCommunityFileList" resultMap="communityFilesResult">
 		select
 		       cf_no
 		     , cf_origin_name
@@ -177,6 +177,51 @@
 		    seq_community_files.nextval
 		  , 'N'
 		  , seq_n_board.currval
+		  , #{cfOriginName}
+		  , #{cfChangeName}
+		  , #{cfPath}
+		  )
+	</insert>
+	
+	<select id="selectCommunityFile" resultMap="communityFilesResult">
+		select
+		       cf_change_name
+		     , cf_path
+		  from community_files
+		 where cf_no = #{cfNo} 
+	</select>
+	
+	<delete id="deleteCommunityFileList">
+		delete
+		  from community_files
+		 where cf_no = #{cfNo} 
+	</delete>
+	
+	<update id="updateNoticeBoard">
+		update
+		       n_board
+		   set nb_Title = #{nbTitle}
+		     , nb_Content = #{nbContent}
+		     , nb_date = sysdate
+		 where nb_no = #{nbNo}         
+	</update>
+	
+	<insert id="updateCommunityFileList">
+		insert
+		  into community_files
+		  (
+		    cf_no
+		  , cf_category
+		  , cf_ref_no
+		  , cf_origin_name
+		  , cf_change_name
+		  , cf_path
+		  )  
+		  values
+		  (
+		    seq_community_files.nextval
+		  , 'N'
+		  , #{cfRefNo}
 		  , #{cfOriginName}
 		  , #{cfChangeName}
 		  , #{cfPath}

@@ -21,6 +21,11 @@
         margin-bottom:20px;
         font-weight:bolder;
     }
+    
+    #page-title a{
+    	text-decoration:none;
+    	color:black;
+    }
 
     /* 게시글 정렬설정/검색/등록버튼 영역 */
     .board-header-area {
@@ -193,7 +198,7 @@
 		    <div class="container-fluid">
 		      <div class="row mb-2">
 		        <div class="col-sm-6">
-		          <h1 id="page-title">공지사항 게시판</h1>
+		          <h1 id="page-title"><a href="list.nbo">공지사항 게시판</a></h1>
 		        </div>
 		      </div>
 		    </div><!-- /.container-fluid -->

@@ -106,12 +106,15 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 	 * 공지사항 게시글 첨부파일 조회
 	 */
 	@Override
-	public ArrayList<CommunityFiles> selectCommunityFilesList(int nbNo) {
+	public ArrayList<CommunityFiles> selectCommunityFileList(int nbNo) {
 
-		return nDao.selectCommunityFilesList(sqlSession, nbNo);
+		return nDao.selectCommunityFileList(sqlSession, nbNo);
 		
 	}
 
+	/** 공지사항 게시글 등록 및 첨부파일 등록
+	 *
+	 */
 	@Override
 	public int insertNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list) {
 
@@ -120,12 +123,50 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		int result2 = 1;
 		
 		if(!list.isEmpty()) { // 첨부파일 있을 경우에만 실행되도록 조건 검사
+			
 			result2 = nDao.insertCommunityFileList(sqlSession, list);
+			
 		}
 		
 		return result1 * result2;
 		
 	}
+	
+	@Override
+	public CommunityFiles selectCommunityFile(int cfNo) {
+		
+		return nDao.selectCommunityFile(sqlSession, cfNo);
+		
+	}
+	
+	@Override
+	public int deleteCommunityFileList(int cfNo) {
+		
+		return nDao.deleteCommunityFileList(sqlSession, cfNo);
+		
+	}
+
+	@Override
+	public int updateNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list) {
+		
+		int result1 = nDao.updateNoticeBoard(sqlSession, nb);
+		
+		int result2 = 1;
+		
+		if(!list.isEmpty()) { // 첨부파일 있을 경우에만 실행되도록 조건 검사
+			
+			result2 = nDao.updateCommunityFileList(sqlSession, list);
+			
+		}
+		
+		return result1 * result2;
+		
+	}
+	
+	
+
+
+	
 	
 	
 
