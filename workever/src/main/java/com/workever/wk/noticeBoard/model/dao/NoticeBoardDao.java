@@ -171,9 +171,9 @@ public class NoticeBoardDao {
 		
 	}
 	
-	public int deleteCommunityFileList(SqlSessionTemplate sqlSession, int cfNo) {
+	public int deleteCommunityFile(SqlSessionTemplate sqlSession, int cfNo) {
 		
-		return sqlSession.delete("noticeBoardMapper.deleteCommunityFileList", cfNo);
+		return sqlSession.delete("noticeBoardMapper.deleteCommunityFile", cfNo);
 		
 	}
 	
@@ -197,9 +197,16 @@ public class NoticeBoardDao {
 		
 	}
 	
+	public int deleteNoticeBoard(SqlSessionTemplate sqlSession, int nbNo) {
+		
+		return sqlSession.update("noticeBoardMapper.deleteNoticeBoard", nbNo);
+		
+	}
 	
+	public int deleteCommunityFileList(SqlSessionTemplate sqlSession, int nbNo) {
+		
+		return sqlSession.delete("noticeBoardMapper.deleteCommunityFileList", nbNo);
+		
+	}
 	
-	
-	
-
 }

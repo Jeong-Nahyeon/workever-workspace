@@ -40,7 +40,7 @@ public class NoticeBoardController {
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 		
-		if(orderList != null) { // 오래된순
+		if(orderList != null) { // 오래된순 조회
 			
 			ArrayList<NoticeBoard> list = nService.selectAscList(pi);
 			
@@ -51,7 +51,7 @@ public class NoticeBoardController {
 			
 			return mv;
 			
-		} else { // 최신순(기본)
+		} else { // 최신순(기본) 조회
 			
 			ArrayList<NoticeBoard> list = nService.selectNoticeBoardList(pi);
 		
@@ -86,7 +86,7 @@ public class NoticeBoardController {
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 		
-		if(orderList != null) { // 오래된순
+		if(orderList != null) { // 오래된순 조회
 			
 			ArrayList<NoticeBoard> list = nService.selectSearchAscList(map, pi);
 			
@@ -99,7 +99,7 @@ public class NoticeBoardController {
 			
 			return mv;
 			
-		} else { // 최신순(기본)
+		} else { // 최신순(기본) 조회
 			
 			ArrayList<NoticeBoard> list = nService.selectSearchList(map, pi);
 		
@@ -125,7 +125,7 @@ public class NoticeBoardController {
 		
 		int result = nService.increaseCount(nbno); // 조회수 증가
 		
-		if(result > 0) { // 유효한 게시글
+		if(result > 0) { // 유효한 게시글 조회
 			
 			NoticeBoard nb = nService.selectNoticeBoard(nbno); // 게시글 상세 조회
 			
@@ -137,7 +137,7 @@ public class NoticeBoardController {
 			
 			return mv;
 		
-		} else { // 유효하지 않은 게시글
+		} else { // 유효하지 않은 게시글 조회
 			
 			mv.addObject("errorMsg", "유효하지 않은 게시글 입니다")
 			  .setViewName("common/errorPage");
@@ -191,12 +191,12 @@ public class NoticeBoardController {
 				
 		int result = nService.insertNoticeBoard(nb, list);
 		
-		if(result > 0) {
+		if(result > 0) { // 등록 성공
 			
-			session.setAttribute("successMsg", "성공적으로 공지사항 게시글이 등록되었습니다");
+			session.setAttribute("successMsg", "성공적으로 등록되었습니다");
 			return "redirect:list.nbo";
 			
-		} else {
+		} else { // 등록 실패
 			
 			if(!list.isEmpty()) { // 첨부파일 있는 경우
 				
@@ -248,7 +248,7 @@ public class NoticeBoardController {
 				new File(session.getServletContext().getRealPath(cf.getCfPath() + cf.getCfChangeName())).delete();
 								
 				// DB에서 삭제
-				nService.deleteCommunityFileList(cfNo);
+				nService.deleteCommunityFile(cfNo);
 				
 			}
 			
@@ -278,18 +278,18 @@ public class NoticeBoardController {
 		
 		int result = nService.updateNoticeBoard(nb, list);
 		
-		if(result > 0) {
+		if(result > 0) { // 수정 성공
 			
-			session.setAttribute("successMsg", "성공적으로 공지사항 게시글이 수정되었습니다");
+			session.setAttribute("successMsg", "성공적으로 수정되었습니다");
 			return "redirect:list.nbo";
 			
-		} else {
+		} else { // 수정 실패
 			
 			if(!list.isEmpty()) { // 첨부파일 있는 경우
 				
 				for(CommunityFiles file : list) {
 					
-					new File(file.getCfPath() + file.getCfChangeName()).delete();
+					new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
 				
 				}
 				
@@ -302,8 +302,39 @@ public class NoticeBoardController {
 		
 	}
 	
-	
-	
-	
+	@RequestMapping("delete.nbo")
+	public String deleteNoticeBoard(int nbno, HttpSession session, Model m) {
+		
+		int result1 = nService.deleteNoticeBoard(nbno);
+		
+		ArrayList<CommunityFiles> list = new ArrayList<>();
+		list = nService.selectCommunityFileList(nbno);
+		
+		int result2 = 1;
+		if(!list.isEmpty()) { // 첨부파일 있을 경우
+			
+			result2 = nService.deleteCommunityFileList(nbno);
+			
+			for(CommunityFiles file : list) {
+				
+				new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
+			
+			}
+			
+		} 
+		
+		if(result1 * result2 > 0) { // 삭제 성공
+			
+			session.setAttribute("successMsg", "성공적으로 삭제되었습니다.");
+			return "redirect:list.nbo";
+			
+		} else { // 삭제 실패
+			
+			m.addAttribute("errorMsg", "공지사항 게시글 삭제 실패");
+			return "common/errorPage";
+			
+		}
+		
+	}
 	
 }

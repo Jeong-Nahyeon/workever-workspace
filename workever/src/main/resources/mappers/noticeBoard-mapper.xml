@@ -191,7 +191,7 @@
 		 where cf_no = #{cfNo} 
 	</select>
 	
-	<delete id="deleteCommunityFileList">
+	<delete id="deleteCommunityFile">
 		delete
 		  from community_files
 		 where cf_no = #{cfNo} 
@@ -227,5 +227,18 @@
 		  , #{cfPath}
 		  )
 	</insert>
+	
+	<update id="deleteNoticeBoard">
+		update
+		       n_board
+		   set nb_status = 'N'
+		 where nb_no = #{nbNo} 	
+	</update>
+	
+	<delete id="deleteCommunityFileList">
+		delete
+		  from community_files
+		 where cf_ref_no = #{nbNo}	
+	</delete>
 	
 </mapper>

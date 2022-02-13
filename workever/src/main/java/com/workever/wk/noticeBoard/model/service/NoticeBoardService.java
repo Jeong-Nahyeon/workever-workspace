@@ -30,9 +30,11 @@ public interface NoticeBoardService {
 	
 	// 공지사항 게시글 수정 서비스
 	CommunityFiles selectCommunityFile(int cfNo); // 삭제용 첨부파일 조회
-	int deleteCommunityFileList(int cfNo); // DB에서 첨부파일 삭제
+	int deleteCommunityFile(int cfNo); // DB에서 첨부파일 삭제
 	int updateNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list); // 게시글 수정
 	
 	// 공지사항 게시글 삭제 서비스
+	int deleteNoticeBoard(int nbNo);
+	int deleteCommunityFileList(int nbNo);
 	
 }

@@ -140,9 +140,9 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 	}
 	
 	@Override
-	public int deleteCommunityFileList(int cfNo) {
+	public int deleteCommunityFile(int cfNo) {
 		
-		return nDao.deleteCommunityFileList(sqlSession, cfNo);
+		return nDao.deleteCommunityFile(sqlSession, cfNo);
 		
 	}
 
@@ -162,12 +162,21 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		return result1 * result2;
 		
 	}
-	
-	
 
+	@Override
+	public int deleteNoticeBoard(int nbNo) {
+				
+		return nDao.deleteNoticeBoard(sqlSession, nbNo);
+		
+	}
 
+	@Override
+	public int deleteCommunityFileList(int nbNo) {
+		
+		return nDao.deleteCommunityFileList(sqlSession, nbNo);
+		
+	}
 	
 	
 	
-
 }

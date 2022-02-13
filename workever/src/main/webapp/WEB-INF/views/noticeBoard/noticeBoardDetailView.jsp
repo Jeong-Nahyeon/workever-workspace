@@ -91,6 +91,35 @@
         color: white;
     }  
 
+    /* 요청처리 여부 확인 모달창 영역 */
+    #confirm-modal h6{
+      margin-left:220px;
+    }
+
+    #confirm-modal .modal-body{
+      height:130px;
+      text-align:center;
+      line-height:100px;
+    }
+   
+    .confirm-modal-btns{
+      /* border:1px solid red; */
+      display: inline-block;
+      margin-right:160px;
+    }
+    
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
+    }
+
+    #confirm-btn{
+      border:1px solid #4E73DF;
+      background: #4E73DF;
+      color: white;
+    }
+    
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -127,7 +156,7 @@
 		            
 		            <c:if test="${ loginUser.userRank eq '관리자' }">
 		              <button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href = 'updateForm.nbo?nbno=${ nb.nbNo }';">수정</button>
-		              <button type="button" class="btn btn-sm delete-btn">삭제</button>
+		              <button type="button" id="delete-modal-btn" class="btn btn-sm delete-btn">삭제</button>
 		            </c:if>  
 		            
 		            </div>
@@ -204,6 +233,57 @@
     
     </div>
     <!-- ./wrapper -->
+    
+    <!-- 요청처리 여부 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="confirm-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b>삭제하시겠습니까?</b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="confirm-modal-btns">
+	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
+	            <button id="confirm-btn" class="btn btn-sm">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+	
+
+
+	<script>
+		$(function(){
+			
+			// 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
+		    $("#delete-modal-btn").click(function(){
+		    	
+			      $("#confirm-modal").modal({backdrop: "static"});
+			      
+			});
+		    
+			// 확인 버튼 클릭 시 삭제 요청 처리
+		    $("#confirm-btn").click(function(){
+		    	
+		    	  location.href = "delete.nbo?nbno=${ nb.nbNo }";
+			      
+			});
+			
+		});
+	</script>	
 
 </body>
 </html>
