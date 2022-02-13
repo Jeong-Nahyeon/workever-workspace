@@ -54,6 +54,18 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	// 임시비밀번호 발급용 이메일 확인
+	@Override
+	public int pwdEmailCheck(User u) {
+		return uDao.pwdEmailCheck(sqlSession, u);
+	}
+
+	// 임시비밀번호 DB업데이트
+	@Override
+	public int updateTemPwd(User u) {
+		return uDao.updateTemPwd(sqlSession, u);
+	}
+
 	
 
 	

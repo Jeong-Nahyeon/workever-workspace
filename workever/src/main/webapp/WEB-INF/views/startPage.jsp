@@ -80,7 +80,7 @@
 </head>
 <body>
     
-	<!--<jsp:include page="user/startHeader.jsp"></jsp:include>-->
+	
     <div id="start-header">
         <div id="header-font">
             <a href="${pageContext.request.contextPath}">

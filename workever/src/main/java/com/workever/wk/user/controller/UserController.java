@@ -1,5 +1,7 @@
 package com.workever.wk.user.controller;
 
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -184,6 +186,80 @@ public class UserController {
 			model.addAttribute("errorMsg", "회원가입 실패");
 			return "common/errorPage";
 		}
+	}
+	
+	// 비밀번호 발급 페이지 연결
+	@RequestMapping("findPwd.do")
+	public String findPwdPage() {
+		return "user/findPwd";
+	}
+	
+	// 임시비밀번호 발급용 이메일 확인
+	@ResponseBody
+	@RequestMapping("pwdEmailCheck.do")
+	public String pwdEmailCheck(User u) {
+		System.out.println(u);
+		int count = uService.pwdEmailCheck(u);
+		
+		return count > 0 ? "NNNNY" : "NNNNN";
+	}
+	
+	// 임시비밀번호를 생성하는 메소드
+	private String getRandomPassword(int size) {
+		char[] charSet = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+									 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 
+									 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+									 'a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+									 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+									 'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&'};
+		
+		StringBuffer sb = new StringBuffer();
+		SecureRandom sr = new SecureRandom();
+		sr.setSeed(new Date().getTime());
+		int idx = 0;
+		int len = charSet.length;
+		for(int i=0; i < size; i++) {
+			idx = (int) (len * Math.random());
+			idx = sr.nextInt(len);
+			sb.append(charSet[idx]);
+		}
+		return sb.toString();
+	}
+	
+	// 임시비밀번호 메일 전송
+	@RequestMapping("findPwd.us")
+	public String findPwd(User u, HttpSession session, Model model) {
+		String userEmail = u.getUserEmail();
+		String temPwd = getRandomPassword(8);	// 비밀번호 생성
+		
+		// 메일내용
+		String setFrom = "workever0303@gmail.com";
+		String toMail = userEmail;
+		String title = "Workever - 임시 비밀번호 입니다.";
+		String content = "안녕하세요. Workever 입니다." + "<br>" + 
+				 		 "본 메일은 Workever 임시 비밀번호 안내 메일입니다." + "<br>" +
+				 		 "임시비밀번호는  <strong>" + temPwd + "</strong> 입니다." + "<br>" + 
+				 		 "임시 비밀번호로 로그인 후 비밀번호를 변경해주세요";
+		
+		// 비밀번호 암호화
+		String inputPass = temPwd;
+		String encPwd = bcryptPasswordEncoder.encode(inputPass);
+		u.setUserPwd(encPwd);
+		
+		// 임시비밀번호 DB업데이트
+		int result = uService.updateTemPwd(u);
+		
+		if(result > 0) {
+			// 메일 전송
+			emailService.mailSend(setFrom, toMail, title, content);
+			
+			model.addAttribute("alertMvMsg", "입력하신 이메일로 임시비밀번호가 전송되었습니다.");
+			return "redirect:/";
+		}else {
+			model.addAttribute("errorMsg", "임시비밀번호 발급 실패");
+			return "common/errorPage";
+		}
+		
 	}
 	
 	

@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
-
+<jsp:include page="startHeader.jsp"></jsp:include>
 <style>
     div{box-sizing: border-box;}
     /* 헤더스타일 */
@@ -81,12 +81,7 @@
 </style>
 </head>
 <body>
-    <c:if test="${ not empty alertMsg }">
-		<script>
-			alert("${alertMsg}");
-		</script>
-		<c:remove var="alertMsg" scope="session" />
-	</c:if>
+    <span>${alertMvMsg}</span>
     <div id="start-header">
         <div id="header-font">
             <a href="${pageContext.request.contextPath}">
@@ -121,7 +116,7 @@
                             <button type="submit">로그인</button>
                         </div>
                         <div class="change-pwd">
-                            <a href="">비밀번호 재설정</a>
+                            <a href="findPwd.do">비밀번호 재설정</a>
                         </div>
                     </div>
                 </form>

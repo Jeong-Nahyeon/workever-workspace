@@ -21,5 +21,11 @@ public interface UserService {
 	
 	// 회원가입(사원)
 	int insertUser(HashMap<String, Object> user);
+	
+	// 임시비밀번호 발급용 이메일확인
+	int pwdEmailCheck(User u);
+	
+	// 임시비밀번호 DB업데이트
+	int updateTemPwd(User u);
 
 }

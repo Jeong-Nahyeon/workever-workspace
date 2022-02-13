@@ -161,4 +161,22 @@
 		      , 'N'
 		      )
   	</insert>
+  	
+  	<!-- 임시비밀번호 발급용 이메일 확인 -->
+  	<select id="pwdEmailCheck" resultType="_int">
+  		select
+		       count(*)
+		  from users
+		 where user_email = #{userEmail}
+		   and user_phone = #{userPhone}
+  	</select>
+  	
+  	<!-- 임시비밀번호 저장 -->
+  	<update id="updateTemPwd">
+  		update
+  			   users
+  		   set user_pwd = #{userPwd}
+  		 where user_email = #{userEmail}
+  		   and user_phone = #{userPhone}
+  	</update>
 </mapper>

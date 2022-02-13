@@ -34,4 +34,14 @@ public class UserDao {
 	public int insertUser(SqlSessionTemplate sqlSession, HashMap<String, Object> user) {
 		return sqlSession.insert("userMapper.insertUser", user);
 	}
+	
+	// 임시비밀번호 발급용 이메일 확인
+	public int pwdEmailCheck(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.selectOne("userMapper.pwdEmailCheck", u);
+	}
+	
+	// 임시비밀번호 DB 업데이트
+	public int updateTemPwd(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.updateTemPwd", u);
+	}
 }
