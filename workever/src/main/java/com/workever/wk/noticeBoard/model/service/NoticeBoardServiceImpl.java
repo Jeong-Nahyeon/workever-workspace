@@ -103,7 +103,7 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 	}
 
 	/**
-	 * 공지사항 게시글 첨부파일 조회
+	 * 참조글번호로 공지사항 게시글 첨부파일 조회
 	 */
 	@Override
 	public ArrayList<CommunityFiles> selectCommunityFileList(int nbNo) {
@@ -132,6 +132,9 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		
 	}
 	
+	/** 파일번호로 공지사항 게시글 첨부파일 조회
+	 *
+	 */
 	@Override
 	public CommunityFiles selectCommunityFile(int cfNo) {
 		
@@ -139,6 +142,9 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		
 	}
 	
+	/** 파일번호로 공지사항 첨부파일 삭제
+	 *
+	 */
 	@Override
 	public int deleteCommunityFile(int cfNo) {
 		
@@ -146,6 +152,9 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		
 	}
 
+	/** 공지사항 게시글 수정 및 새로운 첨부파일 등록
+	 *
+	 */
 	@Override
 	public int updateNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list) {
 		
@@ -163,6 +172,9 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		
 	}
 
+	/** 공지사항 게시글 삭제
+	 *
+	 */
 	@Override
 	public int deleteNoticeBoard(int nbNo) {
 				
@@ -170,13 +182,14 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		
 	}
 
+	/** 공지사항 게시글 첨부파일 삭제
+	 *
+	 */
 	@Override
 	public int deleteCommunityFileList(int nbNo) {
 		
 		return nDao.deleteCommunityFileList(sqlSession, nbNo);
 		
 	}
-	
-	
 	
 }

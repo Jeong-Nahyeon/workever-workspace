@@ -34,7 +34,7 @@ public interface NoticeBoardService {
 	int updateNoticeBoard(NoticeBoard nb, ArrayList<CommunityFiles> list); // 게시글 수정
 	
 	// 공지사항 게시글 삭제 서비스
-	int deleteNoticeBoard(int nbNo);
-	int deleteCommunityFileList(int nbNo);
+	int deleteNoticeBoard(int nbNo); // 게시글 삭제
+	int deleteCommunityFileList(int nbNo); // 첨부파일 삭제
 	
 }

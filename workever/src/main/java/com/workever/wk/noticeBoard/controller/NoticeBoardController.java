@@ -176,14 +176,18 @@ public class NoticeBoardController {
 			
 			for(int i=0; i<upfile.length; i++) {
 				
-				String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
-				
-				CommunityFiles cf = new CommunityFiles();
-				cf.setCfOriginName(upfile[i].getOriginalFilename());
-				cf.setCfChangeName(changeName);
-				cf.setCfPath(savePath);
-				
-				list.add(cf);
+				if(!upfile[i].getOriginalFilename().equals("")) {
+					
+					String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
+					
+					CommunityFiles cf = new CommunityFiles();
+					cf.setCfOriginName(upfile[i].getOriginalFilename());
+					cf.setCfChangeName(changeName);
+					cf.setCfPath(savePath);
+					
+					list.add(cf);
+					
+				}
 				
 			}
 			
@@ -234,6 +238,14 @@ public class NoticeBoardController {
 		
 	}
 	
+	/** 공지사항 게시글 수정 및 기존 첨부파일 삭제, 새로운 첨부파일 등록 후 공지사항 게시글 목록 페이지 url 재요청
+	 * @param deleteNo : 사용자가 삭제한 기존 첨부파일 번호
+	 * @param nb : 사용자가 수정한 게시글
+	 * @param upfile : 사용자가 등록한 새로운 첨부파일
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("update.nbo")
 	public String updateNoticeBoard(String[] deleteNo, NoticeBoard nb, MultipartFile[] upfile, HttpSession session, Model m) {
 						
@@ -262,15 +274,19 @@ public class NoticeBoardController {
 			
 			for(int i=0; i<upfile.length; i++) {
 				
-				String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
-				
-				CommunityFiles cf = new CommunityFiles();
-				cf.setCfRefNo(nb.getNbNo());
-				cf.setCfOriginName(upfile[i].getOriginalFilename());
-				cf.setCfChangeName(changeName);
-				cf.setCfPath(savePath);
-				
-				list.add(cf);
+				if(!upfile[i].getOriginalFilename().equals("")) {
+					
+					String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
+					
+					CommunityFiles cf = new CommunityFiles();
+					cf.setCfRefNo(nb.getNbNo());
+					cf.setCfOriginName(upfile[i].getOriginalFilename());
+					cf.setCfChangeName(changeName);
+					cf.setCfPath(savePath);
+					
+					list.add(cf);
+					
+				}
 				
 			}
 			
@@ -302,6 +318,12 @@ public class NoticeBoardController {
 		
 	}
 	
+	/** 공지사항 게시글 삭제 및 첨부파일 삭제 후 공지사항 게시글 목록 페이지 url 재요청
+	 * @param nbno : 사용자가 삭제한 게시글 번호
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("delete.nbo")
 	public String deleteNoticeBoard(int nbno, HttpSession session, Model m) {
 		

@@ -165,24 +165,44 @@ public class NoticeBoardDao {
 		
 	}
 	
+	/** 파일번호로 공지사항 게시글 첨부파일 조회
+	 * @param sqlSession
+	 * @param cfNo
+	 * @return
+	 */
 	public CommunityFiles selectCommunityFile(SqlSessionTemplate sqlSession, int cfNo) {
 		
 		return sqlSession.selectOne("noticeBoardMapper.selectCommunityFile", cfNo);
 		
 	}
 	
+	/** 파일번호로 공지사항 첨부파일 삭제
+	 * @param sqlSession
+	 * @param cfNo
+	 * @return
+	 */
 	public int deleteCommunityFile(SqlSessionTemplate sqlSession, int cfNo) {
 		
 		return sqlSession.delete("noticeBoardMapper.deleteCommunityFile", cfNo);
 		
 	}
 	
+	/** 공지사항 게시글 수정
+	 * @param sqlSession
+	 * @param nb
+	 * @return
+	 */
 	public int updateNoticeBoard(SqlSessionTemplate sqlSession, NoticeBoard nb) {
 		
 		return sqlSession.update("noticeBoardMapper.updateNoticeBoard", nb);
 		
 	}
 	
+	/** 공지사항 게시글 수정 시 새로운 첨부파일 등록
+	 * @param sqlSession
+	 * @param list
+	 * @return
+	 */
 	public int updateCommunityFileList(SqlSessionTemplate sqlSession, ArrayList<CommunityFiles> list) {
 		
 		int result = 0;
@@ -197,12 +217,22 @@ public class NoticeBoardDao {
 		
 	}
 	
+	/** 공지사항 게시글 삭제
+	 * @param sqlSession
+	 * @param nbNo
+	 * @return
+	 */
 	public int deleteNoticeBoard(SqlSessionTemplate sqlSession, int nbNo) {
 		
 		return sqlSession.update("noticeBoardMapper.deleteNoticeBoard", nbNo);
 		
 	}
 	
+	/** 공지사항 게시글 첨부파일 삭제
+	 * @param sqlSession
+	 * @param nbNo
+	 * @return
+	 */
 	public int deleteCommunityFileList(SqlSessionTemplate sqlSession, int nbNo) {
 		
 		return sqlSession.delete("noticeBoardMapper.deleteCommunityFileList", nbNo);
