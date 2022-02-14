@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.deptBoard.model.vo.DeptBoard;
 
 @Repository
@@ -69,4 +70,41 @@ public class DeptBoardDao {
 		return (ArrayList)sqlSession.selectList("deptBoardMapper.selectAscList", deptNo, rowBounds);
 		
 	}
+	
+	/** 부서별 게시글 조회수 증가
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public int increaseCount(SqlSessionTemplate sqlSession, int dbNo) {
+		
+		return sqlSession.update("deptBoardMapper.increaseCount", dbNo);
+		
+	}
+	
+	/** 부서별 게시글 상세 조회
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public DeptBoard selectDeptBoard(SqlSessionTemplate sqlSession, int dbNo) {
+		
+		return sqlSession.selectOne("deptBoardMapper.selectDeptBoard", dbNo);
+		
+	}
+	
+	/** 참조글번호로 부서별 게시글 첨부파일 조회
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public ArrayList<CommunityFiles> selectCommunityFileList(SqlSessionTemplate sqlSession, int dbNo) {
+		
+		return (ArrayList)sqlSession.selectList("deptBoardMapper.selectCommunityFileList", dbNo);
+		
+	}
+	
+	
+	
+	
 }

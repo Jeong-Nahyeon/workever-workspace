@@ -100,4 +100,42 @@
 		    by db_pin desc, db_no asc
 	</select>
 	
+	<update id="increaseCount">
+		update
+		       d_board
+		   set db_count = db_count + 1
+		 where db_status = 'Y'     
+		   and db_no = #{dbNo}
+	</update>
+	
+	<select id="selectDeptBoard" resultMap="DeptBoardResult">
+		select
+		       db_no
+		     , db.dept_no
+		     , dept_name
+		     , db.user_no
+		     , user_name
+		     , user_rank
+		     , db_title
+		     , db_content
+		     , db_category
+		     , to_char(db_date, 'YYYY-MM-DD') as "db_date"
+		  from d_board db
+		  join dept d on (db.dept_no = d.dept_no)
+		  join users u on (db.user_no = u.user_no)
+		 where db_status = 'Y'
+		   and db_no = #{dbNo}
+	</select>
+	
+	<select id="selectCommunityFileList" resultMap="CommunityFilesResult">
+		select
+		       cf_no
+		     , cf_origin_name
+		     , cf_change_name
+		     , cf_path
+		  from community_files
+		 where cf_category = 'D'
+		   and cf_ref_no = #{dbNo}
+	</select>	
+	
 </mapper>

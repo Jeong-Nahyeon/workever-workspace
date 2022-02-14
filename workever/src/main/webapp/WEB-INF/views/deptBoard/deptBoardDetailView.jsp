@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+            
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+   
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,7 @@
 <title>부서별 게시글 상세</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
 
@@ -79,7 +83,7 @@
 
 
     /* 게시글 내용 영역 */
-    .mail-content-area{
+    .board-content-area{
       padding:20px;
     }
 
@@ -188,7 +192,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 id="page-title">OO부 게시글 상세</h1>
+				<h1 id="page-title">${ deptName } 게시글 상세</h1>
 				</div>
 			</div>
 			</div><!-- /.container-fluid -->
@@ -204,71 +208,61 @@
 					<!-- 수정/삭제 버튼 영역 -->
 					<div class="card-header board-btns-area"> 
 					<!-- 본인 게시글일 경우 -->
-					<button class="btn btn-sm btn-default update-btn">수정</button>
-					<button class="btn btn-sm btn-default delete-btn">삭제</button>
+					<button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href='';">수정</button>
+					<button type="button" class="btn btn-sm btn-default delete-btn" onclick="location.href='';">삭제</button>
 					<!-- 공통 -->
-					<button class="btn btn-sm list-btn">목록</button>
+					<button type="button" class="btn btn-sm list-btn" onclick="location.href='list.dbo';">목록</button>
 					</div>
 					<!-- /.card-header -->
 
 					<div class="card-body">
 
-					<table id="board-detail">
-						<thead>
-						<tr>
-							<th style="padding-top:0">제목</th>
-							<td style="padding-top:0">제목들어가는자리</td>
-							<th>카테고리</th>
-							<td>공지</td>
-						</tr>
-						<tr>
-							<th>작성자</th>
-							<td>홍길동</td>
-							<th>작성일</th>
-							<td>2022-00-00</td>
-						</tr>
-						<tr>
-							<th>첨부파일</th>
-							<td colspan="3">
-							<a href="#">dddddd.jpg</a><br>
-							<a href="#">bbbbbb.png</a>
-							</td>
-						</tr>
-						<tr align="center">
-							<th colspan="4">내용</th>
-						</tr>
-						<tr>
-						</thead>
-						<tbody>
+						<table id="board-detail">
+							<thead>
 							<tr>
-								<td colspan="4">
-								<div class="mail-content-area">
-									<p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
-									was born and I will give you a complete account of the system, and expound the actual teachings
-									of the great explorer of the truth, the master-builder of human happiness. No one rejects,
-									dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
-									how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
-									is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
-									but because occasionally circumstances occur in which toil and pain can procure him some great
-									pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
-									except to obtain some advantage from it? But who has any right to find fault with a man who
-									chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
-									produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
-									dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
-									blinded by desire, that they cannot foresee</p>
-									<ul>
-									<li>List item one</li>
-									<li>List item two</li>
-									<li>List item three</li>
-									<li>List item four</li>
-									</ul>
-									<p>Thank you,</p>
-									<p>John Doe</p>
-								</div>
+								<th style="padding:0px 20px 20px 20px">제목</th>
+								<td style="padding-top:0">${ db.dbTitle }</td>
+								<th style="padding:0px 20px 20px 20px">카테고리</th>
+								<td style="padding-top:0">
+									<c:if test="${ not empty db.dbCategory }">
+										공지
+									</c:if>
 								</td>
 							</tr>
-						</tbody>
-					</table>
+							<tr>
+								<th>작성자</th>
+								<td>${ db.userRank } ${ db.userName }</td>
+								<th>작성일</th>
+								<td>${ db.dbDate }</td>
+							</tr>
+							<tr>
+								<th>첨부파일</th>
+								<td colspan="3">
+									<c:choose>
+										<c:when test="${ empty list }">
+											첨부파일이 없습니다.
+										</c:when>
+										<c:otherwise>
+											<c:forEach var="cf" items="${ list }">
+												<a href="${ cf.cfPath }${ cf.cfOriginName }" download="${ cf.cfChangeName }" >${ cf.cfChangeName }</a><br>
+											</c:forEach>
+										</c:otherwise>
+									</c:choose>
+								</td>
+							</tr>
+							<tr align="center">
+								<th colspan="4">내용</th>
+							</tr>
+							<tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="4">
+										<div class="board-content-area">${ db.dbContent }</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<!-- /.card-body -->
 
@@ -278,15 +272,15 @@
 
 					<table class="reply-insert">
 						<tr>
-						<td class="reply-insert-contents">
-							<textarea id="reply-insert-content"></textarea>
-						</td>
-						<td class="reply-insert-btns">
-							<button id="reply-insert-btn" class="btn">댓글등록</button>
-						</td>
+							<td class="reply-insert-contents">
+								<textarea id="reply-insert-content" name="crContent"></textarea>
+							</td>
+							<td class="reply-insert-btns">
+								<button id="reply-insert-btn" class="btn">댓글등록</button>
+							</td>
 						</tr>
 						<tr>
-						<th colspan="2" style="padding-top:20px;">댓글 목록 (5)</th>
+							<th colspan="2" style="padding-top:20px;">댓글 목록 (5)</th>
 						</tr>
 					</table>  
 
@@ -366,7 +360,7 @@
     </div>
     <!-- ./wrapper -->
 
-	<jsp:include page="../common/scripts.jsp" />
+
 
 </body>
 </html>

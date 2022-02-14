@@ -67,8 +67,8 @@
     }
 
 
-    /* 메일 내용 영역 */
-    .mail-content-area{
+    /* 게시글 내용 영역 */
+    .baord-content-area{
       padding:20px;
     }
 
@@ -167,7 +167,7 @@
 		              <table id="board-detail">
 		                <thead>
 		                  <tr>
-		                    <th style="padding-top:0">제목</th>
+		                    <th style="padding:0px 20px 20px 20px">제목</th>
 		                    <td style="padding-top:0">${ nb.nbTitle }</td>
 		                  </tr>
 		                  <tr>
@@ -197,7 +197,7 @@
 		                <tbody>
 		                  <tr>
 		                    <td colspan="2">
-		                      <div class="mail-content-area">${ nb.nbContent }</div>
+		                      <div class="board-content-area">${ nb.nbContent }</div>
 		                    </td>
 		                  </tr>
 		               </tbody>
