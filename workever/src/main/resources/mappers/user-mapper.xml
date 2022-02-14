@@ -21,6 +21,8 @@
 		<result column="user_use_date" property="userUseDate" />
 		
 		<result column="dept_name" property="deptName" />
+		<result column="com_Name" property="comName"/>
+		<result column="com_Phone" property="comPhone" />
 	</resultMap>
 	
 	<resultMap type="Company" id="companyResult">
@@ -37,8 +39,8 @@
 	<select id="loginUser" resultMap="userResult">
 		select
 		       user_no
-		     , dept_no
-		     , com_no
+		     , d.dept_no
+		     , c.com_no 
 		     , user_email
 		     , user_name
 		     , user_phone
@@ -52,9 +54,13 @@
 		     , user_auth
 		     , user_annual_date
 		     , user_use_date
-		  from users
+             , dept_name
+             , com_name
+             , com_phone
+		  from users u
+          join dept d on (d.dept_no = u.dept_no)
+          join company c on (c.com_no = u.com_no)
 		 where user_email = #{userEmail}
-		   and user_pwd = #{userPwd}
 		   and user_enabled = 'Y'
 	</select>
 	
@@ -178,5 +184,20 @@
   		   set user_pwd = #{userPwd}
   		 where user_email = #{userEmail}
   		   and user_phone = #{userPhone}
+  	</update>
+  	
+  	<!-- 현재비밀번호 조회 -->
+  	<select id="checkBeforePwdCheck" resultMap="userResult">
+  		select
+  			   user_pwd
+  		  from users
+  		 where user_no = #{userNo}
+  	</select>
+  	
+  	<!-- 비밀번호 변경 -->
+  	<update id="updatePwd">
+  		update users
+		   set user_pwd = #{userPwd}
+		 where user_no = #{userNo}
   	</update>
 </mapper>

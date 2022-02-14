@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,82 +76,87 @@
 	          </a>
 	        </li>
 
-			<div>
-				<!-- 사원 계정관리 -->
-				<li class="nav-item ">
-					<a href="#" class="nav-link">
-						<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
-						<p class="sidebar-menufont" align="center">
-							계정 관리
-							<i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
-				</li>
-				
-				<!-- 사원 비밀번호 설정 -->
-				<li class="nav-item ">
-					<a href="#" class="nav-link">
-						<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
-						<p class="sidebar-menufont" align="center">
-							비밀번호 설정
-							<i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
-				</li>
-			</div>
-
-			<div>
-				<!-- 관리자 계정관리 -->
-				<li class="nav-item ">
-					<a href="#" class="nav-link">
-						<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
-						<p class="sidebar-menufont" align="center">
-							계정 관리
-							<i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a href="./index.html" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>
-								<p>계정정보 수정</p>
+			<c:choose>
+				<c:when test="${ loginUser.userAuth == 'S'}">
+					<div>
+						<!-- 사원 계정관리 -->
+						<li class="nav-item ">
+							<a href="mypage.do" class="nav-link">
+								<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
+								<p class="sidebar-menufont" align="center">
+									계정 관리
+									<i class="right fas fa-angle-left"></i>
+								</p>
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="./index2.html" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>
-								<p>비밀번호 변경</p>
+						
+						<!-- 사원 비밀번호 설정 -->
+						<li class="nav-item ">
+							<a href="changepwd.do" class="nav-link">
+								<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
+								<p class="sidebar-menufont" align="center">
+									비밀번호 설정
+									<i class="right fas fa-angle-left"></i>
+								</p>
 							</a>
 						</li>
-					</ul>
-				</li>
-				
-				<!-- 관리자 사원정보 관리 -->
-				<li class="nav-item ">
-					<a href="#" class="nav-link">
-						<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
-						<p class="sidebar-menufont" align="center">
-							사원정보 관리
-							<i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a href="./index.html" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>
-								<p>사원 승인</p>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div>
+						<!-- 관리자 계정관리 -->
+						<li class="nav-item ">
+							<a href="mypage.do" class="nav-link">
+								<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
+								<p class="sidebar-menufont" align="center">
+									계정 관리
+									<i class="right fas fa-angle-left"></i>
+								</p>
 							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="./index.html" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>계정정보 수정</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="changepwd.do" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>비밀번호 변경</p>
+									</a>
+								</li>
+							</ul>
 						</li>
-						<li class="nav-item">
-							<a href="./index2.html" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>
-								<p>사원정보 수정</p>
+						
+						<!-- 관리자 사원정보 관리 -->
+						<li class="nav-item ">
+							<a href="#" class="nav-link">
+								<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
+								<p class="sidebar-menufont" align="center">
+									사원정보 관리
+									<i class="right fas fa-angle-left"></i>
+								</p>
 							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="./index.html" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>사원 승인</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="./index2.html" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>사원정보 수정</p>
+									</a>
+								</li>
+							</ul>
 						</li>
-					</ul>
-				</li>
-
-			</div>
+		
+					</div>
+				</c:otherwise>
+			</c:choose>
 			
 	    </nav>
 	    <!-- /.sidebar-menu -->

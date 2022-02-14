@@ -31,4 +31,6 @@ public class User {
 	private String companyCode;
 	
 	private String deptName;
+	private String comName;
+	private String comPhone;
 }

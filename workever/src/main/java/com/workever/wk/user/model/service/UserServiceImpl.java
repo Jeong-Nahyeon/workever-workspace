@@ -66,6 +66,18 @@ public class UserServiceImpl implements UserService {
 		return uDao.updateTemPwd(sqlSession, u);
 	}
 
+	// 현재비밀번호 확인(ajax)
+	@Override
+	public User checkBeforePwdCheck(User u) {
+		return uDao.checkBeforePwdCheck(sqlSession, u);
+	}
+
+	// 비밀번호 변경 서비스
+	@Override
+	public int updatePwd(User u) {
+		return uDao.updatePwd(sqlSession, u);
+	}
+
 	
 
 	

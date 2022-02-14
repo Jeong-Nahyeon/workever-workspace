@@ -44,4 +44,14 @@ public class UserDao {
 	public int updateTemPwd(SqlSessionTemplate sqlSession, User u) {
 		return sqlSession.update("userMapper.updateTemPwd", u);
 	}
+	
+	// 현재비밀번호 가져오기
+	public User checkBeforePwdCheck(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.selectOne("userMapper.checkBeforePwdCheck", u);
+	}
+	
+	// 비밀번호 변경 서비스
+	public int updatePwd(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.updatePwd", u);
+	}
 }

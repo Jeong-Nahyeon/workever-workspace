@@ -41,8 +41,9 @@ public class UserController {
 	public String loginUser(User u, HttpSession session, Model model) {
 		User loginUser = uService.loginUser(u);
 		
-		if(loginUser != null) {
+		if(loginUser != null && bcryptPasswordEncoder.matches(u.getUserPwd(), loginUser.getUserPwd())) {
 			session.setAttribute("loginUser", loginUser);
+			System.out.println(loginUser);
 			return "user/main";
 		}else {
 			model.addAttribute("errorMsg", "로그인 실패");
@@ -262,5 +263,55 @@ public class UserController {
 		
 	}
 	
+	// 마이페이지 이동
+	@RequestMapping("mypage.do")
+	public String myPage() {
+		return "mypage/mypageProfile";
+	}
+	
+	// 마이페이지 수정페이지 이동
+	@RequestMapping("update.us")
+	public String updateProfilePage() {
+		return "mypage/updateUserProfile";
+	}
+	
+	// 비밀번호 변경페이지 이동
+	@RequestMapping("changepwd.do")
+	public String changePwdPage() {
+		return "mypage/changePwd";
+	}
+	
+	// 이전 비밀번호 확인
+	@ResponseBody
+	@RequestMapping("checkPwd.do")
+	public String checkBeforePwdCheck(User u) {
+		String userPwd = u.getUserPwd();
+		User checkPwd = uService.checkBeforePwdCheck(u);
+		String result = "NNNNN";
+		
+		if(bcryptPasswordEncoder.matches(userPwd, checkPwd.getUserPwd())) {
+			result = "NNNNY";
+		}
+		return result;
+	}
+	
+	// 사원, 관리자 비밀번호 변경 서비스
+	@RequestMapping("changepwd.us")
+	public String updatePwd(User u, HttpSession session, Model model) {
+		// 암호화 작업
+		String encPwd = bcryptPasswordEncoder.encode(u.getUserPwd());
+		u.setUserPwd(encPwd);
+		
+		int result = uService.updatePwd(u);
+			
+		if(result > 0) {
+			session.setAttribute("loginUser", uService.loginUser(u));
+			session.setAttribute("alertMsg", "비밀번호를 변경했습니다.");
+			return "redirect:changepwd.do";
+		}else {
+			model.addAttribute("errorMsg", "회원정보 수정 실패");
+			return "common/errorPage";
+		}
+	}
 	
 }

@@ -73,7 +73,7 @@
         <div class="mypage-title">
             <span>계정 관리</span>
             <div id="btn-title">
-                <button>수정하기</button>
+                <button onclick="location.href='update.us'">수정하기</button>
             </div>
         </div>
 
@@ -89,15 +89,15 @@
                     <div class="col-5">
                         <div class="form-group mypage-group">
                             <label for="inputName">이메일</label>
-                            <span>hong123@gmail.com</span>
+                            <span>${ loginUser.userEmail }</span>
                         </div>
                         <div class="form-group mypage-group">
                             <label for="inputEmail">이름</label>
-                            <span>홍길동</span>
+                            <span>${ loginUser.userName }</span>
                         </div>
                         <div class="form-group mypage-group">
                             <label for="inputSubject">전화번호</label>
-                            <span>010-2222-3333</span>
+                            <span>${ loginUser.userPhone }</span>
                         </div>
                     </div>
                 </div>
@@ -109,19 +109,19 @@
                         <div>&nbsp;</div>
                         <div class="form-group">
                             <label for="inputSubject">회사명</label>
-                            <span class="company-name">Workever</span>
+                            <span class="company-name">${ loginUser.comName }</span>
                         </div>
                         <div class="form-group">
                             <label for="inputSubject">부서</label>
-                            <span class="company-name">마케팅팀</span>
+                            <span class="company-name">${ loginUser.deptName }</span>
                         </div>
                         <div class="form-group">
                             <label for="inputSubject">직급</label>
-                            <span class="company-name">대리</span>
+                            <span class="company-name">${ loginUser.userRank }</span>
                         </div>
                         <div class="form-group">
                             <label for="inputSubject">회사연락처</label>
-                            <span class="company-name">02-2345-6789</span>
+                            <span class="company-name">${ loginUser.comPhone }</span>
                         </div>
                     </div>
                 </div>

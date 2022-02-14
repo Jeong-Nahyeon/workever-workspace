@@ -28,4 +28,9 @@ public interface UserService {
 	// 임시비밀번호 DB업데이트
 	int updateTemPwd(User u);
 
+	// 현재비밀번호 확인(ajax)
+	User checkBeforePwdCheck(User u);
+	
+	// 비밀번호 변경 서비스
+	int updatePwd(User u);
 }

@@ -290,7 +290,7 @@
 				</div>
 				<div style="height: 0; border-bottom: 1px solid #e3e6f0;"></div>
 				<div id="profile-icon">
-					<a class="nav-link" href="">
+					<a class="nav-link" href="mypage.do">
 						<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 						<span style="font-size: 11px;">마이페이지</span>
 					</a>
