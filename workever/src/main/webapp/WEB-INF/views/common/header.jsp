@@ -40,7 +40,7 @@
 		font-weight: 900;
 	}
 
-	.text-overflow {
+	.ch-text-overflow {
 		width: 190px; /* 말줄임 처리 위해 width 설정 */
 		height: 21px; /* 상동 */
 		display: block; /* 너비를 가질 수 있도록 설정 */
@@ -177,7 +177,7 @@
 							사원 이름
 						</span>
 						<span class="badge badge-danger" style="float: right;">3</span>
-						<p class="text-sm text-overflow">안녕하세요 글 길게 쓰면 글 줄여주세요</p>
+						<p class="text-sm ch-text-overflow">안녕하세요 글 길게 쓰면 글 줄여주세요</p>
 						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
 						</div>
 					</div>
