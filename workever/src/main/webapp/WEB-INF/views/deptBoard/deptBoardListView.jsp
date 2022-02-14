@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+        
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+   
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
   
 <style>
 
@@ -80,16 +84,18 @@
     
     .board-title-group .board-title{
       display:table-cell;
+      cursor:pointer;
     }
     
+    /*
     .board-title-group .board-title-setting{
-      /* border:1px solid red; */
-      width:800px;
+      width:300px;
       height:25px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    */
     
     .board-title-group .reply-count{
       /* border:1px solid red; */
@@ -137,7 +143,7 @@
 		    <div class="container-fluid">
 		      <div class="row mb-2">
 		        <div class="col-sm-6">
-		          <h1 id="page-title">OO부 게시판</h1>
+		          <h1 id="page-title">${ deptName } 게시판</h1>
 		        </div>
 		      </div>
 		    </div><!-- /.container-fluid -->
@@ -153,9 +159,9 @@
 		            <!-- 부서별 게시글 정렬/등록버튼 영역 -->
 		            <div class="card-header board-header-area">
 		              <div class="col-sm-6 board-header-area-left">
-		                <select class="form-control">
-		                  <option>최신순</option>
-		                  <option>오래된순</option>
+		                <select name="orderList" class="form-control">
+		                  <option value="desc">최신순</option>
+		                  <option value="asc">오래된순</option>
 		                </select>
 		              </div>
 		              <div class="col-sm-6 board-header-area-right">
@@ -180,108 +186,45 @@
 		                </thead>
 		
 		                <tbody>
-		                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
-		                  <tr>
-		                    <td colspan="4">게시글이 없습니다.</td>
-		                  </tr>
-		                  <!-- case 2. 게시글 목록 존재할 경우 -->
-		                  <tr>
-		                    <td>10</td>
-		                    <td>공지</td>
-		                    <td class="board-title-area">
-		                      <div class="board-title-group">
-		                        <div class="board-title">
-		                          <div class="board-title-setting"> <!-- 게시글 제목 -->
-		                            여기는게시글제목들어가는자리입니다
-		                            게시글제목이설정한영역범위를넘어서면
-		                            ...으로표시되는거보이쥬?????????
-		                            800px이상넘어가면그렇게보임
-		                          </div>
-		                        </div>
-		
-		                        <div class="reply-count">
-		                          <label>[25]</label> <!-- 댓글 개수 -->
-		                        </div>
-		                      </div>
-		                    </td>
-		                    <td>홍길동</td>
-		                    <td>203</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td></td>
-		                    <td>게시글제목자리</td>
-		                    <td>김말똥</td> 
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  
+			                <c:choose>
+			                	<c:when test="${ empty list }">
+				                    <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
+				                    <tr>
+				                    	<td colspan="4">게시글이 없습니다.</td>
+				                    </tr>
+			                  	</c:when>
+			                  	<c:otherwise>
+			                   		<!-- case 2. 게시글 목록 존재할 경우 -->
+			                   		<c:forEach var="b" items="${ list }">
+					                    <tr>
+						                    <td>${ b.dbNo }</td>
+						                    <td>
+						                    	<c:if test="${ not empty b.dbCategory }">
+						                    		공지
+						                    	</c:if>
+						                    </td>
+						                    <td class="board-title-area">
+						                      <div class="board-title-group">
+						                        <div class="board-title">
+						                          <div class="board-title-setting"> <!-- 게시글 제목 -->
+						                          	${ b.dbTitle }
+						                          </div>
+						                        </div>
+						
+						                        <div class="reply-count">
+						                        	<c:if test="${ b.dbReplyCount > 0 }">
+						                            	<label>[${ b.dbReplyCount }]</label> <!-- 댓글 개수 -->
+						                        	</c:if>
+						                        </div>
+						                      </div>
+						                    </td>
+						                    <td>${ b.userRank } ${ b.userName }</td>
+						                    <td>${ b.dbCount }</td>
+						                    <td>${ b.dbDate }</td>
+					                    </tr>
+				                    </c:forEach>
+			                	</c:otherwise>  
+					        </c:choose>          
 		                </tbody>
 		            
 		              </table>
@@ -294,13 +237,45 @@
 		            
 		              <div class="paging-area">
 		
-		                <a class="btn">&lt;</a>
-		                <a class="btn">1</a>
-		                <a class="btn">2</a>
-		                <a class="btn">3</a>
-		                <a class="btn">&gt;</a>
+		              	<c:choose>
+		              		<c:when test="${ empty orderList }"> <!-- 최신순 -->
+		              			<c:if test="${ pi.currentPage ne 1 }">
+			                		<a class="btn" href="list.dbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+			                	</c:if>
+			                </c:when>
+			                <c:otherwise> <!-- 오래된순 -->
+				                <c:if test="${ pi.currentPage ne 1 }">
+				                	<a class="btn" href="list.dbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
+			                	</c:if>
+		                	</c:otherwise>
+		                </c:choose>
+		                
+		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+			                <c:choose>
+			                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
+		                			<a class="btn" href="list.dbo?cpage=${ p }">${ p }</a>
+				                </c:when>
+				                <c:otherwise> <!-- 오래된순 -->
+		                			<a class="btn" href="list.dbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+				                </c:otherwise>
+			                </c:choose>
+		                </c:forEach>
+		                
+		                <c:choose>
+		                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
+		                		<c:if test="${ pi.currentPage ne pi.maxPage }">
+		             	   			<a class="btn" href="list.dbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+		             	   		</c:if>
+		             	    </c:when>
+		             	    <c:otherwise> <!-- 오래된순 -->
+		             	    	<c:if test="${ pi.currentPage ne pi.maxPage }">
+		             	   			<a class="btn" href="list.dbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
+		             	    	</c:if>
+		             	    </c:otherwise>
+						</c:choose>
 		
 		              </div>
+		              <!-- /.paging-area -->
 		
 		            </div>
 		            <!-- /.card-footer -->
@@ -324,7 +299,51 @@
 	</div>
 	<!-- ./wrapper -->
 	
-	<jsp:include page="../common/scripts.jsp" />
+	
+	<!-- 오래된순으로 조회 시 => 오래된순 옵션 유지 -->
+	<c:if test="${ not empty orderList }">
+		<script>
+			$(function(){
+				
+				$("select[name=orderList] option[value=${ orderList }]").attr("selected", true);
+				
+			});
+		</script>
+	</c:if>
+	
+	<script>
+		$(function(){
+			
+			// 부서별 게시판 목록 순차 정렬 조회 (최신순/오래된순)
+			$("select[name=orderList]").change(function(){
+				
+				const $option = $(this).children("option:selected").val();
+				
+				if($option == "asc"){ // 오래된순
+					
+					location.href = "list.dbo?orderList=" + $option;
+				
+				}else{ // 최신순
+					
+					location.href = "list.dbo";
+				
+				}
+				
+			});
+			
+			// 부서별 게시글 상세 조회
+			$("#board-list tbody .board-title").click(function(){
+				
+				const $dbNo = $(this).parent().parent().prev().prev().text();
+				location.href = "detail.dbo?dbno=" + $dbNo;
+				console.log($dbNo);
+				
+			});
+			
+			
+		});
+		
+	</script>
 	
 </body>
 </html>

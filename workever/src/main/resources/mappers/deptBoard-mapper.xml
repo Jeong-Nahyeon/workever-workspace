@@ -1,5 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="deptBoardMapper">
-
+	
+	<resultMap id="DeptBoardResult" type="DeptBoard">
+		<result column="db_no" property="dbNo" />
+		<result column="dept_no" property="deptNo" />
+		<result column="user_no" property="userNo" />
+		<result column="db_title" property="dbTitle" />
+		<result column="db_content" property="dbContent" />
+		<result column="db_category" property="dbCategory" />
+		<result column="db_pin" property="dbPin" />
+		<result column="db_count" property="dbCount" />
+		<result column="db_date" property="dbDate" />
+		<result column="db_status" property="dbStatus" />
+		<result column="db_reply_count" property="dbReplyCount" />
+		<result column="dept_name" property="deptName" />
+		<result column="user_name" property="userName" />
+		<result column="user_rank" property="userRank" />
+	</resultMap>
+	
+	<resultMap id="CommunityFilesResult" type="CommunityFiles">
+		<result column="cf_no" property="cfNo" />
+		<result column="cf_category" property="cfCategory" />
+		<result column="cf_ref_no" property="cfRefNo" />
+		<result column="cf_origin_name" property="cfOriginName" />
+		<result column="cf_change_name" property="cfChangeName" />
+		<result column="cf_path" property="cfPath" />
+	</resultMap>
+	
+	<resultMap id="CommunityReplyResult" type="CommunityReply">
+		<result column="cr_no" property="crNo" />
+		<result column="user_no" property="userNo" />
+		<result column="cr_category" property="crCategory" />
+		<result column="cr_content" property="crContent" />
+		<result column="cr_ref_no" property="crRefNo" />
+		<result column="cr_date" property="crDate" />
+		<result column="cr_status" property="crStatus" />
+	</resultMap>
+	
+	<select id="selectDeptName" resultType="string">
+		select
+		       dept_name
+		  from d_board
+		  join dept using (dept_no)
+		 where user_no = #{userNo}
+	</select>
+	
+	<select id="selectListCount" resultType="_int">
+		select
+		       count(*)
+		  from d_board
+		 where db_status = 'Y'
+		   and dept_no = #{deptNo}
+	</select>
+	
+	<select id="selectDeptBoardList" resultMap="DeptBoardResult">
+		select
+		       db_no
+		     , db.dept_no
+		     , dept_name
+		     , db.user_no
+		     , user_name
+		     , user_rank
+		     , db_title
+		     , db_content
+		     , db_category
+		     , db_count
+		     , to_char(db_date, 'YYYY-MM-DD') as "db_date"
+		     , db_reply_count
+		  from d_board db
+		  join dept d on (db.dept_no = d.dept_no)
+		  join users u on (db.user_no = u.user_no)
+		 where db_status = 'Y'
+		   and db.dept_no = #{deptNo}
+		 order
+		    by db_pin desc, db_no desc
+	</select>
+	
+	<select id="selectAscList" resultMap="DeptBoardResult">
+		select
+		       db_no
+		     , db.dept_no
+		     , dept_name
+		     , db.user_no
+		     , user_name
+		     , user_rank
+		     , db_title
+		     , db_content
+		     , db_category
+		     , db_count
+		     , to_char(db_date, 'YYYY-MM-DD') as "db_date"
+		     , db_reply_count
+		  from d_board db
+		  join dept d on (db.dept_no = d.dept_no)
+		  join users u on (db.user_no = u.user_no)
+		 where db_status = 'Y'
+		   and db.dept_no = #{deptNo}
+		 order
+		    by db_pin desc, db_no asc
+	</select>
+	
 </mapper>
