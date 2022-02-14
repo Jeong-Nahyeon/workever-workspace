@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="now" class="java.util.Date" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +11,6 @@
 
 <jsp:include page="../common/links.jsp" />
 <jsp:include page="../common/scripts.jsp" />
-	
 <style>
 
 	.cm_title {
@@ -96,13 +97,16 @@
 		cursor: pointer;
 		filter: brightness(85%);
 	}
+	
+	.page-link {
+		cursor: pointer;
+	}
 
 
 </style>
 </head>
 	
 <body class="hold-transition sidebar-mini">
-
 	
 	<div class="wrapper">
 	
@@ -172,12 +176,25 @@
 		    
 
 			<div style="text-align: center;">
-				<input type="hidden" name="uno" value="${ loginUser.userNo }">
-				<button class="cmBtn" id="startBtn" onclick="enterInsert();" >출 근</button>
+				<button class="cmBtn" id="startBtn" onclick="ajaxInsertEnter();" >출 근</button>
 				<button class="cmBtn" id="endBtn" data-toggle="modal" data-target="#endModal">퇴 근</button>		
 			</div>
 			
-	
+			<%-- 
+			<form id="commuteForm" action="" method="post">
+					<input type="hidden" name="userNo" value="${ loginUser.userNo }">
+	       	</form>
+			
+			<script>
+           		function commuteFormSubmit(num) {
+           			if(num == 1) {
+           				$("#commuteForm").attr("action", "enter.cm").submit();
+           			} else {
+           				$("#commuteForm").attr("action", "leave.cm").submit();
+           			}
+           		}
+           	</script>
+			--%>
 
 			<!-- Modal -->
 			<div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -186,9 +203,12 @@
 						
 						<div class="modal-body" align="center">
 							<br>
-							지금 시간은 xx시 xx분입니다.<br>
+							지금 시간은 
+							<fmt:formatDate value="${now}" pattern="HH시mm분" var="now" />
+							<c:out value="${now}" />
+							입니다. <br>
 							정말로 퇴근하시겠습니까? <br>
-							<button class="cmBtn">확인</button>
+							<button class="cmBtn" data-dismiss="modal" onclick="ajaxUpdateLeave();">확인</button>
 							<button class="cmBtn" id="endBtn" data-dismiss="modal">취소</button>
 						</div>
 						
@@ -247,8 +267,6 @@
 				</table>
 				
 				<br>
-	
-				<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
 					
 				</div>
 				
@@ -261,15 +279,14 @@
 				</div>
 			</div>
 					
-			
-			
 
 			<script>
 				$(function(){
-					selectCommuteList(1);
+					ajaxSelectCommuteList(1);
 				})
 				
-				function selectCommuteList(cpageNo) {
+				
+				function ajaxSelectCommuteList(cpageNo) {
 					
 					$.ajax({
 						url: "list.cm",
@@ -300,24 +317,25 @@
 		    				console.log(result);
 		    				
 		    				$(".select-area tbody").html(value);
-		    				$("#selectCount").text(result.list.length);
+		    				$("#selectCount").text(result.listCount);
 		    				
 
 		    				let paging="";
 		    				if(result.pi.currentPage == 1) {
-		    					paging += "<li class='page-item disabled'><a class='page-link' href='#'>Previous</a></li>";
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
 		    				} else {
-		    					paging += "<li class='page-item'><a class='page-link' href='selectCommuteList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectCommuteList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
 		    				}
 							
 		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
-		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' href='selectCommuteList(" + p + ")'>" + p + "</a></li>";
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectCommuteList(" + p + ")'>" + p + "</a></li>";
 		    				}
 							
 		    				if(result.pi.currentPage == result.pi.maxPage) {
-		    					paging += "<li class='page-item disabled'><a class='page-link' href='#'>Next</a></li>";
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
 		    				} else {
-		    					paging += "<li class='page-item'><a class='page-link' href='selectCommuteList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectCommuteList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
 		    				}
 							
 		    				$(".pagination").html(paging);
@@ -331,6 +349,62 @@
 					})
 				}
 				
+				
+				
+				function ajaxInsertEnter() {
+					
+					$.ajax({
+						url: "enter.cm",
+						type:"POST",
+						data: {
+							userNo: '${loginUser.userNo}'
+						}, success:function(result) {
+							
+							if(result == "success") {
+								ajaxSelectCommuteList(1);
+								
+								alert("출근 성공 ㅠ");
+								
+							} else {
+								ajaxSelectCommuteList(1);
+								
+								alert("출근 실패 ㅠ");
+							}
+							
+						}, error:function() {
+							console.log("출근 기록용 ajax 통신실패");
+						}
+					})
+				}
+				
+				
+				
+				function ajaxUpdateLeave() {
+					
+					$.ajax({
+						url: "leave.cm",
+						type: "POST",
+						data: {
+							userNo: '${loginUser.userNo}'
+						}, success:function(result) {
+							
+							if(result == "success") {
+								ajaxSelectCommuteList(1);
+								
+								alert("퇴근을 축하합니다~");
+								
+							} else {
+								ajaxSelectCommuteList(1);
+								
+								alert("퇴근 실패ㅠ");
+								
+							}
+							
+						}, error:function() {
+							console.log("퇴근 기록용 ajax 통신실패");
+						}
+					})
+				}
 			</script>
 			
 			

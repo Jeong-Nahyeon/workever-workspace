@@ -84,6 +84,7 @@ public class CommuteController {
 		
 		map.put("pi", pi);
 		map.put("list", list);
+		map.put("listCount", listCount);
 		
 		return map;
 	}
