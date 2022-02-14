@@ -41,7 +41,7 @@ public class UserController {
 	public String loginUser(User u, HttpSession session, Model model) {
 		User loginUser = uService.loginUser(u);
 		
-		if(loginUser != null && bcryptPasswordEncoder.matches(u.getUserPwd(), loginUser.getUserPwd())) {
+		if(loginUser != null) {
 			session.setAttribute("loginUser", loginUser);
 			System.out.println(loginUser);
 			return "user/main";
