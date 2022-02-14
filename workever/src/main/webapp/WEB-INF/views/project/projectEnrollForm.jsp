@@ -10,6 +10,15 @@
     
 	<jsp:include page="../common/links.jsp" />
 	
+	<jsp:include page="../common/scripts.jsp" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+	  $.widget.bridge('uibutton', $.ui.button)
+	</script>
+	
 	<style>
 		.content-wrapper{
 			overflow:scroll;
@@ -131,11 +140,14 @@
 		.ParticipationPerson{
 			overflow:auto; 
 			text-align: center;
-			height:80%;
+			height:310px;
+			top:30px;
+			position: relative;
 		}
 		.employee{
 			margin-left:200px;
 		}
+
 	</style>
     
 </head>
@@ -159,48 +171,238 @@
 				
 				<form id="enrollForm1" method="post" action="insert.pro">
 					<span class="title">프로젝트명</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input class="projectName" name="projectName" placeholder="프로젝트명 입력" required>
+					<input class="projectName" name="proTitle" placeholder="프로젝트명 입력" required>
 					<br><br><br>
 					
 					<span class="title">담당자 승인 후 참여 여부</span>&nbsp;&nbsp;
 					<label class="switch">
-					  <input type="checkbox" name="proGrant">
+					  <input type="checkbox" name="proGrantWhether">
 					  <span class="slider round"></span>
 					</label>
 			
+					<input type="hidden" class="proManager" name="proManager" value="${loginUser.userName}">
 						
 					<br><br><br>
 	
 					<span class="title">부서 선택</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="checkbox" class="dept2" name="dept" onclick="deptCheck" value="2"> 경영지원팀
-					<input type="checkbox" class="dept3" name="dept" onclick="deptCheck" value="3"> 인사팀
-					<input type="checkbox" class="dept4" name="dept" onclick="deptCheck" value="4"> 영업팀<br><br>
-					<input style="margin-left: 132.5px;" class="dept5" type="checkbox" name="dept"onclick="deptCheck"  value="5"> 개발팀 
-					<input style="margin-left:60px;" type="checkbox" class="dept6" name="dept"onclick="deptCheck"  value="6"> 재무팀 
+					<input type="checkbox" class="dept2" name="proDept" value="2"/> 경영지원팀
+					<input type="checkbox" class="dept3" name="proDept" value="3"/> 인사팀
+					<input type="checkbox" class="dept4" name="proDept" value="4"/> 영업팀<br><br>
+					<input style="margin-left: 132.5px;" class="dept5" type="checkbox" name="proDept" value="5"/> 개발팀 
+					<input style="margin-left:60px;" type="checkbox" class="dept6" name="proDept" value="6"/> 재무팀 
 				
 					<br><br><br>
-				</form>
 				
 				
-				<span class="title">참여인원</span><br><br>
 				
-				<form id="enrollForm2" method="post" action="insert.mem">
+				<span class="title" style="margin-left:30px;">참여인원</span><br><br>
+				
+				
 				<div style="width:380px;  height:350px; box-shadow:0px 0px 10px grey;">
-					
-					<div style="text-align: center; height:20%; top:25px; position: relative;">
-						<i class="fas fa-search"></i>&nbsp;&nbsp;
-						<input type="text" class="chat-search-input" name="keyword" placeholder="이름 검색">
-					</div>
 
 					<div class="ParticipationPerson">
-						<i class="fas fa-portrait"></i>
-						<b>홍길동</b><input type="checkbox" class="employee" name="employee" value="zz"><br><br>
+
 					</div>
 				<script> 
-				function deptCheck(){
+				
+				$(document).ready(function(){
+					$(".dept2").change(function(){
+						if($(".dept2").is(":checked")){
+							$.ajax({
+								url  :'ajax1.do?num=2',
+								success : function(list){
+									
+									let value="";
+									
+									for(let i in list){
+										value += "<div>"
+											   + "<i id='icon' class='fas fa-portrait'></i>"
+											   + "<b id='deptUserName'>" + list[i].deptUserName + "</b>"
+											   + "<input type='checkbox' class='employee' name='deptUserNo' value='" + list[i].deptUserNo + "'><br><br>"
+											   + "</div>";
+											   
+									}
+									$(".ParticipationPerson").html($(".ParticipationPerson").html() + value);
+								}
+							})
+						}else{
+							$.ajax({
+								url  :'ajax1.do?num=2',
+								success : function(list){
+									
+									for(let i in list){
 					
-				}
-
+										 $(".ParticipationPerson input[value=" + list[i].deptUserNo + "]").parent().remove();
+										
+									}
+									
+								}
+							})
+							
+							
+							
+						}
+					});
+				});
+				
+				$(document).ready(function(){
+					$(".dept3").change(function(){
+						if($(".dept3").is(":checked")){
+							$.ajax({
+								url  :'ajax1.do?num=3',
+								success : function(list){
+									
+									let value="";
+									
+									for(let i in list){
+										value += "<div>"
+											   + "<i id='icon' class='fas fa-portrait'></i>"
+											   + "<b id='deptUserName'>" + list[i].deptUserName + "</b>"
+											   + "<input type='checkbox' class='employee' name='deptUserNo' value='" + list[i].deptUserNo + "'><br><br>"
+											   + "</div>";
+											   
+									}
+									$(".ParticipationPerson").html($(".ParticipationPerson").html() + value);
+								}
+							})
+						}else{
+							$.ajax({
+								url  :'ajax1.do?num=3',
+								success : function(list){
+									
+									for(let i in list){
+					
+										 $(".ParticipationPerson input[value=" + list[i].deptUserNo + "]").parent().remove();
+									}
+									
+								}
+							})
+							
+							
+							
+						}
+					});
+				});
+				
+				$(document).ready(function(){
+					$(".dept4").change(function(){
+						if($(".dept4").is(":checked")){
+							$.ajax({
+								url  :'ajax1.do?num=4',
+								success : function(list){
+									
+									let value="";
+									
+									for(let i in list){
+										value += "<div>"
+											   + "<i id='icon' class='fas fa-portrait'></i>"
+											   + "<b id='deptUserName'>" + list[i].deptUserName + "</b>"
+											   + "<input type='checkbox' class='employee' name='deptUserNo' value='" + list[i].deptUserNo + "'><br><br>"
+											   + "</div>";
+											   
+									}
+									$(".ParticipationPerson").html($(".ParticipationPerson").html() + value);
+								}
+							})
+						}else{
+							$.ajax({
+								url  :'ajax1.do?num=4',
+								success : function(list){
+									
+									for(let i in list){
+					
+										 $(".ParticipationPerson input[value=" + list[i].deptUserNo + "]").parent().remove();
+									}
+									
+								}
+							})
+							
+							
+							
+						}
+					});
+				});
+				
+				$(document).ready(function(){
+					$(".dept5").change(function(){
+						if($(".dept5").is(":checked")){
+							$.ajax({
+								url  :'ajax1.do?num=5',
+								success : function(list){
+									
+									let value="";
+									
+									for(let i in list){
+										value += "<div>"
+											   + "<i id='icon' class='fas fa-portrait'></i>"
+											   + "<b id='deptUserName'>" + list[i].deptUserName + "</b>"
+											   + "<input type='checkbox' class='employee' name='deptUserNo' value='" + list[i].deptUserNo + "'><br><br>"
+											   + "</div>";
+											   
+									}
+									$(".ParticipationPerson").html($(".ParticipationPerson").html() + value);
+								}
+							})
+						}else{
+							$.ajax({
+								url  :'ajax1.do?num=5',
+								success : function(list){
+									
+									for(let i in list){
+										 $(".ParticipationPerson input[value=" + list[i].deptUserNo + "]").parent().remove();
+									}
+									
+								}
+							})
+							
+							
+							
+						}
+					});
+				});
+				
+				$(document).ready(function(){
+					$(".dept6").change(function(){
+						if($(".dept6").is(":checked")){
+							$.ajax({
+								url  :'ajax1.do?num=6',
+								success : function(list){
+									
+									let value="";
+									
+									for(let i in list){
+										value += "<div>"
+											   + "<i id='icon' class='fas fa-portrait'></i>"
+											   + "<b id='deptUserName'>" + list[i].deptUserName + "</b>"
+											   + "<input type='checkbox' class='employee' name='deptUserNo' value='" + list[i].deptUserNo + "'><br><br>"
+											   + "</div>";
+											   
+									}
+									$(".ParticipationPerson").html($(".ParticipationPerson").html() + value);
+								}
+							})
+						}else{
+							$.ajax({
+								url  :'ajax1.do?num=6',
+								success : function(list){
+									
+									for(let i in list){
+					
+										 $(".ParticipationPerson input[value=" + list[i].deptUserNo + "]").parent().remove();
+									}
+									
+								}
+							})
+							
+							
+							
+						}
+					});
+				});
+				
+	
+				
+				
 		
 				</script>
 
@@ -220,13 +422,6 @@
 	</div>    
 		<jsp:include page="../common/footer.jsp" />
 	
-	<jsp:include page="../common/scripts.jsp" />
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 	
-	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	<script>
-	  $.widget.bridge('uibutton', $.ui.button)
-	</script>
 </body>
 </html>

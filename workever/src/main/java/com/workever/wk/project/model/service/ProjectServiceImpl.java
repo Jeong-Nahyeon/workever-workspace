@@ -30,13 +30,15 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 	
 	@Override
-	public int insertProject(Project p) {
-		return pDao.insertProject(sqlSession, p);
-	}
-	
-	@Override
 	public ArrayList<Project> selectMem(int num) {
 		return pDao.selectMem(sqlSession, num);
+	}
+	
+	
+	
+	@Override
+	public int insertProject(Project p) {
+		return pDao.insertProject(sqlSession, p);
 	}
 	
 	@Override

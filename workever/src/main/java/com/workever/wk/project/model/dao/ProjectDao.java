@@ -22,7 +22,7 @@ public class ProjectDao {
 	
 	//프로젝트생성란에 있는 부서별 회원 목록 조회
 	public ArrayList<Project> selectMem(SqlSessionTemplate sqlSession, int num) {
-		return (ArrayList)sqlSession.selectList("projectMapper.selectList", num);
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMem", num);
 	}
 
 }

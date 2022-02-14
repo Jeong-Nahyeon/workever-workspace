@@ -42,6 +42,8 @@
 		 where DEPT_NO = #{num}
 	</select>
 	
+	
+	
 	<insert id="insertBoard"> 이거도 고쳐야됨
 		insert
 		  into board 이거도 고쳐야됨
