@@ -1,13 +1,15 @@
 package com.workever.wk.commute.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,8 +72,8 @@ public class CommuteController {
 	
 	// 세번째 시도..
 	@ResponseBody
-	@RequestMapping(value="list.cm", method = RequestMethod.POST, produces="application/json; charset=UTF-8")
-	public Map<String,Object> selectCommuteList(int currentPage , int userNo, HttpServletResponse response ) throws IOException {
+	@RequestMapping(value="list.cm", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Map<String,Object> ajaxSelectCommuteList(int currentPage , int userNo, HttpServletResponse response) throws IOException {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -87,14 +89,39 @@ public class CommuteController {
 	}
 	
 	
-	/*
-	@RequestMapping("enter.cm")
-	public void insertEnter(int uno) {
+	@ResponseBody
+	@RequestMapping(value="enter.cm", method=RequestMethod.POST)
+	public String ajaxInsertEnter(/*int userNo*/ Commute cm) throws ParseException {
 		
-		int result = cService.insertEnter(uno);
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		Date now = sdf.parse(sdf.format(date));
+		Date safe = sdf.parse("09:00:59");
+		
+		int result = 0;
+		if(now.after(safe)) {
+			result = cService.cmInertTardiness(cm);			
+		} else {
+			result = cService.cmInertEnter(cm);
+		}
+	
+		return result > 0 ? "success" : "fail";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="leave.cm", method=RequestMethod.POST)
+	public String ajaxUpdateLeave(Commute cm) {
+		
+		int result = cService.cmUpdateLeave(cm);
+		return result > 0 ? "success" : "fail";
 		
 	}
-	*/
+	
+	
+	
+	
 	
 	@RequestMapping("commute.wh")
 	public String workingHours() {

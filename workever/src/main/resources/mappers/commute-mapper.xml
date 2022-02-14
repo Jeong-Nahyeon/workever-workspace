@@ -34,10 +34,11 @@
 		  from commute
 		  join users using (user_no)
 		 where user_no = #{ userNo }
+		 order
+		    by cm_no desc
 	</select>
 	
-	<!-- 
-	<select id="insertEnter" resultMap="commuteResult">
+	<insert id="cmInsertEnter">
 		insert
 		  into commute
 		     (
@@ -49,11 +50,57 @@
 		     values
 		     (
 		       seq_commute.nextval
-		     , #{userNo}
+		     , #{ userNo }
 		     , to_char(sysdate, 'yyyy-mm-dd')
 		     , to_char(sysdate, 'hh24:mi:ss')
 		     )
-	</select>
-	-->
+	</insert>
+	
+	<insert id="cmInertTardiness">
+		insert
+		  into commute
+		     (
+		       cm_no
+		     , user_no
+		     , cm_date
+		     , cm_state
+		     , cm_start_time
+		     )
+		     values
+		     (
+		       seq_commute.nextval
+		     , #{ userNo }
+		     , to_char(sysdate, 'yyyy-mm-dd')
+		     , 2
+		     , to_char(sysdate, 'hh24:mi:ss')
+		     )
+	</insert>
+	
+	<update id="cmUpdateLeave_gy">
+		update commute
+		   set cm_end_time = to_char(sysdate, 'hh24:mi:ss')
+		     , cm_working_hours = TRUNC((to_date(cm_end_time, 'HH24:MI:SS')-to_date(cm_start_time, 'HH24:MI:SS'))*24 -1) || ':' ||
+		                          TRUNC(mod((to_date(cm_end_time, 'HH24:MI:SS') - to_date(cm_start_time, 'HH24:MI:SS'))*24,1)*60)
+		 where user_no = #{ userNo }
+		   and cm_date = to_char(sysdate, 'yyyy-mm-dd')
+	</update>
+	
+	<update id="cmUpdateLeave">
+		update commute
+		   set cm_end_time = to_char(sysdate, 'hh24:mi:ss')
+		     , cm_working_hours = round((to_date(to_char(sysdate, 'hh24:mi:ss'), 'hh24:mi:ss') - to_date(cm_start_time, 'hh24:mi:ss')) * 24, 1) 
+		     , cm_state = case 
+		                    when cm_state = 2 then 2 
+		                    when to_char(sysdate, 'hh24') <![CDATA[ < ]]> 18 then 4 
+		                    else 1 
+		                   end
+		 where user_no = #{ userNo }
+		   and cm_date = to_char(sysdate, 'yyyy-mm-dd')
+	</update>
+	
+	
+
+	
+	
 	
 </mapper>

@@ -25,6 +25,24 @@ public class CommuteDao {
 		return (ArrayList)sqlSession.selectList("commuteMapper.cmSelectList", userNo, rowBounds);
 	}
 
+	public int cmInsertEnter(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.insert("commuteMapper.cmInsertEnter", userNo);
+	}
+
+	public int cmInertEnter(SqlSessionTemplate sqlSession, Commute cm) {
+		return sqlSession.insert("commuteMapper.cmInsertEnter", cm);
+	}
+
+	public int cmInertTardiness(SqlSessionTemplate sqlSession, Commute cm) {
+		return sqlSession.insert("commuteMapper.cmInertTardiness", cm);
+	}
+	
+	public int cmUpdateLeave(SqlSessionTemplate sqlSession, Commute cm) {
+		return sqlSession.update("commuteMapper.cmUpdateLeave", cm);
+	}
+
+
+
 
 	
 

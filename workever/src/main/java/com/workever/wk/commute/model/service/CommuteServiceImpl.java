@@ -30,11 +30,20 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.cmSelectList(sqlSession, userNo, pi);
 	}
 
+	@Override
+	public int cmInertEnter(Commute cm) {
+		return cDao.cmInertEnter(sqlSession, cm);
+	}
 
+	@Override
+	public int cmInertTardiness(Commute cm) {
+		return cDao.cmInertTardiness(sqlSession, cm);
+	}
 	
-//	@Override
-//	public int insertEnter(int uno) {
-//		return cDao.insertEnter(sqlSession, uno);
-//	}
+	@Override
+	public int cmUpdateLeave(Commute cm) {
+		return cDao.cmUpdateLeave(sqlSession, cm);
+	}
+
 
 }
