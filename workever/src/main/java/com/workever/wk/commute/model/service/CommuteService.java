@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.commute.model.vo.Commute;
+import com.workever.wk.user.model.vo.User;
 
 public interface CommuteService {
 	
@@ -17,5 +18,10 @@ public interface CommuteService {
 	
 	// 퇴근 기록용
 	int cmUpdateLeave(Commute cm);
+	
+	
+	// Admin 결근자 조회/처리용
+	ArrayList<User> adSelectAbsenceUserList();
+	int adInsertAbsence(ArrayList<User> absenceUserList);
 
 }

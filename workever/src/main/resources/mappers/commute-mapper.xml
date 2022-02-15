@@ -15,6 +15,10 @@
 		<result column="user_name" property="userName" />
 	</resultMap>
 	
+	<!-- *근태 관리* -->
+	
+	<!-- 출퇴근 관리(유저) -->
+	
 	<select id="cmSelectListCount" resultType="_int">
 		select
 			   count(*)
@@ -98,9 +102,87 @@
 		   and cm_date = to_char(sysdate, 'yyyy-mm-dd')
 	</update>
 	
+	<select id="cmSelectSearchCount" resultType="_int">
+		select 
+			   count(*)
+		  from commute
+		  join users using (user_no)
+		 where user_enabled = 'Y'
+		  <if test='startday !="" and endday != ""'>
+		   	and cm_date between #{ startday } and #{ endday }
+		  </if>
+		  <if test="cm_status == 'normal'">
+		  	and cm_state = 1
+		  </if>
+		  <if test="cm_status == 'tardiness'">
+		  	and cm_state = 2
+		  </if>
+		  <if test="cm_status == 'absence'">
+		  	and cm_state = 3
+		  </if>
+		  <if test="cm_status == 'earlyLeave'">
+		  	and cm_state = 4
+		  </if>
+		  <if test="cm_status == 'leave'">
+		  	and cm_state = 5
+		  </if>
+	</select>
 	
-
+	<select id="cmSelectSearchList" resultMap="commuteResult">
+		select 
+		       cm_no
+		     , cm_date
+		     , cm_state
+		     , cm_start_time
+		     , cm_end_time
+		     , cm_working_hours
+		  from commute
+		  join users using (user_no)
+		 where user_no = #{ userNo }
+		 <choose>
+		 	<when test='startday !="" and endday != ""'>
+		   		and cm_date between #{ startday } and #{ endday }
+		  	</when>
+		 	<when test="cm_status == 'normal'">
+		 		and cm_state = 1
+		 	</when>
+		 	<when test="cm_status == 'tardiness'">
+		 		and cm_state = 2
+		 	</when>
+		 	<when test="cm_status == 'absence'">
+		 		and cm_state = 3
+		 	</when>
+		 	<when test="cm_status == 'earlyLeave'">
+		 		and cm_state = 4
+		 	</when>
+		 	<when test="cm_status == 'leave'">
+		 		and cm_state = 5
+		 	</when>
+		 </choose>
+		 order
+		    by cm_no desc
+	</select>
 	
+	
+	<!-- 출퇴근 관리(관리자) -->
+	
+	<insert id="adInsertAbsence">
+		insert
+		  into commute
+		     (
+		       cm_no
+		     , user_no
+		     , cm_date
+		     , cm_state
+		     )
+		     values
+		     (
+		       seq_commute.nextval
+		     , #{ userNo }
+		     , to_char(sysdate, 'yyyy-mm-dd')
+		     , 3
+		     )
+	</insert>
 	
 	
 </mapper>

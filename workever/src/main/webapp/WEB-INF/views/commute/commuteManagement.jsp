@@ -218,24 +218,26 @@
 
 			<h4 class="cm_title">출퇴근 조회</h4>
 			<hr class="cm_underLine"> <br>
-	
+			
 			<div id="cm_select" style="width: 800px; margin: auto;">
-				<div>
-					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
-				</div>
-
-				<br>
-				
-				<div>
-					<span class="sm_title" style="margin-bottom: 50px;">근무 상태</span>
-					<label><input type="radio" name="cm_status" value="normal" checked="checked">정상</label>
-					<label><input type="radio" name="cm_status" value="tardiness">지각</label>
-					<label><input type="radio" name="cm_status" value="absence">결근</label>
-					<label><input type="radio" name="cm_status" value="earlyLeave">조퇴</label>
-					<label><input type="radio" name="cm_status" value="leave">휴가</label>
-					<button id="cmSelBtn">조 회</button>
-				</div>
+				<form action="Search.cm" method="get">
+					<div>
+						<span class="sm_title">날짜</span>
+						<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
+					</div>
+	
+					<br>
+					
+					<div>
+						<span class="sm_title" style="margin-bottom: 50px;">근무 상태</span>
+						<label><input type="radio" name="cm_status" value="normal" checked="checked">정상</label>
+						<label><input type="radio" name="cm_status" value="tardiness">지각</label>
+						<label><input type="radio" name="cm_status" value="absence">결근</label>
+						<label><input type="radio" name="cm_status" value="earlyLeave">조퇴</label>
+						<label><input type="radio" name="cm_status" value="leave">휴가</label>
+						<button type="submit" id="cmSelBtn">조 회</button>
+					</div>
+				</form>
 				
 			</div>
 
@@ -291,7 +293,7 @@
 					$.ajax({
 						url: "list.cm",
 						type:"POST",
-						data: { 
+						data: {
 								userNo: '${loginUser.userNo}',
 								currentPage: cpageNo
 						}, success:function(result) {
@@ -405,6 +407,7 @@
 						}
 					})
 				}
+				
 			</script>
 			
 			
