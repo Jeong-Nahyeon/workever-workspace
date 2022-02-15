@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.workever.wk.user.model.dao.UserDao;
-import com.workever.wk.user.model.vo.Company;
+import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
 @Service
@@ -87,8 +87,8 @@ public class UserServiceImpl implements UserService {
 
 	// 부서 목록 조회
 	@Override
-	public ArrayList<User> selectDept(User loginUser) {
-		return uDao.selectDept(sqlSession, loginUser);
+	public ArrayList<Dept> selectDept(String comNo) {
+		return uDao.selectDept(sqlSession, comNo);
 	}
 
 	// 관리자 프로필 변경 서비스
@@ -105,6 +105,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ArrayList<User> selectDisableUser(String cno) {
 		return uDao.selectDisableUser(sqlSession, cno);
+	}
+
+	// 사원승인 서비스
+	@Override
+	public int userEnable(User u) {
+		return uDao.userEnable(sqlSession, u);
 	}
 
 	

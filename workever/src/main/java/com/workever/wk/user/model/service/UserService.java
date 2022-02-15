@@ -3,6 +3,7 @@ package com.workever.wk.user.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
 public interface UserService {
@@ -39,11 +40,14 @@ public interface UserService {
 	int updateUserProfile(User u);
 	
 	// 부서 목록 조회
-	ArrayList<User> selectDept(User loginUser);
+	ArrayList<Dept> selectDept(String comNo);
 	
 	// 관리자 프로필 변경
 	int updateAdminProfile(User u);
 	
 	// 사원승인 -> 미승인 사원 조회
 	ArrayList<User> selectDisableUser(String cno);
+	
+	// 사원승인 서비스
+	int userEnable(User u);
 }

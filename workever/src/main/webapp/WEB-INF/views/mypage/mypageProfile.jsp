@@ -153,5 +153,11 @@
     </div>
     
     <jsp:include page="../common/scripts.jsp" />
+    <script>
+        $(function(){
+            console.log('${loginUser.comNo}');
+        })
+
+    </script>
 </body>
 </html>

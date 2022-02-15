@@ -25,7 +25,7 @@
 		<typeAlias type="com.workever.wk.user.model.vo.Company" alias="Company"/>
 		<typeAlias type="com.workever.wk.project.model.vo.Project" alias="Project" />
 		<typeAlias type="com.workever.wk.commute.model.vo.Commute" alias="Commute"/>
-		
+		<typeAlias type="com.workever.wk.user.model.vo.Dept" alias="Dept"/>
 	</typeAliases>
 	
 	<mappers>

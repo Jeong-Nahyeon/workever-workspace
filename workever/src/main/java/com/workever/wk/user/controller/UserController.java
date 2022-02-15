@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.workever.wk.user.model.service.EmailService;
 import com.workever.wk.user.model.service.UserService;
 import com.workever.wk.user.model.vo.Company;
+import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
 @Controller
@@ -163,7 +164,7 @@ public class UserController {
 		int result = uService.insertCompany(admin);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
 			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");
@@ -184,6 +185,7 @@ public class UserController {
 		user.put("userPwd", u.getUserPwd());
 		user.put("userPhone", u.getUserPhone());
 		user.put("companyCode", u.getCompanyCode());
+		user.put("comEncode", u.getComEncode());
 		
 		int result = uService.insertUser(user);
 		
@@ -359,8 +361,9 @@ public class UserController {
 	public String updateAdminProfilePage(HttpSession session, Model model) {
 		//System.out.println(session.getAttribute("loginUser"));
 		User loginUser = (User) session.getAttribute("loginUser");
+		String comNo = loginUser.getComNo();
 		
-		ArrayList<User> deptlist = uService.selectDept(loginUser);
+		ArrayList<Dept> deptlist = uService.selectDept(comNo);
 		model.addAttribute("deptlist", deptlist);
 		//System.out.println(deptlist);
 		return "mypage/updateAdminProfile";
@@ -437,11 +440,22 @@ public class UserController {
 	public String adminUserEnable(String cno, HttpSession session, Model model) {
 		
 		ArrayList<User> disableUser = uService.selectDisableUser(cno);
-		
+		ArrayList<Dept> deptList = uService.selectDept(cno);
+				
 		model.addAttribute("disableUser", disableUser);
+		model.addAttribute("deptList", deptList);
+		//System.out.println(disableUser);
 		return "mypage/adminEnableUser";
 	}
 	
-	
+	// 사원승인 서비스
+	@ResponseBody
+	@RequestMapping("updateEnable.ad")
+	public String updateUserEnabled(User u) {
+		System.out.println(u);
+		int result = uService.userEnable(u);
+		
+		return result > 0 ? "NNNNY" : "NNNNN";
+	}
 	
 }

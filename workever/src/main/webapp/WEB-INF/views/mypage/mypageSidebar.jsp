@@ -140,7 +140,7 @@
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="'userenable.ad?cno=' + '${loginUser.comNo}'" class="nav-link">
+									<a href="userenable.ad?cno=${loginUser.comNo}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
 										<p>사원 승인</p>
 									</a>

@@ -35,6 +35,12 @@
 		<result column="com_changename" property="comChangeName"/>
 		<result column="com_logopath" property="comLogoPath"/>
 	</resultMap>
+	
+	<resultMap type="Dept" id="deptResult">
+		<result column="dept_no" property="deptNo"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="com_no" property="comNo"/>
+	</resultMap>
 
 	<select id="loginUser" resultMap="userResult">
 		select
@@ -43,7 +49,7 @@
 		     , c.com_no 
 		     , user_email
 		     , user_name
-		     , user_phone
+		     , substr(user_phone, 1, 3) || '-' || substr(user_phone, 4, 4) || '-' || substr(user_phone,8) user_phone
 		     , user_pwd
 		     , user_rank
 		     , user_joindate
@@ -159,7 +165,7 @@
 		      values
 		      (
 		        SEQ_users.nextval
-		      , (select com_no from company where com_encode = 'dang')
+		      , (select com_no from company where com_encode = #{comEncode})
 		      , #{userEmail}
 		      , #{userName}
 		      , #{userPhone}
@@ -212,10 +218,10 @@
   	</update>
   	
   	<!-- 부서 목록 조회 -->
-  	<select id="selectDept" resultMap="userResult">
+  	<select id="selectDept" resultMap="deptResult">
   		select dept_name, d.com_no, d.dept_no
 		  from dept d
-		 where d.com_no = (select com_no from users where user_no = #{userNo})
+		 where d.com_no = #{comNo}
   	</select>
   	
   	<!-- 관리자 프로필 변경 -->
@@ -247,4 +253,13 @@
 		   and user_status = '재직'
 		   and com_no = #{cno}
   	</select>
+  	
+  	<!-- 사원승인 -->
+  	<update id="userEnable">
+  		update users
+  		   set dept_no = #{deptNo}
+  		     , user_rank = #{userRank}
+  		     , user_enabled = 'Y'
+  		 where user_email = #{userEmail}
+  	</update>
 </mapper>

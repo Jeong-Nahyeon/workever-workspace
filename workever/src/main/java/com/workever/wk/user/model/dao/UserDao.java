@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
 @Repository
@@ -62,8 +63,8 @@ public class UserDao {
 	}
 	
 	// 부서 목록 조회
-	public ArrayList<User> selectDept(SqlSessionTemplate sqlSession, User loginUser){
-		return (ArrayList)sqlSession.selectList("userMapper.selectDept", loginUser);
+	public ArrayList<Dept> selectDept(SqlSessionTemplate sqlSession, String comNo){
+		return (ArrayList)sqlSession.selectList("userMapper.selectDept", comNo);
 	}
 	
 	// 관리자 프로필 변경 서비스
@@ -77,5 +78,10 @@ public class UserDao {
 	// 사원승인 -> 미승인 사원 조회
 	public ArrayList<User> selectDisableUser(SqlSessionTemplate sqlSession, String cno) {
 		return (ArrayList)sqlSession.selectList("userMapper.selectDisableUser", cno);
+	}
+	
+	// 사원승인 서비스
+	public int userEnable(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.userEnable", u);
 	}
 }
