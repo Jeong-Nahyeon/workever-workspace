@@ -30,7 +30,7 @@
 	
 	<resultMap id="CommunityReplyResult" type="CommunityReply">
 		<result column="cr_no" property="crNo" />
-		<result column="user_no" property="userNo" />
+		<result column="cr_user_no" property="crUserNo" />
 		<result column="cr_category" property="crCategory" />
 		<result column="cr_content" property="crContent" />
 		<result column="cr_ref_no" property="crRefNo" />
@@ -257,7 +257,7 @@
 	<select id="selectReplyList" resultMap="CommunityReplyResult">
 		select
 		       cr_no
-		     , cr.user_no
+		     , cr_user_no
 		     , user_rank     
 		     , user_name
 		     , user_filepath
@@ -265,8 +265,8 @@
 		     , cr_content
 		     , cr_ref_no
 		     , to_char(cr_date, 'YYYY.MM.DD AM HH:MI:SS') as "cr_date"
-		  from community_reply cr
-		  join users u on ( cr.user_no = u.user_no)
+		  from community_reply
+		  join users on (cr_user_no = user_no)
 		 where cr_status = 'Y'
 		   and cr_category = 'D'
 		   and cr_ref_no = #{dbNo}
@@ -279,7 +279,7 @@
 		  into community_reply
 		  (
 		    cr_no
-		  , user_no
+		  , cr_user_no
 		  , cr_category
 		  , cr_content
 		  , cr_ref_no
@@ -287,7 +287,7 @@
 		  values
 		  (
 		    seq_community_reply.nextval
-		  , #{userNo}
+		  , #{crUserNo}
 		  , 'D'
 		  , #{crContent}
 		  , #{crRefNo}

@@ -12,7 +12,7 @@ import lombok.ToString;
 public class CommunityReply {
 
 	private String crNo;			// 댓글번호
-	private String userNo;			// 사원번호(부서별 게시판용)
+	private String crUserNo;			// 사원번호(부서별 게시판용)
 	private String crCategory;		// 댓글분류(D 부서 / A 익명)
 	private String crContent;		// 댓글내용
 	private String crRefNo;			// 참조글번호

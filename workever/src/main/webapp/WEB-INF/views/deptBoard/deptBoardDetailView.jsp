@@ -514,8 +514,10 @@
 			    			
 			    			if(result == "success"){
 			    				
+			    				
 				 				$("#confirm-modal").modal("hide"); 
 				    			selectReplyList();
+				    			crNo = null;
 			    				
 			    			}
 			    			 
@@ -583,7 +585,7 @@
 						
 						reply += "<table class='reply-list'>"
 							   + 	"<input type='hidden' name='crNo' value='" + list[i].crNo + "' />"
-							   + 	"<input type='hidden' name='userNo' value='" + list[i].userNo + "' />"
+							   + 	"<input type='hidden' name='crUserNo' value='" + list[i].crUserNo + "' />"
 							   + 	"<tr>"
 						       + 		"<td class='reply-list-img' rowspan='2'>";
 						    
@@ -602,7 +604,7 @@
 							   + "</td>"
 							   + "<td class='reply-list-btns'>";
 							   
-						if(list[i].userNo == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 수정/삭제버튼 보이기
+						if(list[i].crUserNo == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 수정/삭제버튼 보이기
 							
 							reply += "<a class='reply-update-form-btn'>수정</a>"
 								   + "<a class='reply-delete-btn'>삭제</a>"
@@ -622,7 +624,7 @@
 					$(".reply-insert").after(reply);
 
 
-					if($("input[name=userNo]").val() == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 배경색 다르게 보이기
+					if($("input[name=crUserNo]").val() == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 배경색 다르게 보이기
 						
 						$("input[value=${ loginUser.userNo }]").parent().css("backgroundColor", "rgb(240, 240, 240)");
 						

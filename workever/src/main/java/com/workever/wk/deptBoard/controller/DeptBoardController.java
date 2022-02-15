@@ -385,7 +385,7 @@ public class DeptBoardController {
 	@RequestMapping("rinsert.dbo")
 	public String ajaxInsertReply(CommunityReply cr, HttpSession session) {
 
-		cr.setUserNo(((User)session.getAttribute("loginUser")).getUserNo());
+		cr.setCrUserNo(((User)session.getAttribute("loginUser")).getUserNo());
 		
 		int result = dService.insertReply(cr);
 		
@@ -414,7 +414,7 @@ public class DeptBoardController {
 	@ResponseBody
 	@RequestMapping("rdelete.dbo")
 	public String ajaxDeleteReply(CommunityReply cr) {
-
+		System.out.println(cr);
 		int result = dService.deleteReply(cr);
 		
 		return result > 0 ? "success" : "fail";

@@ -228,7 +228,7 @@
 			                	<c:when test="${ empty list }">
 				                    <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
 				                    <tr>
-				                    	<td colspan="4">게시글이 없습니다.</td>
+				                    	<td colspan="6">게시글이 없습니다.</td>
 				                    </tr>
 			                  	</c:when>
 			                  	<c:otherwise>
