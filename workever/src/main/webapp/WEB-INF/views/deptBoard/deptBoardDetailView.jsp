@@ -161,41 +161,11 @@
 
     .reply-list-btns a{
       margin-left:5px;
-      text-decoration:none;
-      color:black;
       cursor:pointer;
     }
 
     .reply-list .reply-content{
       padding:20px;
-    }
-    
-    
-    /* 댓글 수정 영역 */
-    .reply-update-content-area{
-		padding:20px;
-		padding-right:0;
-    }
-
-	.reply-update-content{
-		width:100%;
-		height:70px;
-		resize:none;
-	}
-    
-	.reply-update-btn-area{
-		padding:20px;
-	}
-
-    .reply-update-btn{
-      background:#4E73DF;
-      color:white;
-	  width:100%;
-	  height:70px;
-    }
-    
-    .reply-update-btn:hover{
-      color:white;
     }
 
     /* 댓글 블라인드용 영역 */
@@ -343,16 +313,69 @@
 								<textarea id="reply-insert-content" name="crContent"></textarea>
 							</td>
 							<td class="reply-insert-btns">
-								<button id="reply-insert-btn" class="btn" onclick="addReply();">댓글등록</button>
+								<button id="reply-insert-btn" class="btn">댓글등록</button>
 							</td>
 						</tr>
 						<tr>
-							<th colspan="2" style="padding-top:20px;">댓글 목록 (<span id="reply-count">0</span>)</th>
+							<th colspan="2" style="padding-top:20px;">댓글 목록 (5)</th>
 						</tr>
 					</table>  
 
-					<!-- 댓글 목록 영역 -->					
-					
+					<!-- 댓글 목록 영역 -->
+					<table class="reply-list">
+						<tr>
+							<td class="reply-list-img" rowspan="2">
+								<!-- case 1. 프로필 이미지 있을 경우 -->
+								<img class="img-circle img-bordered-sm reply-img">
+								<!-- case 2. 프로필 이미지 없을 경우 -->
+								<!-- <i class="fas fa-user-circle fa-3x reply-no-img"></i> -->
+							</td>
+							<td class="reply-list-name">
+								<b>김말똥</b>
+							</td>
+							<td class="reply-list-btns">
+								<!-- 본인 댓글일 경우 -->
+								<a>수정</a>
+								<a>삭제</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<span>2022.01.00 00:00</span>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+							<p class="reply-content">댓글 내용 영역입니다.</p>
+							</td>
+						</tr>
+						</table>
+						
+						<table class="reply-list">
+						<tr>
+							<td class="reply-list-img" rowspan="2">
+							<i class="fas fa-user-circle fa-3x reply-no-img"></i>
+							</td>
+							<td class="reply-list-name">
+							<b>김말순</b>
+							</td>
+							<td class="reply-list-btns">
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<span>2022.01.00 00:00</span>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+							<p class="reply-content">댓글 내용 영역입니다.</p>
+							</td>
+						</tr>
+					</table>              
+
 				</div>
 				<!-- /.card-footer -->
 				</div>
@@ -417,157 +440,16 @@
 		    	
 			      $("#confirm-modal").modal({backdrop: "static"});
 			      
-				// 확인 버튼 클릭 시 삭제 요청 처리
-			    $("#confirm-btn").click(function(){
-			    	
-			    	  location.href = "delete.dbo?dbno=${ db.dbNo }";
-				      
-				});
-				
 			});
 		    
-			
-			
-			// 본인 댓글 수정 버튼 클릭 시 => 수정폼 보이기
-			$(document).on("click", ".reply-update-form-btn", function(){
-				
-				let crNo = $(this).parents(".reply-list").find("input[name=crNo]").val(); // 해당 댓글 번호
-				
-				let updateArea = $(this).parents(".reply-list").find(".reply-update-form"); // 해당 댓글 내용 영역
-				
-				let crContent = $(this).parents(".reply-list").find(".reply-content").text(); // 댓글 내용
-				
-				let cancelBtn = "<a class='reply-update-cancel-btn'>취소</a>"; // 취소버튼
-				
-				// 수정 폼
-				let updateForm = "<td colspan='2' class='reply-update-content-area'>"
-							   + "<textarea class='reply-update-content' name='crContent'>" + crContent + "</textarea></td>"
-							   + " <td class='reply-update-btn-area'>"
-							   + "<input type='hidden' name='crNo' value='" + crNo + "' />"
-				               + "<button type='button' class='btn reply-update-btn'>수정</button></td>";    
-				
-				updateArea.text("");
-				updateArea.html(updateForm);
-				$(this).parent().html(cancelBtn);               
-				
-			});	
-			
-			
-			// 댓글 수정폼에서 취소 버튼 클릭 시
-			$(document).on("click", ".reply-update-cancel-btn", function(){
-				
-				$(this).parents(".reply-list").remove();
-				selectReplyList();
-				
+			// 확인 버튼 클릭 시 삭제 요청 처리
+		    $("#confirm-btn").click(function(){
+		    	
+		    	  location.href = "delete.dbo?dbno=${ db.dbNo }";
+			      
 			});
 			
-			
-			// 수정폼에서 수정버튼 클릭 시 => 수정용 ajax 실행
-			$(document).on("click", ".reply-update-btn", function(){
-				
-				// ajax 사용 시 $(this) 쓸 수 있는 방법 => context: this 속성 추가
-				
-				$.ajax({
-					context: this,
-					url:"rupdate.dbo",
-					data:{
-						crNo:$(this).prev().val(),
-						crContent:$(this).parents(".reply-list").find(".reply-update-content").val()
-					},
-					success:function(result){
-						
-						if(result == "success"){
-							
-							$(this).parents(".reply-list").remove();
-							selectReplyList();
-							
-						}
-											
-					}, error:function(){
-						
-	    				console.log("댓글 수정용 ajax 통신 실패");		
-	    				
-					}
-				});
-				
-			});
-			
-			
-			// 본인 댓글 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
-			
-			$(document).on("click", ".reply-delete-btn", function(){
-				
-				let crNo = $(this).parents(".reply-list").find("input[name=crNo]").val(); // 댓글 번호
-				
-				$("#confirm-modal").modal({backdrop: "static"});
-				
-				// 확인 버튼 클릭 시 삭제 요청 처리
-			    $("#confirm-btn").click(function(){
-			    	
-			    	  $.ajax({
-			    		 url:"rdelete.dbo",
-			    		 data:{
-			    			 crNo:crNo,
-			    			 crRefNo:${ db.dbNo }
-			    		 },
-			    		 success:function(result){
-			    			
-			    			if(result == "success"){
-			    				
-				 				$("#confirm-modal").modal("hide"); 
-				    			selectReplyList();
-			    				
-			    			}
-			    			 
-			    		 }, error:function(){
-			    			 
-			    			 console.log("댓글 삭제용 ajax 통신 실패");		
-			    			 
-			    		 }
-			    	  });
-				      
-				});
-				
-			});
-
 		});
-		
-		
-		// 댓글 등록용 ajax
-		function addReply(){
-			
-			if($("#reply-insert-content").val().trim().length != 0){ // 공백만 있는 댓글이 등록되지 못하도록 조건 검사
-				
-				$.ajax({
-					url:"rinsert.dbo",
-					data:{
-						crRefNo:${ db.dbNo },
-						crContent:$("#reply-insert-content").val()
-					},
-					success:function(result){
-						
-						if(result == "success"){
-							
-							$("#reply-insert-content").val("");
-							selectReplyList();
-							
-						}
-						
-					}, error:function(){
-						
-	    				console.log("댓글 등록용 ajax 통신 실패");		
-	    				
-					}
-				});
-								
-			}else{
-				
-				alert("댓글 작성 후 등록 가능합니다.");
-				
-			}
-			
-		}
-		
 		
 		// 댓글 목록 조회용 ajax
 		function selectReplyList(){
@@ -577,54 +459,13 @@
 				data:{dbno:${ db.dbNo }},
 				success:function(list){
 					
+					console.log(list);
+					
 					let reply = "";
 					
 					for(let i in list){
 						
-						reply += "<table class='reply-list'>"
-							   + 	"<input type='hidden' name='crNo' value='" + list[i].crNo + "' />"
-							   + 	"<input type='hidden' name='userNo' value='" + list[i].userNo + "' />"
-							   + 	"<tr>"
-						       + 		"<td class='reply-list-img' rowspan='2'>";
-						    
-						if(list[i].userFilePath != null){ // 프로필 이미지 있을 경우
-							
-							reply += "<img src='" + list[i].userFilePath + "' class='img-circle img-bordered-sm reply-img'>"
-							
-						}else{ // 프로필 이미지 없을 경우
-							
-							reply += "<i class='fas fa-user-circle fa-3x reply-no-img'></i>" 
-						}
-						
-						reply += "</td>"
-							   + "<td class='reply-list-name'>"
-							   + 	"<b>" + list[i].userRank + " " + list[i].userName + "</b>"
-							   + "</td>"
-							   + "<td class='reply-list-btns'>";
-							   
-						if(list[i].userNo == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 수정/삭제버튼 보이기
-							
-							reply += "<a class='reply-update-form-btn'>수정</a>"
-								   + "<a class='reply-delete-btn'>삭제</a>"
-							
-						}
-						
-						reply += "</td></tr>"
-							   + "<tr><td colspan='2'>"
-							   + 	"<span>" + list[i].crDate + "</span></td></tr>"
-							   + "<tr class='reply-update-form'><td colspan='3'>"
-							   + 	"<p class='reply-content'>" + list[i].crContent + "</p></td></tr></table>";
-						
-					}
-					
-					$(".reply-list").remove(); // 요청 처리 전 댓글 목록 비워주기
-					$("#reply-count").text(list.length);
-					$(".reply-insert").after(reply);
-
-
-					if($("input[name=userNo]").val() == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 배경색 다르게 보이기
-						
-						$("input[value=${ loginUser.userNo }]").parent().css("backgroundColor", "rgb(240, 240, 240)");
+						reply += 
 						
 					}
 					
@@ -636,8 +477,6 @@
 				
 			});
 			
-			
-	
 		}
 	</script>	
 

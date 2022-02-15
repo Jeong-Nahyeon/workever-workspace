@@ -38,12 +38,9 @@ public interface DeptBoardService {
 	ArrayList<CommunityReply> selectReplyList(int dbNo); // 댓글 목록 조회
 	
 	// 부서별 게시판 댓글 작성 서비스
-	int insertReply(CommunityReply cr); // 댓글 등록
 	
 	// 부서별 게시판 댓글 수정 서비스
-	int updateReply(CommunityReply cr); // 댓글 수정
 	
 	// 부서별 게시판 댓글 삭제 서비스
-	int deleteReply(CommunityReply cr); // 댓글 삭제
 	
 }
