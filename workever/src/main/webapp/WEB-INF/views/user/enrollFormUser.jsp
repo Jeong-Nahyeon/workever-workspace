@@ -161,6 +161,7 @@
 						<input type="text" class="form-control" id="company-code" name="companyCode" placeholder="회사코드를 입력하세요.">
 						<input type="button" value="회사코드중복확인" id="btn-checkCode" onclick="checkCompanyCode();">
 						<input type="hidden" id="companyCode-status" value="codeN">
+						<input type="hidden" id="comEncode" name="comEncode" >
 					</div>
 
 					<div class="enroll-check">
@@ -447,6 +448,7 @@
 							$('#company-check').modal();
 							companyCode.attr("readonly", true);
 							$('#companyCode-status').attr('value', 'codeY');
+							$('#comEncode').attr('value', $('#company-code').val())
 						}else{
 							$('#after-checkCodeD').modal();
 						}
