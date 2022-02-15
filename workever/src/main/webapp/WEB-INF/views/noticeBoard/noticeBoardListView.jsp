@@ -170,6 +170,7 @@
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
 	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
 	<c:if test="${ not empty successMsg }">
 		<script>
@@ -444,7 +445,6 @@
 	    </div>
 	  </div>
 	</div>
-	
 	
 	
 	
