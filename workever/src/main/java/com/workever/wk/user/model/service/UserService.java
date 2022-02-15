@@ -43,4 +43,7 @@ public interface UserService {
 	
 	// 관리자 프로필 변경
 	int updateAdminProfile(User u);
+	
+	// 사원승인 -> 미승인 사원 조회
+	ArrayList<User> selectDisableUser(String cno);
 }

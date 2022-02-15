@@ -235,4 +235,16 @@
 		 where com_no = #{comNo}
   	</update>
   	
+  	<!-- 사원승인 -> 미승인 사원 조회 -->
+  	<select id="selectDisableUser" resultMap="userMapper">
+  		select
+		       user_email
+		     , user_phone
+		     , user_name
+		     , user_enabled
+		  from users
+		 where user_enabled = 'N'
+		   and user_status = '재직'
+		   and com_no = #{cno}
+  	</select>
 </mapper>

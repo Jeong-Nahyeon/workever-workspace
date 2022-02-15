@@ -73,4 +73,9 @@ public class UserDao {
 	public int updateAdminProfileCompany(SqlSessionTemplate sqlSession, User u) {
 		return sqlSession.update("userMapper.updateAdminProfileCompany", u);
 	}
+
+	// 사원승인 -> 미승인 사원 조회
+	public ArrayList<User> selectDisableUser(SqlSessionTemplate sqlSession, String cno) {
+		return (ArrayList)sqlSession.selectList("userMapper.selectDisableUser", cno);
+	}
 }

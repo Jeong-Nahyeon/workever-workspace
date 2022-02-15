@@ -101,6 +101,12 @@ public class UserServiceImpl implements UserService {
 		return result = updateUser * updateCompany;
 	}
 
+	// 사원승인 -> 미승인 사원 조회
+	@Override
+	public ArrayList<User> selectDisableUser(String cno) {
+		return uDao.selectDisableUser(sqlSession, cno);
+	}
+
 	
 
 	

@@ -60,9 +60,9 @@ public class UserController {
 	
 	// 로그아웃 서비스
 	@RequestMapping("logout.do")
-	public void logoutUser(HttpSession session) {
+	public String logoutUser(HttpSession session) {
 		session.invalidate();
-		//return "user/startPage";
+		return "redirect:/";
 	}
 	
 
@@ -425,5 +425,23 @@ public class UserController {
 		
 		return changeName;
 	}
+	
+	// 사원관리 페이지 연결
+	@RequestMapping("usermanage.ad")
+	public String adminUserManage() {
+		return "mypage/adminUpdateUser";
+	}
+	
+	// 사원승인 페이지 연결
+	@RequestMapping("userenable.ad")
+	public String adminUserEnable(String cno, HttpSession session, Model model) {
+		
+		ArrayList<User> disableUser = uService.selectDisableUser(cno);
+		
+		model.addAttribute("disableUser", disableUser);
+		return "mypage/adminEnableUser";
+	}
+	
+	
 	
 }

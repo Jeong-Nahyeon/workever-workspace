@@ -31,7 +31,11 @@
 		text-align: center;
 		margin: 20px 20px;
 	}
-	#profile-image img{width: 30px; height: 30px;}
+	
+	
+	#profile-image img{
+		width: 30px; height: 30px; 
+	}
 	#profile-image i{width: 50px; height: 50px;}
 
 	#company-area a{color: lightslategray;}
@@ -263,7 +267,9 @@
 				</div>
 				<c:choose>
 					<c:when test="${ loginUser.userFilePath != null }">
-						<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+						<div style="display: table-cell; vertical-align: middle;">
+							<img src="${loginUser.userFilePath}" class="img-circle elevation-2" alt="User Image">
+						</div>
 					</c:when>
 					<c:otherwise>
 						<div style="display: table-cell; vertical-align: middle;">
@@ -274,10 +280,9 @@
 			</a>
 			<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 				<div id="profile-image">
-				
 					<c:choose>
-						<c:when test="${ loginUser.userFilePath != null }">
-							<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+						<c:when test="${ not empty loginUser.userFilePath}">
+							<img src="${loginUser.userFilePath}" class="img-circle elevation-2">
 							<br>
 						</c:when>
 						<c:otherwise>
@@ -286,7 +291,7 @@
 							</div>
 						</c:otherwise>
 					</c:choose>
-					<span>${loginUser.userName}</span>
+					<br><span>${loginUser.userName}</span>
 				</div>
 				<div style="height: 0; border-bottom: 1px solid #e3e6f0;"></div>
 				<div id="profile-icon">
@@ -294,7 +299,7 @@
 						<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 						<span style="font-size: 11px;">마이페이지</span>
 					</a>
-					<a class="nav-link" href="">
+					<a class="nav-link" href="logout.do">
 						<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
 						<span style="font-size: 11px;">로그아웃</span>
 					</a>
