@@ -122,15 +122,25 @@ public class ApprovalDao {
 		int formNo = Integer.parseInt(((Approval)map.get("apvl")).getApvlFormNo());
 		
 		if(formNo == 1) {
-			return sqlSession.insert("approvalMapper.apvlDayOffForm",map);
+			int apvl = sqlSession.insert("approvalMapper.insertApvlDayOffForm", map);
+			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
+			return apvl * apvlLine;
 		}else if(formNo == 2) {
-			return sqlSession.insert("approvalMapper.apvlOverTimeForm",map);
+			int apvl = sqlSession.insert("approvalMapper.apvlOverTimeForm",map);
+			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
+			return apvl * apvlLine;
 		}else if(formNo == 3) {
-			return sqlSession.insert("approvalMapper.apvlWorkReportForm",map);
+			int apvl = sqlSession.insert("approvalMapper.apvlWorkReportForm",map);
+			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
+			return apvl * apvlLine;
 		}else if(formNo == 4) {
-			return sqlSession.insert("approvalMapper.apvlExpenseReportForm",map);
+			int apvl = sqlSession.insert("approvalMapper.apvlExpenseReportForm",map);
+			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
+			return apvl * apvlLine;
 		}else {
-			return sqlSession.insert("approvalMapper.apvlBuisnessTripForm",map);
+			int apvl = sqlSession.insert("approvalMapper.apvlBuisnessTripForm",map);
+			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
+			return apvl * apvlLine;
 		}
 	}
 	

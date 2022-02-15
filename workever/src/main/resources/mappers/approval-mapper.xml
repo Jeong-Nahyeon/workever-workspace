@@ -280,23 +280,62 @@
 		 where user_no = #{selectUserNo}
 	</select>
 	
-	<insert id="apvlDayOffForm">
-		
+	<insert id="insertApvlDayOffForm" parameterType="Map">
+		insert all
+		  into approval 
+		  (
+		    apvl_no
+		  , apvl_writer
+		  , apvl_form_no
+		  , apvl_title) 
+		  values 
+		  (
+		    seq_approval.nextval
+		  , #{apvl.apvlWriter}
+		  , #{apvl.apvlFormNo}
+		  , #{apvl.apvlTitle}
+		  )
+		  into approval_dayoff
+		  (
+		    apvl_no
+		  , off_start_date
+		  , off_end_date
+		  , off_total_date
+		  , off_kind
+		  , off_reason)
+		  values
+		  (
+		    seq_approval.currval
+		  , #{apvlDof.offStartDate}
+		  , #{apvlDof.offEndDate}
+		  , to_date(#{apvlDof.offEndDate}, 'YYYY-MM-DD') - to_date(#{apvlDof.offStartDate}, 'YYYY-MM-DD')+1
+		  , #{apvlDof.offKind}
+		  , #{apvlDof.offReason}
+		  )
+		  select * from dual
+
 	</insert>
 	
-	<insert id="apvlOverTimeForm">
-	
+	<insert id="insertApvlLine" parameterType="Map">
+		  insert 
+		  into approval_line 
+		  (
+		    apvl_line_no
+		  , apvl_no
+		  , user_no
+		  , apvl_line_turn) 
+		  select 
+		  		 seq_approval_line.nextval
+		  		, seq_approval.currval
+		  		, A.*
+		  	from(
+		  <foreach collection="lineUserNo" item="line" index="index" separator="UNION ALL">
+			  select  
+				   #{line}
+				  , #{index} +1
+				  from dual
+	 		  </foreach>) A
 	</insert>
 	
-	<insert id="apvlWorkReportForm">
 	
-	</insert>
-	
-	<insert id="apvlExpenseReportForm">
-	
-	</insert>
-	
-	<insert id="apvlBuisnessTripForm">
-	
-	</insert>
 </mapper>
