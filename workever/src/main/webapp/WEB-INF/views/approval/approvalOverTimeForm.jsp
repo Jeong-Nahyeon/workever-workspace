@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,31 +22,31 @@
         <tr>
             <th>제목</th>
             <td colspan="5">
-                <input type="text" id="title">
+                <input type="text" id="title" name="apvlTitle" required>
             </td>
         </tr>
         <tr>
-            <th width="150">소속 부서</th>
-            <td width="170">&nbsp;&nbsp;&nbsp;개발팀</td>
-            <th width="150">기안자</th>
-            <td width="170">&nbsp;&nbsp;&nbsp;홍길동</td> 
-            <th width="150">기안일</th>
-            <td width="170">&nbsp;&nbsp;&nbsp;2022-01-20</td>
+            <th width="130">소속 부서</th>
+            <td width="170">&nbsp;&nbsp;&nbsp;${ userDeptName }</td>
+            <th width="130">기안자</th>
+            <td width="170">&nbsp;&nbsp;&nbsp;${ loginUser.userName }</td> 
+            <th width="130">기안일</th>
+            <td width="230">&nbsp;&nbsp;&nbsp;<c:set var="current" value="<%= new java.util.Date() %>"/><fmt:formatDate value="${current }" type="both" pattern="yyyy-MM-dd(E)"/></td>
         </tr>
         <tr>
-            <th width="150">업무명</th>
-            <td width="170"><input type="text"></td>
-            <th width="150">연장 근무 일자</th>
-            <td width="170"><input type="date"></td>
-            <th width="150">연장 시간</th>
-            <td width="170"><input type="time"></td> 
+            <th>업무명</th>
+            <td><input type="text" name="otTitle" required></td>
+            <th>연장 근무 일자</th>
+            <td><input type="date" name="otDate" required></td>
+            <th>연장 시간</th>
+            <td><input type="number" name="otWorkingHours" required>시간</td> 
         </tr>
         <tr>
             <th colspan="6" >사유</th>
         </tr>
         <tr>
             <td colspan="6">
-                <textarea name="" id="content" rows="20" style="resize:none;"></textarea>
+                <textarea name="otContent" id="content" rows="20" style="resize:none;" required></textarea>
             </td>
         </tr>
     </table>

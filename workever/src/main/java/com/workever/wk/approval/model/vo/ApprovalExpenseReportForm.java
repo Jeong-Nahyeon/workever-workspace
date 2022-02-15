@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class ApprovalExpenseReportForm { //지출 품의서 양식
 	private String erDate;
-	private String erAmout;
+	private String erAmount;
 	private String erPurpose;
 }

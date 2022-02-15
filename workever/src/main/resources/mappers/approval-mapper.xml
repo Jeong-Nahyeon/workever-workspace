@@ -18,7 +18,7 @@
 		<result column="apvl_form_name" property="apvlFormNo" /> 
 		<result column="apvl_title" property="apvlTitle" /> 
 		<result column="apvl_create_date" property="apvlCreateDate" /> 
-		<result column="apvl_status" property="apvlStatus" /> 
+		<result column="apvl_line_status" property="apvlStatus" /> 
 	</resultMap>
 	
 	<resultMap id="approvalLineListResult" type="ApprovalLine">
@@ -29,6 +29,19 @@
 		<result column="apvl_line_turn" property="apvlLineTurn" />
 		<result column="apvl_date" property="apvlDate" />
 		<result column="apvl_line_status" property="apvlLineStatus" />
+	</resultMap>
+		
+	<resultMap id="userListResult" type="User">
+		<result column="user_no" property="userNo" />
+		<result column="user_name" property="userName" />
+		<result column="dept_name" property="deptName" />
+		<result column="user_rank" property="userRank" />
+		<result column="user_filepath" property="userFilePath" />
+	</resultMap>
+	
+	<resultMap id="deptListResult" type="Dept">
+		<result column="dept_no" property="deptNo" />
+		<result column="dept_name" property="deptName" />
 	</resultMap>
 	
 	<select id="userWriteListCount" resultType="_int">
@@ -120,7 +133,7 @@
 		     , apvl_form_name
 		     , apvl_title
 		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
-		     , apvl_status
+		     , apvl_line_status
 		  from approval a
 		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
           join approval_line al on (a.apvl_no = al.apvl_no)
@@ -155,12 +168,12 @@
 		     , apvl_form_name
 		     , apvl_title
 		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
-		     , apvl_status
+		     , apvl_line_status
 		  from approval a
 		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
           join approval_line al on (a.apvl_no = al.apvl_no)
           join Users u on (a.apvl_writer = u.user_no)
-		 where apvl_status in ('I', 'S')
+		 where apvl_line_status = 'S'
 		   and al.user_no = #{loginUserNo}
 		 order
 		    by a.apvl_no desc
@@ -171,7 +184,7 @@
 			   count(*)
 		  from approval
 		  join approval_line using (apvl_no)
-		 where apvl_status in ('I', 'S')
+		 where apvl_line_status = 'S'
 		   and user_no = #{loginUserNo}
 	</select>
 	
@@ -180,7 +193,7 @@
 			   count(*)
 		  from approval
 		  join approval_line using (apvl_no)
-		 where apvl_status in ('C', 'R')
+		 where apvl_line_status in ('A', 'R')
 		   and user_no = #{loginUserNo}
 	</select>
 	
@@ -192,14 +205,98 @@
 		     , apvl_form_name
 		     , apvl_title
 		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
-		     , apvl_status
+		     , apvl_line_status
 		  from approval a
 		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
           join approval_line al on (a.apvl_no = al.apvl_no)
           join Users u on (a.apvl_writer = u.user_no)
-		 where apvl_status in ('C', 'R')
+		 where apvl_line_status in ('A', 'R')
 		   and al.user_no = #{loginUserNo}
 		 order
 		    by a.apvl_no desc
 	</select>
+	
+	<select id="insertUserDeptName" resultType="string">
+		select
+			   dept_name
+	      from users
+	      join dept using (dept_no)
+	     where user_no = #{loginUserNo}
+	</select>
+	
+	<select id="selectDeptList" resultMap="deptListResult">
+		select
+			   dept_no
+		     , dept_Name
+		  from dept
+		 where com_No = #{comNo}
+	</select>
+	
+	<select id="selectDeptUserList" resultMap="userListResult" parameterType="Map">
+		select
+		       user_no
+		     , user_name
+		     , dept_name
+		     , user_rank
+		     , user_filepath
+		  from users u
+		  join dept d using (dept_no)
+		 where not user_no in (#{loginUserNo}, (select 
+		                                          user_no
+		                                     from users 
+		                                    where com_no = #{comNo}
+		                                      and user_auth = 'A'))
+		   and u.com_no = #{comNo}
+		   and dept_no = #{deptNo}
+	</select>
+	
+	<select id="userSearchList" resultMap="userListResult" parameterType="Map">
+		select
+		       user_no
+		     , user_name
+		     , dept_name
+		     , user_rank
+		     , user_filepath
+		  from users u
+		  join dept d using (dept_no)
+		 where not user_no in (#{loginUserNo}, (select 
+                                          user_no
+                                     from users 
+                                    where com_no = #{comNo}
+                                      and user_auth = 'A'))
+		   and u.com_no = #{comNo}
+		   and (dept_name like '%'||#{keyword}||'%' or user_name like '%'||#{keyword}||'%')
+	</select>
+	
+	<select id="selectUser" resultMap="userListResult">
+		select
+		       user_no
+		     , user_name
+		     , dept_name
+		     , user_rank
+		     , user_filepath
+		  from users
+		  join dept using (dept_no)
+		 where user_no = #{selectUserNo}
+	</select>
+	
+	<insert id="apvlDayOffForm">
+		
+	</insert>
+	
+	<insert id="apvlOverTimeForm">
+	
+	</insert>
+	
+	<insert id="apvlWorkReportForm">
+	
+	</insert>
+	
+	<insert id="apvlExpenseReportForm">
+	
+	</insert>
+	
+	<insert id="apvlBuisnessTripForm">
+	
+	</insert>
 </mapper>

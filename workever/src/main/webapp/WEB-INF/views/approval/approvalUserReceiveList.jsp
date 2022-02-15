@@ -52,24 +52,24 @@
 	                	<c:choose>
 	                		<c:when test="${ empty category }">
 			                    <button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='receiveList.ap'">전체</button>|
-			                    <button class="btn c" value="SI" onclick="location.href='receiveChangeCategory.ap?category=SI'">대기중</button>|
-			                    <button class="btn c" value="CR" onclick="location.href='receiveChangeCategory.ap?category=CR'">완료</button>
+			                    <button class="btn c" value="S" onclick="location.href='receiveChangeCategory.ap?category=S'">대기중</button>|
+			                    <button class="btn c" value="AR" onclick="location.href='receiveChangeCategory.ap?category=AR'">완료</button>
 			                    <br><br>
 				              	  수신한 전자 결재 총 ${ pi.listCount }건
 				                <br><br>
 	                    	</c:when>
-	                    	<c:when test="${ category eq 'SI'}">
+	                    	<c:when test="${ category eq 'S'}">
 	                    		<button class="btn a" onclick="location.href='receiveList.ap'">전체</button>|
-			                    <button class="btn c" value="SI" style="background: #4E73DF; color:white;" onclick="location.href='receiveChangeCategory.ap?category=SI'">대기중</button>|
-			                    <button class="btn c" value="CR" onclick="location.href='receiveChangeCategory.ap?category=CR'">완료</button>
+			                    <button class="btn c" value="S" style="background: #4E73DF; color:white;" onclick="location.href='receiveChangeCategory.ap?category=S'">대기중</button>|
+			                    <button class="btn c" value="AR" onclick="location.href='receiveChangeCategory.ap?category=AR'">완료</button>
 			                    <br><br>
 				              	  대기중 전자 결재 총 ${ pi.listCount }건
 				                <br><br>
 	                    	</c:when>
 	                    	<c:otherwise>
 	                    		<button class="btn a" onclick="location.href='receiveList.ap'">전체</button>|
-			                    <button class="btn c" value="SI" onclick="location.href='receiveChangeCategory.ap?category=SI'">대기중</button>|
-			                    <button class="btn c" value="CR" style="background: #4E73DF; color:white;" onclick="location.href='receiveChangeCategory.ap?category=CR'">완료</button>
+			                    <button class="btn c" value="S" onclick="location.href='receiveChangeCategory.ap?category=S'">대기중</button>|
+			                    <button class="btn c" value="AR" style="background: #4E73DF; color:white;" onclick="location.href='receiveChangeCategory.ap?category=AR'">완료</button>
 			                    <br><br>
 				              	  완료된 전자 결재 총 ${ pi.listCount }건
 				                <br><br>

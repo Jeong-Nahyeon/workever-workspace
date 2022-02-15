@@ -1,6 +1,7 @@
 package com.workever.wk.approval.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
 import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.user.model.vo.Dept;
+import com.workever.wk.user.model.vo.User;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
@@ -67,41 +70,57 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 	
 	// 내가 수신한 결재 카테고리 조회 카운트
-		@Override
-		public int receiveChangeCategoryListCount(String category, int loginUserNo) {
-			return aDao.receiveChangeCategoryListCount(sqlSession, category, loginUserNo);
-		}
+	@Override
+	public int receiveChangeCategoryListCount(String category, int loginUserNo) {
+		return aDao.receiveChangeCategoryListCount(sqlSession, category, loginUserNo);
+	}
 	
 	// 내가 수신한 결재 리스트 카테고리별 조회(ajax)
 	@Override
 	public ArrayList<Approval> receiveChangeCategoryList(String category, PageInfo pi, int loginUserNo) {
 		return aDao.receiveChangeCategoryList(sqlSession, category, pi, loginUserNo);
 	}
-
+	
+	// 작성자 부서명 조회
 	@Override
-	public int insertApproval(Approval apvl, ApprovalDayOffForm apvlDayOff, ApprovalLine apvlLine) {
-		return 0;
+	public String loginUSerDeptName(int loginUserNo) {		
+		return aDao.loginUserDeptName(sqlSession, loginUserNo);
+	}
+	
+	// 전체 부서 조회
+	@Override
+	public ArrayList<Dept> selectDeptList(int comNo) {
+		return aDao.selectDeptList(sqlSession, comNo);
+	}
+	
+	// 부서별 사원 조회
+	public ArrayList<User> selectDeptUserList(Map<String,Object> map){
+		return aDao.selectDeptUserList(sqlSession, map);
+	}
+	
+	// 사원 검색(ajax)
+	@Override
+	public ArrayList<User> userSearchList(Map<String, Object> map) {
+		return aDao.userSearchList(sqlSession, map);
+	}
+	
+	// 선택 사원 (ajax)
+	@Override
+	public User selectUser(int selectUserNo) {
+		return aDao.selectUser(sqlSession, selectUserNo);
 	}
 
+	// 전자 결재 작성
 	@Override
-	public int insertApproval(Approval apvl, ApprovalOverTimeForm apvlOverTime, ApprovalLine apvlLine) {
-		return 0;
+	public int insertApproval(Map<String, Object> map) {
+		return aDao.insertApproval(sqlSession, map);
 	}
+	
 
-	@Override
-	public int insertApproval(Approval apvl, ApprovalWorkReportForm apvlWorkReport, ApprovalLine apvlLine) {
-		return 0;
-	}
 
-	@Override
-	public int insertApproval(Approval apvl, ApprovalExpenseReportForm apvlExpenseReport, ApprovalLine apvlLine) {
-		return 0;
-	}
 
-	@Override
-	public int insertApproval(Approval apvl, ApprovalBuisnessTripForm apvlBuisnessTrip, ApprovalLine apvlLine) {
-		return 0;
-	}
+
+
 
 
 
