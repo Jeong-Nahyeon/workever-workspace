@@ -269,5 +269,6 @@
 		  from users u
 		  left join commute c on (u.user_no = c.user_no and cm_date = to_char(sysdate, 'yyyy-mm-dd'))
 		 where c.user_no is null
+		   and user_rank != '관리자'
 	</select>
 </mapper>
