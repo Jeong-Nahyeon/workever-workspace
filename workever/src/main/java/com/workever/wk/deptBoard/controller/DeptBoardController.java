@@ -1,22 +1,27 @@
 package com.workever.wk.deptBoard.controller;
 
+import java.io.File;
 import java.util.ArrayList;
-
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.community.model.vo.CommunityFiles;
+import com.workever.wk.community.model.vo.CommunityReply;
+import com.workever.wk.community.template.SaveCommunityFiles;
 import com.workever.wk.deptBoard.model.service.DeptBoardService;
 import com.workever.wk.deptBoard.model.vo.DeptBoard;
-import com.workever.wk.noticeBoard.model.vo.NoticeBoard;
 import com.workever.wk.user.model.vo.User;
 
 @Controller
@@ -38,7 +43,7 @@ public class DeptBoardController {
 		User loginUser = (User)session.getAttribute("loginUser");
 		
 		// 로그인한 사원의 부서명
-		String deptName = dService.selectDeptName(loginUser.getUserNo());
+		String deptName = dService.selectDeptName(loginUser.getDeptNo());
 		
 		// 해당 부서별 게시판 게시글 총 개수
 		int listCount = dService.selectListCount(loginUser.getDeptNo());
@@ -77,7 +82,7 @@ public class DeptBoardController {
 	public ModelAndView selectdeptBoard(int dbno, HttpSession session, ModelAndView mv) {
 		
 		// 로그인한 사원의 부서명
-		String deptName = dService.selectDeptName(((User)session.getAttribute("loginUser")).getUserNo());
+		String deptName = dService.selectDeptName(((User)session.getAttribute("loginUser")).getDeptNo());
 
 		// 조회수 증가
 		int result = dService.increaseCount(dbno);
@@ -92,6 +97,7 @@ public class DeptBoardController {
 			
 			mv.addObject("db", db)
 			  .addObject("list", list)
+			  .addObject("deptName", deptName)
 			  .setViewName("deptBoard/deptBoardDetailView");
 			
 			return mv;
@@ -107,25 +113,236 @@ public class DeptBoardController {
 					
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	// ↓ 테스트용 삭제 예정
-	
-	/** 부서별 게시글 작성 페이지 응답하는 메소드
-	 * @return : deptBoardForm.jsp
+	/** 부서별 게시글 작성 페이지 포워딩
+	 * @return
 	 */
 	@RequestMapping("enrollForm.dbo")
-	public String deptBoardForm() {
+	public String deptBoardEnrollForm(HttpSession session, Model m) {
 		
-		return "deptBoard/deptBoardForm";
+		// 로그인한 사원의 부서명
+		String deptName = dService.selectDeptName(((User)session.getAttribute("loginUser")).getDeptNo());		
+		
+		m.addAttribute("deptName", deptName);
+		
+		return "deptBoard/deptBoardEnrollForm";
 		
 	}
+	
+	@RequestMapping("insert.dbo")
+	public String insertDeptBoard(DeptBoard db, MultipartFile[] upfile, HttpSession session, Model m) {
+		
+		if(db.getDbCategory().equals("N")) { // 공지글인 경우
+			
+			db.setDbPin(1); // 상단 고정을 위한 pin 등록
+			
+		} else { // 일반글인 경우
+
+			db.setDbCategory(null);
+			
+		}
+		
+		ArrayList<CommunityFiles> list = new ArrayList<>();
+		
+		if(upfile != null) { // 첨부파일이 존재할 경우
+		
+		String savePath = "resources/community_upfiles/deptBoard_upfiles/";
+			
+			for(int i=0; i<upfile.length; i++) {
+				
+				if(!upfile[i].getOriginalFilename().equals("")) {
+					
+					String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
+					
+					CommunityFiles cf = new CommunityFiles();
+					cf.setCfOriginName(upfile[i].getOriginalFilename());
+					cf.setCfChangeName(changeName);
+					cf.setCfPath(savePath);
+					
+					list.add(cf);
+					
+				}
+				
+			}
+			
+		}
+			
+		int result = dService.insertDeptBoard(db, list);
+		
+		if(result > 0) { // 등록 성공
+			
+			session.setAttribute("successMsg", "성공적으로 등록되었습니다");
+			return "redirect:list.dbo";
+			
+		} else { // 등록 실패
+		
+		if(!list.isEmpty()) { // 첨부파일 있는 경우
+			
+			for(CommunityFiles file : list) {
+				
+				new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
+				// 삭제 시키고자하는 파일을 찾아서 File 객체에 담아서 삭제		
+			
+			}
+			
+		}
+		
+		m.addAttribute("errorMsg", "부서별 게시글 등록 실패");
+		return "common/errorPage";
+		
+		}
+		
+	}
+	
+	@RequestMapping("updateForm.dbo")
+	public ModelAndView deptBoardUpdateForm(int dbno, HttpSession session, ModelAndView mv) {
+		
+		// 로그인한 사원의 부서명
+		String deptName = dService.selectDeptName(((User)session.getAttribute("loginUser")).getDeptNo());		
+		
+		DeptBoard db = dService.selectDeptBoard(dbno);
+		
+		ArrayList<CommunityFiles> list = dService.selectCommunityFileList(dbno);
+		
+		mv.addObject("db", db)
+		  .addObject("list", list)
+		  .addObject("deptName", deptName)
+		  .setViewName("deptBoard/deptBoardUpdateForm");
+		
+		return mv;
+		
+	}
+	
+	@RequestMapping("update.dbo")
+	public String updateDeptBoard(String[] deleteNo, DeptBoard db, MultipartFile[] upfile, HttpSession session, Model m) {
+		
+		if(db.getDbCategory().equals("N")) { // 공지글인 경우
+			
+			db.setDbPin(1); // 상단 고정을 위한 pin 등록
+			
+		} else { // 일반글인 경우
+
+			db.setDbCategory(null);
+			
+		}
+								
+		if(deleteNo != null) { // 삭제할 첨부파일이 있을 경우 
+			
+			for(String deleteFileNo : deleteNo) {
+				
+				int cfNo = Integer.parseInt(deleteFileNo);
+				
+				// 내부 저장경로에서 삭제
+				CommunityFiles cf = dService.selectCommunityFile(cfNo);
+				new File(session.getServletContext().getRealPath(cf.getCfPath() + cf.getCfChangeName())).delete();
+								
+				// DB에서 삭제
+				dService.deleteCommunityFile(cfNo);
+				
+			}
+			
+		}
+		
+		ArrayList<CommunityFiles> list = new ArrayList<>();
+		
+		if(upfile != null) { // 첨부파일이 존재할 경우
+			
+			String savePath = "resources/community_upfiles/deptBoard_upfiles/";
+			
+			for(int i=0; i<upfile.length; i++) {
+				
+				if(!upfile[i].getOriginalFilename().equals("")) {
+					
+					String changeName = SaveCommunityFiles.saveFile(upfile[i], session, savePath);
+					
+					CommunityFiles cf = new CommunityFiles();
+					cf.setCfRefNo(db.getDbNo());
+					cf.setCfOriginName(upfile[i].getOriginalFilename());
+					cf.setCfChangeName(changeName);
+					cf.setCfPath(savePath);
+					
+					list.add(cf);
+					
+				}
+				
+			}
+			
+		}
+		
+		int result = dService.updateDeptBoard(db, list);
+		
+		if(result > 0) { // 수정 성공
+			
+			session.setAttribute("successMsg", "성공적으로 수정되었습니다");
+			return "redirect:list.dbo";
+			
+		} else { // 수정 실패
+			
+			if(!list.isEmpty()) { // 첨부파일 있는 경우
+				
+				for(CommunityFiles file : list) {
+					
+					new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
+				
+				}
+				
+			}
+			
+			m.addAttribute("errorMsg", "부서별 게시글 수정 실패");
+			return "common/errorPage";
+			
+		}
+		
+	}
+	
+	@RequestMapping("delete.dbo")
+	public String deleteDeptBoard(int dbno, HttpSession session, Model m) {
+		
+		int result1 = dService.deleteDeptBoard(dbno);
+		
+		ArrayList<CommunityFiles> list = new ArrayList<>();
+		list = dService.selectCommunityFileList(dbno);
+		
+		int result2 = 1;
+		if(!list.isEmpty()) { // 첨부파일 있을 경우
+			
+			result2 = dService.deleteCommunityFileList(dbno);
+			
+			for(CommunityFiles file : list) {
+				
+				new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
+			
+			}
+			
+		} 
+		
+		if(result1 * result2 > 0) { // 삭제 성공
+			
+			session.setAttribute("successMsg", "성공적으로 삭제되었습니다.");
+			return "redirect:list.dbo";
+			
+		} else { // 삭제 실패
+			
+			m.addAttribute("errorMsg", "부서별 게시글 삭제 실패");
+			return "common/errorPage";
+			
+		}
+		
+	}	
+	
+	@ResponseBody
+	@RequestMapping(value="rlist.dbo", produces="application/json; charset=UTF-8")
+	public String ajaxSelectReplyList(int dbno) {
+		System.out.println(dbno);
+		ArrayList<CommunityReply> list = dService.selectReplyList(dbno);
+		
+		return new Gson().toJson(list);
+		
+	}
+		
+		
+	// ↓ 테스트용 삭제 예정
+	
+
 	
 	
 	/** 나의 부서별 게시글 목록 페이지 응답하는 메소드

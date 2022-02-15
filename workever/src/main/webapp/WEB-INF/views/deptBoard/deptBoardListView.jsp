@@ -125,11 +125,50 @@
         text-align:center;
         line-height: 25px;
     }
+    
+    /* 요청처리 여부 확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
 
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+      
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
 
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+		
+	</c:if>
+	
 	<div class="wrapper">
 		
 		<jsp:include page="../common/header.jsp" />
@@ -165,8 +204,7 @@
 		                </select>
 		              </div>
 		              <div class="col-sm-6 board-header-area-right">
-		                <!-- 관리자일 경우에만 보임 -->
-		                <button class="btn btn-sm">글작성</button>
+		                <button type="button" class="btn btn-sm" onclick="location.href='enrollForm.dbo';">글작성</button>
 		              </div>
 		            </div>
 		            <!-- /.card-header -->
@@ -207,7 +245,14 @@
 						                      <div class="board-title-group">
 						                        <div class="board-title">
 						                          <div class="board-title-setting"> <!-- 게시글 제목 -->
-						                          	${ b.dbTitle }
+						                          	<c:choose>
+							                          	<c:when test="${ not empty b.dbCategory }">
+							                          		<b>${ b.dbTitle }</b>
+							                          	</c:when>
+							                          	<c:otherwise>
+							                          		${ b.dbTitle }
+							                          	</c:otherwise>
+						                          	</c:choose>
 						                          </div>
 						                        </div>
 						
@@ -299,6 +344,37 @@
 	</div>
 	<!-- ./wrapper -->
 	
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+	
+	
+	
+	<!-- 스크립트 작성 영역 -->	
 	
 	<!-- 오래된순으로 조회 시 => 오래된순 옵션 유지 -->
 	<c:if test="${ not empty orderList }">

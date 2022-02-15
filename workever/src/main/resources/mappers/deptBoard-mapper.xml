@@ -36,14 +36,17 @@
 		<result column="cr_ref_no" property="crRefNo" />
 		<result column="cr_date" property="crDate" />
 		<result column="cr_status" property="crStatus" />
+		<result column="user_rank" property="userRank" />
+		<result column="user_name" property="userName" />
+		<result column="userName" property="userFilePath" />
+		<result column="dept_name" property="deptName" />
 	</resultMap>
 	
 	<select id="selectDeptName" resultType="string">
-		select
+		 select
 		       dept_name
-		  from d_board
-		  join dept using (dept_no)
-		 where user_no = #{userNo}
+		  from dept
+		 where dept_no = #{deptNo}
 	</select>
 	
 	<select id="selectListCount" resultType="_int">
@@ -136,6 +139,134 @@
 		  from community_files
 		 where cf_category = 'D'
 		   and cf_ref_no = #{dbNo}
-	</select>	
+	</select>
 	
+	<insert id="insertDeptBoard">
+		insert
+		  into d_board
+		  (
+	  	    db_no
+	  	  , dept_no  
+	  	  , user_no
+	  	  , db_title
+	  	  , db_content
+	  	  , db_category
+	  	  , db_pin
+		  )
+		  values
+		  (
+		    seq_d_board.nextval
+		  , #{deptNo}  
+		  , #{userNo}
+		  , #{dbTitle}
+		  , #{dbContent}
+		  , #{dbCategory}
+		  , #{dbPin}  	
+		  )
+	</insert>		
+
+	<insert id="insertCommunityFileList">
+		insert
+		  into community_files
+		  (
+		    cf_no
+		  , cf_category
+		  , cf_ref_no
+		  , cf_origin_name
+		  , cf_change_name
+		  , cf_path
+		  )  
+		  values
+		  (
+		    seq_community_files.nextval
+		  , 'D'
+		  , seq_d_board.currval
+		  , #{cfOriginName}
+		  , #{cfChangeName}
+		  , #{cfPath}
+		  )
+	</insert>
+
+	<select id="selectCommunityFile" resultMap="CommunityFilesResult">
+		select
+		       cf_change_name
+		     , cf_path
+		  from community_files
+		 where cf_no = #{cfNo} 
+	</select>
+	
+	<delete id="deleteCommunityFile">
+		delete
+		  from community_files
+		 where cf_no = #{cfNo} 
+	</delete>
+	
+	<update id="updateDeptBoard">
+		update
+			   d_board
+		   set db_title = #{dbTitle}
+		     , db_content = #{dbContent}
+		     , db_category = #{dbCategory}
+		     , db_pin = #{dbPin}
+		     , db_date = sysdate
+		 where db_no = #{dbNo}   	   
+	</update>
+	
+	<insert id="updateCommunityFileList">
+		insert
+		  into community_files
+		  (
+		    cf_no
+		  , cf_category
+		  , cf_ref_no
+		  , cf_origin_name
+		  , cf_change_name
+		  , cf_path
+		  )  
+		  values
+		  (
+		    seq_community_files.nextval
+		  , 'D'
+		  , #{cfRefNo}
+		  , #{cfOriginName}
+		  , #{cfChangeName}
+		  , #{cfPath}
+		  )
+	</insert>
+	
+	<update id="deleteDeptBoard">
+		update
+			   d_board
+		   set db_status = 'N'
+		 where db_no = #{dbNo}   	   
+	</update>
+	
+	<delete id="deleteCommunityFileList">
+		delete
+		  from community_files
+		 where cf_ref_no = #{dbNo}	
+	</delete>
+	
+	<select id="selectReplyList" resultMap="CommunityReplyResult">
+		select
+		       cr_no
+		     , cr.user_no
+		     , user_rank     
+		     , user_name
+		     , user_filepath
+		     , dept_name
+		     , cr_category
+		     , cr_content
+		     , cr_ref_no
+		     , to_char(cr_date, 'YYYY.MM.DD AM HH:MI:SS') as "cr_date"
+		  from community_reply cr
+		  join users u on ( cr.user_no = u.user_no)
+		  join dept d on ( u.dept_no = d.dept_no)
+		 where cr_status = 'Y'
+		   and cr_category = 'D'
+		   and cr_ref_no = #{dbNo}
+		 order
+		    by cr_no desc
+	</select>			
+		
 </mapper>

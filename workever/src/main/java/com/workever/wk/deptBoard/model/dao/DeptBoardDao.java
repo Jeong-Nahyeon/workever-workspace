@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
+import com.workever.wk.community.model.vo.CommunityReply;
 import com.workever.wk.deptBoard.model.vo.DeptBoard;
+import com.workever.wk.noticeBoard.model.vo.NoticeBoard;
 
 @Repository
 public class DeptBoardDao {
@@ -18,9 +20,9 @@ public class DeptBoardDao {
 	 * @param userNo
 	 * @return
 	 */
-	public String selectDeptName(SqlSessionTemplate sqlSession, String userNo) {
+	public String selectDeptName(SqlSessionTemplate sqlSession, String deptNo) {
 		
-		return sqlSession.selectOne("deptBoardMapper.selectDeptName", userNo);
+		return sqlSession.selectOne("deptBoardMapper.selectDeptName", deptNo);
 		
 	}
 	
@@ -104,7 +106,119 @@ public class DeptBoardDao {
 		
 	}
 	
+	/**  부서별 게시글 등록
+	 * @param sqlSession
+	 * @param db
+	 * @return
+	 */
+	public int insertDeptBoard(SqlSessionTemplate sqlSession, DeptBoard db) {
+		
+		return sqlSession.insert("deptBoardMapper.insertDeptBoard", db);
+		
+	}
 	
+	/** 부서별 게시글 첨부파일 등록
+	 * @param sqlSession
+	 * @param list
+	 * @return
+	 */
+	public int insertCommunityFileList(SqlSessionTemplate sqlSession, ArrayList<CommunityFiles> list) {
+		
+		int result = 0;
+		
+		for(CommunityFiles file : list) {
+			
+			result = sqlSession.insert("deptBoardMapper.insertCommunityFileList", file);
+			
+		}
+		
+		return result;
+		
+	}
 	
+	/** 파일번호로 부서별 게시글 첨부파일 조회
+	 * @param sqlSession
+	 * @param cfNo
+	 * @return
+	 */
+	public CommunityFiles selectCommunityFile(SqlSessionTemplate sqlSession, int cfNo) {
+		
+		return sqlSession.selectOne("deptBoardMapper.selectCommunityFile", cfNo);
+		
+	}
+	
+	/** 파일번호로 부서별 게시글 첨부파일 삭제
+	 * @param sqlSession
+	 * @param cfNo
+	 * @return
+	 */
+	public int deleteCommunityFile(SqlSessionTemplate sqlSession, int cfNo) {
+		
+		return sqlSession.delete("deptBoardMapper.deleteCommunityFile", cfNo);
+		
+	}
+	
+	/** 부서별 게시글 수정
+	 * @param sqlSession
+	 * @param nb
+	 * @return
+	 */
+	public int updateDeptBoard(SqlSessionTemplate sqlSession, DeptBoard db) {
+		
+		return sqlSession.update("deptBoardMapper.updateDeptBoard", db);
+		
+	}
+	
+	/** 부서별 게시글 수정 시 새로운 첨부파일 등록
+	 * @param sqlSession
+	 * @param list
+	 * @return
+	 */
+	public int updateCommunityFileList(SqlSessionTemplate sqlSession, ArrayList<CommunityFiles> list) {
+		
+		int result = 0;
+		
+		for(CommunityFiles file : list) {
+			
+			result = sqlSession.insert("deptBoardMapper.updateCommunityFileList", file);
+			
+		}
+		
+		return result;
+		
+	}
+	
+	/** 부서별 게시글 삭제
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public int deleteDeptBoard(SqlSessionTemplate sqlSession, int dbNo) {	
+		
+		return sqlSession.update("deptBoardMapper.deleteDeptBoard", dbNo);
+		
+	}
+	
+	/** 부서별 게시글 첨부파일 삭제
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public int deleteCommunityFileList(SqlSessionTemplate sqlSession, int dbNo) {
+		
+		return sqlSession.delete("deptBoardMapper.deleteCommunityFileList", dbNo);
+		
+	}
+	
+	/** 게시글 번호로 댓글 목록 조회
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public ArrayList<CommunityReply> selectReplyList(SqlSessionTemplate sqlSession, int dbNo) {
+		
+		return (ArrayList)sqlSession.selectList("deptBoardMapper.selectReplyList", dbNo);
+		
+	}
 	
 }

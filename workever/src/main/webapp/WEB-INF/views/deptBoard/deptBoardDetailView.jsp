@@ -174,7 +174,36 @@
       color:lightgray;
       text-align:center;
     }
+
+    /* 요청처리 여부 확인 모달창 영역 */
+    #confirm-modal h6{
+      margin-left:220px;
+    }
+
+    #confirm-modal .modal-body{
+      height:130px;
+      text-align:center;
+      line-height:100px;
+    }
+   
+    .confirm-modal-btns{
+      /* border:1px solid red; */
+      display: inline-block;
+      margin-right:160px;
+    }
     
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
+    }
+
+    #confirm-btn{
+      border:1px solid #4E73DF;
+      background: #4E73DF;
+      color: white;
+    }
+        
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -207,11 +236,14 @@
 
 					<!-- 수정/삭제 버튼 영역 -->
 					<div class="card-header board-btns-area"> 
-					<!-- 본인 게시글일 경우 -->
-					<button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href='';">수정</button>
-					<button type="button" class="btn btn-sm btn-default delete-btn" onclick="location.href='';">삭제</button>
-					<!-- 공통 -->
-					<button type="button" class="btn btn-sm list-btn" onclick="location.href='list.dbo';">목록</button>
+						<c:if test="${ db.userNo eq loginUser.userNo }">
+							<!-- 본인 게시글일 경우 -->
+							<button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href='updateForm.dbo?dbno=${ db.dbNo }';">수정</button>
+							<button type="button" id="delete-modal-btn" class="btn btn-sm btn-default delete-btn">삭제</button>
+						</c:if>
+						<!-- 공통 -->
+						<button type="button" class="btn btn-sm list-btn" onclick="location.href='list.dbo';">목록</button>
+					
 					</div>
 					<!-- /.card-header -->
 
@@ -224,9 +256,14 @@
 								<td style="padding-top:0">${ db.dbTitle }</td>
 								<th style="padding:0px 20px 20px 20px">카테고리</th>
 								<td style="padding-top:0">
-									<c:if test="${ not empty db.dbCategory }">
-										공지
-									</c:if>
+									<c:choose>
+										<c:when test="${ not empty db.dbCategory }">
+											공지
+										</c:when>
+										<c:otherwise>
+											일반
+										</c:otherwise>	
+									</c:choose>
 								</td>
 							</tr>
 							<tr>
@@ -244,7 +281,7 @@
 										</c:when>
 										<c:otherwise>
 											<c:forEach var="cf" items="${ list }">
-												<a href="${ cf.cfPath }${ cf.cfOriginName }" download="${ cf.cfChangeName }" >${ cf.cfChangeName }</a><br>
+												<a href="${ cf.cfPath }${ cf.cfChangeName }" download="${ cf.cfOriginName }" >${ cf.cfOriginName }</a><br>
 											</c:forEach>
 										</c:otherwise>
 									</c:choose>
@@ -286,57 +323,57 @@
 
 					<!-- 댓글 목록 영역 -->
 					<table class="reply-list">
-					<tr>
-						<td class="reply-list-img" rowspan="2">
-						<!-- case 1. 프로필 이미지 있을 경우 -->
-						<img class="img-circle img-bordered-sm reply-img">
-						<!-- case 2. 프로필 이미지 없을 경우 -->
-						<!-- <i class="fas fa-user-circle fa-3x reply-no-img"></i> -->
-						</td>
-						<td class="reply-list-name">
-						<b>김말똥</b>
-						</td>
-						<td class="reply-list-btns">
-						<!-- 본인 댓글일 경우 -->
-						<a>수정</a>
-						<a>삭제</a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-						<span>2022.01.00 00:00</span>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td colspan="3">
-						<p class="reply-content">댓글 내용 영역입니다.</p>
-						</td>
-					</tr>
-					</table>
-					
-					<table class="reply-list">
-					<tr>
-						<td class="reply-list-img" rowspan="2">
-						<i class="fas fa-user-circle fa-3x reply-no-img"></i>
-						</td>
-						<td class="reply-list-name">
-						<b>김말순</b>
-						</td>
-						<td class="reply-list-btns">
-						</td>
-					</tr>
-					<tr>
-						<td>
-						<span>2022.01.00 00:00</span>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td colspan="3">
-						<p class="reply-content">댓글 내용 영역입니다.</p>
-						</td>
-					</tr>
+						<tr>
+							<td class="reply-list-img" rowspan="2">
+								<!-- case 1. 프로필 이미지 있을 경우 -->
+								<img class="img-circle img-bordered-sm reply-img">
+								<!-- case 2. 프로필 이미지 없을 경우 -->
+								<!-- <i class="fas fa-user-circle fa-3x reply-no-img"></i> -->
+							</td>
+							<td class="reply-list-name">
+								<b>김말똥</b>
+							</td>
+							<td class="reply-list-btns">
+								<!-- 본인 댓글일 경우 -->
+								<a>수정</a>
+								<a>삭제</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<span>2022.01.00 00:00</span>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+							<p class="reply-content">댓글 내용 영역입니다.</p>
+							</td>
+						</tr>
+						</table>
+						
+						<table class="reply-list">
+						<tr>
+							<td class="reply-list-img" rowspan="2">
+							<i class="fas fa-user-circle fa-3x reply-no-img"></i>
+							</td>
+							<td class="reply-list-name">
+							<b>김말순</b>
+							</td>
+							<td class="reply-list-btns">
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<span>2022.01.00 00:00</span>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+							<p class="reply-content">댓글 내용 영역입니다.</p>
+							</td>
+						</tr>
 					</table>              
 
 				</div>
@@ -360,7 +397,88 @@
     </div>
     <!-- ./wrapper -->
 
-
+    <!-- 요청처리 여부 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="confirm-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b>삭제하시겠습니까?</b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="confirm-modal-btns">
+	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
+	            <button id="confirm-btn" class="btn btn-sm">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+	
+	
+	
+	<script>
+		$(function(){
+			
+			// 실시간으로 댓글 조회
+			selectReplyList();
+			// setInterval(topBoardList, 2000); // 2초마다 조회
+			
+			// 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
+		    $("#delete-modal-btn").click(function(){
+		    	
+			      $("#confirm-modal").modal({backdrop: "static"});
+			      
+			});
+		    
+			// 확인 버튼 클릭 시 삭제 요청 처리
+		    $("#confirm-btn").click(function(){
+		    	
+		    	  location.href = "delete.dbo?dbno=${ db.dbNo }";
+			      
+			});
+			
+		});
+		
+		// 댓글 목록 조회용 ajax
+		function selectReplyList(){
+			
+			$.ajax({
+				url:"rlist.dbo",
+				data:{dbno:${ db.dbNo }},
+				success:function(list){
+					
+					console.log(list);
+					
+					let reply = "";
+					
+					for(let i in list){
+						
+						reply += 
+						
+					}
+					
+				}, error:function(){
+					
+    				console.log("댓글 리스트 조회용 ajax 통신 실패");		
+    				
+				}
+				
+			});
+			
+		}
+	</script>	
 
 </body>
 </html>
