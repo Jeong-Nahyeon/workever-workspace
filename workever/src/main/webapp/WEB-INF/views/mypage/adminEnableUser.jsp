@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,36 +63,19 @@
                             <th style="width: 100px">상태</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        
-                        <tr>
-                            <td><input type="checkbox" name="" id=""></td>
-                            <td>홍길동</td>
-                            <td>hong123@gmail.com</td>
-                            <td>010-2222-3333</td>
-                            <td>
-                                <a href="">미승인</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="" id=""></td>
-                            <td>김미애</td>
-                            <td>hong123@gmail.com</td>
-                            <td>010-2222-6666</td>
-                            <td>
-                                <a href="">미승인</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="" id=""></td>
-                            <td>홍길동</td>
-                            <td>hong123@gmail.com</td>
-                            <td>010-2222-4444</td>
-                            <td>
-                                <a href="">미승인</a>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <c:forEach var="d" items="disableUser">
+                        <tbody>
+                        	<tr>
+                                <td><input type="checkbox" name="" id=""></td>
+                                <td>${d.userName}</td>
+                                <td>${d.userEmail}</td>
+                                <td>${</td>
+                                <td>
+                                    <a href="">미승인</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </c:forEach>
                 </table>
             </div>
             <!-- /.card-body -->

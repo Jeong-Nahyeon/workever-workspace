@@ -236,7 +236,7 @@
   	</update>
   	
   	<!-- 사원승인 -> 미승인 사원 조회 -->
-  	<select id="selectDisableUser" resultMap="userMapper">
+  	<select id="selectDisableUser" resultMap="userResult">
   		select
 		       user_email
 		     , user_phone
