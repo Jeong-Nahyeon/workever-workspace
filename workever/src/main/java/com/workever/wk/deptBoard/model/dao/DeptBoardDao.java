@@ -10,7 +10,6 @@ import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
 import com.workever.wk.deptBoard.model.vo.DeptBoard;
-import com.workever.wk.noticeBoard.model.vo.NoticeBoard;
 
 @Repository
 public class DeptBoardDao {
@@ -199,6 +198,17 @@ public class DeptBoardDao {
 		
 	}
 	
+	/** 부서별 게시글 삭제 시 해당 게시글의 댓글 목록 삭제
+	 * @param sqlSession
+	 * @param dbNo
+	 * @return
+	 */
+	public int deleteCommunityReplyList(SqlSessionTemplate sqlSession, int dbNo) {
+		
+		return sqlSession.update("deptBoardMapper.deleteCommunityReplyList", dbNo);
+		
+	}
+	
 	/** 부서별 게시글 첨부파일 삭제
 	 * @param sqlSession
 	 * @param dbNo
@@ -220,5 +230,61 @@ public class DeptBoardDao {
 		return (ArrayList)sqlSession.selectList("deptBoardMapper.selectReplyList", dbNo);
 		
 	}
+	
+	/** 댓글 등록
+	 * @param sqlSession
+	 * @param cr
+	 * @return
+	 */
+	public int insertReply(SqlSessionTemplate sqlSession, CommunityReply cr) {
+		
+		return sqlSession.insert("deptBoardMapper.insertReply", cr);
+		
+	}
+	
+	/** 댓글 등록 시 해당 게시글 댓글 개수 증가
+	 * @param sqlSession
+	 * @param cr
+	 * @return
+	 */
+	public int increaseReplyCount(SqlSessionTemplate sqlSession, CommunityReply cr) {
+		
+		return sqlSession.update("deptBoardMapper.increaseReplyCount", cr);
+		
+	}
+	
+	/** 댓글 수정
+	 * @param sqlSession
+	 * @param cr
+	 * @return
+	 */
+	public int updateReply(SqlSessionTemplate sqlSession, CommunityReply cr) {
+		
+		return sqlSession.update("deptBoardMapper.updateReply", cr);
+		
+	}
+	
+	/** 댓글 삭제
+	 * @param sqlSession
+	 * @param cr
+	 * @return
+	 */
+	public int deleteReply(SqlSessionTemplate sqlSession, CommunityReply cr) {
+		
+		return sqlSession.update("deptBoardMapper.deleteReply", cr);
+		
+	}
+	
+	/** 댓글 삭제 시 해당 게시글 댓글 총 개수 감소
+	 * @param sqlSession
+	 * @param cr
+	 * @return
+	 */
+	public int decreaseReplyCount(SqlSessionTemplate sqlSession, CommunityReply cr) {
+		
+		return sqlSession.update("deptBoardMapper.decreaseReplyCount", cr);
+		
+	}
+	
 	
 }

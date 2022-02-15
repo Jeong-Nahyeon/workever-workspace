@@ -78,6 +78,12 @@ public class DeptBoardController {
 		
 	}
 
+	/** 부서별 게시글 상세 조회
+	 * @param dbno : 사용자가 요청한 게시글 번호
+	 * @param session
+	 * @param mv
+	 * @return
+	 */
 	@RequestMapping("detail.dbo")
 	public ModelAndView selectdeptBoard(int dbno, HttpSession session, ModelAndView mv) {
 		
@@ -128,6 +134,13 @@ public class DeptBoardController {
 		
 	}
 	
+	/** 부서별 게시글 등록 후 부서별 게시글 목록 페이지 url 재요청
+	 * @param db : 사용자가 입력한 부서별 게시글 정보
+	 * @param upfile : 사용자가 등록한 첨부파일
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("insert.dbo")
 	public String insertDeptBoard(DeptBoard db, MultipartFile[] upfile, HttpSession session, Model m) {
 		
@@ -193,6 +206,12 @@ public class DeptBoardController {
 		
 	}
 	
+	/** 부서별 게시글 수정  페이지 포워딩
+	 * @param dbno : 사용자가 요청한 게시글 번호
+	 * @param session
+	 * @param mv
+	 * @return
+	 */
 	@RequestMapping("updateForm.dbo")
 	public ModelAndView deptBoardUpdateForm(int dbno, HttpSession session, ModelAndView mv) {
 		
@@ -212,6 +231,14 @@ public class DeptBoardController {
 		
 	}
 	
+	/** 새로운 게시글 내용 업데이트, 기존의 첨부파일 삭제, 새로운 첨부파일 등록 후 부서별 게시글 목록 페이지 url 재요청 
+	 * @param deleteNo : 사용자가 요청한 삭제할 첨부파일 번호
+	 * @param db : 사용자가 수정한 게시글 정보
+	 * @param upfile : 사용자가 새로 등록한 첨부파일
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("update.dbo")
 	public String updateDeptBoard(String[] deleteNo, DeptBoard db, MultipartFile[] upfile, HttpSession session, Model m) {
 		
@@ -294,6 +321,12 @@ public class DeptBoardController {
 		
 	}
 	
+	/** 게시글 삭제 후 부서별 게시글 목록 페이지 url 재요청
+	 * @param dbno : 사용자가 요청한 삭제할 게시글번호
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("delete.dbo")
 	public String deleteDeptBoard(int dbno, HttpSession session, Model m) {
 		
@@ -329,15 +362,66 @@ public class DeptBoardController {
 		
 	}	
 	
+	/** [Ajax] 부서별 게시글에 달린 댓글 목록 조회 후 해당 댓글 리스트 응답 데이터로 전달
+	 * @param dbno : 참조할 게시글 번호
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="rlist.dbo", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReplyList(int dbno) {
-		System.out.println(dbno);
+
 		ArrayList<CommunityReply> list = dService.selectReplyList(dbno);
 		
 		return new Gson().toJson(list);
 		
 	}
+	
+	/** [Ajax] 부서별 게시글에 새로운 댓글 등록 후 처리 상태 응답 데이터로 전달
+	 * @param cr : 사용자가 입력한 댓글 정보
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("rinsert.dbo")
+	public String ajaxInsertReply(CommunityReply cr, HttpSession session) {
+
+		cr.setUserNo(((User)session.getAttribute("loginUser")).getUserNo());
+		
+		int result = dService.insertReply(cr);
+		
+		return result > 0 ? "success" : "fail";
+		
+	}
+	
+	/** [Ajax] 부서별 게시글에 달린 기존 댓글 수정 후 처리 상태 응답 데이터로 전달
+	 * @param cr : 사용자가 수정한 댓글 정보
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("rupdate.dbo")
+	public String ajaxUpdateReply(CommunityReply cr) {
+
+		int result = dService.updateReply(cr);
+		
+		return result > 0 ? "success" : "fail";
+		
+	}
+	
+	/** [Ajax] 부서별 게시글에 달린 기존 댓글 삭제 후 처리 상태 응답 데이터로 전달
+	 * @param cr : 사용자가 삭제 요청한 댓글 정보
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("rdelete.dbo")
+	public String ajaxDeleteReply(CommunityReply cr) {
+
+		int result = dService.deleteReply(cr);
+		
+		return result > 0 ? "success" : "fail";
+		
+	}	
+	
+	
 		
 		
 	// ↓ 테스트용 삭제 예정
