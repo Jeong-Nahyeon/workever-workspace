@@ -104,7 +104,7 @@
 								<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
 								<p>${p.proDept}</p>
 								<br><br>
-								<c:if test="${proGrantWhether}=='Y'">
+								<c:if test="${proGrantWhether}.equlas('on')">
 									<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i>
 	                        	</c:if>
 	                        	<br><br>

@@ -60,9 +60,10 @@ public class projectController {
 		
 		System.out.println(p);
 		int result = pService.insertProject(p);
+		int result1 = pService.insertMember(p);
+		int result2 = pService.insertDept(p);
 		
-		
-		if(result > 0) { 
+		if(result > 0 && result1 > 0 && result2 > 0) { 
 			session.setAttribute("alertMsg", "프로젝트가 성공적으로 생성되었습니다.");
 			return "redirect:list.pro";
 			

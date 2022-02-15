@@ -20,5 +20,5 @@ public class Project {
 	 private int proNumberPeople;
 	 private String proDept;
 	 private String deptUserName;
-	 private int deptUserNo;
+	 private String deptUserNo;
 }

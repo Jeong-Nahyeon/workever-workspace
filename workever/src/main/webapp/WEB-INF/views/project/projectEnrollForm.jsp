@@ -203,6 +203,15 @@
 					<div class="ParticipationPerson">
 
 					</div>
+					
+				<input type="hidden" id="proNumberPeople" name="proNumberPeople">
+				<script>
+				function count(){
+					var count = $("input[name='deptUserNo']:checked").length;
+					document.getElementById('proNumberPeople').value = count;
+				}
+				</script>
+				
 				<script> 
 				
 				$(document).ready(function(){
@@ -400,7 +409,7 @@
 					});
 				});
 				
-	
+				
 				
 				
 		
@@ -410,7 +419,7 @@
 				</div>
 						
 				
-				<button class="EnrollBtn">프로젝트 생성하기</button>
+				<button class="EnrollBtn" onclick="count()">프로젝트 생성하기</button>
 				<br>
 			</form>
 			

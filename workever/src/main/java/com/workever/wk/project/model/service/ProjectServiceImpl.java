@@ -42,6 +42,19 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 	
 	@Override
+	public int insertMember(Project p) {
+		return pDao.insertMember(sqlSession, p);
+	}
+	
+	@Override
+	public int insertDept(Project p) {
+		return pDao.insertDept(sqlSession, p);
+	}
+	
+	
+	
+	
+	@Override
 	public Project detailProject(int projectNo) {
 		return null;
 	}
@@ -55,6 +68,7 @@ public class ProjectServiceImpl implements ProjectService{
 	public int updatetProject(Project p) {
 		return 0;
 	}
+
 
 
 }

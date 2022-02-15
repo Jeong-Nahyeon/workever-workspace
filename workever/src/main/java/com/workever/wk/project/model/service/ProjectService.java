@@ -13,6 +13,13 @@ public interface ProjectService{
 	// 프로젝트 작성하기 서비스
 	int insertProject(Project p);
 	
+	// 프로젝트 참여멤버  insert
+	int insertMember(Project p);
+	
+	// 프로젝트 참여부서 insert
+	int insertDept(Project p);
+	
+	
 	// 프로젝트 상세조회 서비스
 	Project detailProject(int projectNo);
 	

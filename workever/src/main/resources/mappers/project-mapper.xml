@@ -43,27 +43,54 @@
 	</select>
 	
 	
-	
-	<insert id="insertBoard"> 이거도 고쳐야됨
+	<!-- 프로젝트 내용 insert  -->
+	<insert id="insertProject">
 		insert
-		  into board 이거도 고쳐야됨
+		  into PROJECT
 		  	 (
 			   PRO_NO
 			 , PRO_TITLE
 			 , PRO_GRANT_WHETHER
-			 , PRO_CREATE_DATE
-			 , PRO_STATUS
 			 , PRO_MANAGER
 			 , PRO_NUMBERPEOPLE
 		     )
 		values
 		     (
 		       seq_project.nextval
-		     , #{projectName}
-		     , #{proGrant}
-		     <!-- , #{dept} -->
-		     , #{originName}
-		     , #{changeName}		  
+		     , #{proTitle}
+		     , #{proGrantWhether}
+		     , #{proManager}
+		     , #{proNumberPeople}
+		     )
+	</insert>
+	
+	<!-- 프로젝트 참여멤버  insert  -->
+	<insert id="insertMember">
+		insert
+		  into PROJECT_MEMBER
+		  	 (
+		  	   PRO_NO
+			 , USER_NO
+		     )
+		values
+		     (
+		  	   seq_project.currval
+		  	 , #{userNo}
+		     )
+	</insert>
+	
+	<!-- 프로젝트 참여부서 insert  -->
+	<insert id="insertDept">
+		insert
+		  into PROJECT_DEPT 
+		  	 (
+		  	   PRO_NO
+			 , DEPT_NO
+		     )
+		values
+		     (
+		  	   seq_project.currval
+		  	 , #{deptNo}
 		     )
 	</insert>
 	
