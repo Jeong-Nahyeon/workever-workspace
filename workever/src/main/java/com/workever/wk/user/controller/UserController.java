@@ -1,6 +1,10 @@
 package com.workever.wk.user.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.workever.wk.user.model.service.EmailService;
 import com.workever.wk.user.model.service.UserService;
@@ -43,9 +48,11 @@ public class UserController {
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(u.getUserPwd(), loginUser.getUserPwd())) {
 			session.setAttribute("loginUser", loginUser);
-			System.out.println(loginUser);
+			//System.out.println(loginUser);
 			return "user/main";
 		}else {
+			//System.out.println(loginUser);
+			//System.out.println(u.getUserPwd());
 			model.addAttribute("errorMsg", "로그인 실패");
 			return "common/errorPage";
 		}
@@ -270,7 +277,7 @@ public class UserController {
 	}
 	
 	// 마이페이지 수정페이지 이동
-	@RequestMapping("update.us")
+	@RequestMapping("updateForm.us")
 	public String updateProfilePage() {
 		return "mypage/updateUserProfile";
 	}
@@ -312,6 +319,111 @@ public class UserController {
 			model.addAttribute("errorMsg", "회원정보 수정 실패");
 			return "common/errorPage";
 		}
+	}
+	
+	// 사원 프로필변경 서비스
+	@RequestMapping("update.us")
+	public String updateUserProfile(User u, MultipartFile upfile, HttpSession session, Model model) {
+		
+		// 새로운 첨부파일이 있을 경우
+		//System.out.println(upfile.toString());
+		if(upfile.getSize() != 0) {
+			
+			// 기존 첨부파일 있을 경우 (프로필이미지) 삭제
+			if(u.getUserFilePath() != null) {
+				new File(session.getServletContext().getRealPath(u.getUserFilePath())).delete();
+			}
+			
+			// 새로운 첨부파일 서버 업로드
+			String changeName = saveFile(upfile, session);
+			
+			// User 객체에 새로운 첨부파일 정보 담기
+			u.setUserFilePath("resources/users_upfiles/" + changeName);
+		}
+		
+		//System.out.println(u);
+		int result = uService.updateUserProfile(u);
+		
+		if(result > 0) {
+			session.setAttribute("loginUser", uService.loginUser(u));
+			session.setAttribute("alertMsg", "프로필 정보를 수정했습니다.");
+			return "mypage/mypageProfile";
+		}else {
+			model.addAttribute("errorMsg", "회원정보 수정 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	// 관리자 프로필 변경 페이지 이동
+	@RequestMapping("updateForm.ad")
+	public String updateAdminProfilePage(HttpSession session, Model model) {
+		//System.out.println(session.getAttribute("loginUser"));
+		User loginUser = (User) session.getAttribute("loginUser");
+		
+		ArrayList<User> deptlist = uService.selectDept(loginUser);
+		model.addAttribute("deptlist", deptlist);
+		//System.out.println(deptlist);
+		return "mypage/updateAdminProfile";
+	}
+	
+	// 관리자 프로필 변경
+	@RequestMapping("update.ad")
+	public String updateAdminProfile(User u, MultipartFile adUpfile ,HttpSession session, Model model) {
+		System.out.println(u);
+		System.out.println(adUpfile);
+		
+		if(!adUpfile.getOriginalFilename().equals("")) {
+			// 기존 첨부파일 있을 경우 (프로필이미지) 삭제
+			if(u.getUserFilePath() != null) {
+				new File(session.getServletContext().getRealPath(u.getUserFilePath())).delete();
+			}
+			
+			// 새로운 첨부파일 서버 업로드
+			String changeName = saveFile(adUpfile, session);
+			
+			// User 객체에 새로운 첨부파일 정보 담기
+			u.setUserFilePath("resources/users_upfiles/" + changeName);
+		}
+		
+		int result = uService.updateAdminProfile(u);
+		if(result > 0) {
+			session.setAttribute("loginUser", uService.loginUser(u));
+			session.setAttribute("alertMsg", "프로필 정보를 수정했습니다.");
+			return "mypage/mypageProfile";
+		}else {
+			model.addAttribute("errorMsg", "회원정보 수정 실패");
+			return "common/errorPage";
+		}
+		
+	}
+	
+	// 전달된 프로필 이미지 파일을 서버의 폴더에 저장
+	public String saveFile(MultipartFile upfile, HttpSession session) {
+		String originName = upfile.getOriginalFilename();	// ex)"flower.png"
+		
+		// 20220118103507(년월일시분초)
+		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		
+		// 5자리의 랜덤값
+		int ranNum = (int)(Math.random() * 90000 + 10000);
+		
+		// 확장자
+		String ext = originName.substring(originName.lastIndexOf("."));
+		
+		// 3개를 연이어서
+		String changeName = currentTime + ranNum + ext;
+		
+		// 업로드 시키고자 하는 폴더의 물리적인 경로 알아내기
+		String savePath = session.getServletContext().getRealPath("/resources/users_upfiles/");
+		
+		// 업로드
+		try {
+			upfile.transferTo(new File(savePath + changeName));
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		return changeName;
 	}
 	
 }

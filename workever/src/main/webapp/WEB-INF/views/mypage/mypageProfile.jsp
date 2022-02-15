@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,10 +22,10 @@
         font-size: 25px;
         font-weight: 600;
     }
-    #btn-title{
+    .btn-title{
         float: right;
     }
-    #btn-title button{
+    .btn-title button{
         width: 80px; height: 30px;
         border: none;
         background-color: rgb(78, 115, 223);
@@ -35,8 +36,14 @@
     /* 마이페이지 내용 영역 */
     .mypage-content{margin: 50px 100px;}
     .profile-image{
-        padding-top: 20px;
         width: 200px; height: 200px;
+        border-radius: 70%;
+        overflow: hidden;
+    }
+    .profile-image img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
     #btn-selectphoto{
         width: 40px; height: 40px;
@@ -72,9 +79,18 @@
         
         <div class="mypage-title">
             <span>계정 관리</span>
-            <div id="btn-title">
-                <button onclick="location.href='update.us'">수정하기</button>
-            </div>
+            <c:choose>
+            	<c:when test="${loginUser.userAuth == 'A'}">
+            	    <div class="btn-title">
+                        <button onclick="location.href='updateForm.ad'">수정하기</button>
+                    </div>
+            	</c:when>
+            	<c:otherwise>
+                    <div class="btn-title">
+                        <button onclick="location.href='updateForm.us'">수정하기</button>
+                    </div>
+            	</c:otherwise>
+            </c:choose>
         </div>
 
         <div class="mypage-content">
@@ -82,8 +98,14 @@
                 <div class="card-body row">
                     <div class="col-6 text-center d-flex align-items-center justify-content-center">
                         <div class="profile-image">
-                            <i class="fas fa-user-circle fa-10x"></i>
-                            
+                            <c:choose>
+                                <c:when test="${empty loginUser.userFilePath}">
+                                    <i class="fas fa-user-circle fa-10x"></i>
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${loginUser.userFilePath}" alt="">
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                     <div class="col-5">

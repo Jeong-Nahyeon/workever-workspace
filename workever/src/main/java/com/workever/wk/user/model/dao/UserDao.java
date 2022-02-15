@@ -1,5 +1,6 @@
 package com.workever.wk.user.model.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -53,5 +54,23 @@ public class UserDao {
 	// 비밀번호 변경 서비스
 	public int updatePwd(SqlSessionTemplate sqlSession, User u) {
 		return sqlSession.update("userMapper.updatePwd", u);
+	}
+	
+	// 사원 프로필 변경 서비스
+	public int updateUserProfile(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.updateUserProfile", u);
+	}
+	
+	// 부서 목록 조회
+	public ArrayList<User> selectDept(SqlSessionTemplate sqlSession, User loginUser){
+		return (ArrayList)sqlSession.selectList("userMapper.selectDept", loginUser);
+	}
+	
+	// 관리자 프로필 변경 서비스
+	public int updateAdminProfileUser(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.updateAdminProfileUser", u);
+	}
+	public int updateAdminProfileCompany(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.updateAdminProfileCompany", u);
 	}
 }

@@ -1,5 +1,6 @@
 package com.workever.wk.user.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -76,6 +77,28 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updatePwd(User u) {
 		return uDao.updatePwd(sqlSession, u);
+	}
+
+	// 사원 프로필 변경 서비스
+	@Override
+	public int updateUserProfile(User u) {
+		return uDao.updateUserProfile(sqlSession, u);
+	}
+
+	// 부서 목록 조회
+	@Override
+	public ArrayList<User> selectDept(User loginUser) {
+		return uDao.selectDept(sqlSession, loginUser);
+	}
+
+	// 관리자 프로필 변경 서비스
+	@Override
+	public int updateAdminProfile(User u) {
+		int result = 0;
+		int updateUser = uDao.updateAdminProfileUser(sqlSession, u);
+		int updateCompany = uDao.updateAdminProfileCompany(sqlSession, u);
+		
+		return result = updateUser * updateCompany;
 	}
 
 	

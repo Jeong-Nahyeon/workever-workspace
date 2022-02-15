@@ -200,4 +200,39 @@
 		   set user_pwd = #{userPwd}
 		 where user_no = #{userNo}
   	</update>
+  	
+  	<!-- 사원 프로필 변경 -->
+  	<update id="updateUserProfile">
+  		update users
+  		   set 
+  		   		user_name = #{userName}
+  		   	  , user_phone = #{userPhone}
+  		   	  , user_filepath = #{userFilePath}
+  		 where user_email = #{userEmail}
+  	</update>
+  	
+  	<!-- 부서 목록 조회 -->
+  	<select id="selectDept" resultMap="userResult">
+  		select dept_name, d.com_no, d.dept_no
+		  from dept d
+		 where d.com_no = (select com_no from users where user_no = #{userNo})
+  	</select>
+  	
+  	<!-- 관리자 프로필 변경 -->
+  	<update id="updateAdminProfileUser">
+  		update users
+		   set user_name = #{userName}
+		     , user_phone = #{userPhone}
+		     , user_rank = #{userRank}
+		     , dept_no = #{deptNo}
+		     , user_filepath = #{userFilePath}
+		 where user_email = #{userEmail}
+  	</update>
+  	<update id="updateAdminProfileCompany">
+  		update company
+		   set com_name = #{comName}
+		     , com_phone = #{comPhone}
+		 where com_no = #{comNo}
+  	</update>
+  	
 </mapper>

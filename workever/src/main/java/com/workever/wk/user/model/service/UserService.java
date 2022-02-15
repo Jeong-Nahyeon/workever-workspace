@@ -1,5 +1,6 @@
 package com.workever.wk.user.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.workever.wk.user.model.vo.User;
@@ -33,4 +34,13 @@ public interface UserService {
 	
 	// 비밀번호 변경 서비스
 	int updatePwd(User u);
+	
+	// 사원 회원정보 변경
+	int updateUserProfile(User u);
+	
+	// 부서 목록 조회
+	ArrayList<User> selectDept(User loginUser);
+	
+	// 관리자 프로필 변경
+	int updateAdminProfile(User u);
 }
