@@ -3,9 +3,11 @@ package com.workever.wk.user.model.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
@@ -83,5 +85,18 @@ public class UserDao {
 	// 사원승인 서비스
 	public int userEnable(SqlSessionTemplate sqlSession, User u) {
 		return sqlSession.update("userMapper.userEnable", u);
+	}
+	
+	// 리스트 수
+	public int selectUserListCount(SqlSessionTemplate sqlSession, User adminUser) {
+		return sqlSession.selectOne("userMapper.selectUserListCount", adminUser);
+	}
+	// 전체사원 조회
+	public ArrayList<User> selectAllUser(SqlSessionTemplate sqlSession, User adminUser, PageInfo pi){
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("userMapper.selectAllUser", adminUser, rowBounds);
 	}
 }

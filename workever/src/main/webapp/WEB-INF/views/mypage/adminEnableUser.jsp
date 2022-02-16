@@ -75,9 +75,9 @@
                             <th style="width: 100px">상태</th>
                         </tr>
                     </thead>
-                    <c:forEach var="d" items="${disableUser}">
-                        <tbody>
-                        	<tr>
+                    <tbody>
+                        <c:forEach var="d" items="${disableUser}">
+                            <tr>
                                 <td><input type="checkbox" name="" id=""></td>
                                 <td class="userName">${d.userName}</td>
                                 <td class="userEmail">${d.userEmail}</td>
@@ -87,8 +87,8 @@
                                     <button class="enable-modal">미승인</button>
                                 </td>
                             </tr>
-                        </tbody>
-                    </c:forEach>
+                        </c:forEach>
+                    </tbody>
                 </table>
             </div>
             <!-- /.card-body -->

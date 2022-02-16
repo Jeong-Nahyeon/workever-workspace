@@ -18,9 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.common.template.Pagination;
 import com.workever.wk.user.model.service.EmailService;
 import com.workever.wk.user.model.service.UserService;
 import com.workever.wk.user.model.vo.Company;
@@ -164,7 +167,7 @@ public class UserController {
 		int result = uService.insertCompany(admin);
 		
 		if(result > 0) {
-			//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
 			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");
@@ -190,7 +193,7 @@ public class UserController {
 		int result = uService.insertUser(user);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
 			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");
@@ -431,7 +434,19 @@ public class UserController {
 	
 	// 사원관리 페이지 연결
 	@RequestMapping("usermanage.ad")
-	public String adminUserManage() {
+	public String adminUserManage(@RequestParam(value="upage", defaultValue="1") int currentPage, HttpSession session, Model model) {
+		User adminUser = (User)session.getAttribute("loginUser");
+		System.out.println(adminUser);
+		
+		int listCount = uService.selectUserListCount(adminUser);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		ArrayList<User> allUser = uService.selectAllUser(adminUser, pi);
+		ArrayList<Dept> deptList = uService.selectDept(adminUser.getComNo());
+		
+		model.addAttribute("allUser", allUser);
+		model.addAttribute("pi", pi);
+		model.addAttribute("deptList", deptList);
 		return "mypage/adminUpdateUser";
 	}
 	

@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.user.model.dao.UserDao;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
@@ -111,6 +112,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int userEnable(User u) {
 		return uDao.userEnable(sqlSession, u);
+	}
+
+	// 리스트 수 조회
+	@Override
+	public int selectUserListCount(User adminUser) {
+		return uDao.selectUserListCount(sqlSession, adminUser);
+	}
+	// 전체사원 조회
+	@Override
+	public ArrayList<User> selectAllUser(User adminUser, PageInfo pi) {
+		return uDao.selectAllUser(sqlSession, adminUser, pi);
 	}
 
 	

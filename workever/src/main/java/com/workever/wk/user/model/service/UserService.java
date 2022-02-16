@@ -3,6 +3,7 @@ package com.workever.wk.user.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
@@ -50,4 +51,9 @@ public interface UserService {
 	
 	// 사원승인 서비스
 	int userEnable(User u);
+	
+	// 리스트 수
+	int selectUserListCount(User adminUser);
+	// 전체 사원 조회
+	ArrayList<User> selectAllUser(User adminUser, PageInfo pi);
 }
