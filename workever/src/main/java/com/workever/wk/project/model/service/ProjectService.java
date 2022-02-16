@@ -10,6 +10,7 @@ public interface ProjectService{
 	// 프로젝트 리스트 조회 서비스
 	ArrayList<Project> selectList();
 	
+	
 	// 프로젝트 작성하기 서비스
 	int insertProject(Project p);
 	

@@ -24,17 +24,18 @@
 
 	}
 	.teamPro{
-		border: 1px solid red;
+		/*border: 1px solid red;
 	}
 	.myPro{
 		/*border: 1px solid blue;*/
 
 	}
 	.project{
-		width:225px;
-		height:260px;
+		width:280px;
+		height:225px;
 		border-radius:20px;
 		background-color: rgb(214, 214, 214);
+		/*border: 1px solid yellow;*/
 		
 	}
 	.project>*{
@@ -42,8 +43,6 @@
 	}
 	
 	.myProEl{
-		width:230px;
-		height:270px;
 		float:left;
 		margin-right:30px;
 		margin-bottom:30px;
@@ -102,13 +101,17 @@
 						<div class="myProEl"> 
 							<div class="project"><br>
 								<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
-								<p>${p.proDept}</p>
+								
+								
+								<div><span style="font-size:13px">${p.proDept}</span></div>
+							
 								<br><br>
-								<c:if test="${proGrantWhether}.equlas('on')">
+								<c:if test="${proGrantWhether.equals('on')}">
 									<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i>
 	                        	</c:if>
-	                        	<br><br>
-								<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	                        	<br>
+
+								<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<b><span> ${p.proNumberPeople}명 참여중 </span></b>
 							</div>
 						</div> 

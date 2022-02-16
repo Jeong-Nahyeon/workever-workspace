@@ -32,6 +32,9 @@ public class projectController {
 		
 		ArrayList<Project> list = pService.selectList();
 		
+		System.out.println(list);
+
+		
 		mv.addObject("list", list)
 		  .setViewName("project/projectListView");
 		return mv;

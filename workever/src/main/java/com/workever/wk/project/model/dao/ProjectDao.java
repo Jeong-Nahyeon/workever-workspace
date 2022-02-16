@@ -14,6 +14,7 @@ public class ProjectDao {
 	public ArrayList<Project> selectList(SqlSessionTemplate sqlSession){
 		 return (ArrayList)sqlSession.selectList("projectMapper.selectList");
 	}
+		
 	
 	// 프로젝트 내용 insert
 	public int insertProject(SqlSessionTemplate sqlSession, Project p) {
@@ -24,16 +25,16 @@ public class ProjectDao {
 	public int insertMember(SqlSessionTemplate sqlSession, Project p) {
 		String[] deptUserNo = p.getDeptUserNo().split(",");
 		int result = 0;
-			for(String userNo : deptUserNo) {
-				result += sqlSession.insert("projectMapper.insertMember", userNo); 
-			};
+		for(String userNo : deptUserNo) {
+			result += sqlSession.insert("projectMapper.insertMember", userNo); 
+		};
 		return result;
 	}
 	
 	// 프로젝트 참여부서 insert
 	public int insertDept(SqlSessionTemplate sqlSession, Project p) {
 		String[] proDeptNo = p.getProDept().split(",");
-		int result = 0 ;
+		int result = 0;
 		for(String deptNo : proDeptNo) {
 			result += sqlSession.insert("projectMapper.insertDept", deptNo); 
 		};

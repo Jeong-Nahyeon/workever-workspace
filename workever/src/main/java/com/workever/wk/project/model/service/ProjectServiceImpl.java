@@ -29,6 +29,7 @@ public class ProjectServiceImpl implements ProjectService{
 		return pDao.selectList(sqlSession);
 	}
 	
+	
 	@Override
 	public ArrayList<Project> selectMem(int num) {
 		return pDao.selectMem(sqlSession, num);
@@ -68,6 +69,8 @@ public class ProjectServiceImpl implements ProjectService{
 	public int updatetProject(Project p) {
 		return 0;
 	}
+
+
 
 
 

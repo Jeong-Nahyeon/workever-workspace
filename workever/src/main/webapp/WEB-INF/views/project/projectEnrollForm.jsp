@@ -195,7 +195,7 @@
 				
 				
 				
-				<span class="title" style="margin-left:30px;">참여인원</span><br><br>
+				<span class="title">참여인원</span><br><br>
 				
 				
 				<div style="width:380px;  height:350px; box-shadow:0px 0px 10px grey;">

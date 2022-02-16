@@ -10,7 +10,7 @@
 		<result column="PRO_STATUS" property="proStatus" />
 		<result column="PRO_MANAGER" property="proManager" />
 		<result column="PRO_NUMBERPEOPLE" property="proNumberPeople" />
-		<result column="DEPT_NAME" property="proDept" />
+		<result column="PRODEPT" property="proDept" />
 		<result column="USER_NAME" property="deptUserName" />
 		<result column="USER_NO" property="deptUserNo" />
 	</resultMap>
@@ -18,22 +18,25 @@
 	
 	<select id="selectList" resultMap="projectResult">
 		select
-		       PRO_NO
-			 , PRO_TITLE
-			 , PRO_GRANT_WHETHER
-			 , PRO_CREATE_DATE
-			 , PRO_MANAGER
-			 , PRO_NUMBERPEOPLE
-             , DEPT_NAME
-		  from project
-          JOIN PROJECT_DEPT USING (PRO_NO)
-          JOIN DEPT USING (DEPT_NO)
-		 where PRO_STATUS = 'Y'
-		 order
-		    by PRO_NO desc
+		    PRO_NO
+		  , PRO_TITLE
+		  , PRO_GRANT_WHETHER
+		  , PRO_CREATE_DATE
+		  , PRO_MANAGER
+		  , PRO_NUMBERPEOPLE
+		  , (
+		      select listagg(d.dept_name, ', ') within group(order by d.dept_name)
+		        from dept d, project_dept pd
+		       where d.dept_no = pd.dept_no
+		         and p.pro_no = pd.pro_no
+		    ) PRODEPT
+		from project p
+		where PRO_STATUS = 'Y'
+		order
+		  by PRO_NO desc
 	
 	</select>
-	
+
 	<select id="selectMem" resultMap="projectResult">
 		select
                USER_NAME
