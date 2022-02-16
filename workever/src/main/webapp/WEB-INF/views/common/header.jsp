@@ -87,7 +87,7 @@
 	
 	<c:if test="${ not empty alertMsg }">
 		<script>
-			alertify.alert("${alertMsg}");
+			alert("${alertMsg}");
 		</script>
 		<c:remove var="alertMsg" scope="session" />
 	</c:if>

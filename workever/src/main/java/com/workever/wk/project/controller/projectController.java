@@ -79,7 +79,7 @@ public class projectController {
 		int result = pService.deleteProject(proNo);
 		
 		if(result > 0) { 
-			session.setAttribute("alertMsg", "게시글이 성공적으로 삭제되었습니다.");
+			session.setAttribute("alertMsg", "프로젝트가 삭제되었습니다.");
 			return "redirect:list.pro";
 			
 		}else { 

@@ -61,12 +61,6 @@
 
 <body class="hold-transition sidebar-mini">
 
-		<c:if test="${ not empty alertMsg }">
-		<script>
-			alertify.alert("${alertMsg}");
-		</script>
-		<c:remove var="alertMsg" scope="session" />
-	</c:if>
 
 	<div class="wrapper">
 	
