@@ -324,6 +324,28 @@
 		   set db_reply_count = db_reply_count - 1
 		 where db_status = 'Y'
 		   and db_no = #{crRefNo}  	   
-	</update>			
+	</update>
+	
+	<select id="selectMyDeptBoardListCount" resultType="_int">
+		select
+		       count(*)
+		  from d_board
+		 where db_status = 'Y'
+		   and user_no = #{userNo}	
+	</select>
+	
+	<select id="selectMyDeptBoardList" resultMap="DeptBoardResult">
+		select
+		       db_no
+		     , db_title
+		     , db_count
+		     , to_char(db_date, 'YYYY-MM-DD') as "db_date"
+		     , db_reply_count
+		  from d_board
+		 where db_status = 'Y'
+		   and user_no = #{userNo}
+		 order
+		    by db_no desc	
+	</select>			
 		
 </mapper>

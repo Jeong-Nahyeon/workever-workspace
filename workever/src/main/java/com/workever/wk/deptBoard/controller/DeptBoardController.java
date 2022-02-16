@@ -1,7 +1,9 @@
 package com.workever.wk.deptBoard.controller;
 
 import java.io.File;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -330,17 +332,27 @@ public class DeptBoardController {
 	@RequestMapping("delete.dbo")
 	public String deleteDeptBoard(int dbno, HttpSession session, Model m) {
 		
-		int result1 = dService.deleteDeptBoard(dbno);
+		int result1 = dService.deleteDeptBoard(dbno); // 게시글 삭제
 		
-		ArrayList<CommunityFiles> list = new ArrayList<>();
-		list = dService.selectCommunityFileList(dbno);
+		ArrayList<CommunityReply> rlist = new ArrayList<>();
+		rlist = dService.selectReplyList(dbno);
 		
 		int result2 = 1;
-		if(!list.isEmpty()) { // 첨부파일 있을 경우
+		if(!rlist.isEmpty()) { // 삭제할 게시글에 댓글 있을 경우
 			
-			result2 = dService.deleteCommunityFileList(dbno);
+			result2 = dService.deleteCommunityReplyList(dbno);
 			
-			for(CommunityFiles file : list) {
+		}
+		
+		ArrayList<CommunityFiles> flist = new ArrayList<>();
+		flist = dService.selectCommunityFileList(dbno);
+		
+		int result3 = 1;
+		if(!flist.isEmpty()) { // 삭제할 게시글에  첨부파일 있을 경우
+			
+			result3 = dService.deleteCommunityFileList(dbno);
+			
+			for(CommunityFiles file : flist) {
 				
 				new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
 			
@@ -348,7 +360,7 @@ public class DeptBoardController {
 			
 		} 
 		
-		if(result1 * result2 > 0) { // 삭제 성공
+		if(result1 * result2 * result3 > 0) { // 삭제 성공
 			
 			session.setAttribute("successMsg", "성공적으로 삭제되었습니다.");
 			return "redirect:list.dbo";
@@ -414,31 +426,77 @@ public class DeptBoardController {
 	@ResponseBody
 	@RequestMapping("rdelete.dbo")
 	public String ajaxDeleteReply(CommunityReply cr) {
-		System.out.println(cr);
+		
 		int result = dService.deleteReply(cr);
 		
 		return result > 0 ? "success" : "fail";
 		
 	}	
 	
-	
+	@RequestMapping("list.mdbo")
+	public ModelAndView myDeptBoardListView(@RequestParam(value="cpage", defaultValue="1") int currentPage, HttpSession session, ModelAndView mv) {
 		
+		User loginUser = (User)session.getAttribute("loginUser");
 		
-	// ↓ 테스트용 삭제 예정
-	
-
-	
-	
-	/** 나의 부서별 게시글 목록 페이지 응답하는 메소드
-	 * @return : myDeptBoardListView.jsp
-	 */
-	@RequestMapping("dlist.mybo")
-	public String myDeptBoardListView() {
+		// 나의 부서 게시글 총 개수
+		int listCount = dService.selectMyDeptBoardListCount(loginUser.getUserNo());
 		
-		return "myBoard/myDeptBoardListView";
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
+	
+		ArrayList<DeptBoard> list = dService.selectMyDeptBoardList(pi, loginUser.getUserNo());
+		
+		mv.addObject("list", list)
+		.addObject("pi", pi)
+		.setViewName("myBoard/myDeptBoardListView");
+		
+		return mv;
 		
 	}
-	
-	
+
+	/** [Ajax] 나의 부서글 목록 페이지에서 게시글 삭제 요청 처리 후 처리 상태 응답 데이터로 전달
+	 * @param deleteNo : 사용자가 삭제 요청한 다수의 부서글
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("delete.mdbo")
+	public String ajaxDeleteMyDeptBoardList(@RequestParam(value="deleteList[]") List<Integer> deleteList, HttpSession session) {
+		
+		int result1 = 0; // 게시글 삭제
+		int result2 = 1; // 첨부파일 삭제
+		int result3 = 1; // 댓글 삭제
+		
+		for(int dbNo : deleteList) {
+			
+			result1 = dService.deleteDeptBoard(dbNo); // 게시글 삭제
+			
+			ArrayList<CommunityReply> rlist = new ArrayList<>();
+			rlist = dService.selectReplyList(dbNo);
+			
+			if(!rlist.isEmpty()) { // 삭제할 게시글에 댓글 있을 경우
+				
+				result2 = dService.deleteCommunityReplyList(dbNo);
+				
+			}
+			
+			ArrayList<CommunityFiles> flist = new ArrayList<>();
+			flist = dService.selectCommunityFileList(dbNo);
+			
+			if(!flist.isEmpty()) { // 삭제할 게시글에  첨부파일 있을 경우
+				
+				result3 = dService.deleteCommunityFileList(dbNo);
+				
+				for(CommunityFiles file : flist) {
+					
+					new File(session.getServletContext().getRealPath(file.getCfPath() + file.getCfChangeName())).delete();
+				
+				}
+				
+			}  
+			
+		}
+		
+		return result1 * result2 * result3 > 0 ? new Gson().toJson("success") : new Gson().toJson("success");
+		
+	}
 	
 }
