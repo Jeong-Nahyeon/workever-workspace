@@ -412,7 +412,6 @@
 				
 				const $dbNo = $(this).parent().parent().prev().prev().text();
 				location.href = "detail.dbo?dbno=" + $dbNo;
-				console.log($dbNo);
 				
 			});
 			

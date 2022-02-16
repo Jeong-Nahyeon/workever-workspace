@@ -32,7 +32,8 @@ public interface DeptBoardService {
 	
 	// 부서별 게시글 삭제 서비스
 	int deleteDeptBoard(int dbNo); // 게시글 삭제
-	int deleteCommunityFileList(int dbNo); // 첨부파일 삭제
+	int deleteCommunityReplyList(int dbNo); // 해당 게시글 댓글 목록 삭제
+	int deleteCommunityFileList(int dbNo); // 첨부파일 목록 삭제
 	
 	// 부서별 게시판 댓글 목록 서비스
 	ArrayList<CommunityReply> selectReplyList(int dbNo); // 댓글 목록 조회
@@ -45,5 +46,9 @@ public interface DeptBoardService {
 	
 	// 부서별 게시판 댓글 삭제 서비스
 	int deleteReply(CommunityReply cr); // 댓글 삭제
+	
+	// 나의 부서별 게시글 목록 조회 서비스
+	int selectMyDeptBoardListCount(String userNo); // 나의 부서 게시글 총 개수
+	ArrayList<DeptBoard> selectMyDeptBoardList(PageInfo pi, String userNo); // 나의 부서 게시글 목록 조회
 	
 }

@@ -462,7 +462,7 @@
 			});
 			
 			
-			// 수정폼에서 수정버튼 클릭 시 => 수정용 ajax 실행
+			// 댓글 수정용 ajax (수정폼에서 수정버튼 클릭 시)
 			$(document).on("click", ".reply-update-btn", function(){
 				
 				// ajax 사용 시 $(this) 쓸 수 있는 방법 => context: this 속성 추가
@@ -493,7 +493,7 @@
 			});
 			
 			
-			// 본인 댓글 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
+			// 댓글 삭제용 ajax (본인 댓글 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기)
 			
 			$(document).on("click", ".reply-delete-btn", function(){
 				
@@ -516,8 +516,7 @@
 			    				
 			    				
 				 				$("#confirm-modal").modal("hide"); 
-				    			selectReplyList();
-				    			crNo = null;
+				    			location.reload();
 			    				
 			    			}
 			    			 

@@ -153,16 +153,22 @@ public class DeptBoardServiceImpl implements DeptBoardService {
 	}
 
 	/**
-	 *  부서별 게시글 삭제 시 해당 게시글의 댓글 목록 삭제
+	 *  부서별 게시글 삭제
 	 */
 	@Override
 	public int deleteDeptBoard(int dbNo) {
 		
-		int result1 = dDao.deleteDeptBoard(sqlSession, dbNo);
-				
-		int result2 = dDao.deleteCommunityReplyList(sqlSession, dbNo);
+		return dDao.deleteDeptBoard(sqlSession, dbNo);
 		
-		return result1 * result2;
+	}
+	
+	/**
+	 *  부서별 게시글 삭제 시 해당 게시글의 댓글 목록 삭제
+	 */
+	@Override
+	public int deleteCommunityReplyList(int dbNo) {
+		
+		return dDao.deleteCommunityReplyList(sqlSession, dbNo);
 		
 	}
 
@@ -221,6 +227,26 @@ public class DeptBoardServiceImpl implements DeptBoardService {
 		int result2 = dDao.decreaseReplyCount(sqlSession, cr);
 		
 		return result1 * result2;
+		
+	}
+
+	/**
+	 * 나의 부서 게시글 총 개수
+	 */
+	@Override
+	public int selectMyDeptBoardListCount(String userNo) {
+		
+		return dDao.selectMyDeptBoardListCount(sqlSession, userNo);
+		
+	}
+
+	/**
+	 * 나의 부서 게시글 목록 조회
+	 */
+	@Override
+	public ArrayList<DeptBoard> selectMyDeptBoardList(PageInfo pi, String userNo) {
+		
+		return dDao.selectMyDeptBoardList(sqlSession, pi, userNo);
 		
 	}
 

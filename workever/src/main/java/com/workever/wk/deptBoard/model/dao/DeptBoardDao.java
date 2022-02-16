@@ -286,5 +286,33 @@ public class DeptBoardDao {
 		
 	}
 	
+	/** 나의 부서 게시글 총 개수
+	 * @param sqlSession
+	 * @param userNo
+	 * @return
+	 */
+	public int selectMyDeptBoardListCount(SqlSessionTemplate sqlSession, String userNo) {
+		
+		return sqlSession.selectOne("deptBoardMapper.selectMyDeptBoardListCount", userNo);
+		
+	}
+
+	/** 나의 부서 게시글 목록 조회
+	 * @param sqlSession
+	 * @param pi
+	 * @param userNo
+	 * @return
+	 */
+	public ArrayList<DeptBoard> selectMyDeptBoardList(SqlSessionTemplate sqlSession, PageInfo pi, String userNo) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+				
+		return (ArrayList)sqlSession.selectList("deptBoardMapper.selectMyDeptBoardList", userNo, rowBounds);
+		
+	}
 	
 }
