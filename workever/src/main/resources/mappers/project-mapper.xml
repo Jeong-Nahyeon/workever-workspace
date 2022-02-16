@@ -97,4 +97,14 @@
 		     )
 	</insert>
 	
+	
+	<update id="deleteProject">
+		update
+		       PROJECT
+		   set PRO_STATUS='N'
+	     where PRO_NO = #{proNo}
+	
+	
+	</update>
+	
 </mapper>

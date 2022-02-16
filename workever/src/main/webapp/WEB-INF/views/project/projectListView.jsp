@@ -86,7 +86,7 @@
 							<p>인사팀</p>
 							<br><br>
 							<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i><br><br>
-							<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a style="font-size:12px" href="delete.bo">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
 							<b><span> *명 참여중 </span></b>
 						</div>
 					</div>
@@ -106,16 +106,40 @@
 								<div><span style="font-size:13px">${p.proDept}</span></div>
 							
 								<br><br>
-								<c:if test="${proGrantWhether.equals('on')}">
-									<i class="fas fa-lock fa-2x" style="float:right;margin-right:37px"></i>
+								<c:if test="${not empty p.proGrantWhether}">
+									<i class="fas fa-lock fa-lg" style="float:right;margin-right:37px;"></i>
 	                        	</c:if>
 	                        	<br>
-
-								<a style="font-size:12px" href="">삭제하기</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<b><span> ${p.proNumberPeople}명 참여중 </span></b>
+	                        	
+								<div style="margin-left:180px"><b><span> ${p.proNumberPeople}명 참여중 </span></b></div>
+	                        	
+								<c:if test="${loginUser.userName.equals(p.proManager)}">
+									<a style="font-size:12px; color: red;'" onclick="deleteconfirm(${p.proNo})">삭제하기</a>
+								</c:if>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								
 							</div>
 						</div> 
 					</c:forEach>
+					
+					<form id="postForm" action="" method="post">
+						<input type="hidden" id="proNo" name="proNo" value="">
+					</form> 
+					
+					 <script>
+			            function deleteconfirm(no){
+			            	  const result = confirm('정말로 삭제하시겠습니까?\n삭제하시면 복구할 수 없습니다.');
+			            	  
+			            	  document.getElementById("proNo").value = no;
+			            	  
+		            		  if(result){
+			            		$("#postForm").attr("action", "delete.pro").submit();
+			            	  }else{
+			            		  return false;
+			            	  }
+		
+			            }
+		            </script>
 					
 				</div><!-- 여기까지가 myPro-->
 				

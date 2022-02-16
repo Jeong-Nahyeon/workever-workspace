@@ -53,6 +53,10 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 	
 	
+	@Override
+	public int deleteProject(int proNo) {
+		return pDao.deleteProject(sqlSession, proNo);
+	}
 	
 	
 	@Override
@@ -60,10 +64,6 @@ public class ProjectServiceImpl implements ProjectService{
 		return null;
 	}
 
-	@Override
-	public int deleteProject(Project p) {
-		return 0;
-	}
 
 	@Override
 	public int updatetProject(Project p) {

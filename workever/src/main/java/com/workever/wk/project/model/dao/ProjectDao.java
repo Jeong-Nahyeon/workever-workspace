@@ -41,11 +41,16 @@ public class ProjectDao {
 		return result;
 	}
 	
-	
-	
 	// 프로젝트생성란에 있는 부서별 회원 목록 조회
 	public ArrayList<Project> selectMem(SqlSessionTemplate sqlSession, int num) {
 		return (ArrayList)sqlSession.selectList("projectMapper.selectMem", num);
 	}
+	
+	
+	// 프로젝트 삭제 메소드
+	public int deleteProject(SqlSessionTemplate sqlSession, int proNo) {
+		return sqlSession.update("projectMapper.deleteProject", proNo);
+	}
+
 
 }

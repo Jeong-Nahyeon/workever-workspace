@@ -26,7 +26,7 @@ public interface ProjectService{
 	
 	
 	// 프로젝트 삭제용 서비스
-	int deleteProject(Project p);
+	int deleteProject(int proNo);
 	
 	
 	// 프로젝트 수정용 서비스

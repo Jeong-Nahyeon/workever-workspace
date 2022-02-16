@@ -32,8 +32,6 @@ public class projectController {
 		
 		ArrayList<Project> list = pService.selectList();
 		
-		System.out.println(list);
-
 		
 		mv.addObject("list", list)
 		  .setViewName("project/projectListView");
@@ -61,7 +59,6 @@ public class projectController {
 	@RequestMapping("insert.pro")
 	public String insertProject(HttpSession session, Model model, Project p) {
 		
-		System.out.println(p);
 		int result = pService.insertProject(p);
 		int result1 = pService.insertMember(p);
 		int result2 = pService.insertDept(p);
@@ -76,6 +73,21 @@ public class projectController {
 		}
 	}
 	
+	@RequestMapping("delete.pro")
+	public String deleteProject(int proNo, HttpSession session,Model model) {
+		
+		int result = pService.deleteProject(proNo);
+		
+		if(result > 0) { 
+			session.setAttribute("alertMsg", "게시글이 성공적으로 삭제되었습니다.");
+			return "redirect:list.pro";
+			
+		}else { 
+			model.addAttribute("errorMsg","게시글 삭제실패");
+			return "common/errorPage";
+		}
+		
+	}
 	
 	@RequestMapping("detail.pro")
 	public String detailProject() {
