@@ -32,7 +32,6 @@ public class projectController {
 		
 		ArrayList<Project> list = pService.selectList();
 		
-		
 		mv.addObject("list", list)
 		  .setViewName("project/projectListView");
 		return mv;
@@ -41,7 +40,7 @@ public class projectController {
 	
 	@RequestMapping("enroll.pro")
 	public String enrollProject() {
-		return "project/projectEnrollForm";
+		return "project/projectDetailView";
 		
 	}
 	
@@ -94,6 +93,10 @@ public class projectController {
 		return "project/projectDetailView";
 		
 	}
+	
+	
+	
+	
 	
 	//업무조회 리스트이동 
 	@RequestMapping("list.work")

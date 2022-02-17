@@ -16,6 +16,23 @@
 	</resultMap>
 	
 	
+	<resultMap id="workBoardResult" type="workBoard">
+		<result column="WORKBOARD_NO" property="workBoardNo" />
+		<result column="PRO_NO" property="proNo" />
+		<result column="USER_NO" property="userNo" />
+		<result column="WORK_MANAGER" property="workManager" />
+		<result column="WORK_STARTDATE" property="workStartDate" />
+		<result column="WORK_ENDDATE" property="workEndDate" />
+		<result column="WORK_STATUS" property="workStatus" />
+		<result column="WORK_PRIORITY" property="workPriority" />
+		<result column="WORK_PROGRESS" property="workProgress" />
+		<result column="WORK_CONTENT" property="workContent" />
+		<result column="WORK_CREATE_DATE" property="workCreateDate" />
+		<result column="BOARD_STATUS" property="boardStatus" />
+		<result column="WORKBOARD_WRITER" property="workwriter" />
+	</resultMap>
+	
+	
 	<select id="selectList" resultMap="projectResult">
 		select
 		    PRO_NO
@@ -103,8 +120,11 @@
 		       PROJECT
 		   set PRO_STATUS='N'
 	     where PRO_NO = #{proNo}
-	
-	
 	</update>
+	
+	<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 여기부터 게시판 매퍼 -@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+	
+	
+	
 	
 </mapper>

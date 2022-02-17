@@ -83,14 +83,14 @@
 				<br>
 	            <table id="workList" class="table" align="center">
 	                <thead>
-	                  <tr>
-	                    <th>번호</th>
-	                    <th>상태</th>
-	                    <th>우선순위</th>
-	                    <th>제목</th>
-	                    <th>담장자</th>
-	                    <th>수정일</th>
-	                  </tr>
+			                <tr>
+			                  	<th>번호</th>
+			                  	<th>상태</th>
+			                  	<th>우선순위</th>
+			                  	<th>제목</th>
+			                  	<th>담장자</th>
+			                  	<th>수정일</th>
+			                </tr>
 	                </thead>
 	                <tbody>
 		                

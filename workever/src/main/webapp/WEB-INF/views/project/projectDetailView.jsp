@@ -15,6 +15,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<!-- datepicker 공간 -->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	
+	
     <style>
     	input[type="radio"]{
 		display: none;
@@ -134,6 +142,23 @@
 		.input-group{
 			margin-left:75px !important;
 		}
+		.workContent{
+			resize:none;
+			width: 430px;
+			height:130px;
+		}
+		
+		.EnrollBtn{
+			background-color: rgb(78, 115, 223);
+			color: white;
+			border: none;
+			border-radius: 5px;
+			height:35px;
+			width: 100px;
+			font-weight: bolder;
+			font-size: 14px;
+			margin-left:80%;
+		}
 	
     </style>
     
@@ -178,8 +203,13 @@
 						})
 					</script>
 					<br>
-					<form>
+					
+					<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@여기부터 작성란@@@@@@@@@@@@@@@@@@@@@@@ -->
+					<form id="enrollForm" method="post" action="insert.work" enctype="multipart/form-data">
 						<!--제목 결정-->
+						
+						<input type="hidden" name="boardWriter" value="${loginUser.userName}">
+						
 						<br>
 						<div>
 							<input type="text" class="workTitle" name="workTitle" id="workTitle" placeholder="업무명을 입력하세요.(50자 이내)">
@@ -218,23 +248,57 @@
 						<!--시작날짜 공간-->
 						<div>
 							<i class="far fa-calendar-alt fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input style="cursor: pointer;" type="date" class="datepicker" name="startDate" placeholder="시작일시">
-							<script>
-						
-							</script>
+							<input type="text" id="datepicker" name="startDate" placeholder="시작일시">	
+					
 						</div>
 						<br>
 						<!--마감날짜 공간-->
 						<div>
 							<i class="far fa-calendar-alt fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input style="cursor: pointer;" type="text" class="datepicker" name="endDate" placeholder="마감일시">
+							<input type="text" id="datepicker2" name="endDate" placeholder="마감일시">
+							
+					    <script>
+					        // 1) datepicker 공통 옵션 설정
+					        $.datepicker.setDefaults({
+					            dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+					            dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'], 
+					            monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+					            monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+					            yearSuffix: '년',
+					            dateFormat: 'yy-mm-dd',
+					            showMonthAfterYear:true,
+					            constrainInput: true    
+					        });
+					
+					        // 2) datepicker 영역 선언
+					        $("#datepicker").datepicker();
+					        $("#datepicker2").datepicker();
+					
+					        // 3) 초기값 설정
+					        // (today / -nD: n일전 / +nD: n일후 / -nM: n달전 / +nM: n달후 / -nY: n년전 / +nY: n년후)
+					        //$("#datepicker").datepicker('setDate', 'today');
+					        //$("#datepicker2").datepicker('setDate', '+1D');
+					
+					    </script>						
 						</div>
-						
 						<hr>
 				
 						<!--업무 진행도-->
 						<div>
-							<div id="slider-range-min"></div>
+							<input type="range" list="tickmarks">
+							<datalist id="tickmarks">
+							<option value="0" label="0%"></option>
+							<option value="10"></option>
+							<option value="20"></option>
+							<option value="30"></option>
+							<option value="40"></option>
+							<option value="50" label="50%"></option>
+							<option value="60"></option>
+							<option value="70"></option>
+							<option value="80"></option>
+							<option value="90"></option>
+							<option value="100" label="100%"></option>
+							</datalist>
 				
 						</div>
 				
@@ -242,7 +306,7 @@
 				
 						<!--업무 순위-->
 						<div>
-							<i class="fas fa-list-ol fa-lg"></i>&nbsp;&nbsp;&nbsp;
+							<i class="fas fa-list-ol fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;
 							<select name="workrank" class="workrank" style="width: 120px; height: 30px;"> 
 								<option value="high">높음</option>
 								<option value="middle" selected>중간</option>
@@ -254,13 +318,21 @@
 						
 						<!--업무 내용-->
 						<div>
+							<textarea name="workContent" class="workContent"></textarea>
 						</div>
+						
+						<hr>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="file" id="upfile" name="upfile">
+						
+						<button class="EnrollBtn" onclick="">등록하기</button>
 					</form>
+					<br>
 				</div>
+				<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@여기까지 작성란@@@@@@@@@@@@@@@@@@@@@@@ -->
 				
-				
-				
-				<!-- 여기부터 밑이 게시글 목록 -->
+				<br><br>
+				<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기부터 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 					<div style="background-color: white;">
 						<br>
 						<div style="margin-right:30px">
@@ -344,9 +416,14 @@
 						
 						<!--업무 내용-->
 						<div>
-						
+							<textarea name="workContent" class="workContent"></textarea>
 						</div>
+						<br>
 					</div>
+					<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기부터 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+					
+					
+					
 			</div><!--전체감싸는 div 끝-->
 		
 			<div class="sidemenu">
