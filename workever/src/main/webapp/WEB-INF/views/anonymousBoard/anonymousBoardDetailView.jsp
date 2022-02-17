@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+       
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +12,7 @@
 <title>익명 게시글 상세</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
 
@@ -77,7 +82,6 @@
       padding:20px;
     }
 
-
     /* 게시글 내용 영역 */
     .mail-content-area{
       padding:20px;
@@ -103,6 +107,7 @@
       width:100%;
       height:100%;
       resize:none;
+      maxlenth:500;
     }
 
     .reply-insert-btns{
@@ -114,11 +119,11 @@
     #reply-insert-btn{
       background:#4E73DF;
       color:white;
-      width:220px;
+      width:200px;
       height:100%;
+      margin-left:20px;
     }
 
-    
     /* 댓글 목록 영역 */
     .reply-list {
       box-sizing:border-box;
@@ -157,11 +162,40 @@
 
     .reply-list-btns a{
       margin-left:5px;
+      text-decoration:none;
+      color:black;
       cursor:pointer;
     }
 
     .reply-list .reply-content{
       padding:20px;
+    }
+    
+    /* 댓글 수정 영역 */
+    .reply-update-content-area{
+		padding:20px;
+		padding-right:0;
+    }
+
+	.reply-update-content{
+		width:100%;
+		height:70px;
+		resize:none;
+	}
+    
+	.reply-update-btn-area{
+		padding:20px;
+	}
+
+    .reply-update-btn{
+      background:#4E73DF;
+      color:white;
+	  width:100%;
+	  height:70px;
+    }
+    
+    .reply-update-btn:hover{
+      color:white;
     }
 
     /* 댓글 블라인드용 영역 */
@@ -172,20 +206,27 @@
     }
 
 
-
     /* 요청처리 여부 확인 모달창 영역 */
     #confirm-modal h6{
-      margin-left:120px;
+      margin-left:220px;
     }
 
     #confirm-modal .modal-body{
+      height:130px;
       text-align:center;
+      line-height:100px;
     }
-
+   
     .confirm-modal-btns{
       /* border:1px solid red; */
       display: inline-block;
-      margin-right:90px;
+      margin-right:160px;
+    }
+    
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
     }
 
     #confirm-btn{
@@ -243,10 +284,48 @@
       height:30px;
     }
 
+    /* 요청처리  확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
 
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+	</c:if>
+	
 	<div class="wrapper">
 	
 		<jsp:include page="../common/header.jsp" />
@@ -274,36 +353,68 @@
 		          <div class="card"> 
 		
 		            <!-- 수정/삭제 버튼 영역 -->
-		            <div class="card-header board-btns-area"> 
-		              <!-- case 1. 본인 게시글일 경우 -->
-		              <button class="btn btn-sm btn-default update-btn">수정</button>
-		              <button class="btn btn-sm btn-default delete-btn">삭제</button>
-		              <!-- case 2. 타사원 게시글일 경우 -->
-		              <button  id="test-report" class="btn btn-sm report-btn">신고</button>
+		            <div class="card-header board-btns-area">
+		              <c:choose> 
+		              	<c:when test="${ correct eq 1 }">
+			              <!-- case 1. 본인 게시글일 경우 -->
+			              <button type="button" class="btn btn-sm btn-default update-btn" onclick="postFormSubmit(1);">수정</button>
+			              <button type="button" class="btn btn-sm btn-default delete-btn" onclick="postFormSubmit(2);">삭제</button>
+			            </c:when>
+			            <c:otherwise>
+			              <!-- case 2. 타사원 게시글일 경우 -->
+			              <button type="button" id="test-report" class="btn btn-sm report-btn">신고</button>
+			            </c:otherwise>    
+		              </c:choose>
 		              <!-- 공통 -->
-		              <button class="btn btn-sm list-btn">목록</button>
+		              <button type="button" class="btn btn-sm list-btn" onclick="location.href='list.abo';">목록</button>
 		            </div>
 		            <!-- /.card-header -->
-		
+					
+					<!-- 수정/삭제 버튼 클릭 시 익명 게시글 번호 post 방식으로 전달 -->
+					<form id="postForm" method="post">
+						<input type="hidden" name="abNo" value="${ ab.abNo }" /> 
+					</form>
+					
 		            <div class="card-body">
 		
 		              <table id="board-detail">
+		              			              
 		                <thead>
 		                  <tr>
 		                    <th style="padding-top:0">제목</th>
 		                    <td style="padding-top:0">
-		                      <span class="right badge badge-primary">블라인드</span>
-		                      	제목들어가는자리
+		                    	<c:if test="${ loginUser.userRank eq '관리자' }">
+			                      	<c:if test="${ ab.abReportCount > 0 }">
+			                      	  <c:choose>	
+			                      	  	<c:when test="${ ab.abStatus eq 'B' }">	
+						                  <span class="right badge badge-primary">블라인드</span>
+						                </c:when>
+						                <c:otherwise>  
+						                  <span class="right badge badge-danger">신고</span>
+			                          	</c:otherwise>
+			                          </c:choose>
+			                        </c:if>
+		                        </c:if>
+		                        ${ ab.abTitle }
 		                    </td>
 		                  </tr>
+		                  <tr>
 		                    <th>작성일</th>
-		                    <td>2022-00-00</td>
+		                    <td>${ ab.abDate }</td>
 		                  </tr>
 		                  <tr>
 		                    <th>첨부파일</th>
 		                    <td>
-		                      <a href="#">dddddd.jpg</a><br>
-		                      <a href="#">bbbbbb.png</a>
+		                      <c:choose>
+								<c:when test="${ empty list }">
+									첨부파일이 없습니다.
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="cf" items="${ list }">
+										<a href="${ cf.cfPath }${ cf.cfChangeName }" download="${ cf.cfOriginName }" >${ cf.cfOriginName }</a><br>
+									</c:forEach>
+								</c:otherwise>
+							  </c:choose>
 		                    </td>
 		                  </tr>
 		                  <tr align="center">
@@ -312,32 +423,9 @@
 		                  <tr>
 		                </thead>
 		                <tbody>
+		                  <tr>	
 		                    <td colspan="2">
-		                      <div class="mail-content-area">
-		                        <h1><u>Heading Of Message</u></h1>
-		                        <h4>Subheading</h4>
-		                        <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
-		                          was born and I will give you a complete account of the system, and expound the actual teachings
-		                          of the great explorer of the truth, the master-builder of human happiness. No one rejects,
-		                          dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
-		                          how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
-		                          is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
-		                          but because occasionally circumstances occur in which toil and pain can procure him some great
-		                          pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
-		                          except to obtain some advantage from it? But who has any right to find fault with a man who
-		                          chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
-		                          produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
-		                          dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
-		                          blinded by desire, that they cannot foresee</p>
-		                        <ul>
-		                          <li>List item one</li>
-		                          <li>List item two</li>
-		                          <li>List item three</li>
-		                          <li>List item four</li>
-		                        </ul>
-		                        <p>Thank you,</p>
-		                        <p>John Doe</p>
-		                    </div>
+		                      <div class="mail-content-area">${ ab.abContent }</div>
 		                    </td>
 		                  </tr>
 		               </tbody>
@@ -346,101 +434,25 @@
 		            <!-- /.card-body -->
 		
 		
-		          <!-- 댓글 등록 영역 -->
-		          <div class="card-footer">
-		
-		            <table class="reply-insert">
-		                <tr>
-		                  <td class="reply-insert-contents">
-		                    <textarea id="reply-insert-content"></textarea>
-		                  </td>
-		                  <td class="reply-insert-btns">
-		                    <button id="reply-insert-btn" class="btn">댓글등록</button>
-		                  </td>
-		                </tr>
-		                <tr>
-		                  <th colspan="2" style="padding-top:20px;">댓글 목록 (5)</th>
-		                </tr>
-		            </table>  
+					<!-- 댓글 등록 영역 -->
+					<div class="card-footer">
+
+						<table class="reply-insert">
+							<tr>
+								<td class="reply-insert-contents">
+									<textarea id="reply-insert-content" name="crContent"></textarea>
+								</td>
+								<td class="reply-insert-btns">
+									<button id="reply-insert-btn" class="btn" onclick="addReply();">댓글등록</button>
+								</td>
+							</tr>
+							<tr>
+								<th colspan="2" style="padding-top:20px;">댓글 목록 (<span id="reply-count">0</span>)</th>
+							</tr>
+						</table>  
 		
 		            <!-- 댓글 목록 영역 -->
-		            <table class="reply-list">
-		              <!-- case 1. 블라인드 처리된 댓글일 경우 -->
-		              <!-- <tr>
-		                <td class="reply-blind" colspan="3">
-		                  <span style="color:lightgray;">블라인드 처리된 댓글입니다</span>
-		                </td>
-		              </tr> -->
-		
-		              <!-- case 2. 일반 댓글일 경우 -->
-		              <tr>
-		                <td class="reply-list-img" rowspan="2">
-		                  <!-- case 1. 프로필 이미지 있을 경우 -->
-		                  <!-- <img class="img-circle img-bordered-sm reply-img"> -->
-		                  <!-- case 2. 프로필 이미지 없을 경우 -->
-		                  <i class="fas fa-user-circle fa-3x reply-no-img"></i>
-		                </td>
-		                <td class="reply-list-name">
-		                  <b>익명</b>
-		                  <!-- 관리자가 접속했을 경우 => 블라인드 처리된 댓글 보이고, 블라인드 뱃지 붙어있음 -->
-		                  <span class="right badge badge-primary">블라인드</span>
-		                </td>
-		                <td class="reply-list-btns">
-		                  <!-- case 1. 본인 댓글일 경우 -->
-		                  <a>수정</a>
-		                  <a>삭제</a>
-		                  <!-- case 2. 타사원 댓글일 경우 -->
-		                  <!-- <a>신고</a> -->
-		                </td>
-		              </tr>
-		              <tr>
-		                <td>
-		                  <span>2022.01.00 00:00</span>
-		                </td>
-		                <td></td>
-		              </tr>
-		              <tr>
-		                <td colspan="3">
-		                  <p class="reply-content">댓글 내용 영역입니다.</p>
-		                </td>
-		              </tr>
-		            </table>
-		            
-		            
-		            <table class="reply-list">
-		              <tr>
-		                <td class="reply-blind" colspan="3">
-		                  <span style="color:lightgray;">블라인드 처리된 댓글입니다</span>
-		                </td>
-		              </tr>
-		            </table>
-		
-		            
-		            <table class="reply-list">
-		              <tr>
-		                <td class="reply-list-img" rowspan="2">
-		                  <i class="fas fa-user-circle fa-3x reply-no-img"></i>
-		                </td>
-		                <td class="reply-list-name">
-		                  <b>익명</b>
-		                </td>
-		                <td class="reply-list-btns">
-		                  <a>신고</a>
-		                </td>
-		              </tr>
-		              <tr>
-		                <td>
-		                  <span>2022.01.00 00:00</span>
-		                </td>
-		                <td></td>
-		              </tr>
-		              <tr>
-		                <td colspan="3">
-		                  <p class="reply-content">댓글 내용 영역입니다.</p>
-		                </td>
-		              </tr>
-		            </table>              
-		
+		                       
 		          </div>
 		          <!-- /.card-footer -->
 		          </div>
@@ -461,6 +473,69 @@
     
     </div>
     <!-- ./wrapper -->
+
+
+
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+	
+	
+	
+	<!-- 요청처리 여부 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="confirm-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b>삭제하시겠습니까?</b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="confirm-modal-btns">
+	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
+	            <button id="confirm-btn" class="btn btn-sm">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+
+
 
 	<!-- 신고글 상세 모달창 -->
 	<!-- The Modal -->
@@ -515,50 +590,370 @@
 	</div>
 	
 	
-    <!-- 요청처리 여부 확인 모달창 -->
-	<!-- The Modal -->
-	<div class="modal fade" id="confirm-modal">
-	  <div class="modal-dialog modal-sm modal-dialog-centered">
-	    <div class="modal-content">
-	    
-	      <!-- Modal Header -->
-	      <div class="modal-header">
-	        <h6 class="modal-title"><b>확인</b></h6>
-	        <button type="button" class="close" data-dismiss="modal">×</button>
-	      </div>
-	      
-	      <!-- Modal body -->
-	      <div class="modal-body">
-	        <b>삭제하시겠습니까?</b>
-	      </div>
-	      
-	      <!-- Modal footer -->
-	      <div class="modal-footer">
-	          <div class="confirm-modal-btns">
-	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
-	            <button id="confirm-btn" class="btn btn-sm">확인</button>
-	          </div>
-	      </div>
-	      
-	    </div>
-	  </div>
-	</div>
-
-	<jsp:include page="../common/scripts.jsp" />
-
-	<!-- 스크립트 영역 -->
+	
+	<!-- 댓글 영역 -->
+	<c:choose>
+		<c:when test="${ loginUser.userRank eq '관리자' }"> <!-- 로그인한 사원이 관리자인 경우 -->
+			<script>
+			
+				$(function(){
+					
+					selectReplyListForManager(); // 관리자 실시간 댓글 조회
+					
+					// 관리자 => 댓글작성 X
+					$("#reply-insert-content").attr("placeholder", "일반 사원만 댓글 작성 가능합니다.")
+											  .attr("readonly", true);
+					
+					$("#reply-insert-btn").attr("disabled", true);
+					
+				});
+				
+				
+				// 관리자 댓글 목록 조회용 ajax
+				function selectReplyListForManager(){
+					
+					$.ajax({
+						url:"rlist.abo",
+						data:{abno:${ ab.abNo }},
+						success:function(list){
+							
+							let reply = "";
+							
+							for(let i in list){
+														
+								reply += "<table class='reply-list'>"
+									   + 	"<input id='" + list[i].crNo + "' type='hidden' name='crNo' value='" + list[i].crNo + "' />"
+									   + 	"<input type='hidden' name='crUserNo' value='" + list[i].crUserNo + "' />"
+									   + 	"<tr>"
+								       + 		"<td class='reply-list-img' rowspan='2'>"
+								       +			"<i class='fas fa-user-circle fa-3x reply-no-img'></i>" 	
+									   +		"</td>"
+									   + 		"<td class='reply-list-name'>"
+									   + 			"<b>익명</b> ";
+									   
+								if(list[i].crReportCount > 0){ // 신고된 댓글인 경우
+									
+									if(list[i].crStatus == "B"){ // 블라인드 처리된 댓글인 경우
+										
+										reply += "<span class='right badge badge-primary'>블라인드</span>";
+										
+									}else{
+										
+										reply += "<span class='right badge badge-danger'>신고</span>";
+										
+									}
+									
+								}	   
+								
+								reply += "</td>"
+									   + "<td class='reply-list-btns'>"
+									   + 	"<a class='reply-report-btn'>신고</a>"
+								       + "</td></tr>"
+									   + "<tr><td colspan='2'>"
+									   + 	"<span>" + list[i].crDate + "</span></td></tr>"
+									   + "<tr class='reply-update-form'><td colspan='3'>"
+									   + 	"<p class='reply-content'>" + list[i].crContent + "</p></td></tr></table>";
+								
+							}
+							
+							$(".reply-list").remove(); // 요청 처리 전 댓글 목록 비워주기
+							$("#reply-count").text(list.length);
+							$(".reply-insert").after(reply);
+							
+						}, error:function(){
+							
+			 				console.log("댓글 리스트 조회용 ajax 통신 실패");		
+			 				
+						}
+						
+					});
+						
+				}
+				
+			</script>
+		</c:when>
+		<c:otherwise>  <!-- 로그인한 사원이 일반 사원인 경우 -->
+			<script>
+			
+				$(function(){
+					
+					$("#reply-insert-content").attr("placeholder", "최대 500자 입력 가능합니다.");
+					
+					
+					selectReplyListForUsers(); // 실시간 댓글 조회
+					
+					
+					// 본인 댓글 수정 버튼 클릭 시 => 수정폼 보이기
+					$(document).on("click", ".reply-update-form-btn", function(){
+						
+						let crNo = $(this).parents(".reply-list").find("input[name=crNo]").val(); // 해당 댓글 번호
+						
+						let updateArea = $(this).parents(".reply-list").find(".reply-update-form"); // 해당 댓글 내용 영역
+						
+						let crContent = $(this).parents(".reply-list").find(".reply-content").text(); // 댓글 내용
+						
+						let cancelBtn = "<a class='reply-update-cancel-btn'>취소</a>"; // 취소버튼
+						
+						// 수정 폼
+						let updateForm = "<td colspan='2' class='reply-update-content-area'>"
+									   + "<textarea class='reply-update-content' name='crContent'>" + crContent + "</textarea></td>"
+									   + " <td class='reply-update-btn-area'>"
+									   + "<input type='hidden' name='crNo' value='" + crNo + "' />"
+						               + "<button type='button' class='btn reply-update-btn'>수정</button></td>";    
+						
+						updateArea.text("");
+						updateArea.html(updateForm);
+						$(this).parent().html(cancelBtn);               
+						
+					});	
+					
+					
+					// 댓글 수정폼에서 취소 버튼 클릭 시
+					$(document).on("click", ".reply-update-cancel-btn", function(){
+						
+						$(this).parents(".reply-list").remove();
+						selectReplyListForUsers();
+						
+					});
+					
+					
+					// 댓글 수정용 ajax (수정폼에서 수정버튼 클릭 시)
+					$(document).on("click", ".reply-update-btn", function(){
+						
+						// ajax 사용 시 $(this) 쓸 수 있는 방법 => context: this 속성 추가
+						
+						$.ajax({
+							context: this,
+							url:"rupdate.abo",
+							data:{
+								crNo:$(this).prev().val(),
+								crContent:$(this).parents(".reply-list").find(".reply-update-content").val()
+							},
+							success:function(result){
+								
+								if(result == "success"){
+									
+									$(this).parents(".reply-list").remove();
+									selectReplyListForUsers();
+									
+								}
+													
+							}, error:function(){
+								
+			    				console.log("댓글 수정용 ajax 통신 실패");		
+			    				
+							}
+							
+						});
+						
+					});
+					
+					
+					// 댓글 삭제용 ajax (본인 댓글 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기)
+					
+					$(document).on("click", ".reply-delete-btn", function(){
+						
+						let crNo = $(this).parents(".reply-list").find("input[name=crNo]").val(); // 댓글 번호
+						
+						$("#confirm-modal").modal({backdrop: "static"});
+						
+						// 확인 버튼 클릭 시 삭제 요청 처리
+					    $("#confirm-btn").click(function(){
+					    	
+					    	  $.ajax({
+					    		 url:"rdelete.abo",
+					    		 data:{
+					    			 crNo:crNo,
+					    			 crRefNo:${ ab.abNo }
+					    		 },
+					    		 success:function(result){
+					    			
+					    			if(result == "success"){
+					    				
+						 				$("#confirm-modal").modal("hide"); 
+						 				
+						 				$("#alert-message").text("성공적으로 삭제되었습니다.");
+										$("#alert-message-modal").modal({backdrop: "static"});
+										
+										$("#close-btn").click(function(){
+											
+											location.reload();
+											
+										});
+						    			
+					    			}
+					    			 
+					    		 }, error:function(){
+					    			 
+					    			 console.log("댓글 삭제용 ajax 통신 실패");		
+					    			 
+					    		 }
+						      
+					    	  });
+					    	  
+						});
+						
+					});
+	
+				});	
+					
+					
+				
+				
+				// 일반 사원 댓글 목록 조회용 ajax
+				function selectReplyListForUsers(){
+					
+					$.ajax({
+						url:"rlist.abo",
+						data:{abno:${ ab.abNo }},
+						success:function(list){
+							
+							let reply = "";
+							
+							for(let i in list){
+								
+								if(list[i].crStatus == "B"){ // 블라인드 처리된 댓글인 경우
+									
+									reply += "<table class='reply-list'><tr><td class='reply-blind' colspan='3'>"
+						              	   + 	"<span style='color:lightgray;'>블라인드 처리된 댓글입니다</span></td></tr></table>";
+						                
+								} else { // 일반 댓글인 경우
+									
+									reply += "<table class='reply-list'>"
+										   + 	"<input type='hidden' name='crNo' value='" + list[i].crNo + "' />"
+										   + 	"<input type='hidden' name='crUserNo' value='" + list[i].crUserNo + "' />"
+										   + 	"<tr>"
+									       + 		"<td class='reply-list-img' rowspan='2'>"
+									       +			"<i class='fas fa-user-circle fa-3x reply-no-img'></i>" 	
+										   +		"</td>"
+										   + 		"<td class='reply-list-name'>"
+										   + 			"<b>익명</b>"
+										   + 		"</td>"
+										   + 		"<td class='reply-list-btns'>";
+										   
+									if(list[i].correct == 1){ // 본인 댓글인 경우 => 수정/삭제버튼 보이기
+										
+										reply += "<a class='reply-update-form-btn'>수정</a>"
+											   + "<a class='reply-delete-btn'>삭제</a>";
+										
+									}else{
+										
+										reply += "<a class='reply-report-btn'>신고</a>";
+										
+									}
+									
+									reply += "</td></tr>"
+										   + "<tr><td colspan='2'>"
+										   + 	"<span>" + list[i].crDate + "</span></td></tr>"
+										   + "<tr class='reply-update-form'><td colspan='3'>"
+										   + 	"<p class='reply-content'>" + list[i].crContent + "</p></td></tr></table>";
+								
+								}
+								
+							}
+							
+							$(".reply-list").remove(); // 요청 처리 전 댓글 목록 비워주기
+							$("#reply-count").text(list.length);
+							$(".reply-insert").after(reply);
+			
+			
+							if($("input[name=crUserNo]").val() == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 배경색 다르게 보이기
+								
+								$("input[value=${ loginUser.userNo }]").parent().css("backgroundColor", "rgb(240, 240, 240)");
+								
+							}
+							
+						}, error:function(){
+							
+			 				console.log("댓글 리스트 조회용 ajax 통신 실패");		
+			 				
+						}
+						
+					});
+						
+				}	
+				
+				
+				// 댓글 등록용 ajax
+				function addReply(){
+					
+					if($("#reply-insert-content").val().trim().length != 0){ // 공백만 있는 댓글이 등록되지 못하도록 조건 검사
+						
+						$.ajax({
+							url:"rinsert.abo",
+							data:{
+								crRefNo:${ ab.abNo },
+								crContent:$("#reply-insert-content").val()
+							},
+							success:function(result){
+								
+								if(result == "success"){
+									
+									$("#reply-insert-content").val("");
+									selectReplyListForUsers();
+									
+								}
+								
+							}, error:function(){
+								
+			    				console.log("댓글 등록용 ajax 통신 실패");		
+			    				
+							}
+						});
+										
+					}else{
+						
+						alert("댓글 작성 후 등록 가능합니다.");
+						
+					}
+					
+				}
+				
+			</script>
+		</c:otherwise>
+	</c:choose>
+	
+	
+	
 	<script>
-	  $(document).ready(function(){
-	
-	    $("#test-report").click(function(){
-	      $("#report-modal").modal({backdrop: "static"});
-	    });
-	
-	    $("#report-btn").click(function(){
-	      $("#confirm-modal").modal({backdrop: "static"});
-	    });
-	
-	  });
+		  $(function(){
+			  
+			// 신고 모달창 테스트용 삭제 예정  
+		
+		    $("#test-report").click(function(){
+		      $("#report-modal").modal({backdrop: "static"});
+		    });
+		
+		    $("#report-btn").click(function(){
+		      $("#confirm-modal").modal({backdrop: "static"});
+		    });
+		
+		  });
+	  
+	  
+		  // 수정/삭제 버튼 클릭 시 post 방식으로 게시글 번호 전달
+		  function postFormSubmit(num){
+			  
+			  if(num == 1){ // 수정버튼 클릭
+				  
+				  $("#postForm").attr("action", "updateForm.abo").submit();
+				  
+			  }else{ // 삭제버튼 클릭
+				  
+				  // 요청처리 여부 확인 모달창 오픈
+			      $("#confirm-modal").modal({backdrop: "static"});
+			      
+					// 확인 버튼 클릭 시 삭제 요청 처리
+				    $("#confirm-btn").click(function(){
+				    	
+				    	$("#postForm").attr("action", "delete.abo").submit();
+					      
+					});
+				  
+			  }
+			  
+		  }
+	  
 	</script>  
 
 </body>

@@ -164,10 +164,49 @@
       background: #4E73DF;
       color: white;
     }
-        
+
+
+  	/* 요청처리  확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+            
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+	</c:if>
 
 	<div class="wrapper">
 		
@@ -199,12 +238,11 @@
 		            <div class="card-header board-header-area">
 		              <div class="col-sm-6 board-header-area-left">
 		                <div class="btn-group">
-		                  <button type="button" class="btn btn-sm dept-board-btn" onclick="location.href='list.mdbo';">부서별</button>
-		                  <button type="button" class="btn btn-sm btn-default">익명</button>
+		                  <button type="button" class="btn btn-sm dept-board-btn" onclick="location.href='list.mdbo';">부서</button>
+		                  <button type="button" class="btn btn-sm btn-default" onclick="location.href='list.mabo';">익명</button>
 		                </div>
 		              </div>
 		              <div class="col-sm-6 board-header-area-right">
-		                <!-- 관리자일 경우에만 보임 -->
 		                <button type="button" id="delete-btn" class="btn btn-sm">삭제</button>
 		              </div>
 		            </div>
@@ -216,7 +254,7 @@
 		                <thead>
 		                  <tr>
 		                    <th width="5%">
-		                      <input id="all-check-btn" type="checkbox"> 
+		                      <input type="checkbox" id="all-check-btn"> 
 		                    </th>
 		                    <th width="10%">글번호</th>
 		                    <th width="60%">제목</th>
@@ -273,17 +311,17 @@
 		              <div class="paging-area">
 		
               			<c:if test="${ pi.currentPage ne 1 }">
-	                		<a class="btn" href="dlist.mbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+	                		<a class="btn" href="list.mdbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
 	                	</c:if>
 		                
 		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
 		                
-                			<a class="btn" href="dlist.mbo?cpage=${ p }">${ p }</a>
+                			<a class="btn" href="list.mdbo?cpage=${ p }">${ p }</a>
                 			
 		                </c:forEach>
 		                
                 		<c:if test="${ pi.currentPage ne pi.maxPage }">
-             	   			<a class="btn" href="dlist.mbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+             	   			<a class="btn" href="list.mdbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
              	   		</c:if>
 		
 		              </div>
@@ -309,6 +347,38 @@
 	
 	</div>
 	<!-- ./wrapper -->
+
+
+
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+
+
 	
     <!-- 요청처리 여부 확인 모달창 -->
 	<!-- The Modal -->
@@ -418,7 +488,16 @@
 								
 								if(result == "success"){
 									
-									location.reload();
+									$("#confirm-modal").modal("hide"); 
+					 				
+					 				$("#alert-message").text("성공적으로 삭제되었습니다.");
+									$("#alert-message-modal").modal({backdrop: "static"});
+									
+									$("#close-btn").click(function(){
+										
+										location.reload();
+										
+									});
 									
 								}
 								

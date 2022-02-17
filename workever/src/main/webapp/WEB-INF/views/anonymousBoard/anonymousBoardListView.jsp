@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
   
 <style>
 
@@ -69,17 +73,23 @@
 
     .board-title-group .board-title{
       display:table-cell;
+      cursor:pointer;
     }
     
+    /*
     .board-title-group .board-title-setting{
-      /* border:1px solid red; */
       width:800px;
       height:25px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    
+   */
+   
+   .board-title-group .blind-title{
+   	  color:lightgray;	
+   }
+   
     .board-title-group .reply-count{
       /* border:1px solid red; */
       height:25px;
@@ -107,10 +117,78 @@
       text-align:center;
       line-height:25px;
     }
+    
+
+    /* 요청처리 여부 확인 모달창 영역 */
+    #confirm-modal h6{
+      margin-left:220px;
+    }
+
+    #confirm-modal .modal-body{
+      height:130px;
+      text-align:center;
+      line-height:100px;
+    }
+   
+    .confirm-modal-btns{
+      /* border:1px solid red; */
+      display: inline-block;
+      margin-right:160px;
+    }
+    
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
+    }
+
+    #confirm-btn{
+      border:1px solid #4E73DF;
+      background: #4E73DF;
+      color: white;
+    }
+    
+    /* 요청처리 확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
 
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+	</c:if>
 
 	<div class="wrapper">
 		
@@ -140,7 +218,9 @@
 		
 		            <!-- 익명게시글 등록버튼 영역 -->
 		            <div class="card-header board-header-area">
-		              <button class="btn btn-sm">글작성</button>
+						<c:if test="${ loginUser.userRank ne '관리자' }">		            	
+		            		<button type="button" class="btn btn-sm" onclick="location.href='enrollForm.abo';">글작성</button>
+		            	</c:if>
 		            </div>
 		            <!-- /.card-header -->
 		
@@ -157,103 +237,81 @@
 		                </thead>
 		
 		                <tbody>
-		                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
-		                  <tr>
-		                    <td colspan="4">게시글이 없습니다.</td>
-		                  </tr>
-		                  <!-- case 2. 게시글 목록 존재할 경우 -->
-		                  <tr>
-		                    <td>10</td>
-		                    <td class="board-title-area">
-		                      <div class="board-title-group">
-		                        <!-- case 1. 일반 작성글일 경우 -->
-		                        <!-- case 1_1. 신고된 작성글일 경우 => 관리자만 신고 뱃지 보임 -->
-		                        <div class="report-badge">
-		                          <span class="right badge badge-danger">신고</span> <!-- 신고 뱃지 -->
-		                        </div>
-		                        
-		                        <div class="board-title">
-		                          <div class="board-title-setting"> <!-- 게시글 제목 -->
-		                            여기는게시글제목들어가는자리입니다
-		                            게시글제목이설정한영역범위를넘어서면
-		                            ...으로표시되는거보이쥬?????????
-		                            800px이상넘어가면그렇게보임
-		                          </div>
-		                        </div>
-		
-		                        <div class="reply-count">
-		                          <label>[25]</label> <!-- 댓글 개수 -->
-		                        </div>
-		
-		                        <!-- case 2. 블라인드 처리된 글일 경우 -->
-		                        <!--
-		                             일반사원 => 제목만 O
-		                             관리자   => 제목 O 내용 O
-		                         -->
-		                        <!-- <span style="color:lightgray;">블라인드 처리된 게시글입니다</span> -->
-		                      </div>
-		                    </td>
-		                    <td>203</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>
-		                      <span style="color:lightgray;">블라인드 처리된 게시글입니다</span>
-		                    </td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  
+		                  <c:choose>
+		                      <c:when test="${ empty list }">	
+				                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
+				                  <tr>
+				                    <td colspan="4">게시글이 없습니다.</td>
+				                  </tr>
+			                  </c:when>
+			                  <c:otherwise>
+				                  <!-- case 2. 게시글 목록 존재할 경우 -->
+				                  <c:forEach var="b" items="${ list }">
+					                  <tr>
+					                    <td>${ b.abNo }</td>
+					                    <td class="board-title-area">
+					                      <div class="board-title-group">
+					                      
+					                        <c:choose>
+						                        <c:when test="${ loginUser.userRank eq '관리자' }">
+							                        <!-- case 1. 로그인한 회원이 관리자인 경우 -->
+							                        <c:if test="${ b.abReportCount > 0 }">
+							                        	<c:choose>
+								                        	<c:when test="${ b.abStatus eq 'B' }">
+								                        	
+										                        <div class="report-badge">
+										                          <span class="right badge badge-primary">블라인드</span> <!-- 블라인드 뱃지 -->
+										                        </div>
+										                        
+									                        </c:when>
+									                        <c:otherwise>
+									                        
+										                        <div class="report-badge">
+										                          <span class="right badge badge-danger">신고</span> <!-- 신고 뱃지 -->
+										                        </div>
+										                        
+									                        </c:otherwise>
+								                        </c:choose>
+							                        </c:if>
+							                        
+							                        <div class="board-title">
+						                            	${ b.abTitle }
+							                        </div>
+							                        
+							                        <div class="reply-count">
+							                        	<c:if test="${ b.abReplyCount > 0 }">
+							                        		<label>[${ b.abReplyCount }]</label> <!-- 댓글 개수 -->
+							                        	</c:if>
+							                        </div>
+						                        </c:when>
+						                        <c:otherwise>
+						                        	<!-- case 2. 로그인한 회원이 일반 사원인 경우 -->
+							                        <c:choose>
+								                    	<c:when test="${ b.abStatus eq 'B' }">
+						                            		<span class="blind-title">블라인드 처리된 게시글입니다</span>
+								                        </c:when>
+									                	<c:otherwise>
+									                		<div class="board-title">
+								                        		${ b.abTitle }
+								                        	</div>
+								                        	<div class="reply-count">
+								                        		<c:if test="${ b.abReplyCount > 0 }">
+									                        		<label>[${ b.abReplyCount }]</label> <!-- 댓글 개수 -->
+									                        	</c:if>
+									                        </div>
+								                        </c:otherwise>
+								                    </c:choose>
+												</c:otherwise>
+											</c:choose>
+											
+					                      </div>
+					                    </td>
+					                    <td>${ b.abCount }</td>
+					                    <td>${ b.abDate }</td>
+					                  </tr>
+				                  </c:forEach>
+				              </c:otherwise>  
+					      </c:choose> 
 		                </tbody>
 		            
 		              </table>
@@ -266,11 +324,19 @@
 		            
 		              <div class="paging-area">
 		
-		                <a class="btn">&lt;</a>
-		                <a class="btn">1</a>
-		                <a class="btn">2</a>
-		                <a class="btn">3</a>
-		                <a class="btn">&gt;</a>
+              			<c:if test="${ pi.currentPage ne 1 }">
+	                		<a class="btn" href="list.abo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+	                	</c:if>
+		                
+		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+		                
+                			<a class="btn" href="list.abo?cpage=${ p }">${ p }</a>
+                			
+		                </c:forEach>
+		                
+                		<c:if test="${ pi.currentPage ne pi.maxPage }">
+             	   			<a class="btn" href="list.abo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+             	   		</c:if>
 		
 		              </div>
 		
@@ -296,7 +362,79 @@
 	</div>
 	<!-- ./wrapper -->
 	
-	<jsp:include page="../common/scripts.jsp" />
+    <!-- 요청처리 여부 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="confirm-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="modal-massege">삭제하시겠습니까?</b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="confirm-modal-btns">
+	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
+	            <button id="confirm-btn" class="btn btn-sm">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
 	
+		
+
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+	
+	
+	
+	<script>
+		$(function(){
+			
+			// 게시글 상세 조회
+			$("#board-list tbody .board-title").click(function(){
+				
+				const $abNo = $(this).parents(".board-title-area").prev().text();
+				location.href = "detail.abo?abno=" + $abNo;
+				
+			});			
+			
+		});
+	</script>
 </body>
 </html>

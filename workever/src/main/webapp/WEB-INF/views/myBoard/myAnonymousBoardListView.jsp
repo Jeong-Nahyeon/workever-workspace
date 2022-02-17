@@ -1,13 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>나의 게시글</title>
+<title>나의 익명 게시글</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
   
 <style>
 
@@ -90,16 +94,18 @@
     
     .board-title-group .board-title{
       display:table-cell;
+      cursor:pointer;
     }
     
+    /* 
     .board-title-group .board-title-setting{
-      /* border:1px solid red; */
       width:800px;
       height:25px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    */
     
     .board-title-group .reply-count{
       /* border:1px solid red; */
@@ -130,6 +136,61 @@
         line-height: 25px;
     }
 
+
+    /* 요청처리 여부 확인 모달창 영역 */
+    #confirm-modal h6{
+      margin-left:220px;
+    }
+
+    #confirm-modal .modal-body{
+      height:130px;
+      text-align:center;
+      line-height:100px;
+    }
+   
+    .confirm-modal-btns{
+      /* border:1px solid red; */
+      display: inline-block;
+      margin-right:160px;
+    }
+    
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
+    }
+
+    #confirm-btn{
+      border:1px solid #4E73DF;
+      background: #4E73DF;
+      color: white;
+    }
+
+
+    /* 요청처리  확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+    
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -160,17 +221,16 @@
 		        <div class="col-12">
 		          <div class="card"> 
 		
-		            <!-- 부서별 게시글 정렬/등록버튼 영역 -->
+		            <!-- 익명 게시글 정렬/등록버튼 영역 -->
 		            <div class="card-header board-header-area">
 		              <div class="col-sm-6 board-header-area-left">
 		                <div class="btn-group">
-		                  <button type="button" class="btn btn-sm btn-default">부서별</button>
-		                  <button type="button" class="btn btn-sm anonymous-board-btn">익명</button>
+		                  <button type="button" class="btn btn-sm btn-default" onclick="location.href='list.mdbo';">부서</button>
+		                  <button type="button" class="btn btn-sm anonymous-board-btn" onclick="location.href='list.mabo';">익명</button>
 		                </div>
 		              </div>
 		              <div class="col-sm-6 board-header-area-right">
-		                <!-- 관리자일 경우에만 보임 -->
-		                <button class="btn btn-sm">삭제</button>
+		                <button type="button" id="delete-btn" class="btn btn-sm">삭제</button>
 		              </div>
 		            </div>
 		            <!-- /.card-header -->
@@ -181,7 +241,7 @@
 		                <thead>
 		                  <tr>
 		                    <th width="5%">
-		                      <input type="checkbox"> 
+		                      <input type="checkbox" id="all-check-btn"> 
 		                    </th>
 		                    <th width="10%">글번호</th>
 		                    <th width="60%">제목</th>
@@ -191,118 +251,40 @@
 		                </thead>
 		
 		                <tbody>
-		                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
-		                  <tr>
-		                    <td colspan="5">게시글이 없습니다.</td>
-		                  </tr>
-		                  <!-- case 2. 게시글 목록 존재할 경우 -->
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>10</td>
-		                    <td class="board-title-area">
-		                      <div class="board-title-group">
-		                        <div class="board-title">
-		                          <div class="board-title-setting"> <!-- 게시글 제목 -->
-					                                여기는게시글제목들어가는자리입니다
-					                                게시글제목이설정한영역범위를넘어서면
-		                            ...으로표시되는거보이쥬?????????
-		                            800px이상넘어가면그렇게보임
-		                          </div>
-		                        </div>
-		
-		                        <div class="reply-count">
-		                          <label>[25]</label> <!-- 댓글 개수 -->
-		                        </div>
-		                      </div>
-		                    </td>
-		                    <td>203</td>
-		                    <td>2022-00-00</td>
-		                  </tr>
-		
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>9</td>
-		                    <td>게시글제목자리</td>
-		                    <td>182</td> 
-		                    <td>2022-00-00</td>
-		                  </tr>
-		                  
+		                  <c:choose>
+				              <c:when test="${ empty list }">	
+				                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
+				                  <tr>
+				                    <td colspan="5">게시글이 없습니다.</td>
+				                  </tr>
+			                  </c:when>
+				              <c:otherwise>  
+				                  <!-- case 2. 게시글 목록 존재할 경우 -->
+				                  <c:forEach var="b" items="${ list }">
+					                  <tr>
+					                    <td>
+					                      <input type="checkbox" name="deleteNo"> 
+					                    </td>
+					                    <td>${ b.abNo }</td>
+					                    <td class="board-title-area">
+					                      <div class="board-title-group">
+					                        <div class="board-title">
+					                          <div class="board-title-setting">${ b.abTitle }</div>
+					                       </div>
+					
+					                        <div class="reply-count">
+					                        	<c:if test="${ b.abReplyCount > 0 }">
+					                            	<label>[${ b.abReplyCount }]</label> <!-- 댓글 개수 -->
+					                        	</c:if>
+					                        </div>
+					                      </div>
+					                    </td>
+					                    <td>${ b.abCount }</td>
+					                    <td>${ b.abDate }</td>
+					                  </tr>
+								  </c:forEach>
+				              </c:otherwise>  
+						    </c:choose>   
 		                </tbody>
 		            
 		              </table>
@@ -315,11 +297,19 @@
 		            
 		              <div class="paging-area">
 		
-		                <a class="btn">&lt;</a>
-		                <a class="btn">1</a>
-		                <a class="btn">2</a>
-		                <a class="btn">3</a>
-		                <a class="btn">&gt;</a>
+              			<c:if test="${ pi.currentPage ne 1 }">
+	                		<a class="btn" href="list.mabo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+	                	</c:if>
+		                
+		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+		                
+                			<a class="btn" href="list.mabo?cpage=${ p }">${ p }</a>
+                			
+		                </c:forEach>
+		                
+                		<c:if test="${ pi.currentPage ne pi.maxPage }">
+             	   			<a class="btn" href="list.mabo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+             	   		</c:if>
 		
 		              </div>
 		
@@ -344,8 +334,176 @@
 	
 	</div>
 	<!-- ./wrapper -->
+
+
+
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+
+
 	
-	<jsp:include page="../common/scripts.jsp" />
+    <!-- 요청처리 여부 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="confirm-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="modal-massege">삭제하시겠습니까?</b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="confirm-modal-btns">
+	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
+	            <button id="confirm-btn" class="btn btn-sm">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>	
+	
+		
+	
+	<script>
+		$(function(){
+			
+			// 게시글 상세 조회
+			$("#board-list tbody .board-title").click(function(){
+				
+				const $abNo = $(this).parents(".board-title-area").prev().text();
+				location.href = "detail.abo?abno=" + $abNo;
+				
+			});
+			
+			
+			// thead 체크 버튼 체크 시 => tbody 체크 버튼 모두 체크
+			$("#all-check-btn").change(function(){
+				
+				if($(this).prop("checked")){ // 체크된 경우
+					
+					$("input[name=deleteNo]").prop("checked", true);
+					
+				} else {
+					
+					$("input[name=deleteNo]").prop("checked", false);
+					
+				}
+				
+			});
+			
+			// tbody 체크 버튼 모두 체크 시 => thead 체크 버튼 체크
+			$("input[name=deleteNo]").change(function(){
+				
+				let checkbox = $("input[name=deleteNo]").length; // 체크박스 전체 개수
+				let checked = $("input[name=deleteNo]:checked").length; // 체크된 체크박스 개수
+				
+				if(checkbox == checked){
+					
+					$("#all-check-btn").prop("checked", true);
+					
+				}else{
+					
+					$("#all-check-btn").prop("checked", false);
+					
+				}
+				
+			});
+			
+			
+			// 나의 익명 게시글 삭제용 ajax(삭제할 게시글 체크 후 삭제 버튼 클릭 시)
+			$("#delete-btn").click(function(){
+				
+				let checkedArr = [];
+				
+				$("input[name=deleteNo]:checked").each(function(){
+					
+					checkedArr.push($(this).parent().next().text());
+					
+				});
+				
+				// 삭제할 게시글 체크 하지 않고 삭제 버튼 클릭 시
+				if(checkedArr.length == 0){
+					
+					alert("삭제할 게시글을 선택 후 삭제 가능합니다.");
+					
+				}else{ // 삭제할 게시글 체크 후 삭제 버튼 클릭 시
+					
+					$("#confirm-modal").modal({backdrop: "static"});
+				
+					$("#confirm-btn").click(function(){
+						
+						$.ajax({
+							url:"delete.mabo",
+							dataType:"json",
+							type:"post",
+							data:{deleteList:checkedArr},
+							success:function(result){
+								
+								if(result == "success"){
+									
+									$("#confirm-modal").modal("hide"); 
+					 				
+					 				$("#alert-message").text("성공적으로 삭제되었습니다.");
+									$("#alert-message-modal").modal({backdrop: "static"});
+									
+									$("#close-btn").click(function(){
+										
+										location.reload();
+									
+									});
+									
+								}
+								
+							}, error:function(){
+								
+								console.log("나의 익명 게시글 삭제용 ajax 통신 실패");	
+								
+							}
+						});
+						
+					});
+
+				}
+				
+				
+			});
+			
+		});
+	</script>
 	
 </body>
 </html>

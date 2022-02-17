@@ -2,4 +2,294 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="anonymousBoardMapper">
 
+	<resultMap id="anonymousBoardResult" type="AnonymousBoard">
+		<result column="ab_no" property="abNo" />
+		<result column="ab_title" property="abTitle" />
+		<result column="ab_content" property="abContent" />
+		<result column="ab_count" property="abCount" />
+		<result column="ab_date" property="abDate" />
+		<result column="ab_status" property="abStatus" />
+		<result column="ab_report_count" property="abReportCount" />
+		<result column="ab_reply_count" property="abReplyCount" />
+		<result column="ab_user_no" property="abUserNo" />
+	</resultMap>
+	
+	<resultMap id="communityFilesResult" type="CommunityFiles">
+		<result column="cf_no" property="cfNo" />
+		<result column="cf_category" property="cfCategory" />
+		<result column="cf_ref_no" property="cfRefNo" />
+		<result column="cf_origin_name" property="cfOriginName" />
+		<result column="cf_change_name" property="cfChangeName" />
+		<result column="cf_path" property="cfPath" />
+	</resultMap>
+	
+	<resultMap id="communityReplyResult" type="CommunityReply">
+		<result column="cr_no" property="crNo" />
+		<result column="cr_user_no" property="crUserNo" />
+		<result column="cr_category" property="crCategory" />
+		<result column="cr_content" property="crContent" />
+		<result column="cr_ref_no" property="crRefNo" />
+		<result column="cr_date" property="crDate" />
+		<result column="cr_status" property="crStatus" />
+		<result column="cr_report_count" property="crReportCount" />
+	</resultMap>	
+	
+	<select id="selectListCount" resultType="_int">
+		select
+		       count(*)
+		  from a_board
+		 where ab_status in ('Y', 'B')
+	</select>
+	
+	<select id="selectAnonymousBoardList" resultMap="anonymousBoardResult">
+		select
+		       ab_no
+		     , ab_title
+		     , ab_content
+		     , ab_count
+		     , to_char(ab_date, 'YYYY-MM-DD') as "ab_date"
+		     , ab_status
+		     , ab_report_count
+		     , ab_reply_count
+		     , ab_user_no
+		  from a_board
+		 where ab_status in ('Y', 'B')
+		 order
+		    by ab_no desc
+	</select>
+	
+	<update id="increaseCount">
+		update
+		       a_board
+		   set ab_count = ab_count + 1
+		 where ab_status in ('Y', 'B')     
+		   and ab_no = #{abNo}
+	</update>
+	
+	<select id="selectAnonymousBoard" resultMap="anonymousBoardResult">
+		select
+		       ab_no
+		     , ab_title
+		     , ab_content
+		     , to_char(ab_date, 'YYYY-MM-DD') as "ab_date"
+		     , ab_status
+		     , ab_report_count
+		     , ab_user_no
+		  from a_board
+		 where ab_status in ('Y', 'B')
+		   and ab_no = #{abNo}
+	</select>
+	
+	<select id="selectCommunityFileList" resultMap="communityFilesResult">
+		select
+		       cf_no
+		     , cf_origin_name
+		     , cf_change_name
+		     , cf_path
+		  from community_files
+		 where cf_category = 'A'
+		   and cf_ref_no = #{abNo}	
+	</select>
+	
+	<insert id="insertAnonymousBoard">
+		insert
+		  into a_board
+		  (
+	  	    ab_no
+	  	  , ab_title
+	  	  , ab_content
+	  	  , ab_user_no  
+		  )
+		  values
+		  (
+		    seq_a_board.nextval
+		  , #{abTitle}  
+		  , #{abContent}
+		  , #{abUserNo}	
+		  )
+	</insert>
+	
+	<insert id="insertCommunityFileList">
+		insert
+		  into community_files
+		  (
+		    cf_no
+		  , cf_category
+		  , cf_ref_no
+		  , cf_origin_name
+		  , cf_change_name
+		  , cf_path
+		  )  
+		  values
+		  (
+		    seq_community_files.nextval
+		  , 'A'
+		  , seq_a_board.currval
+		  , #{cfOriginName}
+		  , #{cfChangeName}
+		  , #{cfPath}
+		  )
+	</insert>
+	
+	<select id="selectCommunityFile" resultMap="communityFilesResult">
+		select
+		       cf_change_name
+		     , cf_path
+		  from community_files
+		 where cf_no = #{cfNo} 
+	</select>
+	
+	<delete id="deleteCommunityFile">
+		delete
+		  from community_files
+		 where cf_no = #{cfNo} 
+	</delete>
+	
+	<update id="updateAnonymousBoard">
+		update
+			   a_board
+		   set ab_title = #{abTitle}
+		     , ab_content = #{abContent}
+		     , ab_date = sysdate
+		 where ab_no = #{abNo}   	   
+	</update>
+	
+	<insert id="updateCommunityFileList">
+		insert
+		  into community_files
+		  (
+		    cf_no
+		  , cf_category
+		  , cf_ref_no
+		  , cf_origin_name
+		  , cf_change_name
+		  , cf_path
+		  )  
+		  values
+		  (
+		    seq_community_files.nextval
+		  , 'A'
+		  , #{cfRefNo}
+		  , #{cfOriginName}
+		  , #{cfChangeName}
+		  , #{cfPath}
+		  )
+	</insert>	
+
+	<update id="deleteAnonymousBoard">
+		update
+			   a_board
+		   set ab_status = 'N'
+		 where ab_no = #{abNo}   	   
+	</update>
+	
+	<update id="deleteCommunityReplyList">
+		update
+			   community_reply
+		   set cr_status = 'N'
+		 where cr_category = 'A'
+		   and cr_ref_no = #{abNo}  	   
+	</update>	
+	
+	<delete id="deleteCommunityFileList">
+		delete
+		  from community_files
+		 where cf_category = 'A'
+		   and cf_ref_no = #{abNo}	
+	</delete>
+	
+	<select id="selectReplyList" resultMap="communityReplyResult">
+		select
+		       cr_no
+		     , cr_user_no
+		     , cr_content
+		     , cr_ref_no
+		     , to_char(cr_date, 'YYYY.MM.DD AM HH:MI:SS') as "cr_date"
+		     , cr_status
+		     , cr_report_count
+		  from community_reply
+		 where cr_status in ('Y', 'B')
+		   and cr_category = 'A'
+		   and cr_ref_no = #{abNo}
+		 order
+		    by cr_no desc  
+	</select>
+	
+	<insert id="insertReply">
+		insert
+		  into community_reply
+		  (
+		    cr_no
+		  , cr_user_no
+		  , cr_category
+		  , cr_content
+		  , cr_ref_no
+		  )
+		  values
+		  (
+		    seq_community_reply.nextval
+		  , #{crUserNo}
+		  , 'A'
+		  , #{crContent}
+		  , #{crRefNo}
+		  )    		
+	</insert>
+	
+	<update id="increaseReplyCount">
+		update
+			   a_board
+		   set ab_reply_count = ab_reply_count + 1
+		 where ab_status = 'Y'
+		   and ab_no = #{crRefNo}  	   
+	</update>
+	
+	<update id="updateReply">
+		update
+			   community_reply
+		   set cr_content = #{crContent},
+		   	   cr_date = sysdate
+		 where cr_status = 'Y'
+		   and cr_no = #{crNo} 	   	   
+	</update>
+	
+	<update id="deleteReply">
+		update
+			   community_reply
+		   set cr_status = 'N'
+		 where cr_no = #{crNo}  	   
+	</update>
+	
+	<update id="decreaseReplyCount">
+		update
+			   a_board
+		   set ab_reply_count = ab_reply_count - 1
+		 where ab_status = 'Y'
+		   and ab_no = #{crRefNo}  	   
+	</update>
+	
+	<select id="selectTotalAnonymousBoardList" resultMap="anonymousBoardResult">
+		select
+		       ab_no
+		     , ab_user_no  
+		  from a_board
+		 where ab_status = 'Y'
+	</select>
+	
+	<select id="selectMyAnonymousBoardList" resultMap="anonymousBoardResult">
+		select
+		       ab_no
+		     , ab_title
+		     , ab_count
+		     , to_char(ab_date, 'YYYY-MM-DD') as "ab_date"
+		     , ab_reply_count
+		  from a_board
+		 where ab_status = 'Y'
+		   and ab_no in
+			   <foreach item="abNo" index="index" collection="list" open="(" separator="," close=")">
+			   		#{abNo}
+	  		   </foreach>
+		 order
+		    by ab_no desc	
+	</select>				
+	
 </mapper>
