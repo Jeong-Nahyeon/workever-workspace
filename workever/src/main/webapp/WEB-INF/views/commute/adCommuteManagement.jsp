@@ -134,25 +134,25 @@
 			<div id="cm_select" style="width: 800px; margin: auto;">
 				<div>
 					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
+					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
 				</div>
 
 				<br>
 				
 				<div>
 					<span class="sm_title" style="margin-bottom: 50px;">근무 상태</span>
-					<label><input type="radio" name="cm_status" value="normal" checked="checked">정상</label>
-					<label><input type="radio" name="cm_status" value="tardiness">지각</label>
-					<label><input type="radio" name="cm_status" value="absence">결근</label>
-					<label><input type="radio" name="cm_status" value="earlyLeave">조퇴</label>
-					<label><input type="radio" name="cm_status" value="leave">휴가</label>
+					<label><input type="radio" name="cm_status" value="1">정상</label>
+					<label><input type="radio" name="cm_status" value="2">지각</label>
+					<label><input type="radio" name="cm_status" value="3">결근</label>
+					<label><input type="radio" name="cm_status" value="4">조퇴</label>
+					<label><input type="radio" name="cm_status" value="5">휴가</label>
 				</div>
 
 
                 <div>
                     <span class="sm_title">이름</span>
-                    <input type="text" class="dateInput" placeholder="이름">
-                    <button id="cmSelBtn">조 회</button>
+                    <input type="text" class="dateInput" placeholder="이름" name="userName">
+                    <button id="cmSelBtn" onclick="ajaxAdCmSelectSearch(1);">조 회</button>
                 </div>
                 
                 <br>
@@ -248,11 +248,16 @@
 	    						   else if(result.list[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
 	    						   else { value += "<td>" + "휴가" + "</td>" }
 	    						   
+	    						   if(result.list[i].cmStartTime == 'undefined' || result.list[i].cmStartTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.list[i].cmStartTime + "</td>" }
 	    						   
-	    					value  +=	"<td>" + result.list[i].cmStartTime + "</td>"
-	    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
-	    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
-	    						   + "</tr>";
+	    						   if(result.list[i].cmEndTime == 'undefined' || result.list[i].cmEndTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.list[i].cmEndTime + "</td>" }
+	    						   
+	    						   if(result.list[i].cmWorkingHours == 'undefined' || result.list[i].cmWorkingHours == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.list[i].cmWorkingHours + "</td>" }
+	    					
+	    					value  += "</tr>";
 	    				}
 	    				
 	    				console.log(result);
@@ -283,6 +288,74 @@
 	    				
 					}, error:function() {
 						console.log("근태리스트 조회용 ajax 통신실패");
+					}
+				})
+			}
+			
+			
+			function ajaxAdCmSelectSearch(cpageNo) {
+				
+				$.ajax({
+					url: "adSearch.cm",
+					data: {
+						startday: $('input[name=startday]').val(),
+						endday: $('input[name=endday]').val(),
+						userName: $('input[name=userName]').val(),
+						cmStatus: $('input[name=cm_status]:checked').val(),
+						currentPage: cpageNo
+					}, success:function(result) {
+						
+						console.log(result)
+						
+						let value="";
+	    				for(let i in result.searchList) {
+	    					value += "<tr>"
+	    						   +	"<td>" + result.searchList[i].cmDate + "</td>"
+	    						   +	"<td>" + result.searchList[i].userName + "</td>"
+   						   
+	    						   if(result.searchList[i].cmState == 1) { value += "<td>" + "정상" + "</td>" }
+	    						   else if(result.searchList[i].cmState == 2) { value += "<td>" + "지각" + "</td>" }
+	    						   else if(result.searchList[i].cmState == 3) { value += "<td>" + "결근" + "</td>" }
+	    						   else if(result.searchList[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
+	    						   else { value += "<td>" + "휴가" + "</td>" }
+	    						   
+	    						   if(result.searchList[i].cmStartTime == 'undefined' || result.searchList[i].cmStartTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.searchList[i].cmStartTime + "</td>" }
+	    						   
+	    						   if(result.searchList[i].cmEndTime == 'undefined' || result.searchList[i].cmEndTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.searchList[i].cmEndTime + "</td>" }
+	    						   
+	    						   if(result.searchList[i].cmWorkingHours == 'undefined' || result.searchList[i].cmWorkingHours == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.searchList[i].cmWorkingHours + "</td>" }
+	    						   
+	    					value += "</tr>";
+	    				}
+	    					    				
+	    				$(".select-area tbody").html(value);
+	    				$("#selectCount").text(result.searchCount);
+	    				
+	    				let paging="";
+	    				if(result.pi.currentPage == 1) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+	    				} else {
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdCmSelectSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+	    				}
+						
+	    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+	    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxAdCmSelectSearch(" + p + ")'>" + p + "</a></li>";
+	    				}
+						
+	    				if(result.pi.currentPage == result.pi.maxPage) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+	    				} else {
+	    					
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdCmSelectSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+	    				}
+	    										
+	    				$(".pagination").html(paging);
+						
+					}, error:function() {
+						console.log("근태 검색용 ajax 통신실패")
 					}
 				})
 			}

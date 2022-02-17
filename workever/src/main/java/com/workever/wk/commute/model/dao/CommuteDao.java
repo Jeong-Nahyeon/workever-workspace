@@ -43,6 +43,22 @@ public class CommuteDao {
 		return sqlSession.update("commuteMapper.cmUpdateLeave", cm);
 	}
 	
+	public int cmSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectOne("commuteMapper.cmSelectSearchCount", map);
+	}
+	
+	public ArrayList<Commute> cmSelectSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.cmSelectSearchList", map, rowBounds);
+	}
+	
+	
+	
 	
 	
 	// 관리자
@@ -60,10 +76,6 @@ public class CommuteDao {
 		return (ArrayList)sqlSession.selectList("commuteMapper.adCmSelectList", null, rowBounds);
 	}
 	
-	
-	
-	
-	
 	public ArrayList<User> adSelectAbsenceUserList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("userMapper.adSelectAbsenceUserList");
 	}
@@ -77,32 +89,19 @@ public class CommuteDao {
 		return result;
 	}
 
-	public int cmSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
-		return sqlSession.selectOne("commuteMapper.cmSelectSearchCount", map);
+	public int adCmSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectOne("commuteMapper.adCmSelectSearchCount", map);
 	}
 
-	public ArrayList<Commute> cmSelectSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, PageInfo pi) {
+	public ArrayList<Commute> adCmSelectSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, PageInfo pi) {
 		
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
-		System.out.println("offset : " + offset);
-		System.out.println("limit : " + limit);
-		System.out.println("rowBounds : " + rowBounds);
-		
-		return (ArrayList)sqlSession.selectList("commuteMapper.cmSelectSearchList", map, rowBounds);
+		return (ArrayList)sqlSession.selectList("commuteMapper.adCmSelectSearchList", map, rowBounds);
 	}
-
-	
-
-	
-
-	
-
-
-
 
 	
 

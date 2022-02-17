@@ -30,6 +30,8 @@ public class CommuteController {
 	private CommuteService cService;
 	
 	
+	// 출퇴근 관리
+	
 	@RequestMapping("commute.cm")
 	public String commuteManagement() {
 		return "commute/commuteManagement";
@@ -146,18 +148,23 @@ public class CommuteController {
 	}
 	
 	
-	
-	
+	// 월 근무내역
 	
 	@RequestMapping("commute.wh")
 	public String workingHours() {
 		return "commute/workingHours";
 	}
 	
+	
+	// 휴가 관리
+	
 	@RequestMapping("commute.do")
 	public String dayoffList() {
 		return "commute/dayoffList";
 	}
+	
+	
+	// 연장근무 관리
 	
 	@RequestMapping("commute.ot")
 	public String overtimeList() {

@@ -82,6 +82,16 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.adInsertAbsence(sqlSession, absenceUserList);
 	}
 
+	@Override
+	public int adCmSelectSearchCount(Map<String, Object> map) {
+		return cDao.adCmSelectSearchCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Commute> adCmSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.adCmSelectSearchList(sqlSession, map, pi);
+	}
+
 	
 	
 	

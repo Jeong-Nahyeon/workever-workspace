@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.commute.model.service.CommuteService;
@@ -25,6 +26,7 @@ public class adCommuteController {
 	private CommuteService cService;
 	
 	
+	// 출퇴근 관리
 
 	@RequestMapping("adCommute.cm")
 	public String adCommuteManagement() {
@@ -65,6 +67,30 @@ public class adCommuteController {
 			session.setAttribute("alertMsg", "결근 처리 실패");
 			return "redircet:adCommute.cm";
 		}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="adSearch.cm", produces="application/json; charset=UTF-8")
+	public String ajaxAdCmSelectSearch(String startday, String endday, String userName, int cmStatus, int currentPage) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startday", startday);
+		map.put("endday", endday);
+		map.put("userName", userName);
+		map.put("cmStatus", cmStatus);
+		
+		int searchCount = cService.adCmSelectSearchCount(map);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		ArrayList<Commute> searchList = cService.adCmSelectSearchList(map, pi);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("searchCount", searchCount);
+		result.put("searchList", searchList);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result);
 		
 	}
 	

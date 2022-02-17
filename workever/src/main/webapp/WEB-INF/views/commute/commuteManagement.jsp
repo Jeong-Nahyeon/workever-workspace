@@ -308,10 +308,16 @@
 	    						   else { value += "<td>" + "휴가" + "</td>" }
 	    						   
 	    						   
-	    					value  +=	"<td>" + result.list[i].cmStartTime + "</td>"
-	    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
-	    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
-	    						   + "</tr>";
+	    						   if(result.list[i].cmStartTime == 'undefined' || result.list[i].cmStartTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.list[i].cmStartTime + "</td>" }
+	    						   
+	    						   if(result.list[i].cmEndTime == 'undefined' || result.list[i].cmEndTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.list[i].cmEndTime + "</td>" }
+	    						   
+	    						   if(result.list[i].cmWorkingHours == 'undefined' || result.list[i].cmWorkingHours == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.list[i].cmWorkingHours + "</td>" }
+	    						   
+	    					value += "</tr>";
 	    				}
 	    				
 	    				console.log(result);
@@ -432,11 +438,16 @@
 	    						   else if(result.searchList[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
 	    						   else { value += "<td>" + "휴가" + "</td>" }
 	    						   
+	    						   if(result.searchList[i].cmStartTime == 'undefined' || result.searchList[i].cmStartTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.searchList[i].cmStartTime + "</td>" }
 	    						   
-	    					value  +=	"<td>" + result.searchList[i].cmStartTime + "</td>"
-	    						   +	"<td>" + result.searchList[i].cmEndTime + "</td>"
-	    						   +	"<td>" + result.searchList[i].cmWorkingHours + "</td>"
-	    						   + "</tr>";
+	    						   if(result.searchList[i].cmEndTime == 'undefined' || result.searchList[i].cmEndTime == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.searchList[i].cmEndTime + "</td>" }
+	    						   
+	    						   if(result.searchList[i].cmWorkingHours == 'undefined' || result.searchList[i].cmWorkingHours == undefined) { value += "<td>0</td>" }
+	    						   else { value += "<td>" + result.searchList[i].cmWorkingHours + "</td>" }
+	    						   
+	    					value += "</tr>";
 	    				}
 	    					    				
 	    				$(".select-area tbody").html(value);

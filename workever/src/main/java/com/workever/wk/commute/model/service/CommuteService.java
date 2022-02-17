@@ -20,7 +20,7 @@ public interface CommuteService {
 	// 퇴근 기록용
 	int cmUpdateLeave(Commute cm);
 	
-	// 검색용
+	// 근태 검색용
 	int cmSelectSearchCount(Map<String, Object> map);
 	ArrayList<Commute> cmSelectSearchList(Map<String, Object> map, PageInfo pi);
 	
@@ -31,6 +31,10 @@ public interface CommuteService {
 	// Admin 결근자 조회/처리용
 	ArrayList<User> adSelectAbsenceUserList();
 	int adInsertAbsence(ArrayList<User> absenceUserList);
+	
+	// Admin 근태 검색용
+	int adCmSelectSearchCount(Map<String, Object> map);
+	ArrayList<Commute> adCmSelectSearchList(Map<String, Object> map, PageInfo pi);
 	
 	
 
