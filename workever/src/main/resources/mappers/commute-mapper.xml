@@ -102,31 +102,16 @@
 		   and cm_date = to_char(sysdate, 'yyyy-mm-dd')
 	</update>
 	
+	
 	<select id="cmSelectSearchCount" resultType="_int">
-		select 
-			   count(*)
+		select
+		       count(*)
 		  from commute
-		  join users using (user_no)
-		 where user_enabled = 'Y'
-		  <if test='startday !="" and endday != ""'>
-		   	and cm_date between #{ startday } and #{ endday }
-		  </if>
-		  <if test="cm_status == 'normal'">
-		  	and cm_state = 1
-		  </if>
-		  <if test="cm_status == 'tardiness'">
-		  	and cm_state = 2
-		  </if>
-		  <if test="cm_status == 'absence'">
-		  	and cm_state = 3
-		  </if>
-		  <if test="cm_status == 'earlyLeave'">
-		  	and cm_state = 4
-		  </if>
-		  <if test="cm_status == 'leave'">
-		  	and cm_state = 5
-		  </if>
+		 where user_no = #{ userNo }
+		   and cm_date between #{ startday } and #{ endday }
+		   and cm_state = #{ cmStatus }
 	</select>
+	
 	
 	<select id="cmSelectSearchList" resultMap="commuteResult">
 		select 
@@ -139,32 +124,41 @@
 		  from commute
 		  join users using (user_no)
 		 where user_no = #{ userNo }
-		 <choose>
-		 	<when test='startday !="" and endday != ""'>
-		   		and cm_date between #{ startday } and #{ endday }
-		  	</when>
-		 	<when test="cm_status == 'normal'">
-		 		and cm_state = 1
-		 	</when>
-		 	<when test="cm_status == 'tardiness'">
-		 		and cm_state = 2
-		 	</when>
-		 	<when test="cm_status == 'absence'">
-		 		and cm_state = 3
-		 	</when>
-		 	<when test="cm_status == 'earlyLeave'">
-		 		and cm_state = 4
-		 	</when>
-		 	<when test="cm_status == 'leave'">
-		 		and cm_state = 5
-		 	</when>
-		 </choose>
+	 	<if test='startday !="" and endday != ""'>
+	   	   and cm_date between #{ startday } and #{ endday }
+	  	</if>
+		   and cm_state = #{ cmStatus }
 		 order
 		    by cm_no desc
 	</select>
 	
 	
 	<!-- 출퇴근 관리(관리자) -->
+	
+	<select id="adCmSelectCount" resultType="_int">
+		select
+		       count(*)
+		  from commute
+		  join users using (user_no)
+		 where user_enabled = 'Y'
+		   and user_rank != '관리자'
+	</select>
+	
+	<select id="adCmSelectList" resultMap="commuteResult">
+		select 
+		       cm_no
+		     , user_name
+		     , cm_date
+		     , cm_state
+		     , cm_start_time
+		     , cm_end_time
+		     , cm_working_hours
+		  from commute
+		  join users using (user_no)
+		 where user_enabled = 'Y'
+		 order
+		    by cm_no desc
+	</select>
 	
 	<insert id="adInsertAbsence">
 		insert

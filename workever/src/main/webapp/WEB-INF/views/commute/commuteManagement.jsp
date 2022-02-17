@@ -107,7 +107,7 @@
 </head>
 	
 <body class="hold-transition sidebar-mini">
-	
+
 	<div class="wrapper">
 	
 		<jsp:include page="../common/header.jsp" />
@@ -220,7 +220,6 @@
 			<hr class="cm_underLine"> <br>
 			
 			<div id="cm_select" style="width: 800px; margin: auto;">
-				<form action="Search.cm" method="get">
 					<div>
 						<span class="sm_title">날짜</span>
 						<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
@@ -230,14 +229,13 @@
 					
 					<div>
 						<span class="sm_title" style="margin-bottom: 50px;">근무 상태</span>
-						<label><input type="radio" name="cm_status" value="normal" checked="checked">정상</label>
-						<label><input type="radio" name="cm_status" value="tardiness">지각</label>
-						<label><input type="radio" name="cm_status" value="absence">결근</label>
-						<label><input type="radio" name="cm_status" value="earlyLeave">조퇴</label>
-						<label><input type="radio" name="cm_status" value="leave">휴가</label>
-						<button type="submit" id="cmSelBtn">조 회</button>
+						<label><input type="radio" name="cm_status" value="1">정상</label>
+						<label><input type="radio" name="cm_status" value="2">지각</label>
+						<label><input type="radio" name="cm_status" value="3">결근</label>
+						<label><input type="radio" name="cm_status" value="4">조퇴</label>
+						<label><input type="radio" name="cm_status" value="5">휴가</label>
+						<button id="cmSelBtn" onclick="ajaxSelectSearch(1);">조 회</button>
 					</div>
-				</form>
 				
 			</div>
 
@@ -270,145 +268,208 @@
 				
 				<br>
 					
-				</div>
-				
-				<div class="card-footer" style="background-color: #f4f6f9;">
-					<nav aria-label="Contacts Page Navigation">
-						<ul class="pagination justify-content-center m-0">
-	
-						</ul>
-					</nav>
-				</div>
 			</div>
+				
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
+
+					</ul>
+				</nav>
+			</div>
+		</div>
 					
 
-			<script>
-				$(function(){
-					ajaxSelectCommuteList(1);
+		<script>
+			$(function(){
+				ajaxSelectCommuteList(1);
+			})
+			
+			
+			function ajaxSelectCommuteList(cpageNo) {
+				
+				$.ajax({
+					url: "list.cm",
+					type:"POST",
+					data: {
+							userNo: '${loginUser.userNo}',
+							currentPage: cpageNo
+					}, success:function(result) {
+						
+						let value="";
+	    				for(let i in result.list) {
+	    					value += "<tr>"
+	    						   +	"<td>" + result.list[i].cmDate + "</td>"
+   						   
+	    						   if(result.list[i].cmState == 1) { value += "<td>" + "정상" + "</td>" }
+	    						   else if(result.list[i].cmState == 2) { value += "<td>" + "지각" + "</td>" }
+	    						   else if(result.list[i].cmState == 3) { value += "<td>" + "결근" + "</td>" }
+	    						   else if(result.list[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
+	    						   else { value += "<td>" + "휴가" + "</td>" }
+	    						   
+	    						   
+	    					value  +=	"<td>" + result.list[i].cmStartTime + "</td>"
+	    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
+	    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
+	    						   + "</tr>";
+	    				}
+	    				
+	    				console.log(result);
+	    				
+	    				$(".select-area tbody").html(value);
+	    				$("#selectCount").text(result.listCount);
+	    				
+
+	    				let paging="";
+	    				if(result.pi.currentPage == 1) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+	    				} else {
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectCommuteList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+	    				}
+						
+	    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+	    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectCommuteList(" + p + ")'>" + p + "</a></li>";
+	    				}
+						
+	    				if(result.pi.currentPage == result.pi.maxPage) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+	    				} else {
+	    					
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectCommuteList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+	    				}
+						
+	    				$(".pagination").html(paging);
+	    				
+	    				
+	    					
+					}, error:function() {
+						console.log("근태리스트 조회용 ajax 통신실패");
+					}
+
 				})
+			}
+			
+			
+			
+			function ajaxInsertEnter() {
 				
-				
-				function ajaxSelectCommuteList(cpageNo) {
-					
-					$.ajax({
-						url: "list.cm",
-						type:"POST",
-						data: {
-								userNo: '${loginUser.userNo}',
-								currentPage: cpageNo
-						}, success:function(result) {
+				$.ajax({
+					url: "enter.cm",
+					type:"POST",
+					data: {
+						userNo: '${loginUser.userNo}'
+					}, success:function(result) {
+						
+						if(result == "success") {
+							ajaxSelectCommuteList(1);
 							
-							let value="";
-		    				for(let i in result.list) {
-		    					value += "<tr>"
-		    						   +	"<td>" + result.list[i].cmDate + "</td>"
-    						   
-		    						   if(result.list[i].cmState == 1) { value += "<td>" + "정상" + "</td>" }
-		    						   else if(result.list[i].cmState == 2) { value += "<td>" + "지각" + "</td>" }
-		    						   else if(result.list[i].cmState == 3) { value += "<td>" + "결근" + "</td>" }
-		    						   else if(result.list[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
-		    						   else { value += "<td>" + "휴가" + "</td>" }
-		    						   
-		    						   
-		    					value  +=	"<td>" + result.list[i].cmStartTime + "</td>"
-		    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
-		    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
-		    						   + "</tr>";
-		    				}
-		    				
-		    				console.log(result);
-		    				
-		    				$(".select-area tbody").html(value);
-		    				$("#selectCount").text(result.listCount);
-		    				
-
-		    				let paging="";
-		    				if(result.pi.currentPage == 1) {
-		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
-		    				} else {
-		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectCommuteList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
-		    				}
+							alert("출근 성공 ㅠ");
 							
-		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
-		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectCommuteList(" + p + ")'>" + p + "</a></li>";
-		    				}
+						} else {
+							ajaxSelectCommuteList(1);
 							
-		    				if(result.pi.currentPage == result.pi.maxPage) {
-		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
-		    				} else {
-		    					
-		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectCommuteList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
-		    				}
-							
-		    				$(".pagination").html(paging);
-		    				
-		    				
-		    					
-						}, error:function() {
-							console.log("근태리스트 조회용 ajax 통신실패");
+							alert("출근 실패 ㅠ");
 						}
-
-					})
-				}
+						
+					}, error:function() {
+						console.log("출근 기록용 ajax 통신실패");
+					}
+				})
+			}
+			
+			
+			
+			function ajaxUpdateLeave() {
 				
-				
-				
-				function ajaxInsertEnter() {
-					
-					$.ajax({
-						url: "enter.cm",
-						type:"POST",
-						data: {
-							userNo: '${loginUser.userNo}'
-						}, success:function(result) {
+				$.ajax({
+					url: "leave.cm",
+					type: "POST",
+					data: {
+						userNo: '${loginUser.userNo}'
+					}, success:function(result) {
+						
+						if(result == "success") {
+							ajaxSelectCommuteList(1);
 							
-							if(result == "success") {
-								ajaxSelectCommuteList(1);
-								
-								alert("출근 성공 ㅠ");
-								
-							} else {
-								ajaxSelectCommuteList(1);
-								
-								alert("출근 실패 ㅠ");
-							}
+							alert("퇴근을 축하합니다~");
 							
-						}, error:function() {
-							console.log("출근 기록용 ajax 통신실패");
+						} else {
+							ajaxSelectCommuteList(1);
+							
+							alert("퇴근 실패ㅠ");
+							
 						}
-					})
-				}
+						
+					}, error:function() {
+						console.log("퇴근 기록용 ajax 통신실패");
+					}
+				})
+			}
+			
+			
+			function ajaxSelectSearch(cpageNo) {
 				
-				
-				
-				function ajaxUpdateLeave() {
-					
-					$.ajax({
-						url: "leave.cm",
-						type: "POST",
-						data: {
-							userNo: '${loginUser.userNo}'
-						}, success:function(result) {
-							
-							if(result == "success") {
-								ajaxSelectCommuteList(1);
-								
-								alert("퇴근을 축하합니다~");
-								
-							} else {
-								ajaxSelectCommuteList(1);
-								
-								alert("퇴근 실패ㅠ");
-								
-							}
-							
-						}, error:function() {
-							console.log("퇴근 기록용 ajax 통신실패");
-						}
-					})
-				}
-				
-			</script>
+				$.ajax({
+					url: "search.cm",
+					data: {
+						userNo: '${loginUser.userNo}',
+						startday: $('input[name=startday]').val(),
+						endday: $('input[name=endday]').val(),
+						cmStatus: $('input[name=cm_status]:checked').val(),
+						currentPage: cpageNo
+					}, success:function(result) {
+						
+						console.log(result);
+						
+						let value="";
+	    				for(let i in result.searchList) {
+	    					value += "<tr>"
+	    						   +	"<td>" + result.searchList[i].cmDate + "</td>"
+   						   
+	    						   if(result.searchList[i].cmState == 1) { value += "<td>" + "정상" + "</td>" }
+	    						   else if(result.searchList[i].cmState == 2) { value += "<td>" + "지각" + "</td>" }
+	    						   else if(result.searchList[i].cmState == 3) { value += "<td>" + "결근" + "</td>" }
+	    						   else if(result.searchList[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
+	    						   else { value += "<td>" + "휴가" + "</td>" }
+	    						   
+	    						   
+	    					value  +=	"<td>" + result.searchList[i].cmStartTime + "</td>"
+	    						   +	"<td>" + result.searchList[i].cmEndTime + "</td>"
+	    						   +	"<td>" + result.searchList[i].cmWorkingHours + "</td>"
+	    						   + "</tr>";
+	    				}
+	    					    				
+	    				$(".select-area tbody").html(value);
+	    				$("#selectCount").text(result.searchCount);
+	    				
+	    				let paging="";
+	    				if(result.pi.currentPage == 1) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+	    				} else {
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+	    				}
+						
+	    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+	    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectSearch(" + p + ")'>" + p + "</a></li>";
+	    				}
+						
+	    				if(result.pi.currentPage == result.pi.maxPage) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+	    				} else {
+	    					
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+	    				}
+	    										
+	    				$(".pagination").html(paging);
+						
+						
+					}, error:function() {
+						console.log("근태 검색용 ajax 통신실패")
+					}
+				})
+			}
+			
+		</script>
 			
 			
 		</div>

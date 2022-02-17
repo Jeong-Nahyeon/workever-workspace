@@ -1,6 +1,7 @@
 package com.workever.wk.commute.model.dao;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -45,6 +46,24 @@ public class CommuteDao {
 	
 	
 	// 관리자
+	public int adCmSelectListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("commuteMapper.adCmSelectCount");
+	}
+	
+	public ArrayList<Commute> adCmSelectList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.adCmSelectList", null, rowBounds);
+	}
+	
+	
+	
+	
+	
 	public ArrayList<User> adSelectAbsenceUserList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("userMapper.adSelectAbsenceUserList");
 	}
@@ -57,6 +76,28 @@ public class CommuteDao {
 		}
 		return result;
 	}
+
+	public int cmSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectOne("commuteMapper.cmSelectSearchCount", map);
+	}
+
+	public ArrayList<Commute> cmSelectSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		System.out.println("offset : " + offset);
+		System.out.println("limit : " + limit);
+		System.out.println("rowBounds : " + rowBounds);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.cmSelectSearchList", map, rowBounds);
+	}
+
+	
+
+	
 
 	
 

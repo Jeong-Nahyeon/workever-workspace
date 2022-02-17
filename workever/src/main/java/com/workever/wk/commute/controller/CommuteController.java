@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.commute.model.service.CommuteService;
@@ -82,9 +84,9 @@ public class CommuteController {
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
 		ArrayList<Commute> list = cService.cmSelectList(userNo, pi);
 		
+		map.put("listCount", listCount);
 		map.put("pi", pi);
 		map.put("list", list);
-		map.put("listCount", listCount);
 		
 		return map;
 	}
@@ -120,6 +122,29 @@ public class CommuteController {
 		
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="search.cm", produces="application/json; charset=utf-8")
+	public String ajaxSelectSearch(@RequestParam(value="currentPage", defaultValue="1")int currentPage, int userNo, String startday, String endday, int cmStatus) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userNo", userNo);
+		map.put("startday", startday);
+		map.put("endday", endday);
+		map.put("cmStatus", cmStatus);
+		
+		int searchCount = cService.cmSelectSearchCount(map);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		ArrayList<Commute> searchList = cService.cmSelectSearchList(map, pi);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("searchCount", searchCount);
+		result.put("searchList", searchList);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result); // {searchCount:8, searchList:[{}, {}], pi:{}}
+	}
+	
 	
 	
 	
@@ -138,4 +163,7 @@ public class CommuteController {
 	public String overtimeList() {
 		return "commute/overtimeList";
 	}
+	
+	
+	
 }

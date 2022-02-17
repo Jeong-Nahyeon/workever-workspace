@@ -1,6 +1,7 @@
 package com.workever.wk.commute.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,32 @@ public class CommuteServiceImpl implements CommuteService{
 	public int cmUpdateLeave(Commute cm) {
 		return cDao.cmUpdateLeave(sqlSession, cm);
 	}
+	
+	@Override
+	public int cmSelectSearchCount(Map<String, Object> map) {
+		return cDao.cmSelectSearchCount(sqlSession, map);
+	}
+	
+	@Override
+	public ArrayList<Commute> cmSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.cmSelectSearchList(sqlSession, map, pi);
+	}
+
+
+
 
 	
-	
 	// 관리자
+	@Override
+	public int adCmSelectListCount() {
+		return cDao.adCmSelectListCount(sqlSession);
+	}
+	
+	@Override
+	public ArrayList<Commute> adCmSelectList(PageInfo pi) {
+		return cDao.adCmSelectList(sqlSession, pi);
+	}
+	
 	@Override
 	public ArrayList<User> adSelectAbsenceUserList() {
 		return cDao.adSelectAbsenceUserList(sqlSession);
@@ -58,6 +81,11 @@ public class CommuteServiceImpl implements CommuteService{
 	public int adInsertAbsence(ArrayList<User> absenceUserList) {
 		return cDao.adInsertAbsence(sqlSession, absenceUserList);
 	}
+
+	
+	
+	
+
 
 
 
