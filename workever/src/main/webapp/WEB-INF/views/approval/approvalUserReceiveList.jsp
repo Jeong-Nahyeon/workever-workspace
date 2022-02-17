@@ -84,7 +84,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-hover text-nowrap" id="apvlReceiveList">
                                     <thead>
                                         <tr align="center">
                                             <th>결재 종류</th>
@@ -103,6 +103,7 @@
                                     		<c:otherwise>
 		                                    	<c:forEach var="a" items="${ list }">
 			                                        <tr align="center">
+			                                        	<input type="hidden" class="apvlNo" value="${ a.apvlNo }">
 			                                            <td>${ a.apvlFormNo }</td>
 			                                            <td>${ a.apvlTitle }</td>
 			                                            <td>${ a.apvlWriterName } ${ a.apvlWriterRank}</td>
@@ -228,6 +229,12 @@
 	<jsp:include page="../common/scripts.jsp" />
 
      <script>
+     
+     $(function(){
+  		  $("#apvlReceiveList>tbody>tr").click(function(){
+  			  location.href= "detail.ap?apvlNo=" + $(this).children(".apvlNo").val();
+  		  })
+  	  })
      	/*
 	     $(function(){
 	   	  

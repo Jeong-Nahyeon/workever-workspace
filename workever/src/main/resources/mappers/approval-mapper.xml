@@ -21,6 +21,18 @@
 		<result column="apvl_line_status" property="apvlStatus" /> 
 	</resultMap>
 	
+	<resultMap id="selectApprovalResult" type="Approval">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="apvl_writer" property="apvlWriter" />
+		<result column="apvl_form_no" property="apvlFormNo" />
+		<result column="apvl_title" property="apvlTitle" />
+		<result column="apvl_create_date" property="apvlCreateDate" />
+		<result column="apvl_status" property="apvlStatus" />
+		<result column="user_name" property="apvlWriterName" />
+		<result column="user_rank" property="apvlWriterRank" />
+		<result column="dept_name" property="apvlWriterDeptName" />
+	</resultMap>
+	
 	<resultMap id="approvalLineListResult" type="ApprovalLine">
 		<result column="apvl_no" property="apvlNo" />
 		<result column="user_no" property="userNo" />
@@ -29,6 +41,7 @@
 		<result column="apvl_line_turn" property="apvlLineTurn" />
 		<result column="apvl_date" property="apvlDate" />
 		<result column="apvl_line_status" property="apvlLineStatus" />
+		<result column="apvl_return_comment" property="apvlReturnComment"/>
 	</resultMap>
 		
 	<resultMap id="userListResult" type="User">
@@ -42,6 +55,46 @@
 	<resultMap id="deptListResult" type="Dept">
 		<result column="dept_no" property="deptNo" />
 		<result column="dept_name" property="deptName" />
+	</resultMap>
+	
+	<resultMap id="selectApvlDayOffResult" type="ApprovalDayOffForm">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="off_start_date" property="offStartDate" />
+		<result column="off_end_date" property="offEndDate" />
+		<result column="off_total_date" property="offTotalDate" />
+		<result column="off_kind" property="offKind" />
+		<result column="off_reason" property="offReason" />
+	</resultMap>
+	
+	<resultMap id="selectApvlOverTimeResult" type="ApprovalOverTimeForm">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="ot_date" property="otDate" />
+		<result column="ot_working_hours" property="otWorkingHours" />
+		<result column="ot_title" property="otTitle" />
+		<result column="ot_content" property="otContent" />
+	</resultMap>
+	
+	<resultMap id="selectWorkReportResult" type="ApprovalWorkReportForm">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="work_name" property="workName" />
+		<result column="work_date" property="workDate" />
+		<result column="work_plan" property="workPlan" />
+	</resultMap>
+	
+	<resultMap id="selectExpenseReportResult" type="ApprovalExpenseReportForm">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="er_date" property="erDate" />
+		<result column="er_amount" property="erAmount" />
+		<result column="er_purpose" property="erPurpose" />
+	</resultMap>
+	
+	<resultMap id="selectBuisnessTripResult" type="ApprovalBuisnessTripForm">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="bt_place" property="btPlace" />
+		<result column="bt_start_date" property="btStartDate" />
+		<result column="bt_End_date" property="btEndDate" />
+		<result column="bt_expense" property="btExpense" />
+		<result column="bt_purpose" property="btPurpose" />
 	</resultMap>
 	
 	<select id="userWriteListCount" resultType="_int">
@@ -153,6 +206,7 @@
 		     , apvl_line_turn
 		     , apvl_date
 		     , apvl_line_status
+		     , apvl_return_comment
 		  from approval_line
 		  join users using (user_no)
 		  where apvl_no = #{ apvlNo }
@@ -280,6 +334,27 @@
 		 where user_no = #{selectUserNo}
 	</select>
 	
+	<insert id="insertApvlLine" parameterType="Map">
+		  insert 
+		  into approval_line 
+		  (
+		    apvl_line_no
+		  , apvl_no
+		  , user_no
+		  , apvl_line_turn) 
+		  select 
+		  		 seq_approval_line.nextval
+		  		, seq_approval.currval
+		  		, A.*
+		  	from(
+		  <foreach collection="lineUserNo" item="line" index="index" separator="UNION ALL">
+			  select  
+				   #{line}
+				  , #{index} +1
+				  from dual
+	 		  </foreach>) A
+	</insert>
+	
 	<insert id="insertApvlDayOffForm" parameterType="Map">
 		insert all
 		  into approval 
@@ -316,26 +391,205 @@
 
 	</insert>
 	
-	<insert id="insertApvlLine" parameterType="Map">
-		  insert 
-		  into approval_line 
+	<insert id="insertApvlOverTimeForm" parameterType="Map">
+		insert all
+		  into approval 
 		  (
-		    apvl_line_no
-		  , apvl_no
-		  , user_no
-		  , apvl_line_turn) 
-		  select 
-		  		 seq_approval_line.nextval
-		  		, seq_approval.currval
-		  		, A.*
-		  	from(
-		  <foreach collection="lineUserNo" item="line" index="index" separator="UNION ALL">
-			  select  
-				   #{line}
-				  , #{index} +1
-				  from dual
-	 		  </foreach>) A
+		    apvl_no
+		  , apvl_writer
+		  , apvl_form_no
+		  , apvl_title) 
+		  values 
+		  (
+		    seq_approval.nextval
+		  , #{apvl.apvlWriter}
+		  , #{apvl.apvlFormNo}
+		  , #{apvl.apvlTitle}
+		  )
+		  into approval_overtime
+		  (
+		    apvl_no
+		  , ot_date
+		  , ot_working_hours
+		  , ot_title
+		  , ot_content)
+		  values
+		  (
+		    seq_approval.currval
+		  , #{apvlOtf.otDate}
+		  , #{apvlOtf.otWorkingHours}
+		  , #{apvlOtf.otTitle}
+		  , #{apvlOtf.otContent}
+		  )
+		  select * from dual
 	</insert>
 	
+	<insert id="insertApvlWorkReportForm" parameterType="Map">
+		insert all
+		  into approval 
+		  (
+		    apvl_no
+		  , apvl_writer
+		  , apvl_form_no
+		  , apvl_title) 
+		  values 
+		  (
+		    seq_approval.nextval
+		  , #{apvl.apvlWriter}
+		  , #{apvl.apvlFormNo}
+		  , #{apvl.apvlTitle}
+		  )
+		  into approval_workreport
+		  (
+		    apvl_no
+		  , work_name
+		  , work_date
+		  , work_plan)
+		  values
+		  (
+		    seq_approval.currval
+		  , #{apvlWrf.workName}
+		  , #{apvlWrf.workDate}
+		  , #{apvlWrf.workPlan}
+		  )
+		  select * from dual
+	</insert>
 	
+	<insert id="insertApvlExpenseReportForm" parameterType="Map">
+		insert all
+		  into approval 
+		  (
+		    apvl_no
+		  , apvl_writer
+		  , apvl_form_no
+		  , apvl_title) 
+		  values 
+		  (
+		    seq_approval.nextval
+		  , #{apvl.apvlWriter}
+		  , #{apvl.apvlFormNo}
+		  , #{apvl.apvlTitle}
+		  )
+		  into approval_expensereport
+		  (
+		    apvl_no
+		  , er_date
+		  , er_amount
+		  , er_purpose)
+		  values
+		  (
+		    seq_approval.currval
+		  , #{apvlErf.erDate}
+		  , #{apvlErf.erAmount}
+		  , #{apvlErf.erPurpose}
+		  )
+		  select * from dual
+	</insert>
+	
+	<insert id="insertApvlBuisnessTripForm" parameterType="Map">
+		insert all
+		  into approval 
+		  (
+		    apvl_no
+		  , apvl_writer
+		  , apvl_form_no
+		  , apvl_title) 
+		  values 
+		  (
+		    seq_approval.nextval
+		  , #{apvl.apvlWriter}
+		  , #{apvl.apvlFormNo}
+		  , #{apvl.apvlTitle}
+		  )
+		  into approval_buisnesstrip
+		  (
+		    apvl_no
+		  , bt_place
+		  , bt_start_date
+		  , bt_end_date
+		  , bt_expense
+		  , bt_purpose)
+		  values
+		  (
+		    seq_approval.currval
+		  , #{apvlBtf.btPlace}
+		  , #{apvlBtf.btStartDate}
+		  , #{apvlBtf.btEndDate}
+		  , #{apvlBtf.btExpense}
+		  , #{apvlBtf.btPurpose}
+		  )
+		  select * from dual
+	</insert>
+	
+	<select id="selectApproval" resultMap="selectApprovalResult">
+		select 
+		       apvl_no
+		     , apvl_Writer
+		     , apvl_form_no
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_status
+		     , user_name
+		     , user_rank
+		     , dept_name
+		  from approval
+		  join users on (apvl_writer = user_no)
+		  join dept using (dept_no)
+		  where apvl_no = #{apvlNo}
+	</select>
+	
+	<select id="selectDayOffForm" resultMap="selectApvlDayOffResult">
+		select 
+		         apvl_no
+		       , off_start_date
+		       , off_end_date
+		       , off_total_date
+		       , off_kind
+		       , off_reason
+		    from approval_dayoff
+		   where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="selectOverTimeForm" resultMap="selectApvlOverTimeResult">
+		select 
+		         apvl_no
+		       , ot_date
+		       , ot_working_hours
+		       , ot_title
+		       , ot_content
+		    from approval_overtime
+		   where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="selectWorkReportForm" resultMap="selectWorkReportResult">
+		select 
+		         apvl_no
+		       , work_name
+		       , work_date
+		       , work_plan
+		    from approval_workreport
+		   where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="selectExpenseReportForm" resultMap="selectExpenseReportResult">
+		select 
+		         apvl_no
+		       , er_date
+		       , er_amount
+		       , er_purpose
+		    from approval_expensereport
+		   where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="selectBuisnessTripForm" resultMap="selectBuisnessTripResult">
+		select 
+		         apvl_no
+		       , bt_place
+		       , bt_start_date
+		       , bt_end_date
+		       , bt_expense
+		       , bt_purpose
+		    from approval_buisnesstrip
+		   where apvl_no = #{ apvlNo }
+	</select>
 </mapper>

@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ApprovalWorkReportForm { // 업무 보고서 양식
+	private int apvlNo;
 	private String workName;
 	private String workDate;
 	private String workPlan;

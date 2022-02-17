@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ApprovalOverTimeForm { // 연장 근무 신청서 양식
+	private int apvlNo;
 	private String otDate;
 	private String otWorkingHours;
 	private String otTitle;

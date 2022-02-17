@@ -276,7 +276,7 @@ public class approvalController {
 	
 	// 전자결재 등록
 	@RequestMapping("insert.ap")
-	public String insertApproval(String lineUser, Approval apvl, ApprovalBuisnessTripForm apvlBtf, ApprovalDayOffForm apvlDof, ApprovalExpenseReportForm apvlErf, ApprovalOverTimeForm apvlOtf, ApprovalWorkReportForm apvlWrf) {
+	public String insertApproval(String lineUser, Approval apvl, ApprovalBuisnessTripForm apvlBtf, ApprovalDayOffForm apvlDof, ApprovalExpenseReportForm apvlErf, ApprovalOverTimeForm apvlOtf, ApprovalWorkReportForm apvlWrf, HttpSession session, Model model) {
 		
 		Map<String,Object> map = new HashMap<String,Object>();
 		String[] lineUserNo = lineUser.split(","); 
@@ -287,7 +287,7 @@ public class approvalController {
 			case 1 : 
 				map.put("apvlDof", apvlDof);break;
 			case 2 : 
-				map.put("apvlOtf", apvlDof);break;
+				map.put("apvlOtf", apvlOtf);break;
 			case 3 : 
 				map.put("apvlWrf", apvlWrf);break;
 			case 4 : 
@@ -296,16 +296,70 @@ public class approvalController {
 				map.put("apvlBtf", apvlBtf);break;
 		}
 		
+		
 		int result = aService.insertApproval(map);
 		
-		System.out.println(lineUser);
-		System.out.println(apvl);
-		System.out.println(apvlBtf);
-		System.out.println(apvlDof);
-		System.out.println(apvlErf);
-		System.out.println(apvlOtf);
-		System.out.println(apvlWrf);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "전자결재가 성공적으로 등록되었습니다.");
+			return "redirect:writeList.ap";
+		}else {
+			model.addAttribute("errorMsg", "게시글 등록 실패");
+			return "common/errorPage";
+		}
 		
-		return "redirect:writeList.ap";
 	}
+	
+	// 작성한 전자결제 상세 조회
+	@RequestMapping("detail.ap")
+	public String selectApproval(int apvlNo, Model model) {
+		Approval apvl = aService.selectApproval(apvlNo);
+		ArrayList<ApprovalLine> lineList = aService.approvalLineList(apvlNo);
+		int apvlFormNo = Integer.parseInt(apvl.getApvlFormNo());
+		model.addAttribute("apvl", apvl);
+		model.addAttribute("lineList", lineList);
+		String page = "";
+		switch(apvlFormNo) {
+			case 1:
+				ApprovalDayOffForm apvlDof = aService.selectDayOffForm(apvlNo);
+				switch(apvlDof.getOffKind()) {
+					case "1": apvlDof.setOffKind("연차"); break;
+					case "2": apvlDof.setOffKind("병가"); break;
+					case "3": apvlDof.setOffKind("공가"); break;
+					case "4": apvlDof.setOffKind("정기 휴가"); break;
+					case "5": apvlDof.setOffKind("출산 휴가"); break;
+				}
+				model.addAttribute("form", apvlDof);
+				page =  "approval/approvalDayOffFormView";
+				break;
+			case 2:
+				ApprovalOverTimeForm apvlOtf = aService.selectOverTimeForm(apvlNo);
+				model.addAttribute("form", apvlOtf);
+				page = "approval/approvalOverTimeFormView";
+				break;
+			case 3:
+				ApprovalWorkReportForm apvlWrf = aService.selectWorkReportForm(apvlNo);
+				model.addAttribute("form", apvlWrf);
+				page = "approval/approvalWorkReportFormView";
+				break;
+			case 4:
+				ApprovalExpenseReportForm apvlErf = aService.selectExpenseReportForm(apvlNo);
+				model.addAttribute("form", apvlErf);
+				page = "approval/approvalExpenseReportFormView";
+				break;
+			case 5:
+				ApprovalBuisnessTripForm apvlBtf = aService.selectBuisnessTripForm(apvlNo);
+				model.addAttribute("form", apvlBtf);
+				page = "approval/approvalBuisnessTripFormView";
+				break;
+		}
+		
+		return page;
+	}
+	
+	// 작성한 전자결재 삭제
+	@RequestMapping("delete.ap")
+	public String deleteApproval(int apvlNo, Model model) {
+		return "dlsief";
+	}
+	
 }

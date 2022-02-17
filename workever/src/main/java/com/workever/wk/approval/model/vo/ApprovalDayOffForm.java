@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ApprovalDayOffForm { // 휴가 신청서 양식
+	private int apvlNo;
 	private String offStartDate;
 	private String offEndDate;
 	private int offTotalDate;

@@ -44,7 +44,7 @@
         </tr>
         <tr>
             <td colspan="6">
-                <textarea name="" id="content" rows="20" style="resize:none;" name="workPlan" required></textarea>
+                <textarea id="content" rows="20" style="resize:none;" name="workPlan" required></textarea>
             </td>
         </tr>
     </table>

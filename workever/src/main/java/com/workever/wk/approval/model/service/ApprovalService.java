@@ -46,5 +46,11 @@ public interface ApprovalService {
 	int insertApproval(Map<String,Object> map); // 전자결재 작성
 	
 	
-	// 4. 
+	// 4. 전자결재 상세 조회 서비스
+	Approval selectApproval(int apvlNo); // 전자결재 상세 조회
+	ApprovalDayOffForm selectDayOffForm(int apvlNo); // 휴가신청서
+	ApprovalOverTimeForm selectOverTimeForm(int apvlNo); // 연장근무신청서
+	ApprovalWorkReportForm selectWorkReportForm(int apvlNo); // 업무 보고서
+	ApprovalExpenseReportForm selectExpenseReportForm(int apvlNo); // 지출 품의서
+	ApprovalBuisnessTripForm selectBuisnessTripForm(int apvlNo); // 출장 신청서
 }

@@ -115,6 +115,42 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int insertApproval(Map<String, Object> map) {
 		return aDao.insertApproval(sqlSession, map);
 	}
+
+	// 전자 결재 상세 조회
+	@Override
+	public Approval selectApproval(int apvlNo) {
+		return aDao.selectApproval(sqlSession,  apvlNo);
+	}
+	
+	// 휴가신청서 조회
+	@Override
+	public ApprovalDayOffForm selectDayOffForm(int apvlNo) {
+		return aDao.selectDayOffForm(sqlSession, apvlNo);
+	}
+	
+	// 연장근무 신청서 조회
+	@Override
+	public ApprovalOverTimeForm selectOverTimeForm(int apvlNo) {
+		return aDao.selectOverTimeForm(sqlSession, apvlNo);
+	}
+
+	// 업무 보고서 조회
+	@Override
+	public ApprovalWorkReportForm selectWorkReportForm(int apvlNo) {
+		return aDao.selectWorkReportForm(sqlSession, apvlNo);
+	}
+
+	// 지출 품의서 조회
+	@Override
+	public ApprovalExpenseReportForm selectExpenseReportForm(int apvlNo) {
+		return aDao.selectExpenseReportForm(sqlSession, apvlNo);
+	}
+
+	// 출장 신청서 조회
+	@Override
+	public ApprovalBuisnessTripForm selectBuisnessTripForm(int apvlNo) {
+		return aDao.selectBuisnessTripForm(sqlSession, apvlNo);
+	}
 	
 
 

@@ -84,7 +84,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-hover text-nowrap" id="apvlWriteList">
                                     <thead>
                                         <tr align="center">
                                             <th>결재 종류</th>
@@ -97,11 +97,12 @@
                                     <tbody>
 	                                    <c:choose>
                                     		<c:when test="${ empty list }">
-                                    			<td colspan="4" align="center">리스트가 없습니다.</td>
+                                    			<td colspan="5" align="center">리스트가 없습니다.</td>
                                     		</c:when>
                                     		<c:otherwise>
 		                                    	<c:forEach var="a" items="${ list }">
 			                                        <tr align="center">
+			                                        	<input type="hidden" class="apvlNo" value="${ a.apvlNo }">
 			                                            <td>${ a.apvlFormNo }</td>
 			                                            <td>${ a.apvlTitle }</td>
 			                                            <td>${ a.apvlCreateDate }</td>
@@ -223,13 +224,17 @@
 		<jsp:include page="../common/footer.jsp" />
 	</div>
 	<jsp:include page="../common/scripts.jsp" />
-      <script>
-          
-        	  
-              
-              
+    <script>
+        
+   	  $(function(){
+   		  $("#apvlWriteList>tbody>tr").click(function(){
+   			  location.href= "detail.ap?apvlNo=" + $(this).children(".apvlNo").val();
+   		  })
+   	  })
+            
+            
 
-          
-      </script>
+        
+    </script>
 </body>
 </html>

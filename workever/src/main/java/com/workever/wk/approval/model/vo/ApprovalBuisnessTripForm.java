@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ApprovalBuisnessTripForm { //출장 신청서 양식
+	private int apvlNo;
 	private String btPlace;
 	private String btStartDate;
 	private String btEndDate;

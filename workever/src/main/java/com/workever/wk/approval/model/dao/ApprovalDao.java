@@ -8,7 +8,12 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.workever.wk.approval.model.vo.Approval;
+import com.workever.wk.approval.model.vo.ApprovalBuisnessTripForm;
+import com.workever.wk.approval.model.vo.ApprovalDayOffForm;
+import com.workever.wk.approval.model.vo.ApprovalExpenseReportForm;
 import com.workever.wk.approval.model.vo.ApprovalLine;
+import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
+import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
@@ -126,22 +131,46 @@ public class ApprovalDao {
 			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
 			return apvl * apvlLine;
 		}else if(formNo == 2) {
-			int apvl = sqlSession.insert("approvalMapper.apvlOverTimeForm",map);
+			int apvl = sqlSession.insert("approvalMapper.insertApvlOverTimeForm",map);
 			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
 			return apvl * apvlLine;
 		}else if(formNo == 3) {
-			int apvl = sqlSession.insert("approvalMapper.apvlWorkReportForm",map);
+			int apvl = sqlSession.insert("approvalMapper.insertApvlWorkReportForm",map);
 			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
 			return apvl * apvlLine;
 		}else if(formNo == 4) {
-			int apvl = sqlSession.insert("approvalMapper.apvlExpenseReportForm",map);
+			int apvl = sqlSession.insert("approvalMapper.insertApvlExpenseReportForm",map);
 			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
 			return apvl * apvlLine;
 		}else {
-			int apvl = sqlSession.insert("approvalMapper.apvlBuisnessTripForm",map);
+			int apvl = sqlSession.insert("approvalMapper.insertApvlBuisnessTripForm",map);
 			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
 			return apvl * apvlLine;
 		}
+	}
+	
+	public Approval selectApproval(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("approvalMapper.selectApproval", apvlNo);
+	}
+	
+	public ApprovalDayOffForm selectDayOffForm(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("approvalMapper.selectDayOffForm", apvlNo);
+	}
+	
+	public ApprovalOverTimeForm selectOverTimeForm(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("approvalMapper.selectOverTimeForm", apvlNo);
+	}
+	
+	public ApprovalWorkReportForm selectWorkReportForm(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("approvalMapper.selectWorkReportForm", apvlNo);
+	}
+	
+	public ApprovalExpenseReportForm selectExpenseReportForm(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("approvalMapper.selectExpenseReportForm", apvlNo);
+	}
+	
+	public ApprovalBuisnessTripForm selectBuisnessTripForm(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("approvalMapper.selectBuisnessTripForm", apvlNo);
 	}
 	
 }

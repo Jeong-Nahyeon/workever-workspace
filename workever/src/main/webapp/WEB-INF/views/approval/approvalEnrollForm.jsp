@@ -85,6 +85,11 @@
 		height: 100%;
 		object-fit: cover;
 	}
+	
+	#userTb>tbody>tr input[type=radio]{
+		width:20px;
+		height:20px;
+	}
 
 </style>
 </head>
@@ -106,7 +111,7 @@
 			<div id="enrollForm-area">
 				
 				<div id="form-inner">
-					<form action="insert.ap" id="approval-form">
+					<form action="insert.ap" id="approval-form" method="post">
 						<input type="hidden" value="${ loginUser.userNo }" name="apvlWriter">
 						<table id="enroll-tb">
 							<tr style="border-bottom:1px solid gray;">
@@ -117,9 +122,9 @@
 										<option value="">-----선택-----</option>
 										<option value="1">휴가 신청서</option>
 										<option value="2">연장 근무 신청서</option>
-										<option value="3">지출 품의서</option>
-										<option value="4">출장 신청서</option>
-										<option value="5">업무 보고서</option>
+										<option value="3">업무 보고서</option>
+										<option value="4">지출 품의서</option>
+										<option value="5">출장 신청서</option>
 									</select>
 									<button type="button" class="btn btn-sm" id="formBtn" onclick="formSelect();">선택</button>
 								</td>
@@ -134,7 +139,6 @@
 										</table>
 									<button id="apvlLine-btn" type="button" class="btn btn-sm" data-target="#modal-lg">결재자 추가</button>
 									<button type="button" class="btn btn-sm" id="del-btn">삭제</button>
-									<input type="hidden" val="" name="lineArr">
 								</td>
 							</tr>
 						</table>
@@ -189,9 +193,9 @@
 	            			<table id="userTb">
 								<thead>
 									<tr>
-										<th width="5%"></th>
+										<th width="10%"></th>
 										<th width="20%"></th>
-										<th width="25%">이름</th>
+										<th width="20%">이름</th>
 										<th width="25%">부서</th>
 										<th width="25%">직급</th>
 									</tr>
@@ -206,7 +210,7 @@
 	            
 	            <!-- 모달 푸터 -->
 	            <div class="modal-footer">
-	              <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+	              <button type="button" class="btn btn-default" data-dismiss="modal" id="userSelectCancelBtn">취소</button>
 	              <button type="button" class="btn btn-primary" data-dismiss="modal" id="userSelectBtn">선택 완료</button>
 	            </div>
 	      </div>
@@ -235,15 +239,15 @@
 			}else if(formNo == 2){
 				$("#form").load("overTimeForm.ap");
 			}else if(formNo == 3){
-				$("#form").load("expenseReportForm.ap");
-			}else if(formNo == 4){
-				$("#form").load("buisnessTripForm.ap");
-			}else if(formNo == 5){
 				$("#form").load("workReportForm.ap");
+			}else if(formNo == 4){
+				$("#form").load("expenseReportForm.ap");
+			}else if(formNo == 5){
+				$("#form").load("buisnessTripForm.ap");
 			}else {
 				$("#form").html('<div align="center" style="padding:100px;">양식을 선택해주세요.</div>');
 			}
-
+			
 		}
 		let maxLine = 0;
 		let lineArr = [];
@@ -267,6 +271,8 @@
 				$(this).attr("data-toggle", "");
 			}
 		})
+		
+		
 
 		$(function(){
 			
@@ -341,6 +347,7 @@
 						url:"userSelect.ap",
 						data:{selectUserNo:$("input[name='userNo']:checked").val()},
 						success:function(result){
+							
 							maxLine++;
 							let	user = "<tr align='center' height='50px'>"
 									 +		"<td width='20px' style='font-weight:800;'>" + maxLine + "</td>"
@@ -363,7 +370,11 @@
 				
 			})
 			
+			$("#userSelectCancelBtn").click(function(){
+				$("#userTb tbody").html("");
+			})
 			
+
 			
 			
 		})
