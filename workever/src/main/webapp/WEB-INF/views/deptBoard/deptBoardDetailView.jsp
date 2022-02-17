@@ -233,10 +233,49 @@
       background: #4E73DF;
       color: white;
     }
+    
         
+  	/* 요청처리  확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+    
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+	</c:if>
 
 	<div class="wrapper">
 	
@@ -374,6 +413,38 @@
     </div>
     <!-- ./wrapper -->
 
+
+
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>
+
+
+
     <!-- 요청처리 여부 확인 모달창 -->
 	<!-- The Modal -->
 	<div class="modal fade" id="confirm-modal">
@@ -410,7 +481,7 @@
 			
 			// 실시간으로 댓글 조회
 			selectReplyList();
-			// setInterval(topBoardList, 2000); // 2초마다 조회
+			
 			
 			// 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
 		    $("#delete-modal-btn").click(function(){
@@ -426,7 +497,6 @@
 				
 			});
 		    
-			
 			
 			// 본인 댓글 수정 버튼 클릭 시 => 수정폼 보이기
 			$(document).on("click", ".reply-update-form-btn", function(){
@@ -514,9 +584,16 @@
 			    			
 			    			if(result == "success"){
 			    				
-			    				
 				 				$("#confirm-modal").modal("hide"); 
-				    			location.reload();
+				 				
+				 				$("#alert-message").text("성공적으로 삭제되었습니다.");
+								$("#alert-message-modal").modal({backdrop: "static"});
+								
+								$("#close-btn").click(function(){
+									
+									location.reload();
+									
+								});
 			    				
 			    			}
 			    			 
@@ -525,8 +602,9 @@
 			    			 console.log("댓글 삭제용 ajax 통신 실패");		
 			    			 
 			    		 }
-			    	  });
 				      
+			    	  });
+			    	  
 				});
 				
 			});
@@ -637,9 +715,8 @@
 				
 			});
 			
-			
-	
 		}
+		
 	</script>	
 
 </body>

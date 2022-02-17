@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="deptBoardMapper">
 	
-	<resultMap id="DeptBoardResult" type="DeptBoard">
+	<resultMap id="deptBoardResult" type="DeptBoard">
 		<result column="db_no" property="dbNo" />
 		<result column="dept_no" property="deptNo" />
 		<result column="user_no" property="userNo" />
@@ -19,7 +19,7 @@
 		<result column="user_rank" property="userRank" />
 	</resultMap>
 	
-	<resultMap id="CommunityFilesResult" type="CommunityFiles">
+	<resultMap id="communityFilesResult" type="CommunityFiles">
 		<result column="cf_no" property="cfNo" />
 		<result column="cf_category" property="cfCategory" />
 		<result column="cf_ref_no" property="cfRefNo" />
@@ -28,7 +28,7 @@
 		<result column="cf_path" property="cfPath" />
 	</resultMap>
 	
-	<resultMap id="CommunityReplyResult" type="CommunityReply">
+	<resultMap id="communityReplyResult" type="CommunityReply">
 		<result column="cr_no" property="crNo" />
 		<result column="cr_user_no" property="crUserNo" />
 		<result column="cr_category" property="crCategory" />
@@ -57,7 +57,7 @@
 		   and dept_no = #{deptNo}
 	</select>
 	
-	<select id="selectDeptBoardList" resultMap="DeptBoardResult">
+	<select id="selectDeptBoardList" resultMap="deptBoardResult">
 		select
 		       db_no
 		     , db.dept_no
@@ -80,7 +80,7 @@
 		    by db_pin desc, db_no desc
 	</select>
 	
-	<select id="selectAscList" resultMap="DeptBoardResult">
+	<select id="selectAscList" resultMap="deptBoardResult">
 		select
 		       db_no
 		     , db.dept_no
@@ -111,7 +111,7 @@
 		   and db_no = #{dbNo}
 	</update>
 	
-	<select id="selectDeptBoard" resultMap="DeptBoardResult">
+	<select id="selectDeptBoard" resultMap="deptBoardResult">
 		select
 		       db_no
 		     , db.dept_no
@@ -130,7 +130,7 @@
 		   and db_no = #{dbNo}
 	</select>
 	
-	<select id="selectCommunityFileList" resultMap="CommunityFilesResult">
+	<select id="selectCommunityFileList" resultMap="communityFilesResult">
 		select
 		       cf_no
 		     , cf_origin_name
@@ -187,7 +187,7 @@
 		  )
 	</insert>
 
-	<select id="selectCommunityFile" resultMap="CommunityFilesResult">
+	<select id="selectCommunityFile" resultMap="communityFilesResult">
 		select
 		       cf_change_name
 		     , cf_path
@@ -245,16 +245,18 @@
 		update
 			   community_reply
 		   set cr_status = 'N'
-		 where cr_ref_no = #{dbNo}  	   
+		 where cr_category = 'D'
+		   and cr_ref_no = #{dbNo}  	   
 	</update>	
 	
 	<delete id="deleteCommunityFileList">
 		delete
 		  from community_files
-		 where cf_ref_no = #{dbNo}	
+		 where cf_category = 'D'
+		   and cf_ref_no = #{dbNo}	
 	</delete>
 	
-	<select id="selectReplyList" resultMap="CommunityReplyResult">
+	<select id="selectReplyList" resultMap="communityReplyResult">
 		select
 		       cr_no
 		     , cr_user_no
@@ -334,7 +336,7 @@
 		   and user_no = #{userNo}	
 	</select>
 	
-	<select id="selectMyDeptBoardList" resultMap="DeptBoardResult">
+	<select id="selectMyDeptBoardList" resultMap="deptBoardResult">
 		select
 		       db_no
 		     , db_title

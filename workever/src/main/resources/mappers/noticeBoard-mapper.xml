@@ -238,7 +238,8 @@
 	<delete id="deleteCommunityFileList">
 		delete
 		  from community_files
-		 where cf_ref_no = #{nbNo}	
+		 where cf_category = 'N'
+		   and cf_ref_no = #{nbNo}	
 	</delete>
 	
 </mapper>

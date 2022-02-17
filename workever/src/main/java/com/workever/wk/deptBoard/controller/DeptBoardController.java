@@ -302,7 +302,7 @@ public class DeptBoardController {
 		if(result > 0) { // 수정 성공
 			
 			session.setAttribute("successMsg", "성공적으로 수정되었습니다");
-			return "redirect:list.dbo";
+			return "redirect:detail.dbo?dbno=" + db.getDbNo();
 			
 		} else { // 수정 실패
 			
@@ -433,6 +433,12 @@ public class DeptBoardController {
 		
 	}	
 	
+	/** 나의 부서글 목록 조회 후 나의 부서글 페이지 포워딩
+	 * @param currentPage
+	 * @param session
+	 * @param mv
+	 * @return
+	 */
 	@RequestMapping("list.mdbo")
 	public ModelAndView myDeptBoardListView(@RequestParam(value="cpage", defaultValue="1") int currentPage, HttpSession session, ModelAndView mv) {
 		

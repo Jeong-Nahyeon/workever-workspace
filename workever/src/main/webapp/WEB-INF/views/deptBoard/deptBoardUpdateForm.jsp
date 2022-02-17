@@ -212,7 +212,7 @@
 								
 									<div class="board-btns-area">
 										<button type="button" class="btn btn-sm" onclick="location.href = 'list.dbo';">취소</button>
-										<button type="submit" class="btn btn-sm" form="board-update-form">등록</button>
+										<button type="submit" class="btn btn-sm" form="board-update-form">수정</button>
 									</div>
 			
 								</div>
