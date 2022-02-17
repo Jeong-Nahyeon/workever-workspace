@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 	
 <style>
 
@@ -95,12 +96,23 @@
 		cursor: pointer;
 		filter: brightness(85%);
 	}
-
+	
+	.page-link {
+		cursor: pointer;
+	}
+	
 
 </style>
 </head>
 	
 <body class="hold-transition sidebar-mini">
+
+	<c:if test="${ !empty alertMsg }">
+		<script>
+			alert("${ alertMsg }");
+		</script>
+		<c:remove var="alertMsg" scope="session" />
+	</c:if>
 	
 	<div class="wrapper">
 	
@@ -117,6 +129,7 @@
 
 			<h4 class="cm_title">전 사원 근태 현황</h4>
 			<hr class="cm_underLine"> <br>
+			
 	
 			<div id="cm_select" style="width: 800px; margin: auto;">
 				<div>
@@ -141,16 +154,38 @@
                     <input type="text" class="dateInput" placeholder="이름">
                     <button id="cmSelBtn">조 회</button>
                 </div>
+                
+                <br>
+                
+                <div style="margin-left: 160px">
+                	<a href="#" data-toggle="modal" data-target="#absenceModal">오늘 날짜에 출근하지 않은 사원 '결근' 처리</a>
+           		</div>
+           		
+           		<!-- Modal -->
+				<div class="modal fade" id="absenceModal" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							
+								<div class="modal-body" align="center">
+									<br>
+									오늘 날짜에 출근하지 않은 사원들을 <br>
+									결근처리 하시겠습니까? <br>
+									<button class="cmBtn" data-dismiss="modal" onclick="location.href='adAbsenceHandle.cm'">확인</button>
+									<button class="cmBtn" id="endBtn" data-dismiss="modal">취소</button>
+								</div>
+							</form> 
+							
+						</div>
+					</div>
+				</div>
 				
 			</div>
 
 			<br><br><br><br>
 
-
-			
 			
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
@@ -172,87 +207,88 @@
 							<td>18:00:10</td>
 							<td>8:00</td>
 						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
 				  	</tbody>
 				</table>
+				
+				<br>
 			</div>
+			
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
 
-			<br>
-
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+					</ul>
+				</nav>
 			</div>
+		</div>	
+			
+		<script>
+		
+			$(function(){
+				ajaxAdSelectCommuteList(1);
+			})
+			
+			function ajaxAdSelectCommuteList(cpageNo) {
+				
+				$.ajax({
+					url: "adList.cm",
+					type: "POST",
+					data: {
+						currentPage: cpageNo
+					}, success:function(result) {
+						let value="";
+	    				for(let i in result.list) {
+	    					value += "<tr>"
+	    						   +	"<td>" + result.list[i].cmDate + "</td>"
+	    						   +	"<td>" + result.list[i].userName + "</td>"
+   						   
+	    						   if(result.list[i].cmState == 1) { value += "<td>" + "정상" + "</td>" }
+	    						   else if(result.list[i].cmState == 2) { value += "<td>" + "지각" + "</td>" }
+	    						   else if(result.list[i].cmState == 3) { value += "<td>" + "결근" + "</td>" }
+	    						   else if(result.list[i].cmState == 4) { value += "<td>" + "조퇴" + "</td>" }
+	    						   else { value += "<td>" + "휴가" + "</td>" }
+	    						   
+	    						   
+	    					value  +=	"<td>" + result.list[i].cmStartTime + "</td>"
+	    						   +	"<td>" + result.list[i].cmEndTime + "</td>"
+	    						   +	"<td>" + result.list[i].cmWorkingHours + "</td>"
+	    						   + "</tr>";
+	    				}
+	    				
+	    				console.log(result);
+	    				
+	    				$(".select-area tbody").html(value);
+	    				$("#selectCount").text(result.listCount);
+	    				
+
+	    				let paging="";
+	    				if(result.pi.currentPage == 1) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+	    				} else {
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdSelectCommuteList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+	    				}
+						
+	    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+	    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxAdSelectCommuteList(" + p + ")'>" + p + "</a></li>";
+	    				}
+						
+	    				if(result.pi.currentPage == result.pi.maxPage) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+	    				} else {
+	    					
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdSelectCommuteList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+	    				}
+						
+	    				$(".pagination").html(paging);
+	    				
+					}, error:function() {
+						console.log("근태리스트 조회용 ajax 통신실패");
+					}
+				})
+			}
+
+			
+		</script>
 
 
 		</div>
@@ -261,8 +297,7 @@
 				
 		<jsp:include page="../common/footer.jsp" />
 	</div>
-	
-	<jsp:include page="../common/scripts.jsp" />
+
 
 </body>
 </html>

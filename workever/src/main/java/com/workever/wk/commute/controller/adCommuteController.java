@@ -1,13 +1,19 @@
 package com.workever.wk.commute.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.common.template.Pagination;
 import com.workever.wk.commute.model.service.CommuteService;
 import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.User;
@@ -23,6 +29,24 @@ public class adCommuteController {
 	@RequestMapping("adCommute.cm")
 	public String adCommuteManagement() {
 		return "commute/adCommuteManagement";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="adList.cm", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Map<String, Object> ajaxAdSelectCommuteList(int currentPage) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int listCount = cService.adCmSelectListCount();
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList<Commute> list = cService.adCmSelectList(pi);
+		
+		map.put("listCount", listCount);
+		map.put("pi", pi);
+		map.put("list", list);
+		
+		return map;
 	}
 	
 	@RequestMapping("adAbsenceHandle.cm")
