@@ -362,7 +362,7 @@
 			            </c:when>
 			            <c:otherwise>
 			              <!-- case 2. 타사원 게시글일 경우 -->
-			              <button type="button" id="test-report" class="btn btn-sm report-btn">신고</button>
+			              <button type="button" id="board-report-btn" class="btn btn-sm report-btn">신고</button>
 			            </c:otherwise>    
 		              </c:choose>
 		              <!-- 공통 -->
@@ -537,7 +537,7 @@
 
 
 
-	<!-- 신고글 상세 모달창 -->
+	<!-- 신고 모달창 -->
 	<!-- The Modal -->
 	<div class="modal fade" id="report-modal">
 	  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -551,17 +551,22 @@
 	      
 	      <!-- Modal body -->
 	      <div class="modal-body">
-	        <form id="">
+	        <form id="report-form" action="report.abo" method="post">
+	        
+	        <input type="hidden" name="userNo" value="${ loginUser.userNo }" />
+	        <input type="hidden" name="abNo" value="${ ab.abNo }" />
+	        
 	          <table>
 	              <tr>
 	                <th>신고 유형</th>
 	                <td>
-	                  <select class="form-control">
+	                  <select name="reportGroup" class="form-control">
 	                    <option>개인정보 노출</option>
 	                    <option>게시글 도배</option>
 	                    <option>성적 불쾌감 유발</option>
 	                    <option>욕설/혐오/불쾌/차별적 표현</option>
 	                    <option>타사원 비방</option>
+	                    <option>기타</option>
 	                  </select>
 	                </td>
 	              </tr>
@@ -570,7 +575,7 @@
 	              </tr>
 	              <tr>
 	                <td colspan="2">
-	                  <textarea id="report-content"></textarea>
+	                  <textarea id="report-content" name="reportContent" placeholder="기타 유형을 선택하거나 필요한 경우 신고 내용을 작성해주세요"></textarea>
 	                </td>
 	              </tr>
 	          </table>
@@ -581,7 +586,7 @@
 	      <div class="modal-footer">
 	        <div class="report-modal-btns">
 	          <button id="report-cancel-btn" class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
-	          <button id="report-btn" class="btn btn-sm" form="">등록</button>
+	          <button id="report-btn" class="btn btn-sm" form="report-form">신고</button>
 	        </div>
 	      </div>
 	      
@@ -821,15 +826,22 @@
 									
 									reply += "<table class='reply-list'>"
 										   + 	"<input type='hidden' name='crNo' value='" + list[i].crNo + "' />"
-										   + 	"<input type='hidden' name='crUserNo' value='" + list[i].crUserNo + "' />"
-										   + 	"<tr>"
-									       + 		"<td class='reply-list-img' rowspan='2'>"
-									       +			"<i class='fas fa-user-circle fa-3x reply-no-img'></i>" 	
-										   +		"</td>"
-										   + 		"<td class='reply-list-name'>"
-										   + 			"<b>익명</b>"
-										   + 		"</td>"
-										   + 		"<td class='reply-list-btns'>";
+										   + 	"<input type='hidden' name='crUserNo' value='" + list[i].crUserNo + "' />";
+										   
+									if(list[i].reportUser == 1){
+										
+										reply += "<input type='hidden' name='reportUser' value='" + list[i].reportUser + "' />";
+										
+									}	   
+										   
+								    reply += "<tr>"
+									       + 	"<td class='reply-list-img' rowspan='2'>"
+									       +		"<i class='fas fa-user-circle fa-3x reply-no-img'></i>" 	
+										   +	"</td>"
+										   + 	"<td class='reply-list-name'>"
+										   + 		"<b>익명</b>"
+										   + 	"</td>"
+										   + 	"<td class='reply-list-btns'>";
 										   
 									if(list[i].correct == 1){ // 본인 댓글인 경우 => 수정/삭제버튼 보이기
 										
@@ -917,20 +929,89 @@
 	
 	<script>
 		  $(function(){
-			  
-			// 신고 모달창 테스트용 삭제 예정  
-		
-		    $("#test-report").click(function(){
-		      $("#report-modal").modal({backdrop: "static"});
+			 
+			// 게시글 및 댓글 신고 영역 
+			// 게시글 신고 버튼 클릭  시 => 신고 모달창 띄우기
+		    $("#board-report-btn").click(function(){	
+		    	
+		    	// 신고는 한번만 가능 
+		    	if( ${ reportUser } == 1 ){ // 로그인한 사원이 이미 해당 게시글 신고했을 경우
+		    		
+		    		alert("신고는 한번만 가능합니다.");
+		    		
+		    	} else {
+		    		
+			    	let replyBoard = "<input type='hidden' name='reportCategory' value='B' /><br>" // 신고 분류 (B 게시글 / R 댓글)
+								   + "<input type='hidden' name='reportRefNo' value='" + ${ ab.abNo } + "' />"; 
+			    			    	
+			     	$("#report-form").prepend(replyBoard);
+			    	
+			      	$("#report-modal").modal({backdrop: "static"});
+			      	
+			      	
+			      	// 신고 유형 기타 선택했을 경우 => 신고 내용 입력해야 submit 가능
+			      	$("select[name=reportGroup]").change(function(){
+			      				      		
+				      	if($("select[name=reportGroup] option:selected").text() == "기타"){
+				      		
+				      		$("#report-content").prop("required", true);
+				      		
+				      	} else {
+				      		
+				      		$("#report-content").prop("required", false);
+				      		
+				      	}
+			      		
+			      	});
+			      	
+		    	}
+		      	
 		    });
 		
-		    $("#report-btn").click(function(){
-		      $("#confirm-modal").modal({backdrop: "static"});
+			
+			// 댓글 신고 버튼 클릭 시 => 신고 모달창 띄우기
+		    $(document).on("click", ".reply-report-btn", function(){
+		    	
+		    	let reportUser = $(this).parents(".reply-list").find("input[name=reportUser]").val();
+		    	
+		    	if(reportUser == 1){ // 로그인한 사원이 해당 댓글 이미 신고했을 경우
+		    		
+		    		alert("신고는 한번만 가능합니다.");
+		    		
+		    	} else {
+		    		
+			    	let crNo = $(this).parents(".reply-list").find("input[name=crNo]").val();
+	
+			    	let replyReport = "<input type='hidden' name='reportCategory' value='R' /><br>" // 신고 분류 (B 게시글 / R 댓글)
+			    					+ "<input type='hidden' name='reportRefNo' value='" + crNo + "' />";	
+			    	
+			     	$("#report-form").prepend(replyReport);
+			    	
+			      	$("#report-modal").modal({backdrop: "static"});
+			      	
+			      	// 신고 유형 기타 선택했을 경우 => 신고 내용 입력해야 submit 가능
+			      	$("select[name=reportGroup]").change(function(){
+			      				      		
+				      	if($("select[name=reportGroup] option:selected").text() == "기타"){
+				      		
+				      		$("#report-content").prop("required", true);
+				      		
+				      	} else {
+				      		
+				      		$("#report-content").prop("required", false);
+				      		
+				      	}
+			      		
+			      	});
+			      	
+		    	}   	
+		    	
 		    });
-		
+		    
 		  });
 	  
-	  
+	      
+		  // 게시글 수정 삭제 영역
 		  // 수정/삭제 버튼 클릭 시 post 방식으로 게시글 번호 전달
 		  function postFormSubmit(num){
 			  

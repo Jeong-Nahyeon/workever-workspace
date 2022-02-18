@@ -32,7 +32,15 @@
 		<result column="cr_date" property="crDate" />
 		<result column="cr_status" property="crStatus" />
 		<result column="cr_report_count" property="crReportCount" />
+	</resultMap>
+	
+	<resultMap id="reportResult" type="Report">
+		<result column="user_no" property="userNo" />
+		<result column="report_category" property="reportCategory" />
+		<result column="report_ref_no" property="reportRefNo" />
 	</resultMap>	
+	
+	
 	
 	<select id="selectListCount" resultType="_int">
 		select
@@ -290,6 +298,53 @@
 	  		   </foreach>
 		 order
 		    by ab_no desc	
+	</select>
+	
+	<update id="increaseAnonymousBoardReportCount">
+		update
+			   a_board
+		   set ab_report_count = ab_report_count + 1
+		 where ab_status = 'Y'
+		   and ab_no = #{abNo}  	   
+	</update>				
+	
+	<insert id="insertReport">
+		insert
+		  into report
+		  (
+		  	report_no
+		  , user_no
+		  , report_category
+		  , report_ref_no
+		  , report_group
+		  , report_content
+		  )
+		  values
+		  (
+		  	seq_report.nextval
+		  , #{userNo}
+		  , #{reportCategory}
+		  , #{reportRefNo}
+		  , #{reportGroup}
+		  , #{reportContent}
+		  ) 	
+	</insert>
+	
+	<update id="increaseCommunityReplyReportCount">
+		update
+			   community_reply
+		   set cr_report_count = cr_report_count + 1
+		 where cr_status = 'Y'
+		   and cr_no = #{crNo}  	   
+	</update>
+	
+	<select id="selectReportList" resultMap="reportResult">
+		select
+		       user_no
+		     , report_category  
+		     , report_ref_no
+		  from report
+		 where report_status = 'Y'
 	</select>				
 	
 </mapper>

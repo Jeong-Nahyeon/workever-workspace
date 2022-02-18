@@ -11,6 +11,7 @@ import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
 import com.workever.wk.deptBoard.model.vo.DeptBoard;
+import com.workever.wk.report.model.vo.Report;
 
 @Repository
 public class AnonymousBoardDao {
@@ -281,6 +282,46 @@ public class AnonymousBoardDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 				
 		return (ArrayList)sqlSession.selectList("anonymousBoardMapper.selectMyAnonymousBoardList", myAbNoList, rowBounds);
+		
+	}
+
+	/** 익명 게시글 신고 횟수 증가
+	 * @param abNo
+	 * @return
+	 */
+	public int increaseAnonymousBoardReportCount(SqlSessionTemplate sqlSession, String abNo) {
+		
+		return sqlSession.update("anonymousBoardMapper.increaseAnonymousBoardReportCount", abNo);
+		
+	}
+	
+	/** 익명 게시글 및 댓글 신고 등록
+	 * @param r
+	 * @return
+	 */
+	public int insertReport(SqlSessionTemplate sqlSession, Report r) {
+		
+		return sqlSession.insert("anonymousBoardMapper.insertReport", r);
+
+	}
+	
+	/** 익명 댓글 신고 횟수 증가
+	 * @param abNo
+	 * @return
+	 */
+	public int increaseCommunityReplyReportCount(SqlSessionTemplate sqlSession, String crNo) {
+		
+		return sqlSession.update("anonymousBoardMapper.increaseCommunityReplyReportCount", crNo);
+		
+	}
+	
+	/** 신고 목록 조회
+	 * @param sqlSession
+	 * @return
+	 */
+	public ArrayList<Report> selectReportList(SqlSessionTemplate sqlSession) {
+		
+		return (ArrayList)sqlSession.selectList("anonymousBoardMapper.selectReportList");
 		
 	}
 	

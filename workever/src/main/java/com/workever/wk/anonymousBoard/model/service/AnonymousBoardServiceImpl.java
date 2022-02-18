@@ -12,6 +12,7 @@ import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
 import com.workever.wk.deptBoard.model.vo.DeptBoard;
+import com.workever.wk.report.model.vo.Report;
 
 @Service
 public class AnonymousBoardServiceImpl implements AnonymousBoardService {
@@ -227,6 +228,46 @@ public class AnonymousBoardServiceImpl implements AnonymousBoardService {
 	public ArrayList<AnonymousBoard> selectMyAnonymousBoardList(PageInfo pi, ArrayList<String> myAbNoList) {
 		
 		return aDao.selectMyAnonymousBoardList(sqlSession, pi, myAbNoList);
+		
+	}
+
+	/**
+	 * 익명 게시글 신고 횟수 증가
+	 */
+	@Override
+	public int increaseAnonymousBoardReportCount(String abNo) {
+		
+		return aDao.increaseAnonymousBoardReportCount(sqlSession, abNo);
+		
+	}
+
+	/**
+	 * 익명 게시글 및 댓글 신고 등록
+	 */
+	@Override
+	public int insertReport(Report r) {
+		
+		return aDao.insertReport(sqlSession, r);
+		
+	}
+	
+	/**
+	 * 익명 댓글 신고 횟수 증가
+	 */
+	@Override
+	public int increaseCommunityReplyReportCount(String crNo) {
+		
+		return aDao.increaseCommunityReplyReportCount(sqlSession, crNo);
+		
+	}
+
+	/**
+	 * 신고 목록 조회
+	 */
+	@Override
+	public ArrayList<Report> selectReportList() {
+		
+		return aDao.selectReportList(sqlSession);
 		
 	}
 

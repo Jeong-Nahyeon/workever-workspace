@@ -24,7 +24,7 @@ import com.workever.wk.common.template.Pagination;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
 import com.workever.wk.community.template.SaveCommunityFiles;
-import com.workever.wk.deptBoard.model.vo.DeptBoard;
+import com.workever.wk.report.model.vo.Report;
 import com.workever.wk.user.model.vo.User;
 
 @Controller
@@ -75,10 +75,10 @@ public class AnonymousBoardController {
 			// 게시글 상세 조회
 			AnonymousBoard ab = aService.selectAnonymousBoard(abno);
 			
-			String loginUserNo = ((User)session.getAttribute("loginUser")).getUserNo();
-
+			User loginUser = (User)session.getAttribute("loginUser");
+			
 			int correct = 0;
-			if(bcryptPasswordEncoder.matches(loginUserNo, ab.getAbUserNo())) { // 로그인한 사원과 작성자 회원번호 일치할 경우
+			if(bcryptPasswordEncoder.matches(loginUser.getUserNo(), ab.getAbUserNo())) { // 로그인한 사원과 작성자 회원번호 일치할 경우
 				
 				correct = 1;
 				
@@ -87,9 +87,28 @@ public class AnonymousBoardController {
 			// 첨부파일 조회
 			ArrayList<CommunityFiles> list = aService.selectCommunityFileList(abno);
 			
+			// 신고 목록 조회
+			ArrayList<Report> totalReportList = aService.selectReportList();
+			// 로그인한 사원이 해당 게시글을 이미 신고한 사원인 경우 => reportUser = 1
+			
+			int reportUser = 0;
+			for(Report report : totalReportList) {
+				
+				if(report.getReportCategory().equals("B")) {
+					
+					if(report.getReportRefNo().equals(abno) && loginUser.getUserNo().equals(report.getUserNo())) {
+						// 로그인한 사원이 해당 게시글을 이미 신고한 사원인 경우
+						reportUser = 1;
+					}
+					
+				}
+				
+			}
+			
 			mv.addObject("ab", ab)
 			  .addObject("list", list)
 			  .addObject("correct", correct)
+			  .addObject("reportUser", reportUser)
 			  .setViewName("anonymousBoard/anonymousBoardDetailView");
 			
 			return mv;
@@ -327,7 +346,7 @@ public class AnonymousBoardController {
 	@RequestMapping(value="rlist.abo", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReplyList(String abno, HttpSession session) {
 		
-		String loginUserNo = ((User)session.getAttribute("loginUser")).getUserNo();
+		User loginUser = (User)session.getAttribute("loginUser");
 
 		ArrayList<CommunityReply> list = aService.selectReplyList(abno);
 		
@@ -335,9 +354,28 @@ public class AnonymousBoardController {
 			
 			for(CommunityReply cr : list) {
 				
-				if(bcryptPasswordEncoder.matches(loginUserNo, cr.getCrUserNo())){ // 로그인한 사원과 댓글 작성 사원이 일치할 경우
+				if(bcryptPasswordEncoder.matches(loginUser.getUserNo(), cr.getCrUserNo())){ // 로그인한 사원과 댓글 작성 사원이 일치할 경우
 					
 					cr.setCorrect(1);
+					
+				}
+				
+				ArrayList<Report> totalReportList = aService.selectReportList();
+				
+				int reportUser = 0; // 해당 댓글 신고한 사원 중 로그인한 사원 포함 여부 (불포함 0 / 포함 1)
+				for(Report report : totalReportList) {
+					
+					if(report.getReportCategory().equals("R")) {
+						
+						if(report.getReportRefNo().equals(cr.getCrNo()) && loginUser.getUserNo().equals(report.getUserNo())) {
+							// 로그인한 사원이 해당 댓글을 이미 신고한 사원인 경우
+							
+							reportUser = 1;
+							cr.setReportUser(reportUser);
+							
+						}
+							
+					}
 					
 				}
 				
@@ -480,5 +518,57 @@ public class AnonymousBoardController {
 		return result1 * result2 * result3 > 0 ? new Gson().toJson("success") : new Gson().toJson("success");
 		
 	}	
+	
+	/** 익명 게시글 및 댓글 신고 등록
+	 * @param r : 신고글 정보
+	 * @param abNo : 해당 익명 게시글 번호
+	 * @param session
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping("report.abo")
+	public ModelAndView insertReport(Report r, String abNo, HttpSession session, ModelAndView mv) {
+		
+		if(r.getReportCategory().equals("B")) { // 익명 게시글 신고
+			
+			int result = aService.increaseAnonymousBoardReportCount(r.getReportRefNo());
+			
+			if(result > 0) { // 유효한 게시글
+				
+				aService.insertReport(r);
+				
+				session.setAttribute("successMsg", "성공적으로 신고되었습니다");
+				mv.setViewName("redirect:detail.abo?abno=" + abNo); 
+				
+			} else {
+				
+				mv.addObject("errorMsg", "익명 게시글 신고 실패")
+				  .setViewName("common/errorPage");
+				
+			}
+			
+		} else { // 익명 댓글 신고
+			
+			int result = aService.increaseCommunityReplyReportCount(r.getReportRefNo());
+			
+			if(result > 0) { // 유효한 게시글
+				
+				aService.insertReport(r);
+				
+				session.setAttribute("successMsg", "성공적으로 신고되었습니다");
+				mv.setViewName("redirect:detail.abo?abno=" + abNo); 
+				
+			} else {
+				
+				mv.addObject("errorMsg", "익명 댓글 신고 실패")
+				  .setViewName("common/errorPage");
+				
+			}
+			
+		} 
+			
+		return mv;
+		
+	}
 	
 }

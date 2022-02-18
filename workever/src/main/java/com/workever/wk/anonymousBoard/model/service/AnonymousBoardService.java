@@ -6,7 +6,7 @@ import com.workever.wk.anonymousBoard.model.vo.AnonymousBoard;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
-import com.workever.wk.deptBoard.model.vo.DeptBoard;
+import com.workever.wk.report.model.vo.Report;
 
 public interface AnonymousBoardService {
 	
@@ -48,9 +48,10 @@ public interface AnonymousBoardService {
 	ArrayList<AnonymousBoard> selectTotalAnonymousBoardList(); // 전체 익명 게시글의 게시글 번호 및 사원번호 조회
 	ArrayList<AnonymousBoard> selectMyAnonymousBoardList(PageInfo pi, ArrayList<String> myAbNoList); // 나의 익명 게시글 목록 조회
 	
-	// 익명 게시글 신고 서비스
-	
-	// 익명 게시글 댓글 신고 서비스
-	
+	// 익명 게시글 및 댓글 신고 서비스
+	int increaseAnonymousBoardReportCount(String abNo); // 익명 게시글 신고 횟수 증가
+	int insertReport(Report r); // 익명 게시글 및 댓글 신고 등록
+	int increaseCommunityReplyReportCount(String crNo); // 익명 댓글 신고 횟수 증가
+	ArrayList<Report> selectReportList(); // 신고 목록 조회
 	
 }

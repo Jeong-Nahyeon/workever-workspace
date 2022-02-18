@@ -25,5 +25,6 @@ public class CommunityReply {
 	private String userFilePath;	// 프로필사진경로
 	
 	private int correct;			// 로그인한 사원과 작성사원 일치 여부(0 불일치 / 1 일치)
+	private int reportUser;			// 해당 댓글 신고한 사원 중 로그인한 사원 포함 여부 (0 불포함 / 1 포함)
 	
 }
