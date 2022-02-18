@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.commute.model.dao.CommuteDao;
 import com.workever.wk.commute.model.vo.Commute;
@@ -21,7 +22,11 @@ public class CommuteServiceImpl implements CommuteService{
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-
+	
+	/*
+	 * 출퇴근 관리 (User)
+	 */
+	
 	@Override
 	public int cmSelectListCount(int userNo) {
 		return cDao.cmSelectListCount(sqlSession, userNo);
@@ -58,10 +63,10 @@ public class CommuteServiceImpl implements CommuteService{
 	}
 
 
+	/*
+	 * 출퇴근 관리 (Admin)
+	 */
 
-
-	
-	// 관리자
 	@Override
 	public int adCmSelectListCount() {
 		return cDao.adCmSelectListCount(sqlSession);
@@ -92,9 +97,21 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.adCmSelectSearchList(sqlSession, map, pi);
 	}
 
+
 	
+	/*
+	 * 휴가 관리 (User)
+	 */
 	
-	
+	@Override
+	public int doSelectListCount(int userNo) {
+		return cDao.doSelectListCount(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<Approval> doSelectList(int userNo, PageInfo pi) {
+		return cDao.doSelectList(sqlSession, userNo, pi);
+	}
 
 
 

@@ -7,12 +7,17 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.User;
 
 @Repository
 public class CommuteDao {
+	
+	/*
+	 * 출퇴근 관리 (User)
+	 */
 
 	public int cmSelectListCount(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.selectOne("commuteMapper.cmSelectListCount", userNo);
@@ -59,9 +64,10 @@ public class CommuteDao {
 	
 	
 	
+	/*
+	 * 출퇴근 관리 (Admin)
+	 */
 	
-	
-	// 관리자
 	public int adCmSelectListCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("commuteMapper.adCmSelectCount");
 	}
@@ -101,6 +107,25 @@ public class CommuteDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.adCmSelectSearchList", map, rowBounds);
+	}
+	
+	
+	/*
+	 * 휴가 관리 (User)
+	 */
+	
+	public int doSelectListCount(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("commuteMapper.doSelectListCount", userNo);
+	}
+
+	public ArrayList<Approval> doSelectList(SqlSessionTemplate sqlSession, int userNo, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.doSelectList", userNo, rowBounds);
 	}
 
 	

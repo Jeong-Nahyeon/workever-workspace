@@ -3,7 +3,7 @@
 <mapper namespace="commuteMapper">
 	
 	
-	<resultMap type="Commute" id="commuteResult">
+	<resultMap id="commuteResult" type="Commute">
 		<result column="cm_no" property="cmNo" />
 		<result column="user_no" property="userNo" />
 		<result column="cm_date" property="cmDate" />
@@ -13,6 +13,25 @@
 		<result column="cm_working_hours" property="cmWorkingHours" />
 		
 		<result column="user_name" property="userName" />
+	</resultMap>
+	
+	<resultMap id="ApprovalResult" type="Approval">
+		<result column="apvl_no" property="apvlNo" />
+		<result column="apvl_writer" property="apvlWriter" />
+		<result column="apvl_form_no" property="apvlFormNo" />
+		<result column="apvl_title" property="apvlTitle" />
+		<result column="apvl_create_date" property="apvlCreateDate" />
+		<result column="apvl_status" property="apvlStatus" />
+		<result column="user_name" property="apvlWriterName" />
+		<result column="user_rank" property="apvlWriterRank" />
+		<result column="dept_name" property="apvlWriterDeptName" />
+		
+		<result column="off_start_date" property="offStartDate" />
+		<result column="off_end_date" property="offEndDate" />
+		<result column="dayoff" property="dayoff" />
+		<result column="off_kind" property="offKind" />
+		<result column="off_reason" property="offReason" />
+		<result column="apvl_return_comment" property="apvlReturnComment" />
 	</resultMap>
 	
 	<!-- *근태 관리* -->
@@ -218,6 +237,40 @@
 		</if>
 		 order
 		    by cm_no desc
+	</select>
+	
+	
+	
+	<!-- 근무 내역 -->
+	
+	
+	<!-- 휴가 관리 (유저) -->
+
+	<select id="doSelectListCount" resultType="_int">
+		select
+		       count(*)
+		  from approval
+		  join users on user_no = apvl_writer
+		 where apvl_form_no = 1
+		   and user_no = #{ userNo }
+	</select>
+	
+	<select id="doSelectList" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , off_start_date || '~' || off_end_date as "dayoff"
+		     , off_kind
+		     , apvl_title
+		     , off_reason
+		     , apvl_status
+             , apvl_return_comment
+		  from approval 
+		  join approval_dayoff using (apvl_no)
+		  join users u on user_no = apvl_writer
+          join approval_line using (apvl_no)
+		 where u.user_no = #{ userNo }
+		 order
+   			by apvl_no desc
 	</select>
 	
 </mapper>

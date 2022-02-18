@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.commute.model.service.CommuteService;
@@ -161,6 +162,28 @@ public class CommuteController {
 	@RequestMapping("commute.do")
 	public String dayoffList() {
 		return "commute/dayoffList";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="list.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxSelectDayoffList(int userNo, int currentPage) {
+		
+		int listCount = cService.doSelectListCount(userNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Approval> list = cService.doSelectList(userNo, pi);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listCount", listCount);
+		map.put("pi", pi);
+		map.put("list", list);
+		
+		System.out.println("listCount : " + listCount);
+		System.out.println("pi : " + pi );
+		System.out.println("list : " + list);
+		System.out.println("map : " + map);
+		
+		return new Gson().toJson(map);
 	}
 	
 	

@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
 	.do_title {
@@ -111,9 +112,9 @@
 						</tr>
 	
 						<tr style="font-size: 60px;">
-							<td>16</td>
-							<td style="color: firebrick;">9</td>
-							<td class="td_none" style="color: cornflowerblue;">7</td>
+							<td>${ loginUser.userAnnualDate }</td>
+							<td style="color: firebrick;">${ loginUser.userUseDate }</td>
+							<td class="td_none" style="color: cornflowerblue;">${ loginUser.userAnnualDate - loginUser.userUseDate }</td>
 						</tr>
 					</tbody>
 				</table>
@@ -133,11 +134,11 @@
 				<div>
 					<span class="sm_title">종류</span>
 					<select id="offdayKinds" name="offday" style="width: 150px; height: 35px;">
-						<option value="annualLeave">연차</option>
-						<option value="sickLeave">병가</option>
-						<option value="officialLeave">공가</option>
-						<option value="regularLeave">정기휴가</option>
-						<option value="maternityLeave">출산휴가</option>
+						<option value="1">연차</option>
+						<option value="2">병가</option>
+						<option value="3">공가</option>
+						<option value="4">정기휴가</option>
+						<option value="5">출산휴가</option>
 					</select>
 
 					<span class="sm_title">내용</span>
@@ -150,7 +151,7 @@
 			<br><br><br>
 
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
@@ -175,11 +176,8 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									
-									<div class="modal-body" align="center">
-										<br>
-										<b>연장근무 업무내용</b><br>
-										연장근무 하는 업무내용이 여기에 보여질거에요
-										<button id="doSelBtn" data-dismiss="modal">확인</button>
+									<div class="modal-body do_reason_content" align="center">
+										
 									</div>
 									
 								</div>
@@ -191,86 +189,119 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									
-									<div class="modal-body" align="center">
-										<br>
-										<b>반려 사유</b><br>
-										반려 사유가 여기에 보여질거에요<br>
-										<button id="doSelBtn" data-dismiss="modal">확인</button>
+									<div class="modal-body do_return_content" align="center">
+										
 									</div>
 									
 								</div>
 							</div>
 						</div>
-
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>연차</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
+						
 				  	</tbody>
 				</table>
+				
 			</div>
 
 			<br>
 
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
+
+					</ul>
+				</nav>
 			</div>
+			
+			<script>
+				$(function(){
+					ajaxSelectDayoffList(1);
+				})
+				
+				function ajaxSelectDayoffList(cpageNo) {
+					
+					$.ajax({
+						url: "list.do",
+						type: "POST",
+						data: {
+							userNo: '${ loginUser.userNo }',
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.list) {
+		    					value += "<tr>"
+		    						  +		"<td>" + result.list[i].dayoff + "</td>"
+	   						   
+			    						   if(result.list[i].offKind == 1) { value += "<td>연차</td>" }
+			    						   else if(result.list[i].offKind == 2) { value += "<td>병가</td>" }
+			    						   else if(result.list[i].offKind == 3) { value += "<td>공가</td>" }
+			    						   else if(result.list[i].offKind == 4) { value += "<td>정기휴가</td>" }
+			    						   else { value += "<td>출산휴가</td>" }
+		    						   
+		    					value += 	"<td class='text-overflow'><a a data-toggle='modal' data-target='#do_reason'>" + result.list[i].offReason + "</a></td>"
+										   if(result.list[i].apvlStatus == 'S') { value += "<td>대기</td>" }
+			    						   else if(result.list[i].apvlStatus == 'I') { value += "<td>진행중</td>" }
+			    						   else if(result.list[i].apvlStatus == 'C') { value += "<td>완료</td>" }
+			    						   else if(result.list[i].apvlStatus == 'R') { value += "<td><a data-toggle='modal' data-target='#do_return'>반려</a></td>" }
+			    						   else { value += "<td>회수</td>" }
+		    						  + "</tr>";
+		    				}
+		    				
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.listCount);
+		    				
+		    				<%--
+		    				let reasonModal="";
+		    				for(let i in result.list) {
+		    					reasonModal += "<br>"
+		    								+  "<b>휴가 사유</b><br>"
+		    								+  result.list[i].offReason + "<br>"
+		    								+  "<button id='doSelBtn' data-dismiss='modal'>확인</button>"	
+		    				}
+		    				
+		    				$(".do_reason_content").html(reasonModal);
+		    				
+		    				
+		    				let returnModal="";
+		    				for(let i in result.list) {
+								returnModal += "<br>"
+		    								+  "<b>반려 사유</b><br>"
+		    								+  result.list[i].apvlReturnComment + "<br>"
+		    								+  "<button id='doSelBtn' data-dismiss='modal'>확인</button>"	
+    						}
+    						--%>
+		    				
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectDayoffList(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("휴가리스트 조회용 ajax 통신실패");
+						}
+					})
+				}
+				
+			</script>
 
 		</div>
 		<!-- /.content-wrapper -->
@@ -278,7 +309,6 @@
 		<jsp:include page="../common/footer.jsp" />
 	</div>
 	
-	<jsp:include page="../common/scripts.jsp" />    
 	
 </body>
 </html>
