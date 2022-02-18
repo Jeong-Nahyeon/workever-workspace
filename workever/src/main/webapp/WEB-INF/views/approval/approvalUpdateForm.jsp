@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,9 +12,6 @@
 	<jsp:include page="../common/links.jsp" />
 	<!-- Daterange picker -->
   	<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-  	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style>
 	div, input, textarea{ box-sizing:border-box;}
 
@@ -108,34 +106,32 @@
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			<br><br>
-			<h3>&nbsp;&nbsp;&nbsp;결재 작성</h3>
+			<h3>&nbsp;&nbsp;&nbsp;결재 수정</h3>
 			<hr>
 			<!-- 등록 폼 전체 영역 -->
 			<div id="enrollForm-area">
 				
 				<div id="form-inner">
-					<form action="insert.ap" id="approval-form" method="post" onSubmit="return checkForm();">
+					<form action="update.ap?apvlNo=${ apvl.apvlNo }" id="approval-form" method="post">
 						<input type="hidden" value="${ loginUser.userNo }" name="apvlWriter">
+						<input type="hidden" value="${ apvl.apvlFormNo }" name="apvlFormNo">
 						<table id="enroll-tb">
 							<tr style="border-bottom:1px solid gray;">
-								<th width="150">결재 양식</th>
+								<th width="150">결재선 지정</th>
 								<td width="10"></td>
-								<td width="920">
-									<select name="apvlFormNo" id="formNo" required>
-										<option value="">-----선택-----</option>
-										<c:forEach var="form" items="${ formList }">
-											<option value="${ form.apvlFormNo }">${ form.apvlFormName }</option>
-										</c:forEach>
-									</select>
-									<button type="button" class="btn btn-sm" id="formBtn" onclick="formSelect();">선택</button>
-								</td>
-							</tr>
-							<tr>
-								<th>결재선 지정</th>
-								<td></td>
-								<td style="line-height:3;padding:10px;">
+								<td  width="920" style="line-height:3;">
 										<table id="lineTb">
 											<tbody>
+												<c:forEach var="list" items="${ lineList }">
+													<tr align="center" height="50px">
+														 <td width="20px" style="font-weight:800;"> ${ list.apvlLineTurn } </td>
+														 <td width="50px"><div class="box" style="background: #BDBDBD;"><img class="profile" src="${ list.apvlLineFilePath }"></div></td>
+														 <td width="50px"> ${ list.userName } </td>
+														 <td width="50px"> ${ list.userRank } </td>
+														 <td width="100px"> ${ list.apvlLineDeptName } </td>
+														 <input type="hidden" name="lineUser" value="${ list.userNo }">
+													</tr>
+												</c:forEach>
 											</tbody>											
 										</table>
 									<button id="apvlLine-btn" type="button" class="btn btn-sm" data-target="#modal-lg">결재자 추가</button>
@@ -146,14 +142,75 @@
 						<br><br><br>
 						<h4>상세 입력</h4>
 						<div id="form" style="border-bottom:1px solid gray;border-top:1px solid gray;">
-							<div align="center" style="padding:100px;">
-								양식을 선택해주세요.
-							</div>
+								
+								<c:choose>
+									<c:when test="${ apvl.apvlFormNo eq 1 }"> <!-- 휴가신청서일때 -->
+										<jsp:include page="approvalDayOffForm.jsp">
+											<jsp:param name="apvlTitle" value="${ apvl.apvlTitle }"/>
+											<jsp:param name="apvlWriterDeptName" value="${ apvl.apvlWriterDeptName }"/>
+											<jsp:param name="apvlWriterName" value="${ apvl.apvlWriterName }"/>
+											<jsp:param name="apvlCreateDate" value="${ apvl.apvlCreateDate }"/>
+											<jsp:param name="offKind" value="${ form.offKind }"/>
+											<jsp:param name="offStartDate" value="${ form.offStartDate }"/>
+											<jsp:param name="offEndDate" value="${ form.offEndDate }"/>
+											<jsp:param name="offReason" value="${ form.offReason }"/>
+										</jsp:include>
+									</c:when>
+									<c:when test="${ apvl.apvlFormNo eq 2 }">
+										<jsp:include page="approvalOverTimeForm.jsp">
+											<jsp:param name="apvlTitle" value="${ apvl.apvlTitle }"/>
+											<jsp:param name="apvlWriterDeptName" value="${ apvl.apvlWriterDeptName }"/>
+											<jsp:param name="apvlWriterName" value="${ apvl.apvlWriterName }"/>
+											<jsp:param name="apvlCreateDate" value="${ apvl.apvlCreateDate }"/>
+											<jsp:param name="otTitle" value="${ form.otTitle }"/>
+											<jsp:param name="otDate" value="${ form.otDate }"/>
+											<jsp:param name="otWorkingHours" value="${ form.otWorkingHours }"/>
+											<jsp:param name="otContent" value="${ form.otContent }"/>
+										</jsp:include>
+									</c:when>
+									<c:when test="${ apvl.apvlFormNo eq 3 }">
+										<jsp:include page="approvalWorkReportForm.jsp">
+											<jsp:param name="apvlTitle" value="${ apvl.apvlTitle }"/>
+											<jsp:param name="apvlWriterDeptName" value="${ apvl.apvlWriterDeptName }"/>
+											<jsp:param name="apvlWriterName" value="${ apvl.apvlWriterName }"/>
+											<jsp:param name="apvlCreateDate" value="${ apvl.apvlCreateDate }"/>
+											<jsp:param name="workName" value="${ form.workName }"/>
+											<jsp:param name="workDate" value="${ form.workDate }"/>
+											<jsp:param name="workPlan" value="${ form.workPlan }"/>
+										</jsp:include>
+									</c:when>
+									<c:when test="${ apvl.apvlFormNo eq 4 }">
+										<jsp:include page="approvalExpenseReportForm.jsp">
+											<jsp:param name="apvlTitle" value="${ apvl.apvlTitle }"/>
+											<jsp:param name="apvlWriterDeptName" value="${ apvl.apvlWriterDeptName }"/>
+											<jsp:param name="apvlWriterName" value="${ apvl.apvlWriterName }"/>
+											<jsp:param name="apvlCreateDate" value="${ apvl.apvlCreateDate }"/>
+											<jsp:param name="erDate" value="${ form.erDate }"/>
+											<jsp:param name="erAmount" value="${ form.erAmount }"/>
+											<jsp:param name="erPurpose" value="${ form.erPurpose }"/>
+										</jsp:include>
+									</c:when>
+									<c:otherwise>
+										<jsp:include page="approvalBuisnessTripForm.jsp">
+											<jsp:param name="apvlTitle" value="${ apvl.apvlTitle }"/>
+											<jsp:param name="apvlWriterDeptName" value="${ apvl.apvlWriterDeptName }"/>
+											<jsp:param name="apvlWriterName" value="${ apvl.apvlWriterName }"/>
+											<jsp:param name="apvlCreateDate" value="${ apvl.apvlCreateDate }"/>
+											<jsp:param name="btPlace" value="${ form.btPlace }"/>
+											<jsp:param name="btStartDate" value="${ form.btStartDate }"/>
+											<jsp:param name="btEndDate" value="${ form.btEndDate }"/>
+											<jsp:param name="btExpense" value="${ form.btExpense }"/>
+											<jsp:param name="btPurpose" value="${ form.btPurpose }"/>
+										</jsp:include>
+									</c:otherwise>
+								</c:choose>
+								
+								
 						</div>
 						<br>
 						<div id="btn-area" align="right" style="width:1060px;">
 							<button type="reset" id="reset-btn" class="btn">다시 작성</button>
-							<button type="submit" id="submit-btn" class="btn">기안 등록</button>
+							<button type="submit" id="submit-btn" class="btn">수정 등록</button>
 						</div>
 					</form>
 				</div>
@@ -212,7 +269,7 @@
 	            <!-- 모달 푸터 -->
 	            <div class="modal-footer">
 	              <button type="button" class="btn btn-default" data-dismiss="modal" id="userSelectCancelBtn">취소</button>
-	              <button class="btn btn-primary" data-dismiss="modal" id="userSelectBtn">선택 완료</button>
+	              <button type="button" class="btn btn-primary" data-dismiss="modal" id="userSelectBtn">선택 완료</button>
 	            </div>
 	      </div>
           <!-- /.modal-content -->
@@ -231,26 +288,8 @@
 	  $.widget.bridge('uibutton', $.ui.button)
 	</script>
 	<script>
-		function formSelect(){
-			const formNo = $("option:selected").val();
-			console.log(formNo);
-			
-			if(formNo == 1) {				
-				$("#form").load("dayOffForm.ap");
-			}else if(formNo == 2){
-				$("#form").load("overTimeForm.ap");
-			}else if(formNo == 3){
-				$("#form").load("workReportForm.ap");
-			}else if(formNo == 4){
-				$("#form").load("expenseReportForm.ap");
-			}else if(formNo == 5){
-				$("#form").load("buisnessTripForm.ap");
-			}else {
-				$("#form").html('<div align="center" style="padding:100px;">양식을 선택해주세요.</div>');
-			}
-			
-		}
-		let maxLine = 0;
+		
+		let maxLine = ${ fn:length(lineList) };
 		let lineArr = [];
 		
 		$("#del-btn").click(function(){
@@ -273,14 +312,6 @@
 			}
 		})
 		
-		function checkForm(){
-				if($("#lineTb>tbody").text() == null){
-					alert("결재선을 지정해주세요.");
-					return false;
-				}
-				return true;
-				
-			}
 		
 
 		$(function(){
@@ -382,6 +413,8 @@
 			$("#userSelectCancelBtn").click(function(){
 				$("#userTb tbody").html("");
 			})
+			
+
 			
 			
 		})

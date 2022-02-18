@@ -7,9 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
 <style>
     #title, #content{
         width:100%;
@@ -17,54 +16,122 @@
 </style>
 </head>
 <body>
-    <table border>
-        <tr>
-            <td colspan="2" height="200" align="center"><h4>휴가 신청서</h4></td>
-            <td colspan="4"  width="700"></td>
-        </tr>
-        <tr>
-            <th>제목</th>
-            <td colspan="5">
-                <input type="text" id="title" name="apvlTitle" required>
-            </td>
-        </tr>
-        <tr>
-            <th width="150">소속 부서</th>
-            <td width="170">&nbsp;&nbsp;&nbsp;${ userDeptName }</td>
-            <th width="150">기안자</th>
-            <td width="170">&nbsp;&nbsp;&nbsp;${ loginUser.userName }</td> 
-            <th width="150">기안일</th>
-            <td width="170">&nbsp;&nbsp;&nbsp;<c:set var="current" value="<%= new java.util.Date() %>"/><fmt:formatDate value="${current }" type="both" pattern="yyyy-MM-dd(E)"/></td>
-        </tr>
-        <tr>
-            <th>휴가 종류</th>
-            <td colspan="5">
-                &nbsp;&nbsp;&nbsp;
-                <input type="radio" id="radio1" name="offKind" value="1">연차&nbsp;&nbsp;
-                <input type="radio" id="radio2" name="offKind" value="2">병가&nbsp;&nbsp;
-                <input type="radio" id="radio3" name="offKind" value="3">공가&nbsp;&nbsp;
-                <input type="radio" id="radio4" name="offKind" value="4">정기 휴가&nbsp;&nbsp;
-                <input type="radio" id="radio5" name="offKind" value="5">출산 휴가
-            </td>
-        </tr>
-        <tr>
-            <th>휴가 기간</th>
-            <td colspan="5">
-                &nbsp;&nbsp;&nbsp;
-                <input type="text" id="offStartDate" name="offStartDate" required> ~ <input type="text" id="offEndDate" name="offEndDate" required>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="6" >사유</th>
-        </tr>
-        <tr>
-            <td colspan="6">
-                <textarea name="offReason" id="content" rows="20" style="resize:none;" required></textarea>
-            </td>
-        </tr>
-    </table>
+	<c:choose>
+		<c:when test="${ empty param }"> <!-- 등록폼 -->
+		    <table border>
+		        <tr>
+		            <td colspan="2" height="200" align="center"><h4>휴가 신청서</h4></td>
+		            <td colspan="4"  width="700"></td>
+		        </tr>
+		        <tr>
+		            <th>제목</th>
+		            <td colspan="5">
+		                <input type="text" id="title" name="apvlTitle" required>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th width="150">소속 부서</th>
+		            <td width="170">&nbsp;&nbsp;&nbsp;${ userDeptName }</td>
+		            <th width="150">기안자</th>
+		            <td width="170">&nbsp;&nbsp;&nbsp;${ loginUser.userName }</td> 
+		            <th width="150">기안일</th>
+		            <td width="170">&nbsp;&nbsp;&nbsp;<c:set var="current" value="<%= new java.util.Date() %>"/><fmt:formatDate value="${current }" type="both" pattern="yyyy-MM-dd(E)"/></td>
+		        </tr>
+		        <tr>
+		            <th>휴가 종류</th>
+		            <td colspan="5">
+		                &nbsp;&nbsp;&nbsp;
+		                <input type="radio" id="radio1" name="offKind" value="1" required><label for="radio1">연차</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio2" name="offKind" value="2"><label for="radio2">병가</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio3" name="offKind" value="3"><label for="radio3">공가</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio4" name="offKind" value="4"><label for="radio4">정기 휴가</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio5" name="offKind" value="5"><label for="radio5">출산 휴가</label>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th>휴가 기간</th>
+		            <td colspan="5">
+		                &nbsp;&nbsp;&nbsp;
+		                <input type="text" id="offStartDate" name="offStartDate" required> ~ <input type="text" id="offEndDate" name="offEndDate" required>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th colspan="6" >사유</th>
+		        </tr>
+		        <tr>
+		            <td colspan="6">
+		                <textarea name="offReason" id="content" rows="20" style="resize:none;" required></textarea>
+		            </td>
+		        </tr>
+		    </table>
+		</c:when>
+		<c:otherwise>	<!-- param이 비어있지 않을 땐 수정폼 -->
+		    <table border>
+		        <tr>
+		            <td colspan="2" height="200" align="center"><h4>휴가 신청서</h4></td>
+		            <td colspan="4"  width="700"></td>
+		        </tr>
+		        <tr>
+		            <th>제목</th>
+		            <td colspan="5">
+		                <input type="text" id="title" name="apvlTitle" value="${ param.apvlTitle }" required>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th width="150">소속 부서</th>
+		            <td width="170">&nbsp;&nbsp;&nbsp;${ param.apvlWriterDeptName }</td>
+		            <th width="150">기안자</th>
+		            <td width="170">&nbsp;&nbsp;&nbsp;${ param.apvlWriterName }</td> 
+		            <th width="150">기안일</th>
+		            <td width="170">&nbsp;&nbsp;&nbsp;${ param.apvlCreateDate }</td>
+		        </tr>
+		        <tr>
+		            <th>휴가 종류</th>
+		            <td colspan="5">
+		                &nbsp;&nbsp;&nbsp;
+		                <input type="radio" id="radio1" name="offKind" value="1" required><label for="radio1">연차</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio2" name="offKind" value="2"><label for="radio2">병가</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio3" name="offKind" value="3"><label for="radio3">공가</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio4" name="offKind" value="4"><label for="radio4">정기 휴가</label>&nbsp;&nbsp;
+		                <input type="radio" id="radio5" name="offKind" value="5"><label for="radio5">출산 휴가</label>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th>휴가 기간</th>
+		            <td colspan="5">
+		                &nbsp;&nbsp;&nbsp;
+		                <input type="text" id="offStartDate" name="offStartDate" value="${ param.offStartDate }" required> ~ <input type="text" id="offEndDate" name="offEndDate" value="${ param.offStartDate }" required>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th colspan="6" >사유</th>
+		        </tr>
+		        <tr>
+		            <td colspan="6">
+		                <textarea name="offReason" id="content" rows="20" style="resize:none;" required>${ param.offReason }</textarea>
+		            </td>
+		        </tr>
+		    </table>
+		    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+		  	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+			<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		    <script>
+		    	$(function(){
+		    		$("label").each(function(){
+		    			if($(this).text() == "${ param.offKind }"){
+		    				$(this).prev().attr("checked", true);
+		    			}
+		    		})
+		    	})
+		    </script>
+		</c:otherwise>
+	</c:choose>
     <script>
     	$(function(){
+    		
+    		
+    		
     		$.datepicker.setDefaults({
                 dateFormat: 'yy-mm-dd' //Input Display Format 변경
                 ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
