@@ -307,14 +307,19 @@
 					<div class="card-header board-btns-area"> 
 						<c:if test="${ db.userNo eq loginUser.userNo }">
 							<!-- 본인 게시글일 경우 -->
-							<button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href='updateForm.dbo?dbno=${ db.dbNo }';">수정</button>
-							<button type="button" id="delete-modal-btn" class="btn btn-sm btn-default delete-btn">삭제</button>
+							<button type="button" class="btn btn-sm btn-default update-btn" onclick="postFormSubmit(1);">수정</button>
+							<button type="button" id="delete-modal-btn" class="btn btn-sm btn-default delete-btn" onclick="postFormSubmit(2);">삭제</button>
 						</c:if>
 						<!-- 공통 -->
 						<button type="button" class="btn btn-sm list-btn" onclick="location.href='list.dbo';">목록</button>
 					
 					</div>
 					<!-- /.card-header -->
+					
+					<!-- 수정/삭제 버튼 클릭 시 부서별 게시글 번호 post 방식으로 전달 -->
+					<form id="postForm" method="post">
+						<input type="hidden" name="dbno" value="${ db.dbNo }" /> 
+					</form>					
 
 					<div class="card-body">
 
@@ -481,21 +486,6 @@
 			
 			// 실시간으로 댓글 조회
 			selectReplyList();
-			
-			
-			// 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
-		    $("#delete-modal-btn").click(function(){
-		    	
-			      $("#confirm-modal").modal({backdrop: "static"});
-			      
-				// 확인 버튼 클릭 시 삭제 요청 처리
-			    $("#confirm-btn").click(function(){
-			    	
-			    	  location.href = "delete.dbo?dbno=${ db.dbNo }";
-				      
-				});
-				
-			});
 		    
 			
 			// 본인 댓글 수정 버튼 클릭 시 => 수정폼 보이기
@@ -544,6 +534,7 @@
 						crNo:$(this).prev().val(),
 						crContent:$(this).parents(".reply-list").find(".reply-update-content").val()
 					},
+					type:"post",
 					success:function(result){
 						
 						if(result == "success"){
@@ -580,13 +571,14 @@
 			    			 crNo:crNo,
 			    			 crRefNo:${ db.dbNo }
 			    		 },
+			    		 type:"post",
 			    		 success:function(result){
 			    			
 			    			if(result == "success"){
 			    				
 				 				$("#confirm-modal").modal("hide"); 
 				 				
-				 				$("#alert-message").text("성공적으로 삭제되었습니다.");
+				 				$("#alert-message").text("성공적으로 삭제되었습니다");
 								$("#alert-message-modal").modal({backdrop: "static"});
 								
 								$("#close-btn").click(function(){
@@ -623,6 +615,7 @@
 						crRefNo:${ db.dbNo },
 						crContent:$("#reply-insert-content").val()
 					},
+					type:"post",
 					success:function(result){
 						
 						if(result == "success"){
@@ -717,6 +710,31 @@
 			
 		}
 		
+		
+	  // 게시글 수정 삭제 영역
+	  // 수정/삭제 버튼 클릭 시 post 방식으로 게시글 번호 전달
+	  function postFormSubmit(num){
+		  
+		  if(num == 1){ // 수정버튼 클릭
+			  
+			  $("#postForm").attr("action", "updateForm.dbo").submit();
+			  
+		  }else{ // 삭제버튼 클릭
+			  
+			  // 요청처리 여부 확인 모달창 오픈
+		      $("#confirm-modal").modal({backdrop: "static"});
+		      
+				// 확인 버튼 클릭 시 삭제 요청 처리
+			    $("#confirm-btn").click(function(){
+			    	
+			    	$("#postForm").attr("action", "delete.dbo").submit();
+				      
+				});
+			  
+		  }
+		  
+	  }
+	  
 	</script>	
 
 </body>

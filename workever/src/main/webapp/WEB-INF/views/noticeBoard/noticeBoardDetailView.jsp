@@ -119,10 +119,48 @@
       background: #4E73DF;
       color: white;
     }
+
+  	/* 요청처리  확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
     
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+	</c:if>
 
 	<div class="wrapper">
 	
@@ -155,12 +193,17 @@
 		            <div class="card-header board-btns-area"> 
 		            
 		            <c:if test="${ loginUser.userRank eq '관리자' }">
-		              <button type="button" class="btn btn-sm btn-default update-btn" onclick="location.href = 'updateForm.nbo?nbno=${ nb.nbNo }';">수정</button>
-		              <button type="button" id="delete-modal-btn" class="btn btn-sm delete-btn">삭제</button>
+		              <button type="button" class="btn btn-sm btn-default update-btn" onclick="postFormSubmit(1);">수정</button>
+		              <button type="button" id="delete-modal-btn" class="btn btn-sm delete-btn" onclick="postFormSubmit(2);">삭제</button>
 		            </c:if>  
 		            
 		            </div>
 		            <!-- /.card-header -->
+		            
+					<!-- 수정/삭제 버튼 클릭 시 공지사항 게시글 번호 post 방식으로 전달 -->
+					<form id="postForm" method="post">
+						<input type="hidden" name="nbno" value="${ nb.nbNo }" /> 
+					</form>			            
 		
 		            <div class="card-body">
 		
@@ -234,6 +277,38 @@
     </div>
     <!-- ./wrapper -->
     
+    
+    
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>    
+    
+    
+    
     <!-- 요청처리 여부 확인 모달창 -->
 	<!-- The Modal -->
 	<div class="modal fade" id="confirm-modal">
@@ -266,23 +341,31 @@
 
 	
 	<script>
-		$(function(){
-			
-			// 삭제 버튼 클릭 시 => 삭제처리 여부 확인 모달창 띄우기
-		    $("#delete-modal-btn").click(function(){
-		    	
-			      $("#confirm-modal").modal({backdrop: "static"});
-			      
-			});
-		    
-			// 확인 버튼 클릭 시 삭제 요청 처리
-		    $("#confirm-btn").click(function(){
-		    	
-		    	  location.href = "delete.nbo?nbno=${ nb.nbNo }";
-			      
-			});
-			
-		});
+	
+	  // 게시글 수정 삭제 영역
+	  // 수정/삭제 버튼 클릭 시 post 방식으로 게시글 번호 전달
+	  function postFormSubmit(num){
+		  
+		  if(num == 1){ // 수정버튼 클릭
+			  
+			  $("#postForm").attr("action", "updateForm.nbo").submit();
+			  
+		  }else{ // 삭제버튼 클릭
+			  
+			  // 요청처리 여부 확인 모달창 오픈
+		      $("#confirm-modal").modal({backdrop: "static"});
+		      
+				// 확인 버튼 클릭 시 삭제 요청 처리
+			    $("#confirm-btn").click(function(){
+			    	
+			    	$("#postForm").attr("action", "delete.nbo").submit();
+				      
+				});
+			  
+		  }
+		  
+	  }
+	  
 	</script>	
 
 </body>

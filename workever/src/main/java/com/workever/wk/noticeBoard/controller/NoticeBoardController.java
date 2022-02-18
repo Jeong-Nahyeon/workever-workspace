@@ -297,7 +297,7 @@ public class NoticeBoardController {
 		if(result > 0) { // 수정 성공
 			
 			session.setAttribute("successMsg", "성공적으로 수정되었습니다");
-			return "redirect:list.nbo";
+			return "redirect:detail.nbo?nbno=" + nb.getNbNo();
 			
 		} else { // 수정 실패
 			
@@ -347,7 +347,7 @@ public class NoticeBoardController {
 		
 		if(result1 * result2 > 0) { // 삭제 성공
 			
-			session.setAttribute("successMsg", "성공적으로 삭제되었습니다.");
+			session.setAttribute("successMsg", "성공적으로 삭제되었습니다");
 			return "redirect:list.nbo";
 			
 		} else { // 삭제 실패

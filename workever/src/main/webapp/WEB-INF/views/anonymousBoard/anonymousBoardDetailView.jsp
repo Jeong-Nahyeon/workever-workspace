@@ -682,7 +682,7 @@
 			
 				$(function(){
 					
-					$("#reply-insert-content").attr("placeholder", "최대 500자 입력 가능합니다.");
+					$("#reply-insert-content").attr("placeholder", "댓글 작성 후 등록 가능합니다.");
 					
 					
 					selectReplyListForUsers(); // 실시간 댓글 조회
@@ -734,6 +734,7 @@
 								crNo:$(this).prev().val(),
 								crContent:$(this).parents(".reply-list").find(".reply-update-content").val()
 							},
+							type:"post",
 							success:function(result){
 								
 								if(result == "success"){
@@ -771,6 +772,7 @@
 					    			 crNo:crNo,
 					    			 crRefNo:${ ab.abNo }
 					    		 },
+					    		 type:"post",
 					    		 success:function(result){
 					    			
 					    			if(result == "success"){
@@ -897,6 +899,7 @@
 								crRefNo:${ ab.abNo },
 								crContent:$("#reply-insert-content").val()
 							},
+							type:"post",
 							success:function(result){
 								
 								if(result == "success"){
