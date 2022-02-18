@@ -12,6 +12,7 @@ import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.approval.model.vo.ApprovalBuisnessTripForm;
 import com.workever.wk.approval.model.vo.ApprovalDayOffForm;
 import com.workever.wk.approval.model.vo.ApprovalExpenseReportForm;
+import com.workever.wk.approval.model.vo.ApprovalForm;
 import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
@@ -116,6 +117,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.insertApproval(sqlSession, map);
 	}
 
+	@Override
+	public ArrayList<ApprovalForm> selectFormList() {
+		return aDao.selectFormList(sqlSession);
+	}
+	
 	// 전자 결재 상세 조회
 	@Override
 	public Approval selectApproval(int apvlNo) {
@@ -151,6 +157,37 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ApprovalBuisnessTripForm selectBuisnessTripForm(int apvlNo) {
 		return aDao.selectBuisnessTripForm(sqlSession, apvlNo);
 	}
+
+	// 전자결재 삭제
+	@Override
+	public int deleteApproval(int apvlNo) {
+		return aDao.deleteApproval(sqlSession, apvlNo);
+	}
+
+	// 전자결재 반려처리
+	@Override
+	public int returnApproval(ApprovalLine returnApvl) {
+		return aDao.returnApproval(sqlSession, returnApvl);
+	}
+
+	// 전자결재 승인처리
+	@Override
+	public int approveApproval(ApprovalLine approveApvl) {
+		return aDao.approveApproval(sqlSession, approveApvl);
+	}
+
+	// 전자결재 승인처리(마지막순번)
+	@Override
+	public int lastApproveApproval(ApprovalLine approveApvl, String apvlFormNo) {
+		return aDao.lastApproveApproval(sqlSession, approveApvl, apvlFormNo);
+	}
+
+	// 전자결재 수정
+	@Override
+	public int updateApproval(Map<String, Object> map) {
+		return aDao.updateApproval(sqlSession, map);
+	}
+
 	
 
 

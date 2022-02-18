@@ -19,6 +19,7 @@ import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.approval.model.vo.ApprovalBuisnessTripForm;
 import com.workever.wk.approval.model.vo.ApprovalDayOffForm;
 import com.workever.wk.approval.model.vo.ApprovalExpenseReportForm;
+import com.workever.wk.approval.model.vo.ApprovalForm;
 import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
@@ -187,7 +188,8 @@ public class approvalController {
 	public String enrollForm(Model model, HttpSession session) {
 		User loginUser = (User)session.getAttribute("loginUser");
 		ArrayList<Dept> dept = aService.selectDeptList(Integer.parseInt(loginUser.getComNo()));
-		
+		ArrayList<ApprovalForm> formList = aService.selectFormList();
+		model.addAttribute("formList", formList);
 		model.addAttribute("dept", dept);
 		return "approval/approvalEnrollForm";
 	}
@@ -285,15 +287,15 @@ public class approvalController {
 		
 		switch(Integer.parseInt(apvl.getApvlFormNo())) {
 			case 1 : 
-				map.put("apvlDof", apvlDof);break;
+				map.put("form", apvlDof);break;
 			case 2 : 
-				map.put("apvlOtf", apvlOtf);break;
+				map.put("form", apvlOtf);break;
 			case 3 : 
-				map.put("apvlWrf", apvlWrf);break;
+				map.put("form", apvlWrf);break;
 			case 4 : 
-				map.put("apvlErf", apvlErf);break;
+				map.put("form", apvlErf);break;
 			case 5 : 
-				map.put("apvlBtf", apvlBtf);break;
+				map.put("form", apvlBtf);break;
 		}
 		
 		
@@ -309,7 +311,7 @@ public class approvalController {
 		
 	}
 	
-	// 작성한 전자결제 상세 조회
+	// 전자결제 상세 조회
 	@RequestMapping("detail.ap")
 	public String selectApproval(int apvlNo, Model model) {
 		Approval apvl = aService.selectApproval(apvlNo);
@@ -358,8 +360,156 @@ public class approvalController {
 	
 	// 작성한 전자결재 삭제
 	@RequestMapping("delete.ap")
-	public String deleteApproval(int apvlNo, Model model) {
-		return "dlsief";
+	public String deleteApproval(int apvlNo, Model model, HttpSession session) {
+		int result = aService.deleteApproval(apvlNo);
+		
+		if(result > 0) {
+			session.setAttribute("alertMsg", "전자결재가 성공적으로 삭제되었습니다.");
+			return "redirect:writeList.ap";
+		}else {
+			model.addAttribute("errorMsg", "게시글 등록 실패");
+			return "common/errorPage";
+		}
+
+	}
+	
+	// 수신한 전자결재 반려
+	@RequestMapping("return.ap")
+	public String returnApproval(int apvlNo, String apvlReturnComment, Model model, HttpSession session) {
+		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		
+		ApprovalLine returnApvl = new ApprovalLine();
+		returnApvl.setApvlNo(apvlNo);
+		returnApvl.setUserNo(loginUserNo);
+		returnApvl.setApvlReturnComment(apvlReturnComment);
+		
+		int result = aService.returnApproval(returnApvl);
+		
+		if(result > 0) {
+			return "redirect:detail.ap?apvlNo=" + apvlNo;
+		}else {
+			model.addAttribute("errorMsg", "반려 처리 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	// 수신한 전자결재 승인
+	@RequestMapping("approve.ap")
+	public String approveApproval(int apvlNo, Model model, HttpSession session) {
+		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		
+		ApprovalLine approveApvl = new ApprovalLine();
+		approveApvl.setApvlNo(apvlNo);
+		approveApvl.setUserNo(loginUserNo);		
+		
+		int result = aService.approveApproval(approveApvl);
+		
+		if(result > 0) {
+			return "redirect:detail.ap?apvlNo=" + apvlNo;
+		}else {
+			model.addAttribute("errorMsg", "승인 처리 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	// 수신한 전자결재 승인 (마지막 순번)
+	@RequestMapping("lastApprove.ap")
+	public String lastApproveApproval(int apvlNo, String apvlFormNo, Model model, HttpSession session) {
+		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		ApprovalLine approveApvl = new ApprovalLine();
+		approveApvl.setApvlNo(apvlNo);
+		approveApvl.setUserNo(loginUserNo);
+		
+		int result = aService.lastApproveApproval(approveApvl, apvlFormNo);
+		
+		if(result > 0) {
+			return "redirect:detail.ap?apvlNo=" + apvlNo;
+		}else {
+			model.addAttribute("errorMsg", "승인 처리 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	// 수정하기 페이지 이동
+	@RequestMapping("updateForm.ap")
+	public String updateApproval(int apvlNo, Model model, HttpSession session) {
+		User loginUser = (User)session.getAttribute("loginUser");
+		
+		ArrayList<Dept> dept = aService.selectDeptList(Integer.parseInt(loginUser.getComNo()));
+		Approval apvl = aService.selectApproval(apvlNo);
+		ArrayList<ApprovalLine> lineList = aService.approvalLineList(apvlNo);
+		
+		
+		model.addAttribute("dept", dept);
+		model.addAttribute("apvl", apvl);
+		model.addAttribute("lineList", lineList);
+		
+		int apvlFormNo = Integer.parseInt(apvl.getApvlFormNo());
+		switch(apvlFormNo) {
+			case 1:
+				ApprovalDayOffForm apvlDof = aService.selectDayOffForm(apvlNo);
+				switch(apvlDof.getOffKind()) {
+					case "1": apvlDof.setOffKind("연차"); break;
+					case "2": apvlDof.setOffKind("병가"); break;
+					case "3": apvlDof.setOffKind("공가"); break;
+					case "4": apvlDof.setOffKind("정기 휴가"); break;
+					case "5": apvlDof.setOffKind("출산 휴가"); break;
+				}
+				model.addAttribute("form", apvlDof);
+				break;
+			case 2:
+				ApprovalOverTimeForm apvlOtf = aService.selectOverTimeForm(apvlNo);
+				model.addAttribute("form", apvlOtf);
+				break;
+			case 3:
+				ApprovalWorkReportForm apvlWrf = aService.selectWorkReportForm(apvlNo);
+				model.addAttribute("form", apvlWrf);
+				break;
+			case 4:
+				ApprovalExpenseReportForm apvlErf = aService.selectExpenseReportForm(apvlNo);
+				model.addAttribute("form", apvlErf);
+				break;
+			case 5:
+				ApprovalBuisnessTripForm apvlBtf = aService.selectBuisnessTripForm(apvlNo);
+				model.addAttribute("form", apvlBtf);
+				break;
+		}
+		
+		return "approval/approvalUpdateForm";
+	}
+	
+	// 수정하기
+	@RequestMapping("update.ap")
+	public String updateApproval(int apvlNo, String lineUser, Approval apvl, ApprovalBuisnessTripForm apvlBtf, ApprovalDayOffForm apvlDof, ApprovalExpenseReportForm apvlErf, ApprovalOverTimeForm apvlOtf, ApprovalWorkReportForm apvlWrf, HttpSession session, Model model) {
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		String[] lineUserNo = lineUser.split(","); 
+		map.put("apvl", apvl);
+		map.put("lineUserNo", lineUserNo);		
+		
+		switch(Integer.parseInt(apvl.getApvlFormNo())) {
+			case 1 : 
+				map.put("form", apvlDof);break;
+			case 2 : 
+				map.put("form", apvlOtf);break;
+			case 3 : 
+				map.put("form", apvlWrf);break;
+			case 4 : 
+				map.put("form", apvlErf);break;
+			case 5 : 
+				map.put("form", apvlBtf);break;
+		}
+		
+		
+		int result = aService.updateApproval(map);
+		
+		if(result > 0) {
+			session.setAttribute("alertMsg", "전자결재가 성공적으로 수정되었습니다.");
+			return "redirect:detail.ap?apvlNo=" + apvlNo;
+		}else {
+			model.addAttribute("errorMsg", "게시글 수정 실패");
+			return "common/errorPage";
+		}
 	}
 	
 }

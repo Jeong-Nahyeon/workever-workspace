@@ -7,6 +7,7 @@ import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.approval.model.vo.ApprovalBuisnessTripForm;
 import com.workever.wk.approval.model.vo.ApprovalDayOffForm;
 import com.workever.wk.approval.model.vo.ApprovalExpenseReportForm;
+import com.workever.wk.approval.model.vo.ApprovalForm;
 import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
@@ -44,6 +45,7 @@ public interface ApprovalService {
 	ArrayList<User> userSearchList(Map<String,Object> map); // 사원 검색(ajax)
 	User selectUser(int selectUserNo); // 사원 선택(ajax)
 	int insertApproval(Map<String,Object> map); // 전자결재 작성
+	ArrayList<ApprovalForm> selectFormList();
 	
 	
 	// 4. 전자결재 상세 조회 서비스
@@ -53,4 +55,19 @@ public interface ApprovalService {
 	ApprovalWorkReportForm selectWorkReportForm(int apvlNo); // 업무 보고서
 	ApprovalExpenseReportForm selectExpenseReportForm(int apvlNo); // 지출 품의서
 	ApprovalBuisnessTripForm selectBuisnessTripForm(int apvlNo); // 출장 신청서
+	
+	// 5. 전자결제 삭제 서비스
+	int deleteApproval(int apvlNo);
+	
+	// 6. 전자결재 반려 서비스
+	int returnApproval(ApprovalLine returnApvl);
+	
+	// 7. 전자결재 승인 서비스(진행중 결재)
+	int approveApproval(ApprovalLine approveApvl);
+	
+	// 8. 전자결재 승인 서비스(완료 결재)
+	int lastApproveApproval(ApprovalLine approveApvl, String apvlFormNo);
+	
+	// 9. 전자결재 수정 서비스
+	int updateApproval(Map<String,Object> map);
 }

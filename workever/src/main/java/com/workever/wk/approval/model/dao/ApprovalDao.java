@@ -11,6 +11,7 @@ import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.approval.model.vo.ApprovalBuisnessTripForm;
 import com.workever.wk.approval.model.vo.ApprovalDayOffForm;
 import com.workever.wk.approval.model.vo.ApprovalExpenseReportForm;
+import com.workever.wk.approval.model.vo.ApprovalForm;
 import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
@@ -124,53 +125,86 @@ public class ApprovalDao {
 	
 	// 전자결재 작성
 	public int insertApproval(SqlSessionTemplate sqlSession, Map<String,Object> map) {
-		int formNo = Integer.parseInt(((Approval)map.get("apvl")).getApvlFormNo());
+		int apvl = sqlSession.insert("approvalMapper.insertApproval", map);
+		int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
 		
-		if(formNo == 1) {
-			int apvl = sqlSession.insert("approvalMapper.insertApvlDayOffForm", map);
-			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
-			return apvl * apvlLine;
-		}else if(formNo == 2) {
-			int apvl = sqlSession.insert("approvalMapper.insertApvlOverTimeForm",map);
-			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
-			return apvl * apvlLine;
-		}else if(formNo == 3) {
-			int apvl = sqlSession.insert("approvalMapper.insertApvlWorkReportForm",map);
-			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
-			return apvl * apvlLine;
-		}else if(formNo == 4) {
-			int apvl = sqlSession.insert("approvalMapper.insertApvlExpenseReportForm",map);
-			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
-			return apvl * apvlLine;
-		}else {
-			int apvl = sqlSession.insert("approvalMapper.insertApvlBuisnessTripForm",map);
-			int apvlLine = sqlSession.insert("approvalMapper.insertApvlLine", map);
-			return apvl * apvlLine;
-		}
+		return apvl * apvlLine;
 	}
 	
+	// 전자결재 양식 리스트 조회
+	public ArrayList<ApprovalForm> selectFormList(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectFormList");
+	}
+	
+	// 전자결재 조회
 	public Approval selectApproval(SqlSessionTemplate sqlSession, int apvlNo) {
 		return sqlSession.selectOne("approvalMapper.selectApproval", apvlNo);
 	}
 	
+	// 휴가신청서 조회
 	public ApprovalDayOffForm selectDayOffForm(SqlSessionTemplate sqlSession, int apvlNo) {
 		return sqlSession.selectOne("approvalMapper.selectDayOffForm", apvlNo);
 	}
 	
+	// 연장 근무 신청서 조회
 	public ApprovalOverTimeForm selectOverTimeForm(SqlSessionTemplate sqlSession, int apvlNo) {
 		return sqlSession.selectOne("approvalMapper.selectOverTimeForm", apvlNo);
 	}
 	
+	// 업무 보고서 조회
 	public ApprovalWorkReportForm selectWorkReportForm(SqlSessionTemplate sqlSession, int apvlNo) {
 		return sqlSession.selectOne("approvalMapper.selectWorkReportForm", apvlNo);
 	}
 	
+	// 지출 품의서 조회
 	public ApprovalExpenseReportForm selectExpenseReportForm(SqlSessionTemplate sqlSession, int apvlNo) {
 		return sqlSession.selectOne("approvalMapper.selectExpenseReportForm", apvlNo);
 	}
 	
+	// 출장 신청서 조회
 	public ApprovalBuisnessTripForm selectBuisnessTripForm(SqlSessionTemplate sqlSession, int apvlNo) {
 		return sqlSession.selectOne("approvalMapper.selectBuisnessTripForm", apvlNo);
+	}
+	
+	// 작성한 전자결재 삭제
+	public int deleteApproval(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.update("approvalMapper.deleteApproval", apvlNo);
+	}
+	
+	// 수신한 전자결재 반려
+	public int returnApproval(SqlSessionTemplate sqlSession, ApprovalLine returnApvl) {
+		int result1 = sqlSession.update("approvalMapper.returnApproval", returnApvl);
+		int result2 = sqlSession.update("approvalMapper.returnLine", returnApvl);
+		return result1 * result2;
+	}
+	
+	// 수신한 전자결재 승인
+	public int approveApproval(SqlSessionTemplate sqlSession, ApprovalLine approveApvl) {
+		int result1 = sqlSession.update("approvalMapper.approveApproval", approveApvl);
+		int result2 = sqlSession.update("approvalMapper.approveLine", approveApvl);
+		return result1 * result2;
+	}
+	
+	// 수신한 전자결재 승인(마지막 순번)
+	public int lastApproveApproval(SqlSessionTemplate sqlSession, ApprovalLine approveApvl, String apvlFormNo) {
+		int result1 = sqlSession.update("approvalMapper.lastApproveApproval", approveApvl);
+		int result2 = sqlSession.update("approvalMapper.lastApproveLine", approveApvl);
+		if(apvlFormNo.equals("1")) {
+			int result3 = sqlSession.update("approvalMapper.userUseDateUpdate", approveApvl);
+			return result1 * result2 * result3;
+		}else {
+			return result1 * result2;
+		}
+	}
+	
+	// 전자결재 수정
+	public int updateApproval(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		int apvl = sqlSession.update("approvalMapper.approvalUpdate", map);
+		int apvlForm = sqlSession.update("approvalMapper.approvalFormUpdate", map);
+		int apvlLineDelete = sqlSession.delete("approvalMapper.deleteApvlLine", map);
+		int apvlLine = sqlSession.insert("approvalMapper.updateApvlLine", map);
+		
+		return apvl * apvlForm * apvlLineDelete * apvlLine;
 	}
 	
 }

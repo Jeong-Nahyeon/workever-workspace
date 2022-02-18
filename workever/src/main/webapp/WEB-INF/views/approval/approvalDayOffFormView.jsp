@@ -118,10 +118,10 @@
 											<tr style="height:130px;">
 												<c:choose>
 													<c:when test="${ list.apvlLineStatus eq 'A'}">
-														<td>승인</td>
+														<td>승인<br>${ list.apvlDate }</td>
 													</c:when>
 													<c:when test="${ list.apvlLineStatus eq 'R'}">
-														<td>반려</td> 
+														<td>반려<br>${ list.apvlDate }</td> 
 													</c:when>
 													<c:otherwise>
 														<td></td>
@@ -158,7 +158,7 @@
 				            <th>휴가 기간</th>
 				            <td colspan="5">
 				                &nbsp;&nbsp;&nbsp;
-				                ${ form.offStartDate } ~ ${ form.offEndDate }
+				                ${ form.offStartDate } ~ ${ form.offEndDate } &nbsp;&nbsp;&nbsp;(총&nbsp;${ form.offTotalDate }일)
 				            </td>
 				        </tr>
 				        <tr>
@@ -183,24 +183,24 @@
 										</div>
 										<div align="right">
 											<button id="delete-btn" class="btn btn-lg" data-toggle="modal" data-target="#deleteModal">삭제</button>
-											<button id="update-btn" class="btn btn-lg" onclick="location.href='update.ap?apvlNo=${ apvl.apvlNo }'">수정</button>
+											<button id="update-btn" class="btn btn-lg" onclick="location.href='updateForm.ap?apvlNo=${ apvl.apvlNo }'">수정</button>
 										</div>
 									</c:when>
 									<c:when test="${ apvl.apvlStatus eq 'R' }">  <%-- 작성한 결재가 반려 처리 됐을 때, 반려 코멘트와, 목록 --%>
-										<table id="returnComment">
-											<tr>
-												<th width="30%">이름</th>
-												<th width="70%">반려 코멘트</th>
-											</tr>
-											<c:forEach var="list" items="${ lineList }">
-												<c:if test="${ list.apvlLineStatus eq 'R' }">
-													<tr align="center" height="50px" style="background:white;font-weight:700;">
-														<td>${ list.userName }</td>
-														<td>${ list.apvlReturnComment }</td>
+										<c:forEach var="list" items="${ lineList }">
+											<c:if test="${ not empty list.apvlReturnComment }">
+												<table id="returnComment">
+													<tr>
+														<th width="30%">이름</th>
+														<th width="70%">반려 코멘트</th>
 													</tr>
-												</c:if>
-											</c:forEach>
-										</table>
+														<tr align="center" height="50px" style="background:white;font-weight:700;">
+															<td>${ list.userName }</td>
+															<td>${ list.apvlReturnComment }</td>
+														</tr>
+												</table>
+											</c:if>
+										</c:forEach>
 										<div>
 											
 										</div>
@@ -286,16 +286,18 @@
 												<c:otherwise>	<!-- 이미 처리한 결재일때 -->
 													<c:if test="${ list.apvlLineStatus eq 'R' }">
 														<c:forEach var="list" items="${ lineList }">
-															<table id="returnComment">
-																<tr>
-																	<th width="30%">이름</th>
-																	<th width="70%">반려 코멘트</th>
-																</tr>
-																	<tr align="center" height="50px" style="background:white;font-weight:700;">
-																		<td>${ list.userName }</td>
-																		<td>${ list.apvlReturnComment }</td>
+															<c:if test="${ not empty list.apvlReturnComment }">
+																<table id="returnComment">
+																	<tr>
+																		<th width="30%">이름</th>
+																		<th width="70%">반려 코멘트</th>
 																	</tr>
-															</table>
+																		<tr align="center" height="50px" style="background:white;font-weight:700;">
+																			<td>${ list.userName }</td>
+																			<td>${ list.apvlReturnComment }</td>
+																		</tr>
+																</table>
+															</c:if>
 														</c:forEach>
 													</c:if>
 													<div>
@@ -375,13 +377,16 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body" align="center">
-              <p>승인하시겠습니까?</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" onclick="location.href='lastApprove.ap?apvlNo=${ apvl.apvlNo }'">확인</button>
-            </div>
+            <form action="lastApprove.ap?apvlNo=${ apvl.apvlNo }" method="post">
+	            <div class="modal-body" align="center">
+	              <p>승인하시겠습니까?</p>
+	              <input type="hidden" name="apvlFormNo" value="${ apvl.apvlFormNo }">
+	            </div>
+	            <div class="modal-footer justify-content-between">
+	              <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+	              <button type="submit" class="btn btn-primary">확인</button>
+	            </div>
+            </form>
           </div>
           <!-- /.modal-content -->
         </div>

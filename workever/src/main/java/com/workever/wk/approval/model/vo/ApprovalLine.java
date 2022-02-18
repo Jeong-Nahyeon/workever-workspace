@@ -19,4 +19,7 @@ public class ApprovalLine { // 결재선 vo
 	private String apvlDate;
 	private String userName;
 	private String userRank;
+	
+	private String apvlLineFilePath;
+	private String apvlLineDeptName;
 }
