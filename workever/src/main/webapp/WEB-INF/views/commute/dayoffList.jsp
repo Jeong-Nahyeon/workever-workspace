@@ -176,7 +176,7 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									
-									<div class="modal-body do_reason_content" align="center">
+									<div class="modal-body" id="do_reason_content" align="center">
 										
 									</div>
 									
@@ -189,7 +189,7 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									
-									<div class="modal-body do_return_content" align="center">
+									<div class="modal-body" id="do_return_content" align="center">
 										
 									</div>
 									
@@ -232,6 +232,7 @@
 							let value="";
 		    				for(let i in result.list) {
 		    					value += "<tr>"
+		    						  +		"<input type='hidden' name='apvlNo' value='" + result.list[i].apvlNo + "'>"
 		    						  +		"<td>" + result.list[i].dayoff + "</td>"
 	   						   
 			    						   if(result.list[i].offKind == 1) { value += "<td>연차</td>" }
@@ -240,41 +241,18 @@
 			    						   else if(result.list[i].offKind == 4) { value += "<td>정기휴가</td>" }
 			    						   else { value += "<td>출산휴가</td>" }
 		    						   
-		    					value += 	"<td class='text-overflow'><a a data-toggle='modal' data-target='#do_reason'>" + result.list[i].offReason + "</a></td>"
+		    					value += 	"<td class='text-overflow'><a>" + result.list[i].offReason + "</a></td>"
 										   if(result.list[i].apvlStatus == 'S') { value += "<td>대기</td>" }
 			    						   else if(result.list[i].apvlStatus == 'I') { value += "<td>진행중</td>" }
 			    						   else if(result.list[i].apvlStatus == 'C') { value += "<td>완료</td>" }
-			    						   else if(result.list[i].apvlStatus == 'R') { value += "<td><a data-toggle='modal' data-target='#do_return'>반려</a></td>" }
+			    						   else if(result.list[i].apvlStatus == 'R') { value += "<td class='do_return'><a>반려</a></td>" }
 			    						   else { value += "<td>회수</td>" }
 		    						  + "</tr>";
 		    				}
-		    				
 		    					    				
 		    				$(".select-area tbody").html(value);
 		    				$("#selectCount").text(result.listCount);
-		    				
-		    				<%--
-		    				let reasonModal="";
-		    				for(let i in result.list) {
-		    					reasonModal += "<br>"
-		    								+  "<b>휴가 사유</b><br>"
-		    								+  result.list[i].offReason + "<br>"
-		    								+  "<button id='doSelBtn' data-dismiss='modal'>확인</button>"	
-		    				}
-		    				
-		    				$(".do_reason_content").html(reasonModal);
-		    				
-		    				
-		    				let returnModal="";
-		    				for(let i in result.list) {
-								returnModal += "<br>"
-		    								+  "<b>반려 사유</b><br>"
-		    								+  result.list[i].apvlReturnComment + "<br>"
-		    								+  "<button id='doSelBtn' data-dismiss='modal'>확인</button>"	
-    						}
-    						--%>
-		    				
-		    				
+		    			
 		    				let paging="";
 		    				if(result.pi.currentPage == 1) {
 		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
@@ -300,6 +278,61 @@
 						}
 					})
 				}
+				
+				
+				
+				$(document).on('click', ".text-overflow > a", function(){
+					console.log($(this).parent().siblings("input[name=apvlNo]").val());
+					
+					$.ajax({
+						url: "reason.do",
+						type: "POST",
+						data: {
+							apvlNo: $(this).parent().siblings("input[name=apvlNo]").val()
+						}, success:function(data) {
+							
+							console.log(data);
+							
+							let	content = "<br>"
+	    								+  "<b>휴가 사유</b><br><br>"
+	    								+  data.offReason + "<br>"
+	    								+  "<button id='doSelBtn' data-dismiss='modal'>확인</button>";
+							
+							$("#do_reason_content").html(content);
+							$("#do_reason").modal('show');
+							
+						}, error:function() {
+							console.log("휴가내용 모달 조회용 ajax 통신실패");
+						}
+					})
+				})
+				
+				
+				$(document).on('click', ".do_return > a", function(){
+					console.log($(this).parent().siblings("input[name=apvlNo]").val());
+					
+					$.ajax({
+						url: "return.do",
+						type: "POST",
+						data: {
+							apvlNo: $(this).parent().siblings("input[name=apvlNo]").val()
+						}, success:function(data) {
+							
+							console.log(data);
+							
+							let content = "<br>"
+										+  "<b>반려 사유</b><br><br>"
+										+  data.apvlReturnComment + "<br>"
+										+  "<button id='doSelBtn' data-dismiss='modal'>확인</button>";
+										
+							$("#do_return_content").html(content);
+							$("#do_return").modal('show');
+							
+						}, error:function() {
+							console.log("반려사유 모달 조회용 ajax 통신실패");
+						}
+					})
+				})
 				
 			</script>
 

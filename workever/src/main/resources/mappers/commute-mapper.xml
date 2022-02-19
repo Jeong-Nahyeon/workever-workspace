@@ -273,4 +273,24 @@
    			by apvl_no desc
 	</select>
 	
+	<select id="doSelectReason" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , apvl_title
+		     , off_reason
+		  from approval 
+		  join approval_dayoff using (apvl_no)
+		 where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="doSelectReturn" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , apvl_status
+             , apvl_return_comment
+		  from approval 
+          join approval_line using (apvl_no)
+		 where apvl_no = #{ apvlNo }
+	</select>
+	
 </mapper>

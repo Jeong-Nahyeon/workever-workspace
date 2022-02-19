@@ -50,6 +50,10 @@ public interface CommuteService {
 	int doSelectListCount(int userNo);
 	ArrayList<Approval> doSelectList(int userNo, PageInfo pi);
 	
+	// 휴가 내용, 반려 사유 모달용
+	Approval doSelectReason(int apvlNo);
+	Approval doSelectReturn(int apvlNo);
+	
 	
 
 }

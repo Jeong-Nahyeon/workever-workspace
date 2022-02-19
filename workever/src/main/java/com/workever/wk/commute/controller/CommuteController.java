@@ -178,12 +178,25 @@ public class CommuteController {
 		map.put("pi", pi);
 		map.put("list", list);
 		
-		System.out.println("listCount : " + listCount);
-		System.out.println("pi : " + pi );
-		System.out.println("list : " + list);
-		System.out.println("map : " + map);
-		
 		return new Gson().toJson(map);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="reason.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Approval ajaxDayoffReasonModal(int apvlNo) {
+		
+		Approval offReason = cService.doSelectReason(apvlNo);
+		
+		return offReason;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="return.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Approval ajaxDayoffReturnModal(int apvlNo) {
+		
+		Approval offReturn = cService.doSelectReturn(apvlNo);
+		
+		return offReturn;
 	}
 	
 	

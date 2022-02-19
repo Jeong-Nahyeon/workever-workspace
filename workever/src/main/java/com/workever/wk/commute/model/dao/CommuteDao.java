@@ -128,6 +128,14 @@ public class CommuteDao {
 		return (ArrayList)sqlSession.selectList("commuteMapper.doSelectList", userNo, rowBounds);
 	}
 
+	public Approval doSelectReason(SqlSessionTemplate sqlSession, int apvlNo) {
+		return (Approval)sqlSession.selectOne("commuteMapper.doSelectReason", apvlNo);
+	}
+
+	public Approval doSelectReturn(SqlSessionTemplate sqlSession, int apvlNo) {
+		return (Approval)sqlSession.selectOne("commuteMapper.doSelectReturn", apvlNo);
+	}
+
 	
 
 }

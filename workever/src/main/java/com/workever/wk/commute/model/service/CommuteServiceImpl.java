@@ -113,6 +113,16 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.doSelectList(sqlSession, userNo, pi);
 	}
 
+	@Override
+	public Approval doSelectReason(int apvlNo) {
+		return cDao.doSelectReason(sqlSession, apvlNo);
+	}
+
+	@Override
+	public Approval doSelectReturn(int apvlNo) {
+		return cDao.doSelectReturn(sqlSession, apvlNo);
+	}
+
 
 
 
