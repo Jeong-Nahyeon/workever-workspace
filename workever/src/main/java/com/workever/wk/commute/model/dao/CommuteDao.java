@@ -187,6 +187,25 @@ public class CommuteDao {
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.adDoSelectList", null, rowBounds);
 	}
+	
+	
+	/*
+	 * 연장근무 관리 (Admin)
+	 */
+
+	public int adOtSelectListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("commuteMapper.adOtSelectListCount");
+	}
+
+	public ArrayList<Approval> adOtSelectList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.adOtSelectList", null, rowBounds);
+	}
 
 	
 

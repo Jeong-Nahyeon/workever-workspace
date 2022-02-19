@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
     .ot_title {
@@ -108,7 +109,7 @@
             <br><br><br>
 
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
@@ -126,69 +127,87 @@
 							<td>1</td>
 							<td>승인</td>
 						</tr>
-						<tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
 				  	</tbody>
 				</table>
 			</div>
 
 			<br>
 
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
+
+					</ul>
+				</nav>
 			</div>
+			
+			<script>
+				$(function(){
+					ajaxAdSelectOvertimeList(1)
+				})
+				
+				function ajaxAdSelectOvertimeList(cpageNo) {
+					
+					$.ajax({
+						url: "adList.ot",
+						type: "POST",
+						data: {
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							let value="";
+		    				for(let i in result.list) {
+		    					value += "<tr>"
+		    						   +	"<input type='hidden' name='apvlNo' value='" + result.list[i].apvlNo + "'>"
+		    						   +	"<td>" + result.list[i].otDate + "</td>"
+		    					       + 	"<td>" + result.list[i].apvlWriterName + "</td>"
+									   +	"<td>" + result.list[i].otWorkingHours + "</td>"	   
+		    					 
+										   if(result.list[i].apvlStatus == 'S') {
+											   value += "<td>대기</td>";
+										   } else if(result.list[i].apvlStatus == 'I') {
+											   value += "<td>진행중</td>";
+										   } else if(result.list[i].apvlStatus == 'C') {
+											   value += "<td>완료</td>";
+										   } else if(result.list[i].apvlStatus == 'R') {
+											   value += "<td class='do_return'>반려</td>";
+										   } else {
+											   value += "<td>회수</td>";
+										   }
+										   
+		    					value += "</tr>";
+		    				}
+		
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.listCount);
+		    			
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdSelectOvertimeList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxAdSelectOvertimeList(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdSelectOvertimeList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("연장근무리스트 조회용 ajax 통신실패");
+						}
+					})
+				}
+			</script>
 	
 		</div>
 		<!-- /.content-wrapper -->
@@ -196,7 +215,6 @@
 		<jsp:include page="../common/footer.jsp" />
 
 	</div>
-	
-	<jsp:include page="../common/scripts.jsp" />
+
 </body>
 </html>

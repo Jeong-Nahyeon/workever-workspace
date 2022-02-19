@@ -106,6 +106,11 @@ public class adCommuteController {
 	
 	// 휴가 관리
 	
+	@RequestMapping("adCommute.do")
+	public String adDayoffList() {
+		return "commute/adDayoffList";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value="adList.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
 	public String ajaxAdSelectDayoffList(int currentPage) {
@@ -120,21 +125,32 @@ public class adCommuteController {
 		map.put("list", list);
 		map.put("pi", pi);
 		
-		System.out.println("currentPage : " + currentPage);
-		System.out.println("listCount: " + listCount);
-		System.out.println("list :"  + list);
-		System.out.println("pi : " + pi);
-		
 		return new Gson().toJson(map);
 	}
 	
-	@RequestMapping("adCommute.do")
-	public String adDayoffList() {
-		return "commute/adDayoffList";
-	}
+	
+	// 연장근무 관리
 	
 	@RequestMapping("adCommute.ot")
 	public String adOvertimeList() {
 		return "commute/adOvertimeList";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="adList.ot", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxAdSelectOvertimeList(int currentPage) {
+		
+		int listCount = cService.adOtSelectListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Approval> list = cService.adOtSelectList(pi);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listCount", listCount);
+		map.put("list", list);
+		map.put("pi", pi);
+		
+		return new Gson().toJson(map);
+		
 	}
 }

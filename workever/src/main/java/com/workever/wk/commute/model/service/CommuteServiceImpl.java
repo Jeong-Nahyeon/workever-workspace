@@ -158,6 +158,21 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.adDoSelectList(sqlSession, pi);
 	}
 
+	
+	/*
+	 * 연장근무 관리 (Admin)
+	 */
+	
+	@Override
+	public int adOtSelectListCount() {
+		return cDao.adOtSelectListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Approval> adOtSelectList(PageInfo pi) {
+		return cDao.adOtSelectList(sqlSession, pi);
+	}
+
 
 
 

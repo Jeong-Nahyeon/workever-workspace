@@ -360,11 +360,11 @@
 	
 	
 	<!-- 휴가 관리 (관리자) -->
+	
 	<select id="adDoSelectListCount" resultType="_int">
 		select
 		       count(*)
 		  from approval
-		  join users on user_no = apvl_writer
 		 where apvl_form_no = 1
 	</select>
 	
@@ -406,5 +406,29 @@
 		  join approval_overtime using (apvl_no)
 		  join users u on user_no = apvl_writer
 		 where u.user_no = #{ userNo }
+	</select>
+	
+	
+	<!-- 연장근무 관리 (관리자) -->
+	
+	<select id="adOtSelectListCount" resultType="_int">
+		select
+		       count(*)
+		  from approval
+		 where apvl_form_no = 2
+	</select>
+	
+	<select id="adOtSelectList" resultMap="ApprovalResult">
+		select
+		       apvl_no
+		     , ot_date
+             , user_name
+		     , ot_working_hours
+		     , apvl_status
+		  from approval a
+		  join approval_overtime using (apvl_no)
+          join users on user_no = apvl_writer
+         order
+            by apvl_no desc
 	</select>
 </mapper>
