@@ -32,6 +32,11 @@
 		<result column="off_kind" property="offKind" />
 		<result column="off_reason" property="offReason" />
 		<result column="apvl_return_comment" property="apvlReturnComment" />
+		
+		<result column="ot_date" property="otDate" />
+		<result column="ot_working_hours" property="otWorkingHours" />
+		<result column="ot_title" property="otTitle" />
+		<result column="ot_content" property="otContent" />
 	</resultMap>
 	
 	<!-- *근태 관리* -->
@@ -293,7 +298,7 @@
 		 where apvl_no = #{ apvlNo }
 	</select>
 	
-	<select id="doSelectSearchCount" resultMap="ApprovalResult">
+	<select id="doSelectSearchCount" resultType="_int">
 		select
 			   count(*)
 		  from (
@@ -353,4 +358,53 @@
    			by apvl_no desc
 	</select>
 	
+	
+	<!-- 휴가 관리 (관리자) -->
+	<select id="adDoSelectListCount" resultType="_int">
+		select
+		       count(*)
+		  from approval
+		  join users on user_no = apvl_writer
+		 where apvl_form_no = 1
+	</select>
+	
+	<select id="adDoSelectList" resultMap="ApprovalResult">
+		select
+		       apvl_no
+		     , off_start_date || '~' ||off_end_date as "dayoff"
+		     , user_name
+		     , off_kind
+		     , apvl_status
+		  from approval
+		  join approval_dayoff using (apvl_no)
+		  join users on user_no = apvl_writer
+		 order
+		    by apvl_no desc
+	</select>
+	
+	
+	<!-- 연장근무 관리 (유저) -->
+	
+	<select id="otSelectListCount" resultType="_int">
+		select
+		       count(*)
+		  from approval
+		  join users u on user_no = apvl_writer
+		 where u.user_no = #{ userNo }
+		   and apvl_form_no = 2
+	</select>
+	
+	<select id="otSelectList" resultMap="ApprovalResult">
+		select
+		       apvl_no
+		     , ot_date
+		     , ot_working_hours
+		     , ot_title
+		     , ot_content
+		     , apvl_status
+		  from approval a
+		  join approval_overtime using (apvl_no)
+		  join users u on user_no = apvl_writer
+		 where u.user_no = #{ userNo }
+	</select>
 </mapper>

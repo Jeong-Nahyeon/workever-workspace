@@ -27,4 +27,9 @@ public class Approval {	 // 전자결재 통합 vo
 	private String offKind;
 	private String offReason;
 	private String apvlReturnComment;
+	
+	private String otDate;
+	private String otWorkingHours;
+	private String otTitle;
+	private String otContent;
 }

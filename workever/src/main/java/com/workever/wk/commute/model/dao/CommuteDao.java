@@ -149,6 +149,44 @@ public class CommuteDao {
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.doSelectSearchList", map, rowBounds);
 	}
+	
+	/*
+	 * 휴가 관리 (Admin)
+	 */
+	
+
+	
+	/*
+	 * 연장근무 관리 (User)
+	 */
+	
+	public int otSelectListCount(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("commuteMapper.otSelectListCount", userNo);
+	}
+
+	public ArrayList<Approval> otSelectList(SqlSessionTemplate sqlSession, int userNo, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.otSelectList", userNo, rowBounds);
+	}
+
+	public int adDoSelectListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("commuteMapper.adDoSelectListCount");
+	}
+
+	public ArrayList<Approval> adDoSelectList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.adDoSelectList", null, rowBounds);
+	}
 
 	
 

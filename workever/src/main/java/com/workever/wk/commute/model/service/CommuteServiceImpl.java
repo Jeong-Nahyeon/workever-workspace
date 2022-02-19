@@ -132,6 +132,31 @@ public class CommuteServiceImpl implements CommuteService{
 	public ArrayList<Approval> doSelectSearchList(Map<String, Object> map, PageInfo pi) {
 		return cDao.doSelectSearchList(sqlSession, map, pi);
 	}
+	
+	
+	/*
+	 *  연장근무 관리 (User)
+	 */
+	
+	@Override
+	public int otSelectListCount(int userNo) {
+		return cDao.otSelectListCount(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<Approval> otSelectList(int userNo, PageInfo pi) {
+		return cDao.otSelectList(sqlSession, userNo, pi);
+	}
+
+	@Override
+	public int adDoSelectListCount() {
+		return cDao.adDoSelectListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Approval> adDoSelectList(PageInfo pi) {
+		return cDao.adDoSelectList(sqlSession, pi);
+	}
 
 
 

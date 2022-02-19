@@ -59,5 +59,18 @@ public interface CommuteService {
 	ArrayList<Approval> doSelectSearchList(Map<String, Object> map, PageInfo pi);
 	
 	
+	/*
+	 * 연장근무 관리
+	 */
+	
+	// 연장근무 조회용
+	int otSelectListCount(int userNo);
+	ArrayList<Approval> otSelectList(int userNo, PageInfo pi);
+	
+	// Admin 휴가 조회용
+	int adDoSelectListCount();
+	ArrayList<Approval> adDoSelectList(PageInfo pi);
+	
+	
 
 }

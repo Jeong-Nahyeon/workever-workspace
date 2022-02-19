@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />    
 
 <style>
 	.do_title {
@@ -135,15 +136,15 @@
 			<br><br><br>
 
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
 						<tr>
-						<th width="25%">날짜</th>
-						<th width="25%">이름</th>
-						<th width="25%">종류</th>
-						<th width="25%">상태</th>
+							<th width="25%">날짜</th>
+							<th width="25%">이름</th>
+							<th width="25%">종류</th>
+							<th width="25%">상태</th>
 						</tr>
 				  	</thead>
 				  	<tbody>
@@ -153,83 +154,107 @@
 							<td>연차</td>
                             <td>승인</td>
 						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-							<td>승인</td>
-						</tr>
 				  	</tbody>
 				</table>
 			</div>
 
 			<br>
 
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
+
+					</ul>
+				</nav>
 			</div>
+			
+			<script>
+				$(function(){
+					ajaxAdSelectDayoffList(1);
+				})
+				
+				function ajaxAdSelectDayoffList(cpageNo) {
+					
+					$.ajax({
+						url: "adList.do",
+						type: "POST",
+						data: {
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+							for(let i in result.list) {
+							value += "<tr>"
+  						   		   +	"<input type='hidden' name='apvlNo' value='" + result.list[i].apvlNo + "'>"
+    						       +	"<td>" + result.list[i].dayoff + "</td>"
+    						       +	"<td>" + result.list[i].apvlWriterName + "</td>"
+	    						       
+    						           if(result.list[i].offKind == 1) { 
+	    						    	   value += "<td>연차</td>";
+	    						       } else if(result.list[i].offKind == 2) { 
+	    						    	   value += "<td>병가</td>";
+	    						       } else if(result.list[i].offKind == 3) { 
+	    						    	   value += "<td>공가</td>"; 
+	    						       } else if(result.list[i].offKind == 4) { 
+	    						    	   value += "<td>정기휴가</td>"; 
+	    						       } else { 
+	    						    	   value += "<td>출산휴가</td>"; 
+	    						       }	   	
+	  
+			    					   if(result.list[i].apvlStatus == 'S') {
+										   value += "<td>대기</td>";
+									   } else if(result.list[i].apvlStatus == 'I') {
+										   value += "<td>진행중</td>";
+									   } else if(result.list[i].apvlStatus == 'C') {
+										   value += "<td>완료</td>";
+									   } else if(result.list[i].apvlStatus == 'R') {
+										   value += "<td class='do_return'>반려</td>";
+									   } else {
+										   value += "<td>회수</td>";
+									   }
+			    					   
+	    						   + "</tr>";
+	    					}
+	    					    				
+	    				$(".select-area tbody").html(value);
+	    				$("#selectCount").text(result.listCount);
+	    			
+	    				let paging="";
+	    				if(result.pi.currentPage == 1) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+	    				} else {
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdSelectDayoffList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+	    				}
+						
+	    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+	    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxAdSelectDayoffList(" + p + ")'>" + p + "</a></li>";
+	    				}
+						
+	    				if(result.pi.currentPage == result.pi.maxPage) {
+	    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+	    				} else {
+	    					
+	    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxAdSelectDayoffList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+	    				}
+	    										
+	    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("휴가리스트 조회용 ajax 통신실패");
+						}
+					})
+					
+				}
+			</script>
 
 		</div>
 		<!-- /.content-wrapper -->
 		
 		<jsp:include page="../common/footer.jsp" />
 	</div>
-	
-	<jsp:include page="../common/scripts.jsp" />    
+
 	
 </body>
 </html>

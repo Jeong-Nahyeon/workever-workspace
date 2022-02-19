@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
     .ot_title {
@@ -87,7 +88,7 @@
             <div style="width: 700px; margin: auto;">
 				<div>
 					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
+					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
 				</div>
 
 				<div>
@@ -101,15 +102,15 @@
             <br><br><br>
 
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
 						<tr>
-						<th width="25%">날짜</th>
-						<th width="25%">연장 근무시간</th>
-						<th width="25%">내용</th>
-						<th width="25%">상태</th>
+							<th width="25%">날짜</th>
+							<th width="25%">연장 근무시간</th>
+							<th width="25%">내용</th>
+							<th width="25%">상태</th>
 						</tr>
 				  	</thead>
 				  	<tbody>
@@ -120,7 +121,10 @@
 								연장 내용 클릭해서 모달창에서 한 번 더 볼 수 있도록 하세요</a></td>
 							<td><a data-toggle="modal" data-target="#ot_return">반려</a></td>
 						</tr>
-
+				  	</tbody>
+				</table>
+				  	
+				  	
 						<!-- Modal -->
 						<div class="modal fade" id="ot_reason" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog" role="document">
@@ -152,71 +156,88 @@
 								</div>
 							</div>
 						</div>
-
-
-						<tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-						<tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-                        <tr>
-							<td>2021-01-24</td>
-							<td>1</td>
-							<td>연장내용</td>
-							<td>승인</td>
-						</tr>
-				  	</tbody>
-				</table>
 			</div>
 
 			<br>
 
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
+
+					</ul>
+				</nav>
 			</div>
+			
+			<script>
+				$(function(){
+					ajaxSelectOvertimeList(1)
+				})
+				
+				function ajaxSelectOvertimeList(cpageNo) {
+					
+					$.ajax({
+						url: "list.ot",
+						type: "POST",
+						data: {
+							userNo: '${loginUser.userNo}',
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.list) {
+		    					value += "<tr>"
+		    						   +	"<input type='hidden' name='apvlNo' value='" + result.list[i].apvlNo + "'>"
+		    						   +	"<td>" + result.list[i].otDate + "</td>"
+									   +	"<td>" + result.list[i].otWorkingHours + "</td>"	   
+		    					       + 	"<td class='text-overflow'><a>" + result.list[i].otTitle + "</a></td>";
+		    					 
+										   if(result.list[i].apvlStatus == 'S') {
+											   value += "<td>대기</td>";
+										   } else if(result.list[i].apvlStatus == 'I') {
+											   value += "<td>진행중</td>";
+										   } else if(result.list[i].apvlStatus == 'C') {
+											   value += "<td>완료</td>";
+										   } else if(result.list[i].apvlStatus == 'R') {
+											   value += "<td class='do_return'><a>반려</a></td>";
+										   } else {
+											   value += "<td>회수</td>";
+										   }
+										   
+		    					value += "</tr>";
+		    				}
+		
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.listCount);
+		    			
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectOvertimeList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectOvertimeList(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectOvertimeList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("연장근무리스트 조회용 ajax 통신실패");
+						}
+					})
+				}
+			</script>
 	
 		</div>
 		<!-- /.content-wrapper -->
@@ -224,7 +245,6 @@
 		<jsp:include page="../common/footer.jsp" />
 
 	</div>
-	
-	<jsp:include page="../common/scripts.jsp" />
+
 </body>
 </html>

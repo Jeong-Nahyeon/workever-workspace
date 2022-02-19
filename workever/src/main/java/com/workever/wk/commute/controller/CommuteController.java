@@ -200,7 +200,7 @@ public class CommuteController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="search.do", produces="application/json; charset=UTF-8")
+	@RequestMapping(value="search.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
 	public String ajaxSelectDayoffSearch(int userNo, String startday, String endday, int offdayKind, String keyword, int currentPage) {
 		
 		System.out.println("userNo : " + userNo);
@@ -239,6 +239,23 @@ public class CommuteController {
 	@RequestMapping("commute.ot")
 	public String overtimeList() {
 		return "commute/overtimeList";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="list.ot", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxSelectOvertimeList(int userNo, int currentPage) {
+		
+		int listcount = cService.otSelectListCount(userNo);
+		PageInfo pi = Pagination.getPageInfo(listcount, currentPage, 5, 10);
+		
+		ArrayList<Approval> list = cService.otSelectList(userNo, pi);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listCount", listcount);
+		map.put("list", list);
+		map.put("pi", pi);
+		
+		return new Gson().toJson(map);
 	}
 	
 	

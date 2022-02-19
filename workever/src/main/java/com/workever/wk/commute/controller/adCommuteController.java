@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.workever.wk.approval.model.vo.Approval;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.commute.model.service.CommuteService;
@@ -94,9 +95,37 @@ public class adCommuteController {
 		
 	}
 	
+	
+	// 근무 내역
+	
 	@RequestMapping("adCommute.wh")
 	public String adWorkingHours() {
 		return "commute/adWorkingHours";
+	}
+	
+	
+	// 휴가 관리
+	
+	@ResponseBody
+	@RequestMapping(value="adList.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxAdSelectDayoffList(int currentPage) {
+		
+		int listCount = cService.adDoSelectListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Approval> list = cService.adDoSelectList(pi);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listCount", listCount);
+		map.put("list", list);
+		map.put("pi", pi);
+		
+		System.out.println("currentPage : " + currentPage);
+		System.out.println("listCount: " + listCount);
+		System.out.println("list :"  + list);
+		System.out.println("pi : " + pi);
+		
+		return new Gson().toJson(map);
 	}
 	
 	@RequestMapping("adCommute.do")
