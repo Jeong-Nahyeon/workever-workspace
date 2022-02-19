@@ -70,4 +70,12 @@ public interface ApprovalService {
 	
 	// 9. 전자결재 수정 서비스
 	int updateApproval(Map<String,Object> map);
+	
+	// 10. 작성한 전자결재 검색 서비스
+	int searchWriteApvlListCount(Map<String,Object> map);
+	ArrayList<Approval> searchWriteApvlList(PageInfo pi, Map<String,Object> map);
+	
+	// 11. 수신한 전자결재 검색 서비스
+	int searchReceiveApvlListCount(Map<String,Object> map);
+	ArrayList<Approval> searchReceiveApvlList(PageInfo pi, Map<String,Object> map);
 }

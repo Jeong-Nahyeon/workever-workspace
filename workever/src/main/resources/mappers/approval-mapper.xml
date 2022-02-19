@@ -709,4 +709,102 @@
  		  </foreach>) A
 	</insert>
 	
+	<select id="searchWriteApvlListCount" resultType="_int" parameterType="Map">
+		select
+			   count(*)
+		  from approval
+          join approval_form using (apvl_form_no)
+		 where not apvl_status = 'D'
+		   and apvl_writer = #{loginUserNo}
+		   <choose>
+		   		<when test="category == 'title'">
+		   			and apvl_title like '%'||#{keyword}||'%'
+		   		</when>
+		   		<otherwise>
+		           and apvl_form_name like '%'||#{keyword}||'%'
+		   		</otherwise>
+		   </choose>
+	</select>
+	
+	<select id="searchWriteApvlList" resultMap="userWriterApprovalListResult" parameterType="Map">
+		select
+		       apvl_no
+		     , apvl_writer
+		     , apvl_form_name
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_status
+		  from approval
+		  join approval_form using (apvl_form_no)
+		 where not apvl_status = 'D'
+		   and apvl_writer = #{loginUserNo}
+           <choose>
+		   		<when test="category == 'title'">
+		   			and apvl_title like '%'||#{keyword}||'%'
+		   		</when>
+		   		<otherwise>
+		           and apvl_form_name like '%'||#{keyword}||'%'
+		   		</otherwise>
+		   </choose>
+		 order
+		    by apvl_no desc   
+	</select>
+	
+	<select id="searchReceiveApvlListCount" resultType="_int">
+		select
+		      count(*)     
+		 from approval a
+		 join approval_form af on (a.apvl_form_no = af.apvl_form_no)
+		 join approval_line al on (a.apvl_no = al.apvl_no)
+		 join Users u on (a.apvl_writer = u.user_no)
+		where ((apvl_line_status = 'S'
+		  and apvl_status in ('S', 'I')
+		  and al.user_no = #{loginUserNo})
+		   or (apvl_line_status in ('A', 'R')
+		  and al.user_no = #{loginUserNo}))
+		  <choose>
+		  	<when test="category == 'title'">
+		  		and a.apvl_title like '%'||#{keyword}||'%'
+		  	</when>
+		  	<when test="category == 'kind'">
+		         and af.apvl_form_name like '%'||#{keyword}||'%'
+		  	</when>
+		  	<otherwise>
+		  		and u.user_name like '%'||#{keyword}||'%'
+		  	</otherwise>
+		  </choose>
+	</select>
+	
+	<select id="searchReceiveApvlList" resultMap="userReceiveApprovalListResult">
+		select
+		       a.apvl_no as "apvl_no"
+		     , user_name
+		     , user_rank
+		     , apvl_form_name
+		     , apvl_title
+		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
+		     , apvl_line_status
+		  from approval a
+		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
+          join approval_line al on (a.apvl_no = al.apvl_no)
+          join Users u on (a.apvl_writer = u.user_no)
+		 where ((apvl_line_status = 'S'
+           and apvl_status in ('S', 'I')
+		   and al.user_no = #{loginUserNo})
+            or (apvl_line_status in ('A', 'R')
+		   and al.user_no = #{loginUserNo}))
+		   <choose>
+		  	<when test="category == 'title'">
+		  		and a.apvl_title like '%'||#{keyword}||'%'
+		  	</when>
+		  	<when test="category == 'kind'">
+		         and af.apvl_form_name like '%'||#{keyword}||'%'
+		  	</when>
+		  	<otherwise>
+		  		and u.user_name like '%'||#{keyword}||'%'
+		  	</otherwise>
+		  </choose>
+          order
+		    by a.apvl_no desc
+	</select>
 </mapper>

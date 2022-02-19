@@ -188,6 +188,32 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.updateApproval(sqlSession, map);
 	}
 
+	// 작성한 전자결재 검색 리스트 카운트
+	@Override
+	public int searchWriteApvlListCount(Map<String, Object> map) {
+		return aDao.searchWriteApvlListCount(sqlSession, map);
+	}
+
+	// 작성한 전자결재 검색 리스트 조회
+	@Override
+	public ArrayList<Approval> searchWriteApvlList(PageInfo pi, Map<String, Object> map) {
+		return aDao.searchWriteApvlList(sqlSession, pi, map);
+	}
+
+	// 수신한 전자결재 검색 리스트 카운트
+	@Override
+	public int searchReceiveApvlListCount(Map<String, Object> map) {
+		return aDao.searchReceiveApvlListCount(sqlSession, map);
+	}
+
+	// 수신한 전자결재 검색 리스트 조회
+	@Override
+	public ArrayList<Approval> searchReceiveApvlList(PageInfo pi, Map<String, Object> map) {
+		return aDao.searchReceiveApvlList(sqlSession, pi, map);
+	}
+	
+	
+
 	
 
 

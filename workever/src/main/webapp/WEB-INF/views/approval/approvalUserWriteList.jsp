@@ -31,7 +31,12 @@
 			display:inline-block;
 			margin-right:20px;
 			
-		}
+	}
+		
+	.searchResult{
+		font-weight:500;
+		font-size:20px;
+	}
 </style>
 </head>
 
@@ -66,13 +71,21 @@
 			              	  진행중 전자 결재 총 ${ pi.listCount }건
 			                <br><br>
                     	</c:when>
-                    	<c:otherwise>
+                    	<c:when test="${ category eq 'CR' }">
                     		<button class="btn a" onclick="location.href='writeList.ap'">전체</button>|
 		                    <button class="btn c" value="SI" onclick="location.href='writeChangeCategory.ap?category=SI'">진행중</button>|
 		                    <button class="btn c" value="CR" style="background: #4E73DF; color:white;" onclick="location.href='writeChangeCategory.ap?category=CR'">완료</button>
 		                    <br><br>
 			              	  완료된 전자 결재 총 ${ pi.listCount }건
 			                <br><br>
+                    	</c:when>
+                    	<c:when test="${ category eq 'title' }">
+                    		<p class="searchResult">제목으로 "${ keyword }" 검색 결과<p>
+                    		<br>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<p class="searchResult">결재 종류로 "${ keyword }" 검색 결과<p>
+                    		<br>
                     	</c:otherwise>
                     </c:choose>
                 </div>
@@ -118,6 +131,9 @@
 				                                            						<c:when test="${lineList[st.index].apvlLineTurn ne 1}">
 				                                            							<c:choose>
 				                                            								<c:when test="${ lineList[st.index-1].apvlLineStatus eq 'S' }">
+							                                            						<i class="fas fa-ellipsis-h fa-lg"></i><br>
+							                                            					</c:when>
+							                                            					<c:when test="${ lineList[st.index-1].apvlLineStatus eq 'R' }">
 							                                            						<i class="fas fa-ellipsis-h fa-lg"></i><br>
 							                                            					</c:when>
 							                                            					<c:otherwise>
@@ -170,7 +186,22 @@
 	                    		<li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-solid fa-angle-left"></i></a></li>
 	                    	</c:when>
 	                    	<c:otherwise>
-	                    		<li class="page-item"><a class="page-link" href="writeList.ap?cpage=${ pi.currentPage-1 }"><i class="fas fa-solid fa-angle-left"></i></a></li>
+	                    		<c:choose>
+	                    			<c:when test="${ empty category }">
+	                    				<li class="page-item"><a class="page-link" href="writeList.ap?cpage=${ pi.currentPage-1 }"><i class="fas fa-solid fa-angle-left"></i></a></li>
+	                    			</c:when>
+	                    			<c:otherwise>
+	                    				<c:choose>
+	                    					<c:when test="${ empty keyword }">
+	                    						<li class="page-item"><a class="page-link" href="writeChangeCategory.ap?cpage=${ pi.currentPage-1 }&category=${ category }"><i class="fas fa-solid fa-angle-left"></i></a></li>
+	                    					</c:when>
+	                    					<c:otherwise>
+	                    						<li class="page-item"><a class="page-link" href="writerSearch.ap?cpage=${ pi.currentPage-1 }&category=${ category }&keyword=${ keyword }""><i class="fas fa-solid fa-angle-left"></i></a></li>
+	                    					</c:otherwise>
+	                    				</c:choose>
+	                    			</c:otherwise>
+	                    		</c:choose>
+	                    		
 	                    	</c:otherwise>
 	                    </c:choose>
 	                    
@@ -180,7 +211,15 @@
 									<li class="page-item"><a class="page-link" href="writeList.ap?cpage=${ p }">${ p }</a></li>
 								</c:when>
 								<c:otherwise>
-									<li class="page-item"><a class="page-link" href="writeChangeCategory.ap?cpage=${ p }&category=${ category }">${ p }</a></li>
+									<c:choose>
+										<c:when test="${ empty keyword }">
+											<li class="page-item"><a class="page-link" href="writeChangeCategory.ap?cpage=${ p }&category=${ category }">${ p }</a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"><a class="page-link" href="writerSearch.ap?cpage=${ p }&category=${ category }&keyword=${ keyword }">${ p }</a></li>
+										</c:otherwise>
+									</c:choose>
+									
 								</c:otherwise>
 							</c:choose>
 	                    	
@@ -195,7 +234,21 @@
 	                    		<li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-solid fa-angle-right"></i></a></li>
 	                    	</c:when>
 	                    	<c:otherwise>
-	                    		<li class="page-item"><a class="page-link" href="writeList.ap.ap?cpage=${ pi.currentPage+1 }"><i class="fas fa-solid fa-angle-right"></i></a></li>
+	                    		<c:choose>
+	                    			<c:when test="${ empty category }">
+	                    				<li class="page-item"><a class="page-link" href="writeList.ap?cpage=${ pi.currentPage+1 }"><i class="fas fa-solid fa-angle-right"></i></a></li>
+	                    			</c:when>
+	                    			<c:otherwise>
+	                    				<c:choose>
+	                    					<c:when test="${ empty keyword }">
+	                    						<li class="page-item"><a class="page-link" href="writeChangeCategory.ap?cpage=${ pi.currentPage+1 }&category=${ category }"><i class="fas fa-solid fa-angle-right"></i></a></li>
+	                    					</c:when>
+	                    					<c:otherwise>
+	                    						<li class="page-item"><a class="page-link" href="writerSearch.ap?cpage=${ pi.currentPage+1 }&category=${ category }&keyword=${ keyword }""><i class="fas fa-solid fa-angle-right"></i></a></li>
+	                    					</c:otherwise>
+	                    				</c:choose>
+	                    			</c:otherwise>
+	                    		</c:choose>
 	                    	</c:otherwise>
 	                    </c:choose>
 	                </ul>
@@ -205,14 +258,14 @@
                 
                 <!-- 검색 영역 -->
                 <div id="search-area" align="center">
-                    <form action="">
-                        <select name="" id="">
+                    <form action="writerSearch.ap">
+                        <select name="category" required>
                             <option value="">--선택--</option>
-                            <option value="">결제 종류</option>
-                            <option value="">제목</option>
-                            <option value="">내용</option>
+                            <option value="kind">결재 종류</option>
+                            <option value="title">제목</option>
                         </select>
-                        <input type="text">
+                        <input type="text" name="keyword" required>
+                        <input type="hidden" name="cpage" value="1">
                         <button class="btn btn-sm" type="submit">검색</button>
                     </form>
                 </div>

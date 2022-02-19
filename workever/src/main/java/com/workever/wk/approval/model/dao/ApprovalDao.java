@@ -207,4 +207,30 @@ public class ApprovalDao {
 		return apvl * apvlForm * apvlLineDelete * apvlLine;
 	}
 	
+	// 작성한 전자결재 검색 리스트 카운트
+	public int searchWriteApvlListCount(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.selectOne("approvalMapper.searchWriteApvlListCount", map);
+	}
+	
+	// 작성한 전자결재 검색 리스트 조회
+	public ArrayList<Approval> searchWriteApvlList(SqlSessionTemplate sqlSession, PageInfo pi, Map<String,Object> map){
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("approvalMapper.searchWriteApvlList", map, rowBounds);
+	}
+	
+	// 수신한 전자결재 검색 리스트 카운트
+	public int searchReceiveApvlListCount(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.selectOne("approvalMapper.searchReceiveApvlListCount", map);
+	}
+	
+	// 수신한 전자결재 검색 리스트 조회
+	public ArrayList<Approval> searchReceiveApvlList(SqlSessionTemplate sqlSession, PageInfo pi, Map<String,Object> map) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("approvalMapper.searchReceiveApvlList", map, rowBounds);
+	}
+	
 }

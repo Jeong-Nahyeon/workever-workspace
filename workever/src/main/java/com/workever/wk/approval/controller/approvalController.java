@@ -512,4 +512,72 @@ public class approvalController {
 		}
 	}
 	
+	// 작성한 전자결재 검색하기
+	@RequestMapping("writerSearch.ap")
+	public String searchWriteApproval(Model model, int cpage, String category, String keyword, HttpSession session) {
+		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("category", category);
+		map.put("keyword", keyword);
+		map.put("loginUserNo", loginUserNo);
+		
+		int listCount = aService.searchWriteApvlListCount(map);
+		PageInfo pi = Pagination.getPageInfo(listCount, cpage, 5, 10);
+		
+		ArrayList<Approval> list = aService.searchWriteApvlList(pi, map);
+		
+		ArrayList<ApprovalLine> lineList = new ArrayList<>();
+		for(Approval a : list) {			
+			switch(a.getApvlStatus()) {
+				case "S": a.setApvlStatus("결재 대기"); break;
+				case "I": a.setApvlStatus("진행중"); break;
+				case "C": a.setApvlStatus("승인"); break;
+				case "R": a.setApvlStatus("반려"); break;
+				case "D": a.setApvlStatus("회수"); break;
+			}
+			lineList.addAll(aService.approvalLineList(a.getApvlNo()));
+		}
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("lineList", lineList);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("category", category);
+		
+		return "approval/approvalUserWriteList";
+		
+		
+	}
+	
+	// 수신한 전자결재 검색하기
+	@RequestMapping("receiveSearch.ap")
+	public String searchReceiveApproval(Model model, int cpage, String category, String keyword, HttpSession session) {
+		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("category", category);
+		map.put("keyword", keyword);
+		map.put("loginUserNo", loginUserNo);
+		
+		int listCount = aService.searchReceiveApvlListCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, cpage, 5, 10);
+		ArrayList<Approval> list = aService.searchReceiveApvlList(pi, map);
+		ArrayList<ApprovalLine> lineList = new ArrayList<>();
+		for(Approval a : list) {
+			switch(a.getApvlStatus()) {
+				case "S": a.setApvlStatus("결재 대기"); break;
+				case "A": a.setApvlStatus("승인 처리"); break;
+				case "R": a.setApvlStatus("반려 처리"); break;
+			}
+			lineList.addAll(aService.approvalLineList(a.getApvlNo()));
+		}
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("lineList", lineList);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("category", category);
+		System.out.println(category);
+		return "approval/approvalUserReceiveList";
+	}
+	
 }
