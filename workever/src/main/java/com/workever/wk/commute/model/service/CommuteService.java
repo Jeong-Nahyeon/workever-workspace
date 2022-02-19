@@ -54,6 +54,10 @@ public interface CommuteService {
 	Approval doSelectReason(int apvlNo);
 	Approval doSelectReturn(int apvlNo);
 	
+	// 휴가 검색용
+	int doSelectSearchCount(Map<String, Object> map);
+	ArrayList<Approval> doSelectSearchList(Map<String, Object> map, PageInfo pi);
+	
 	
 
 }

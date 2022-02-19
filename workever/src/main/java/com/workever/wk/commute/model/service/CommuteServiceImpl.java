@@ -123,6 +123,16 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.doSelectReturn(sqlSession, apvlNo);
 	}
 
+	@Override
+	public int doSelectSearchCount(Map<String, Object> map) {
+		return cDao.doSelectSearchCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Approval> doSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.doSelectSearchList(sqlSession, map, pi);
+	}
+
 
 
 

@@ -43,7 +43,7 @@
 		margin: 50px 50px 50px 60px;
 	}
 
-	.dateInput, #offdayKinds, #offdayReason {
+	.dateInput, #offdayKind, #offdayReason {
 		font-size: 20px;
 		margin: 0 20px 0 0;
 		border: 2px solid lightgray;
@@ -128,12 +128,12 @@
 			<div style="width: 1000px; margin: auto;">
 				<div>
 					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
+					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
 				</div>
 
 				<div>
 					<span class="sm_title">종류</span>
-					<select id="offdayKinds" name="offday" style="width: 150px; height: 35px;">
+					<select id="offdayKind" style="width: 150px; height: 35px;">
 						<option value="1">연차</option>
 						<option value="2">병가</option>
 						<option value="3">공가</option>
@@ -142,8 +142,8 @@
 					</select>
 
 					<span class="sm_title">내용</span>
-					<input type="text" id="offdayReason" style="height: 35px;" placeholder="키워드 검색">
-					<button id="doSelBtn">조 회</button>
+					<input type="text" id="offdayReason" name="keyword" style="height: 35px;" placeholder="키워드 검색">
+					<button id="doSelBtn" onclick="ajaxSelectDayoffSearch(1)">조 회</button>
 				</div>
 
 			</div>
@@ -333,8 +333,75 @@
 						}
 					})
 				})
+			
+				function ajaxSelectDayoffSearch(cpageNo) {
+				
+					$.ajax({
+						url: "search.do",
+						data: {
+							userNo: '${loginUser.userNo}',
+							startday: $('input[name=startday]').val(),
+							endday: $('input[name=endday]').val(),
+							offdayKind: $('#offdayKind option:selected').val(),
+							keyword : $('input[name=keyword]').val(),
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.searchList) {
+		    					value += "<tr>"
+		    						  +		"<input type='hidden' name='apvlNo' value='" + result.searchList[i].apvlNo + "'>"
+		    						  +		"<td>" + result.searchList[i].dayoff + "</td>"
+	   						   
+			    						   if(result.searchList[i].offKind == 1) {
+			    							   value += "<td>연차</td>" }
+			    						   else if(result.searchList[i].offKind == 2) { value += "<td>병가</td>" }
+			    						   else if(result.searchList[i].offKind == 3) { value += "<td>공가</td>" }
+			    						   else if(result.searchList[i].offKind == 4) { value += "<td>정기휴가</td>" }
+			    						   else { value += "<td>출산휴가</td>" }
+		    						   
+		    					value += 	"<td class='text-overflow'><a>" + result.searchList[i].offReason + "</a></td>"
+										   if(result.searchList[i].apvlStatus == 'S') { value += "<td>대기</td>" }
+			    						   else if(result.searchList[i].apvlStatus == 'I') { value += "<td>진행중</td>" }
+			    						   else if(result.searchList[i].apvlStatus == 'C') { value += "<td>완료</td>" }
+			    						   else if(result.searchList[i].apvlStatus == 'R') { value += "<td class='do_return'><a>반려</a></td>" }
+			    						   else { value += "<td>회수</td>" }
+		    						  + "</tr>";
+		    				}
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.searchCount);
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("휴가 검색용 ajax 통신실패");
+						}
+					})
+				}
 				
 			</script>
+			
 
 		</div>
 		<!-- /.content-wrapper -->

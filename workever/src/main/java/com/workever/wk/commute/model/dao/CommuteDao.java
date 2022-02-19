@@ -136,6 +136,20 @@ public class CommuteDao {
 		return (Approval)sqlSession.selectOne("commuteMapper.doSelectReturn", apvlNo);
 	}
 
+	public int doSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectOne("commuteMapper.doSelectSearchCount", map);
+	}
+
+	public ArrayList<Approval> doSelectSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.doSelectSearchList", map, rowBounds);
+	}
+
 	
 
 }

@@ -293,4 +293,64 @@
 		 where apvl_no = #{ apvlNo }
 	</select>
 	
+	<select id="doSelectSearchCount" resultMap="ApprovalResult">
+		select
+			   count(*)
+		  from (
+		  		select
+					   distinct apvl_no
+				     , off_start_date || '~' || off_end_date as "dayoff"
+				     , off_kind
+				     , apvl_title
+				     , off_reason
+				     , apvl_status
+		             , apvl_return_comment
+				  from approval 
+				  join approval_dayoff using (apvl_no)
+				  join users u on user_no = apvl_writer
+		          join approval_line using (apvl_no)
+				 where u.user_no = #{ userNo }
+				 <if test='startday !="" and endday != ""'>
+		           and off_start_date between #{ startday } and #{ endday }
+		           and off_end_date between #{ startday } and #{ endday }
+		         </if>
+		         <if test='offdayKind != null'>
+		           and off_kind = #{ offdayKind }
+		         </if>
+		         <if test='keyword !=""'>
+		           and off_reason like '%' || #{ keyword } || '%'
+		         </if>
+				 order
+		   			by apvl_no desc
+		       )
+	</select>
+	
+	<select id="doSelectSearchList" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , off_start_date || '~' || off_end_date as "dayoff"
+		     , off_kind
+		     , apvl_title
+		     , off_reason
+		     , apvl_status
+             , apvl_return_comment
+		  from approval 
+		  join approval_dayoff using (apvl_no)
+		  join users u on user_no = apvl_writer
+          join approval_line using (apvl_no)
+		 where u.user_no = #{ userNo }
+		 <if test='startday !="" and endday != ""'>
+           and off_start_date between #{ startday } and #{ endday }
+           and off_end_date between #{ startday } and #{ endday }
+         </if>
+         <if test='offdayKind != null'>
+           and off_kind = #{ offdayKind }
+         </if>
+         <if test='keyword !=""'>
+           and off_reason like '%' || #{ keyword } || '%'
+         </if>
+		 order
+   			by apvl_no desc
+	</select>
+	
 </mapper>
