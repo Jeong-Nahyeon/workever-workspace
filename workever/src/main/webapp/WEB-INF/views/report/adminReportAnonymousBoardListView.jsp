@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
   
 <style>
 
@@ -79,38 +83,11 @@
         margin-bottom:20px;
     }
     
-    /* 신고글 목록 테이블 제목 영역 : 설정한 영역 범위 넘어가면 ...으로 표시  */
-    .board-title-area{
-      text-align:center;
-    }
-
-    .board-title-group{
-      display:inline-block;
-    }
     
-    .board-title-group .board-title{
-      display:table-cell;
-    }
-    
-    .board-title-group .board-title-setting{
-      /* border:1px solid red; */
-      width:800px;
-      height:25px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    
-    .board-title-group .reply-count{
-      /* border:1px solid red; */
-      height:25px;
-      display:table-cell;
-    }
-
-    .board-title-group .reply-count>label{
-      margin:0;
-      margin-left:10px;
-    }
+	/* 제목 */
+	.report-title{
+		cursor:pointer;
+	}
 
 
     /* 페이징 처리 영역 */
@@ -133,17 +110,25 @@
 
     /* 요청처리 여부 확인 모달창 영역 */
     #confirm-modal h6{
-      margin-left:120px;
+      margin-left:220px;
     }
 
     #confirm-modal .modal-body{
+      height:130px;
       text-align:center;
+      line-height:100px;
     }
-
+   
     .confirm-modal-btns{
       /* border:1px solid red; */
       display: inline-block;
-      margin-right:90px;
+      margin-right:160px;
+    }
+    
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
     }
 
     #confirm-btn{
@@ -151,7 +136,32 @@
       background: #4E73DF;
       color: white;
     }
-  
+
+
+  	/* 요청처리  확인 모달창 영역 */
+    #alert-message-modal h6{
+    	margin-left:220px;
+    }
+
+    #alert-message-modal .modal-body{
+	    height:130px;
+	    text-align:center;
+	    line-height:100px;
+    }
+   
+    .alert-message-modal-btns{
+	    /* border:1px solid red; */
+	    display: inline-block;
+	    margin-right:200px;
+    }
+    
+    #close-btn{
+	    border:1px solid #4E73DF;
+	    background: #4E73DF;
+	    color: white;
+	    width:75px;
+    }
+         
 
     /* 신고 상세 모달창 영역 */
     #report-detail-modal h5{
@@ -178,14 +188,16 @@
     #report-content{
       border:1px solid lightgray;
       border-radius:5px;
+      height:200px;
       padding:10px;
       text-align:left;
+      overflow:scroll;
     }
 
     .report-modal-btns{
       /* border:1px solid red; */
       display: inline-block;
-      margin-right:325px;
+      margin-right:350px;
     }
 
     #blind-btn{
@@ -215,6 +227,20 @@
 </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
+	<!-- 요청처리 성공 시 =>  성공 메시디 담은 요청처리 확인 모달창 띄우기 -->
+	<c:if test="${ not empty successMsg }">
+		<script>
+			$(function(){
+				
+				$("#alert-message").text("${ successMsg }");
+				$("#alert-message-modal").modal({backdrop: "static"});
+				
+			});
+		</script>
+		
+		<c:remove var="successMsg" scope="session" />
+	</c:if>
 
 	<div class="wrapper">
 		
@@ -246,12 +272,12 @@
 		            <div class="card-header board-header-area">
 		              <div class="col-sm-6 board-header-area-left">
 		                <div class="btn-group">
-		                  <button type="button" class="btn btn-sm anonymous-board-btn">게시글 관리</button>
-		                  <button type="button" class="btn btn-sm btn-default">댓글 관리</button>
+		                  <button type="button" class="btn btn-sm anonymous-board-btn" onclick="location.href='list.bo';">게시글 관리</button>
+		                  <button type="button" class="btn btn-sm btn-default" onclick="location.href='list.re';">댓글 관리</button>
 		                </div>
 		              </div>
 		              <div class="col-sm-6 board-header-area-right">
-		                <button class="btn btn-sm">삭제</button>
+		                <button id="delete-btn" class="btn btn-sm">삭제</button>
 		              </div>
 		            </div>
 		            <!-- /.card-header -->
@@ -262,137 +288,46 @@
 		                <thead>
 		                  <tr>
 		                    <th width="5%">
-		                      <input type="checkbox"> 
+		                      <input type="checkbox" id="all-check-btn"> 
 		                    </th>
 		                    <th width="10%">신고번호</th>
 		                    <th width="20%">신고유형</th>
-		                    <th width="35%">신고글 제목</th>
+		                    <th width="30%">신고글 제목</th>
 		                    <th width="10%">익명글 번호</th>
 		                    <th width="10%">블라인드 처리</th>
-		                    <th  width="10%">신고시간</th>
+		                    <th  width="15%">신고시간</th>
 		                  </tr>
 		                </thead>
 		
 		                <tbody>
-		                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
-		                  <tr>
-		                    <td colspan="6">게시글이 없습니다.</td>
-		                  </tr>
-		                  <!-- case 2. 게시글 목록 존재할 경우 -->
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>10</td>
-		                    <td>타사원 비방</td>
-		                    <td>익명 게시글 신고</td>
-		                    <td>20</td>
-		                    <td>완료</td>
-		                    <td>2022-02-00 00:00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>10</td>
-		                    <td>성적 불쾌감 유발</td>
-		                    <td>익명 게시글 신고</td>
-		                    <td>20</td>
-		                    <td>완료</td>
-		                    <td>2022-02-00 00:00</td>
-		                  </tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>10</td>
-		                    <td>욕설/혐오/불쾌/차별적 표현</td>
-		                    <td>익명 게시글 신고</td>
-		                    <td>20</td>
-		                    <td>완료</td>
-		                    <td>2022-02-00 00:00</td>
-		                  </tr>
-		                  <tr>
-		                  <tr>
-		                    <td>
-		                      <input type="checkbox"> 
-		                    </td>
-		                    <td>10</td>
-		                    <td>게시글 도배</td>
-		                    <td>익명 게시글 신고</td>
-		                    <td>20</td>
-		                    <td>완료</td>
-		                    <td>2022-02-00 00:00</td>
-		                  </tr>
-		                  <tr> 
-		                    <tr>
-		                      <td>
-		                        <input type="checkbox"> 
-		                      </td>
-		                      <td>10</td>
-		                      <td>개인정보 노출</td>
-		                      <td>익명 게시글 신고</td>
-		                      <td>20</td>
-		                      <td>완료</td>
-		                      <td>2022-02-00 00:00</td>
-		                    </tr>
-		                    <tr>
-		                    <tr>
-		                      <td>
-		                        <input type="checkbox"> 
-		                      </td>
-		                      <td>10</td>
-		                      <td>욕설/혐오/불쾌/차별적 표현</td>
-		                      <td>익명 게시글 신고</td>
-		                      <td>20</td>
-		                      <td>완료</td>
-		                      <td>2022-02-00 00:00</td>
-		                    </tr>    
-		                    <tr>
-		                      <td>
-		                        <input type="checkbox"> 
-		                      </td>
-		                      <td>10</td>
-		                      <td>욕설/혐오/불쾌/차별적 표현</td>
-		                      <td>익명 게시글 신고</td>
-		                      <td>20</td>
-		                      <td>완료</td>
-		                      <td>2022-02-00 00:00</td>
-		                    </tr>    
-		                    <tr>
-		                      <td>
-		                        <input type="checkbox"> 
-		                      </td>
-		                      <td>10</td>
-		                      <td>욕설/혐오/불쾌/차별적 표현</td>
-		                      <td>익명 게시글 신고</td>
-		                      <td>20</td>
-		                      <td>완료</td>
-		                      <td>2022-02-00 00:00</td>
-		                    </tr>    
-		                    <tr>
-		                      <td>
-		                        <input type="checkbox"> 
-		                      </td>
-		                      <td>10</td>
-		                      <td>욕설/혐오/불쾌/차별적 표현</td>
-		                      <td>익명 게시글 신고</td>
-		                      <td>20</td>
-		                      <td>완료</td>
-		                      <td>2022-02-00 00:00</td>
-		                    </tr>    
-		                    <tr>
-		                      <td>
-		                        <input type="checkbox"> 
-		                      </td>
-		                      <td>10</td>
-		                      <td>욕설/혐오/불쾌/차별적 표현</td>
-		                      <td>익명 게시글 신고</td>
-		                      <td>20</td>
-		                      <td>완료</td>
-		                      <td>2022-02-00 00:00</td>
-		                    </tr>    
-		
+		                  <c:choose>
+				              <c:when test="${ empty list }">	
+				                  <!-- case 1. 게시글 목록 존재하지 않을 경우 -->
+				                  <tr>
+				                    <td colspan="7">게시글이 없습니다.</td>
+				                  </tr>
+			                  </c:when>
+				              <c:otherwise>
+				                  <!-- case 2. 게시글 목록 존재할 경우 -->
+				                  <c:forEach var="b" items="${ list }">
+					                  <tr>
+					                    <td>
+					                      <input type="checkbox" name="deleteNo"> 
+					                    </td>
+					                    <td class="report_no">${ b.reportNo }</td>
+					                    <td>${ b.reportGroup }</td>
+					                    <td class="report-title">익명 게시글 신고</td>
+					                    <td class="report_ref_no">${ b.reportRefNo }</td>
+					                    <td>
+					                    	<c:if test="${ b.abStatus eq 'B' }">
+			                    				완료
+				                    		</c:if>    
+					                    </td>
+					                    <td>${ b.reportDate }</td>
+					                  </tr>
+				                  </c:forEach>
+						      </c:otherwise>  
+					      </c:choose>   
 		                </tbody>
 		            
 		              </table>
@@ -404,13 +339,21 @@
 		            <div class="card-footer">
 		            
 		              <div class="paging-area">
-		
-		                <a class="btn">&lt;</a>
-		                <a class="btn">1</a>
-		                <a class="btn">2</a>
-		                <a class="btn">3</a>
-		                <a class="btn">&gt;</a>
-		
+						<c:if test="${ not empty list }">
+	              			<c:if test="${ pi.currentPage ne 1 }">
+		                		<a class="btn" href="rlist.bo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+		                	</c:if>
+			                
+			                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+			                
+	                			<a class="btn" href="rlist.bo?cpage=${ p }">${ p }</a>
+	                			
+			                </c:forEach>
+			                
+	                		<c:if test="${ pi.currentPage ne pi.maxPage }">
+	             	   			<a class="btn" href="rlist.bo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+	             	   		</c:if>
+						</c:if>
 		              </div>
 		
 		            </div>
@@ -430,13 +373,13 @@
 		</div>
 		<!-- /.content-wrapper -->
 		
-		<button type="button" class="btn btn-primary" id="myBtn">Open Modal</button>
-		
 		<jsp:include page="../common/footer.jsp" />
 	
 	</div>
 	<!-- ./wrapper -->
-	
+
+
+
 	<!-- 신고글 상세 모달창 -->
 	<!-- The Modal -->
 	<div class="modal fade" id="report-detail-modal">
@@ -451,16 +394,16 @@
 	      
 	      <!-- Modal body -->
 	      <div class="modal-body">
-	        <table>
+	        <table id="report-detail">
 	
 	          <thead>
 	            <tr>
 	              <th>신고 작성 사원</th>
-	              <td id="report-user-name" colspan="3">홍길동</td>
+	              <td id="report-user-name" colspan="3"></td>
 	            </tr>
 	            <tr>
 	              <th>신고 유형</th>
-	              <td id="report-group">욕설/혐오/불쾌/차별적 표현</td>
+	              <td id="report-group"></td>
 	              <th>신고 대상 글</th>
 	              <td>
 	                <a id="report-link-btn" class="btn btn-sm btn-default" href="#">링크이동</a>
@@ -474,13 +417,7 @@
 	          <tbody>
 	            <tr>
 	              <td colspan="4">
-	                <div id="report-content">
-	                  신고글내용들어가는자리입니다<br>
-	                  신고글내용들어가는자리입니다<br>
-	                  신고글내용들어가는자리입니다<br>
-	                  신고글내용들어가는자리입니다<br>
-	                  신고글내용들어가는자리입니다<br>
-	                </div>
+	                <div id="report-content"></div>
 	              </td>
 	            </tr>
 	          </tbody>
@@ -491,22 +428,23 @@
 	      <!-- Modal footer -->
 	      <div class="modal-footer">
 	        <div class="report-modal-btns">
-	          <!-- case 1. 블라인드 처리 전에 보이는 버튼 => 블라인드 버튼 -->
-	          <button id="blind-btn" class="btn btn-sm">블라인드</button>
-	          <!-- case 2. 블라인드 처리 후에 보이는 버튼 => 블라인드 해제 버튼 -->
-	          <button id="blind-cancel-btn"class="btn btn-sm">해제</button>
 	        </div>
 	      </div>
+      	  <!-- 블라인드/블라인드 해제 시 익명 게시글 번호 post 방식으로 전달 -->
+		  <form id="postForm" method="post">
+	      	<input type="hidden" name="abNo" value="" /> 
+		  </form>
 	      
 	    </div>
 	  </div>
 	</div>
+
+
 	
-	
-	<!-- 요청처리 여부 확인 모달창 -->
+    <!-- 요청처리 여부 확인 모달창 -->
 	<!-- The Modal -->
 	<div class="modal fade" id="confirm-modal">
-	  <div class="modal-dialog modal-sm modal-dialog-centered">
+	  <div class="modal-dialog modal-dialog-centered">
 	    <div class="modal-content">
 	    
 	      <!-- Modal Header -->
@@ -517,7 +455,7 @@
 	      
 	      <!-- Modal body -->
 	      <div class="modal-body">
-	        <b>삭제하시겠습니까?</b>
+	        <b id="modal-massege">삭제하시겠습니까?</b>
 	      </div>
 	      
 	      <!-- Modal footer -->
@@ -530,22 +468,265 @@
 	      
 	    </div>
 	  </div>
+	</div>	
+	
+	
+	
+    <!-- 요청처리 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="alert-message-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="alert-message"><!-- 알림 메시지 --></b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="alert-message-modal-btns">
+	            <button  id="close-btn" class="btn btn-sm btn-default" data-dismiss="modal">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
 	</div>
 	
-	<jsp:include page="../common/scripts.jsp" />
+		
 	
-    <script>
-	    $(document).ready(function(){
-	      $("#myBtn").click(function(){
-	        $("#report-detail-modal").modal({backdrop: "static"});
-	      });
-	
-	      $("#blind-btn").click(function(){
-	        $("#confirm-modal").modal({backdrop: "static"});
-	      });
-	
-	    });
-    </script>
+	<script>
+		$(function(){
+			
+			// 익명 게시글 신고 상세 조회
+			$("#board-list tbody .report-title").click(function(){
+				
+				const reportNo = $(this).prev().prev().text();
+				
+				$.ajax({
+					url:"detail.bo",
+					data:{reportNo:reportNo},
+					success:function(report){
+						
+						$("#report-detail").html("");
+						$(".report-modal-btns").html("");
+						$("#postForm input[name=abNo]").val("");
+						
+						if(report != null){
+							
+						  let detail  = "<thead><tr><th>신고 작성 사원</th>"
+									  + "<td id='report-user-name' colspan='3'>" + report.deptName + " " + report.userRank + " " + report.userName + "</td></tr><tr>"
+									  + "<th>신고 유형</th><td id='report-group'>" + report.reportGroup + "</td>"
+									  + "<th>신고 대상 글</th><td><a id='report-link-btn' class='btn btn-sm btn-default' " 
+									  + "href='detail.abo?abno=" + report.reportRefNo + "'>링크이동</a></td></tr>"
+									  + "<tr><th colspan='4'>신고 내용</th></tr></thead>"
+									  + "<tbody><tr><td colspan='4'><div id='report-content'>";
+									  
+									  if(report.reportContent != null){
+										  
+										  detail += report.reportContent;
+										  
+									  }
+									  
+							 detail += "</div></td></tr></tbody>";
+								
+							let blind = "";
+							if(report.abStatus == "B"){ // 블라인드 처리 후에 보이는 버튼 => 블라인드 해제 버튼
+								
+								blind = "<button id='blind-cancel-btn' class='btn btn-sm'>해제</button>";
+								
+							} else { // 블라인드 처리 전에 보이는 버튼 => 블라인드 버튼
+								
+								blind = "<button id='blind-btn' class='btn btn-sm'>블라인드</button>";
+								
+							}
+							
+							$("#report-detail").html(detail);
+							$("#postForm input[name=abNo]").val(report.reportRefNo);
+							$(".report-modal-btns").html(blind);
+							
+							// 신고 상세 모달창 띄우기
+							$("#report-detail-modal").modal({backdrop: "static"});
+							
+						}
+						
+						
+					}, error:function(){
+						
+					}
+				});
+				
+				
+			
+				
+			});
+			
+			
+			// 블라인드 버튼 클릭 시
+			$(document).on("click", "#blind-btn", function(){
+				
+				$.ajax({
+					url:"blind.bo",
+					data:{abNo:$("#postForm input[name=abNo]").val()},
+					success:function(result){
+						
+						if(result == "success"){
+							
+							$("#report-detail-modal").modal("hide");	
+							$("#alert-message").text("블라인드 처리되었습니다");
+							$("#alert-message-modal").modal({backdrop: "static"});
+							
+							$("#close-btn").click(function(){
+								
+								location.reload();
+								
+							});
+							
+						}
+						
+					}, error:function(){
+						
+						console.log("블라인드 처리용 ajax 통신 실패");	
+						
+					}
+				});
+				
+			});
+			
+			
+			// 블라인드 해제 버튼 클릭 시
+			$(document).on("click", "#blind-cancel-btn", function(){
+				
+				$.ajax({
+					url:"cancel.bo",
+					data:{abNo:$("#postForm input[name=abNo]").val()},
+					success:function(result){
+						
+						if(result == "success"){
+							
+							$("#report-detail-modal").modal("hide");
+							$("#alert-message").text("블라인드 해제되었습니다");
+							$("#alert-message-modal").modal({backdrop: "static"});
+							
+							$("#close-btn").click(function(){
+								
+								location.reload();
+								
+							});
+							
+						}
+						
+					}, error:function(){
+						
+						console.log("블라인드 처리용 ajax 통신 실패");	
+						
+					}
+				});
+				
+			});
+			
+			
+			// thead 체크 버튼 체크 시 => tbody 체크 버튼 모두 체크
+			$("#all-check-btn").change(function(){
+				
+				if($(this).prop("checked")){ // 체크된 경우
+					
+					$("input[name=deleteNo]").prop("checked", true);
+					
+				} else {
+					
+					$("input[name=deleteNo]").prop("checked", false);
+					
+				}
+				
+			});
+			
+			// tbody 체크 버튼 모두 체크 시 => thead 체크 버튼 체크
+			$("input[name=deleteNo]").change(function(){
+				
+				let checkbox = $("input[name=deleteNo]").length; // 체크박스 전체 개수
+				let checked = $("input[name=deleteNo]:checked").length; // 체크된 체크박스 개수
+				
+				if(checkbox == checked){
+					
+					$("#all-check-btn").prop("checked", true);
+					
+				}else{
+					
+					$("#all-check-btn").prop("checked", false);
+					
+				}
+				
+			});
+			
+			
+			// 신고글 삭제용 ajax(삭제할 게시글 체크 후 삭제 버튼 클릭 시)
+			$("#delete-btn").click(function(){
+
+				let checkedArr = [];
+				
+				$("input[name=deleteNo]:checked").each(function(){
+					
+					checkedArr.push($(this).parent().next().text());
+					
+				});
+				
+				// 삭제할 신고글 체크 하지 않고 삭제 버튼 클릭 시
+				if(checkedArr.length == 0){
+					
+					alert("삭제할 신고글을 선택 후 삭제 가능합니다.");
+					
+				}else{ // 삭제할 신고글 체크 후 삭제 버튼 클릭 시
+					console.log(checkedArr);
+					$("#confirm-modal").modal({backdrop: "static"});
+					
+					$("#confirm-btn").click(function(){
+						
+						$.ajax({
+							url:"delete.bo",
+							dataType:"json",
+							type:"post",
+							data:{deleteList:checkedArr},
+							success:function(result){
+								
+								if(result == "success"){
+									
+									$("#confirm-modal").modal("hide"); 
+					 				
+					 				$("#alert-message").text("성공적으로 삭제되었습니다");
+									$("#alert-message-modal").modal({backdrop: "static"});
+									
+									$("#close-btn").click(function(){
+										
+										location.reload();
+										
+									});
+									
+								}
+								
+							}, error:function(){
+								
+								console.log("신고글 목록 삭제용 ajax 통신 실패");	
+								
+							}
+						});
+						
+					});
+					
+				}
+				
+				
+			});
+			
+		});
+	</script>
 	
 </body>
 </html>

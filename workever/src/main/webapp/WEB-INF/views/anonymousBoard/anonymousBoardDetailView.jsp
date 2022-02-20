@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-       
-    
+   
 <!DOCTYPE html>
 <html>
 <head>
@@ -626,15 +625,15 @@
 							
 							for(let i in list){
 														
-								reply += "<table class='reply-list'>"
-									   + 	"<input id='" + list[i].crNo + "' type='hidden' name='crNo' value='" + list[i].crNo + "' />"
+								reply += "<table id='" + list[i].crNo + "' class='reply-list'>"
+									   + 	"<input type='hidden' name='crNo' value='" + list[i].crNo + "' />"
 									   + 	"<input type='hidden' name='crUserNo' value='" + list[i].crUserNo + "' />"
 									   + 	"<tr>"
 								       + 		"<td class='reply-list-img' rowspan='2'>"
 								       +			"<i class='fas fa-user-circle fa-3x reply-no-img'></i>" 	
 									   +		"</td>"
 									   + 		"<td class='reply-list-name'>"
-									   + 			"<b>익명</b> ";
+									   + 			"<b>익명 (" + list[i].crNo + ")</b> ";
 									   
 								if(list[i].crReportCount > 0){ // 신고된 댓글인 경우
 									
@@ -1010,7 +1009,7 @@
 		    	}   	
 		    	
 		    });
-		    
+	
 		  });
 	  
 	      

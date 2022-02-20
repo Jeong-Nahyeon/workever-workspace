@@ -20,4 +20,14 @@ public class Report {
 	private String reportDate;		// 신고시간
 	private String reportStatus;	// 게시상태(Y 노출 / N 비노출)
 	
+	private String deptName;		// 신고 작성 사원의 부서명
+	private String userRank;		// 신고 작성 사원의 직급명
+	private String userName;		// 신고 작성 사원
+	
+	private String abStatus;		// 익명 게시글 블라인드 처리 여부
+	
+	private String crStatus;		// 익명 댓글 블라인드 처리 여부
+	private String crRefNo;			// 신고 당한 댓글의 게시글 번호
+	private String crContent;		// 신고 당한 댓글의 내용
+	
 }

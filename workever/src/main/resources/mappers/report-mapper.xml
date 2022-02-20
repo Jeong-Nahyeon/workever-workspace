@@ -2,4 +2,168 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="reportMapper">
 
+	<resultMap id="reportResult" type="Report">
+		<result column="report_no" property="reportNo" />
+		<result column="user_no" property="userNo" />
+		<result column="report_category" property="reportCategory" />
+		<result column="report_ref_no" property="reportRefNo" />
+		<result column="report_group" property="reportGroup" />
+		<result column="report_content" property="reportContent" />
+		<result column="report_date" property="reportDate" />
+		<result column="report_status" property="reportStatus" />
+		<result column="dept_name" property="deptName" />		
+		<result column="user_rank" property="userRank" />		
+		<result column="user_name" property="userName" />		
+		<result column="ab_status" property="abStatus" />		
+		<result column="cr_status" property="crStatus" />		
+		<result column="cr_ref_no" property="crRefNo" />		
+		<result column="cr_content" property="crContent" />		
+	</resultMap>
+	
+	<select id="selectBoardReportListCount" resultType="_int">
+		select
+		       count(*)
+		  from report
+		  join a_board on (report_ref_no = ab_no)
+		 where report_status = 'Y'
+		   and report_category = 'B'
+		   and ab_status in ('Y', 'B')
+	</select>
+	
+	<select id="selectBoardReportList" resultMap="reportResult">
+		select
+		       report_no
+		     , user_no
+		     , report_ref_no
+		     , report_group
+		     , to_char(report_date, 'YYYY-MM-DD HH24:MI:SS') as "report_date"
+		     , ab_status
+		  from report
+		  join a_board on (report_ref_no = ab_no)
+		 where report_status = 'Y'
+		   and report_category = 'B'
+		   and ab_status in ('Y', 'B')
+		 order
+    		by report_no desc
+	</select>
+	
+	<select id="selectBoardReportDetail" resultMap="reportResult">
+		select
+		       report_no
+		     , r.user_no
+		     , dept_name
+			 , user_rank
+		     , user_name
+		     , report_group
+		     , report_ref_no
+		     , report_content
+		     , ab_Status
+		  from report r
+		  join users u on (r.user_no = u.user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		  join a_board a on (r.report_ref_no = a.ab_no)
+		 where report_status = 'Y'
+		   and ab_status in ('Y', 'B')
+		   and report_no = #{reportNo}
+	</select>
+	
+	<update id="updateBoardBlind">
+		update
+			   a_board
+		   set ab_status = 'B'
+		 where ab_no = #{abNo}     
+	</update>
+	
+	<update id="updateBoardBlindCancel">
+		update
+			   a_board
+		   set ab_status = 'Y'
+		 where ab_no = #{abNo}     
+	</update>
+	
+	<update id="deleteReport">
+		update
+			   report
+		   set report_status = 'N'
+		 where report_no = #{reportNo}  		
+	</update>
+	
+	<update id="decreaseBoardReportCount">
+		update
+			   a_board
+		   set ab_report_count = ab_report_count - 1
+		 where ab_no = #{abNo}  	
+	</update>
+	
+		<select id="selectReplyReportListCount" resultType="_int">
+		select
+		       count(*)
+		  from report
+		  join community_reply on (report_ref_no = cr_no)
+		 where report_status = 'Y'
+		   and report_category = 'R'
+		   and cr_status in ('Y', 'B')
+	</select>
+	
+	<select id="selectReplyReportList" resultMap="reportResult">
+		select
+		       report_no
+		     , user_no
+		     , report_ref_no
+		     , report_group
+		     , to_char(report_date, 'YYYY-MM-DD HH24:MI:SS') as "report_date"
+		     , cr_status
+		     , cr_ref_no
+		  from report
+		  join community_reply on (report_ref_no = cr_no)
+		 where report_status = 'Y'
+		   and report_category = 'R'
+		   and cr_status in ('Y', 'B')
+		 order
+		    by report_no desc
+	</select>
+	
+	<select id="selectReplyReportDetail" resultMap="reportResult">
+		select
+		       report_no
+		     , r.user_no
+		     , dept_name
+		     , user_rank
+		     , user_name
+		     , report_group
+		     , report_ref_no
+		     , report_content
+		     , cr_Status
+		     , cr_ref_no
+		     , cr_content
+		  from report r
+		  join users u on (r.user_no = u.user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		  join community_reply c on (r.report_ref_no = c.cr_no)
+		 where report_status = 'Y'
+		   and cr_status in ('Y', 'B')
+		   and report_no = #{reportNo}
+	</select>
+	
+	<update id="updateReplyBlind">
+		update
+			   community_reply
+		   set cr_status = 'B'
+		 where cr_no = #{crNo}     
+	</update>
+	
+	<update id="updateReplyBlindCancel">
+		update
+			   community_reply
+		   set cr_status = 'Y'
+		 where cr_no = #{crNo}     
+	</update>	
+	
+	<update id="decreaseReplyReportCount">
+		update
+			   community_reply
+		   set cr_report_count = cr_report_count - 1
+		 where cr_no = #{crNo}  	
+	</update>
+
 </mapper>

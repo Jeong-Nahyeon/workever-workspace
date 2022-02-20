@@ -104,7 +104,7 @@ public class AnonymousBoardController {
 				}
 				
 			}
-			
+
 			mv.addObject("ab", ab)
 			  .addObject("list", list)
 			  .addObject("correct", correct)
@@ -134,6 +134,13 @@ public class AnonymousBoardController {
 		
 	}
 	
+	/** 익명 게시글 등록 및 첨부파일 목록 등록 후 익명 게시글 목록 페이지 url 재요청
+	 * @param ab : 사용자가 입력한 익명 게시글 정보
+	 * @param upfile : 사용자가 등록한 첨부파일 목록
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("insert.abo")
 	public String insertAnonymousBoard(AnonymousBoard ab, MultipartFile[] upfile, HttpSession session, Model m) {
 		
@@ -294,6 +301,12 @@ public class AnonymousBoardController {
 		
 	}	
 	
+	/** 익명 게시글 삭제 후 익명 게시글 목록 페이지 url 재요청
+	 * @param abNo : 사용자가 삭제 요청한 익명 게시글 번호
+	 * @param session
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("delete.abo")
 	public String deleteAnonymousBoard(String abNo, HttpSession session, Model m) {
 		
