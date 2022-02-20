@@ -1,6 +1,7 @@
 package com.workever.wk.anonymousBoard.model.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -10,7 +11,6 @@ import com.workever.wk.anonymousBoard.model.vo.AnonymousBoard;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
-import com.workever.wk.deptBoard.model.vo.DeptBoard;
 import com.workever.wk.report.model.vo.Report;
 
 @Repository
@@ -273,7 +273,7 @@ public class AnonymousBoardDao {
 	 * @param abUserNo
 	 * @return
 	 */
-	public ArrayList<AnonymousBoard> selectMyAnonymousBoardList(SqlSessionTemplate sqlSession, PageInfo pi, ArrayList<String> myAbNoList) {
+	public ArrayList<AnonymousBoard> selectMyAnonymousBoardList(SqlSessionTemplate sqlSession, PageInfo pi, List<String> myAbNoList) {
 		
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		

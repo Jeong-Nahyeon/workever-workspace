@@ -107,6 +107,16 @@
         line-height: 25px;
     }
 
+    .active-color{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+    
+    .active-color:hover{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+
 
     /* 요청처리 여부 확인 모달창 영역 */
     #confirm-modal h6{
@@ -341,17 +351,22 @@
 		              <div class="paging-area">
 						<c:if test="${ not empty list }">
 	              			<c:if test="${ pi.currentPage ne 1 }">
-		                		<a class="btn" href="rlist.bo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+		                		<a class="btn" href="list.bo?cpage=${ pi.currentPage - 1 }">&lt;</a>
 		                	</c:if>
 			                
 			                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
-			                
-	                			<a class="btn" href="rlist.bo?cpage=${ p }">${ p }</a>
-	                			
+	                			<c:choose>
+				                	<c:when test="${ pi.currentPage eq p }">
+		                				<a class="btn active-color" href="list.bo?cpage=${ p }">${ p }</a>
+		                			</c:when>
+		                			<c:otherwise>
+		                				<a class="btn" href="list.bo?cpage=${ p }">${ p }</a>
+		                			</c:otherwise>
+	                			</c:choose>
 			                </c:forEach>
 			                
 	                		<c:if test="${ pi.currentPage ne pi.maxPage }">
-	             	   			<a class="btn" href="rlist.bo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+	             	   			<a class="btn" href="list.bo?cpage=${ pi.currentPage + 1 }">&gt;</a>
 	             	   		</c:if>
 						</c:if>
 		              </div>

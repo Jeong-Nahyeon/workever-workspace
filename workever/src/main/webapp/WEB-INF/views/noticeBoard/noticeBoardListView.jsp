@@ -143,6 +143,16 @@
         line-height: 25px;
     }
     
+    .active-color{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+    
+    .active-color:hover{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }    
+    
     /* 요청처리 여부 확인 모달창 영역 */
     #alert-message-modal h6{
     	margin-left:220px;
@@ -293,109 +303,138 @@
 		            <div class="card-footer">
 		            
 		              <div class="paging-area">
-		              	
-		              	<c:choose>
-		              		<c:when test="${ empty orderList }"> <!-- 최신순 -->
-		              		
-		              			<c:choose>
-			              			<c:when test="${ empty condition }"> <!-- 검색 전 -->
-										<c:if test="${ pi.currentPage ne 1 }">
-						                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
-						                </c:if>
-					                </c:when>
-					                <c:otherwise> <!-- 검색 후 -->
-					                	<c:if test="${ pi.currentPage ne 1 }">
-						                	<a class="btn" href="search.nbo?cpage=${ pi.currentPage - 1 }&condition=${ condition }&keyword=${ keyword }">&lt;</a>
-						                </c:if>
-					                </c:otherwise>
-				                </c:choose>
-				                
-			                </c:when>
-			                <c:otherwise> <!-- 오래된순 -->
-			                	
+		              	<c:if test="${ not empty list }">
+			              	<c:choose>
+			              		<c:when test="${ empty orderList }"> <!-- 최신순 -->
+			              		
+			              			<c:choose>
+				              			<c:when test="${ empty condition }"> <!-- 검색 전 -->
+											<c:if test="${ pi.currentPage ne 1 }">
+							                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+							                </c:if>
+						                </c:when>
+						                <c:otherwise> <!-- 검색 후 -->
+						                	<c:if test="${ pi.currentPage ne 1 }">
+							                	<a class="btn" href="search.nbo?cpage=${ pi.currentPage - 1 }&condition=${ condition }&keyword=${ keyword }">&lt;</a>
+							                </c:if>
+						                </c:otherwise>
+					                </c:choose>
+					                
+				                </c:when>
+				                <c:otherwise> <!-- 오래된순 -->
+				                	
+					                <c:choose>
+				              			<c:when test="${ empty condition }"> <!-- 검색 전 -->
+											<c:if test="${ pi.currentPage ne 1 }">
+							                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
+							                </c:if>
+						                </c:when>
+						                <c:otherwise> <!-- 검색 후 -->
+						                	<c:if test="${ pi.currentPage ne 1 }">
+							                	<a class="btn" href="search.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">&lt;</a>
+							                </c:if>
+						                </c:otherwise>
+					                </c:choose>
+					                
+			                	</c:otherwise>
+			                </c:choose>
+			                
+			                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+			              	  
 				                <c:choose>
-			              			<c:when test="${ empty condition }"> <!-- 검색 전 -->
-										<c:if test="${ pi.currentPage ne 1 }">
-						                	<a class="btn" href="list.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
-						                </c:if>
+				                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
+				                	
+				                		<c:choose>
+				              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
+					                			<c:choose>
+								                	<c:when test="${ pi.currentPage eq p }">
+						                				<a class="btn active-color" href="list.nbo?cpage=${ p }">${ p }</a>
+						                			</c:when>
+						                			<c:otherwise>
+						                				<a class="btn" href="list.nbo?cpage=${ p }">${ p }</a>
+						                			</c:otherwise>
+					                			</c:choose>
+					                		</c:when>
+							                <c:otherwise> <!-- 검색 후 -->
+					                			<c:choose>
+								                	<c:when test="${ pi.currentPage eq p }">
+						                				<a class="btn active-color" href="search.nbo?cpage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
+						                			</c:when>
+						                			<c:otherwise>
+						                				<a class="btn" href="search.nbo?cpage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
+						                			</c:otherwise>
+					                			</c:choose>
+							                </c:otherwise>
+					                	</c:choose>
+					                	
 					                </c:when>
-					                <c:otherwise> <!-- 검색 후 -->
-					                	<c:if test="${ pi.currentPage ne 1 }">
-						                	<a class="btn" href="search.nbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">&lt;</a>
-						                </c:if>
+					                <c:otherwise> <!-- 오래된순 -->
+					                
+				                		<c:choose>
+				              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
+					                			<c:choose>
+								                	<c:when test="${ pi.currentPage eq p }">
+						                				<a class="btn active-color" href="list.nbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+						                			</c:when>
+						                			<c:otherwise>
+						                				<a class="btn" href="list.nbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+						                			</c:otherwise>
+					                			</c:choose>
+					                		</c:when>
+							                <c:otherwise> <!-- 검색 후 -->
+							                	<c:choose>
+								                	<c:when test="${ pi.currentPage eq p }">
+						                				<a class="btn active-color" href="search.nbo?cpage=${ p }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
+						                			</c:when>
+						                			<c:otherwise>
+						                				<a class="btn" href="search.nbo?cpage=${ p }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
+						                			</c:otherwise>
+					                			</c:choose>
+							                </c:otherwise>
+					                	</c:choose>
+				                		
 					                </c:otherwise>
 				                </c:choose>
 				                
-		                	</c:otherwise>
-		                </c:choose>
-		                
-		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
-		              	  
+			                </c:forEach>
+			                
 			                <c:choose>
 			                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
 			                	
 			                		<c:choose>
 			              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
-				                			<a class="btn" href="list.nbo?cpage=${ p }">${ p }</a>
-				                		</c:when>
-						                <c:otherwise> <!-- 검색 후 -->
-				                			<a class="btn" href="search.nbo?cpage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
-						                </c:otherwise>
+						                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+						             	   		<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+						             	 	</c:if>
+					             	 	</c:when>
+								        <c:otherwise> <!-- 검색 후 -->
+						                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+						             	   		<a class="btn" href="search.nbo?cpage=${ pi.currentPage + 1 }&condition=${ condition }&keyword=${ keyword }">&gt;</a>
+						             	 	</c:if>
+								        </c:otherwise>
 				                	</c:choose>
 				                	
-				                </c:when>
-				                <c:otherwise> <!-- 오래된순 -->
-				                
-			                		<c:choose>
+			             	    </c:when>
+			             	    <c:otherwise> <!-- 오래된순 -->
+			             	    
+				             	 	<c:choose>
 			              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
-				                			<a class="btn" href="list.nbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
-				                		</c:when>
-						                <c:otherwise> <!-- 검색 후 -->
-				                			<a class="btn" href="search.nbo?cpage=${ p }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">${ p }</a>
-						                </c:otherwise>
+						                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+						             	   		<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
+						             	 	</c:if>
+					             	 	</c:when>
+								        <c:otherwise> <!-- 검색 후 -->
+						                	<c:if test="${ pi.currentPage ne pi.maxPage }">
+						             	   		<a class="btn" href="search.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">&gt;</a>
+						             	 	</c:if>
+								        </c:otherwise>
 				                	</c:choose>
-			                		
-				                </c:otherwise>
-			                </c:choose>
-			                
-		                </c:forEach>
-		                
-		                <c:choose>
-		                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
-		                	
-		                		<c:choose>
-		              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
-					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
-					             	   		<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
-					             	 	</c:if>
-				             	 	</c:when>
-							        <c:otherwise> <!-- 검색 후 -->
-					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
-					             	   		<a class="btn" href="search.nbo?cpage=${ pi.currentPage + 1 }&condition=${ condition }&keyword=${ keyword }">&gt;</a>
-					             	 	</c:if>
-							        </c:otherwise>
-			                	</c:choose>
-			                	
-		             	    </c:when>
-		             	    <c:otherwise> <!-- 오래된순 -->
-		             	    
-			             	 	<c:choose>
-		              				<c:when test="${ empty condition }"> <!-- 검색 전 -->
-					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
-					             	   		<a class="btn" href="list.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
-					             	 	</c:if>
-				             	 	</c:when>
-							        <c:otherwise> <!-- 검색 후 -->
-					                	<c:if test="${ pi.currentPage ne pi.maxPage }">
-					             	   		<a class="btn" href="search.nbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }&condition=${ condition }&keyword=${ keyword }">&gt;</a>
-					             	 	</c:if>
-							        </c:otherwise>
-			                	</c:choose>
-			             	 	
-		             	    </c:otherwise>
-						</c:choose>
+				             	 	
+			             	    </c:otherwise>
+							</c:choose>
+						</c:if>
 		              </div>
-		
+					  
 		            </div>
 		            <!-- /.card-footer -->
 		

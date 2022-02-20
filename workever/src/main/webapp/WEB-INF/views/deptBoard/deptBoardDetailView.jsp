@@ -696,7 +696,7 @@
 
 					if($("input[name=crUserNo]").val() == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 배경색 다르게 보이기
 						
-						$("input[value=${ loginUser.userNo }]").parent().css("backgroundColor", "rgb(240, 240, 240)");
+						$("input[value=${ loginUser.userNo }]").parent().css("backgroundColor", "#F0F0F0");
 						
 					}
 					

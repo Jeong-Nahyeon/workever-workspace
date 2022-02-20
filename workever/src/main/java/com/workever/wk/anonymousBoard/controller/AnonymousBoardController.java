@@ -462,13 +462,15 @@ public class AnonymousBoardController {
 		ArrayList<AnonymousBoard> totalList = aService.selectTotalAnonymousBoardList();
 		
 		// 로그인한 사원과 일치하는 익명 게시글의 게시글 번호 목록
-		ArrayList<String> myAbNoList = new ArrayList<>();
+		List<String> myAbNoList = new ArrayList<>();
 		
 		if(totalList != null) {
 			for(AnonymousBoard ab : totalList) {
 				
 				if(bcryptPasswordEncoder.matches(loninUserNo, ab.getAbUserNo())) {
 					myAbNoList.add(ab.getAbNo());
+				} else {
+					myAbNoList.add("0");
 				}
 				
 			}

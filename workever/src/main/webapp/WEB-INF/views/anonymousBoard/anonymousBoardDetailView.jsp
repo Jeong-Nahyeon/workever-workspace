@@ -805,7 +805,6 @@
 					
 					
 				
-				
 				// 일반 사원 댓글 목록 조회용 ajax
 				function selectReplyListForUsers(){
 					
@@ -870,9 +869,9 @@
 							$(".reply-insert").after(reply);
 			
 			
-							if($("input[name=crUserNo]").val() == ${ loginUser.userNo }){ // 본인 댓글인 경우 => 배경색 다르게 보이기
+							if($(".reply-list-btns").children().eq(0).text() == "수정"){ // 본인 댓글인 경우 => 배경색 다르게 보이기
 								
-								$("input[value=${ loginUser.userNo }]").parent().css("backgroundColor", "rgb(240, 240, 240)");
+								$(".reply-update-form-btn").parents(".reply-list").css("backgroundColor", "#F0F0F0");
 								
 							}
 							

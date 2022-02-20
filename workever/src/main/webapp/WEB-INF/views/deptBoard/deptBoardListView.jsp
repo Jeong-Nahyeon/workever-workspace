@@ -126,6 +126,16 @@
         line-height: 25px;
     }
     
+    .active-color{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+    
+    .active-color:hover{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }    
+    
     /* 요청처리 여부 확인 모달창 영역 */
     #alert-message-modal h6{
     	margin-left:220px;
@@ -281,44 +291,58 @@
 		            <div class="card-footer">
 		            
 		              <div class="paging-area">
-		
-		              	<c:choose>
-		              		<c:when test="${ empty orderList }"> <!-- 최신순 -->
-		              			<c:if test="${ pi.currentPage ne 1 }">
-			                		<a class="btn" href="list.dbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
-			                	</c:if>
-			                </c:when>
-			                <c:otherwise> <!-- 오래된순 -->
-				                <c:if test="${ pi.currentPage ne 1 }">
-				                	<a class="btn" href="list.dbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
-			                	</c:if>
-		                	</c:otherwise>
-		                </c:choose>
-		                
-		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
-			                <c:choose>
-			                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
-		                			<a class="btn" href="list.dbo?cpage=${ p }">${ p }</a>
+						<c:if test="${ not empty list }">
+			              	<c:choose>
+			              		<c:when test="${ empty orderList }"> <!-- 최신순 -->
+			              			<c:if test="${ pi.currentPage ne 1 }">
+				                		<a class="btn" href="list.dbo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+				                	</c:if>
 				                </c:when>
 				                <c:otherwise> <!-- 오래된순 -->
-		                			<a class="btn" href="list.dbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
-				                </c:otherwise>
+					                <c:if test="${ pi.currentPage ne 1 }">
+					                	<a class="btn" href="list.dbo?cpage=${ pi.currentPage - 1 }&orderList=${ orderList }">&lt;</a>
+				                	</c:if>
+			                	</c:otherwise>
 			                </c:choose>
-		                </c:forEach>
-		                
-		                <c:choose>
-		                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
-		                		<c:if test="${ pi.currentPage ne pi.maxPage }">
-		             	   			<a class="btn" href="list.dbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
-		             	   		</c:if>
-		             	    </c:when>
-		             	    <c:otherwise> <!-- 오래된순 -->
-		             	    	<c:if test="${ pi.currentPage ne pi.maxPage }">
-		             	   			<a class="btn" href="list.dbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
-		             	    	</c:if>
-		             	    </c:otherwise>
-						</c:choose>
-		
+			                
+			                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+				                <c:choose>
+				                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
+			                			<c:choose>
+						                	<c:when test="${ pi.currentPage eq p }">
+				                				<a class="btn active-color" href="list.dbo?cpage=${ p }">${ p }</a>
+				                			</c:when>
+				                			<c:otherwise>
+				                				<a class="btn" href="list.dbo?cpage=${ p }">${ p }</a>
+				                			</c:otherwise>
+		                				</c:choose>
+					                </c:when>
+					                <c:otherwise> <!-- 오래된순 -->
+					                	<c:choose>
+						                	<c:when test="${ pi.currentPage eq p }">
+				                				<a class="btn active-color" href="list.dbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+				                			</c:when>
+				                			<c:otherwise>
+				                				<a class="btn" href="list.dbo?cpage=${ p }&orderList=${ orderList }">${ p }</a>
+				                			</c:otherwise>
+		                				</c:choose>
+					                </c:otherwise>
+				                </c:choose>
+			                </c:forEach>
+			                
+			                <c:choose>
+			                	<c:when test="${ empty orderList }"> <!-- 최신순 -->
+			                		<c:if test="${ pi.currentPage ne pi.maxPage }">
+			             	   			<a class="btn" href="list.dbo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+			             	   		</c:if>
+			             	    </c:when>
+			             	    <c:otherwise> <!-- 오래된순 -->
+			             	    	<c:if test="${ pi.currentPage ne pi.maxPage }">
+			             	   			<a class="btn" href="list.dbo?cpage=${ pi.currentPage + 1 }&orderList=${ orderList }">&gt;</a>
+			             	    	</c:if>
+			             	    </c:otherwise>
+							</c:choose>
+						</c:if>
 		              </div>
 		              <!-- /.paging-area -->
 		

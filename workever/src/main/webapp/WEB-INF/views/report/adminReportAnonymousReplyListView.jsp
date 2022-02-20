@@ -107,6 +107,16 @@
         line-height: 25px;
     }
 
+    .active-color{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+    
+    .active-color:hover{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+
  
     /* 요청처리 여부 확인 모달창 영역 */
     #confirm-modal h6{
@@ -345,9 +355,14 @@
 		                	</c:if>
 			                
 			                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
-			                
-	                			<a class="btn" href="list.re?cpage=${ p }">${ p }</a>
-	                			
+	                			<c:choose>
+				                	<c:when test="${ pi.currentPage eq p }">
+		                				<a class="btn active-color" href="list.re?cpage=${ p }">${ p }</a>
+		                			</c:when>
+		                			<c:otherwise>
+		                				<a class="btn" href="list.re?cpage=${ p }">${ p }</a>
+		                			</c:otherwise>
+	                			</c:choose>
 			                </c:forEach>
 			                
 	                		<c:if test="${ pi.currentPage ne pi.maxPage }">

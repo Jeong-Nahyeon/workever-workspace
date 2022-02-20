@@ -1,6 +1,7 @@
 package com.workever.wk.anonymousBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.workever.wk.anonymousBoard.model.vo.AnonymousBoard;
 import com.workever.wk.common.model.vo.PageInfo;
@@ -46,7 +47,7 @@ public interface AnonymousBoardService {
 	
 	// 나의 익명 게시글 목록 조회 서비스
 	ArrayList<AnonymousBoard> selectTotalAnonymousBoardList(); // 전체 익명 게시글의 게시글 번호 및 사원번호 조회
-	ArrayList<AnonymousBoard> selectMyAnonymousBoardList(PageInfo pi, ArrayList<String> myAbNoList); // 나의 익명 게시글 목록 조회
+	ArrayList<AnonymousBoard> selectMyAnonymousBoardList(PageInfo pi, List<String> myAbNoList); // 나의 익명 게시글 목록 조회
 	
 	// 익명 게시글 및 댓글 신고 서비스
 	int increaseAnonymousBoardReportCount(String abNo); // 익명 게시글 신고 횟수 증가

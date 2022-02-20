@@ -1,6 +1,7 @@
 package com.workever.wk.anonymousBoard.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import com.workever.wk.anonymousBoard.model.vo.AnonymousBoard;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.community.model.vo.CommunityFiles;
 import com.workever.wk.community.model.vo.CommunityReply;
-import com.workever.wk.deptBoard.model.vo.DeptBoard;
 import com.workever.wk.report.model.vo.Report;
 
 @Service
@@ -225,7 +225,7 @@ public class AnonymousBoardServiceImpl implements AnonymousBoardService {
 	 * 나의 익명 게시글 목록 조회
 	 */
 	@Override
-	public ArrayList<AnonymousBoard> selectMyAnonymousBoardList(PageInfo pi, ArrayList<String> myAbNoList) {
+	public ArrayList<AnonymousBoard> selectMyAnonymousBoardList(PageInfo pi, List<String> myAbNoList) {
 		
 		return aDao.selectMyAnonymousBoardList(sqlSession, pi, myAbNoList);
 		

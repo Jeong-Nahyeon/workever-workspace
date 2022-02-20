@@ -136,6 +136,15 @@
         line-height: 25px;
     }
 
+    .active-color{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
+    
+    .active-color:hover{
+   	  color:#4E73DF;
+   	  font-weight:bold;
+    }
 
     /* 요청처리 여부 확인 모달창 영역 */
     #confirm-modal h6{
@@ -296,21 +305,26 @@
 		            <div class="card-footer">
 		            
 		              <div class="paging-area">
-		
-              			<c:if test="${ pi.currentPage ne 1 }">
-	                		<a class="btn" href="list.mabo?cpage=${ pi.currentPage - 1 }">&lt;</a>
-	                	</c:if>
-		                
-		                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
-		                
-                			<a class="btn" href="list.mabo?cpage=${ p }">${ p }</a>
-                			
-		                </c:forEach>
-		                
-                		<c:if test="${ pi.currentPage ne pi.maxPage }">
-             	   			<a class="btn" href="list.mabo?cpage=${ pi.currentPage + 1 }">&gt;</a>
-             	   		</c:if>
-		
+						<c:if test="${ not empty list }">
+	              			<c:if test="${ pi.currentPage ne 1 }">
+		                		<a class="btn" href="list.mabo?cpage=${ pi.currentPage - 1 }">&lt;</a>
+		                	</c:if>
+			                
+			                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.maxPage }">
+	                			<c:choose>
+				                	<c:when test="${ pi.currentPage eq p }">
+		                				<a class="btn active-color" href="list.mabo?cpage=${ p }">${ p }</a>
+		                			</c:when>
+		                			<c:otherwise>
+		                				<a class="btn" href="list.mabo?cpage=${ p }">${ p }</a>
+		                			</c:otherwise>
+	                			</c:choose>
+			                </c:forEach>
+			                
+	                		<c:if test="${ pi.currentPage ne pi.maxPage }">
+	             	   			<a class="btn" href="list.mabo?cpage=${ pi.currentPage + 1 }">&gt;</a>
+	             	   		</c:if>
+						</c:if>
 		              </div>
 		
 		            </div>
