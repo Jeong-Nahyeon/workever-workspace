@@ -56,4 +56,14 @@ public interface UserService {
 	int selectUserListCount(User adminUser);
 	// 전체 사원 조회
 	ArrayList<User> selectAllUser(User adminUser, PageInfo pi);
+	
+	// 관리자 사원 정보 변경
+	int adminUpdateUserInfo(User u);
+	
+	// 관리자 사원 상태 변경
+	int adminUpdateStatusUser(User u);
+	
+	// 관리자 사원 검색 서비스
+	int searchCount(User user);
+	ArrayList<User> searchList(User adminUser, PageInfo pi);
 }

@@ -99,4 +99,26 @@ public class UserDao {
 		
 		return (ArrayList)sqlSession.selectList("userMapper.selectAllUser", adminUser, rowBounds);
 	}
+	
+	// 관리자 사원 정보 변경 서비스
+	public int adminUpdateUserInfo(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.adminUpdateUserInfo", u);
+	}
+	
+	// 관리자 사원 상태 변경 서비스
+	public int adminUpdateStatusUser(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.adminUpdateStatusUser", u);
+	}
+	
+	// 관리자 사원 검색
+	public int searchCount(SqlSessionTemplate sqlSession, User user) {
+		return sqlSession.selectOne("userMapper.searchCount", user);
+	}
+	public ArrayList<User> searchList(SqlSessionTemplate sqlSession, User adminUser, PageInfo pi){
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("userMapper.searchList", adminUser, rowBounds);
+	}
 }

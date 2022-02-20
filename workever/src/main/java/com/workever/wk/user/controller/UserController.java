@@ -434,19 +434,91 @@ public class UserController {
 	
 	// 사원관리 페이지 연결
 	@RequestMapping("usermanage.ad")
-	public String adminUserManage(@RequestParam(value="upage", defaultValue="1") int currentPage, HttpSession session, Model model) {
+	public String adminUserManage(@RequestParam(value="upage", defaultValue="1") int currentPage, String category,
+												HttpSession session, Model model) {
 		User adminUser = (User)session.getAttribute("loginUser");
-		System.out.println(adminUser);
+		if(category != null) {
+			adminUser.setCategory(category);
+		}else {
+			category = "전체";
+			adminUser.setCategory(category);
+		}
+		
+		//System.out.println(adminUser);
+		
 		
 		int listCount = uService.selectUserListCount(adminUser);
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
-		ArrayList<User> allUser = uService.selectAllUser(adminUser, pi);
+		ArrayList<User> userList = uService.selectAllUser(adminUser, pi);
 		ArrayList<Dept> deptList = uService.selectDept(adminUser.getComNo());
 		
-		model.addAttribute("allUser", allUser);
+		model.addAttribute("userList", userList);
 		model.addAttribute("pi", pi);
 		model.addAttribute("deptList", deptList);
+		model.addAttribute("category", category);
+		//System.out.println(category);
+		return "mypage/adminUpdateUser";
+		//return "redirect:usermanage.ad?" + ca;
+	}
+	
+	// 사원정보 변경 서비스
+	@RequestMapping("updateUserInfo.ad")
+	public String adminUpdateUserInfo(User u, HttpSession session, Model model) {
+		System.out.println(u);
+		
+		int result = uService.adminUpdateUserInfo(u);
+		
+		if(result > 0) {
+			session.setAttribute("alertMsg", "사원정보를 변경했습니다.");
+			return "redirect:usermanage.ad";
+		}else {
+			model.addAttribute("errorMsg", "사원정보 수정 실패");
+			return "common/errorPage";
+		}
+	}
+	
+	// 사원 상태변경 서비스(ajax)
+	@ResponseBody
+	@RequestMapping("updateStatus.ad")
+	public String adminUpdateStatusUser(User u) {
+		System.out.println(u);
+		
+		int result = uService.adminUpdateStatusUser(u);
+		
+		return result > 0 ? "NNNNY" : "NNNNN";
+	}
+	
+	// 사원 검색 서비스
+	@RequestMapping("searchUser.ad")
+	public String adminSearchUser(@RequestParam(value="upage", defaultValue="1") int currentPage, 
+								String group, String keyword, String category ,Model model, HttpSession session) {
+		
+		System.out.println(group);
+		System.out.println(keyword);
+		System.out.println(category);
+		User adminUser = (User)session.getAttribute("loginUser"); 
+		adminUser.setGroup(group);
+		adminUser.setKeyword(keyword);
+		if(category != null) {
+			adminUser.setCategory(category);
+		}else {
+			category = "전체";
+			adminUser.setCategory(category);
+		}
+
+		int listCount = uService.searchCount(adminUser);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		ArrayList<User> userList = uService.searchList(adminUser, pi);
+		ArrayList<Dept> deptList = uService.selectDept(adminUser.getComNo());
+		
+		model.addAttribute("userList", userList);
+		model.addAttribute("pi", pi);
+		model.addAttribute("deptList", deptList);
+		model.addAttribute("category", category);
+		model.addAttribute("group", group);
+		model.addAttribute("keyword", keyword);
 		return "mypage/adminUpdateUser";
 	}
 	

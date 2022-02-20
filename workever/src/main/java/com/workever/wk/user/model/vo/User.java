@@ -35,4 +35,9 @@ public class User {
 	private String comPhone;
 	
 	private String comEncode;
+	
+	// 검색, 카테고리별 정렬을 위해 필요한 필드
+	private String category;
+	private String group;
+	private String keyword;
 }

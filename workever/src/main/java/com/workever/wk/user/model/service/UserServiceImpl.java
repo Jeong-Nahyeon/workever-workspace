@@ -125,8 +125,26 @@ public class UserServiceImpl implements UserService {
 		return uDao.selectAllUser(sqlSession, adminUser, pi);
 	}
 
+	@Override
+	public int adminUpdateUserInfo(User u) {
+		return uDao.adminUpdateUserInfo(sqlSession, u);
+	}
 	
+	@Override
+	public int adminUpdateStatusUser(User u) {
+		return uDao.adminUpdateStatusUser(sqlSession, u);
+	}
 
+	// 관리자 사원 검색
+	@Override
+	public int searchCount(User user) {
+		return uDao.searchCount(sqlSession, user);
+	}
+
+	@Override
+	public ArrayList<User> searchList(User adminUser, PageInfo pi) {
+		return uDao.searchList(sqlSession, adminUser, pi);
+	}
 	
 	
 
