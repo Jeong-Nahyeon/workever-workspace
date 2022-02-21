@@ -1,10 +1,21 @@
 package com.workever.wk.mail.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.workever.wk.mail.model.service.MailService;
+
 @Controller
-public class MailController { // 테스트용 메일 컨트롤러
+public class MailController {
+	
+	@Autowired
+	private MailService mService;
+	
+	
+	
+	
+	// 테스트용 삭제 예정
 	
 	/** 메일 작성 페이지 응답하는 메소드
 	 * @return : composeMailForm.jsp
