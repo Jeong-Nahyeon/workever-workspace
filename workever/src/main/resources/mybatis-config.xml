@@ -29,6 +29,8 @@
 		<typeAlias type="com.workever.wk.workBoard.model.vo.workBoard" alias="workBoard"/>
 		<typeAlias type="com.workever.wk.mail.model.vo.Mail" alias="Mail"/>
 		<typeAlias type="com.workever.wk.mail.model.vo.MailFiles" alias="MailFiles"/>
+		<typeAlias type="com.workever.wk.meetingRoom.model.vo.MeetingRoom" alias="MeetingRoom"/>
+		<typeAlias type="com.workever.wk.meetingRoom.model.vo.MeetingRoomReservation" alias="MeetingRoomReservation"/>
 	</typeAliases>
 	
 	<mappers>
@@ -42,6 +44,7 @@
 		<mapper resource="/mappers/project-mapper.xml" />
 		<mapper resource="/mappers/commute-mapper.xml" />
 		<mapper resource="/mappers/mail-mapper.xml" />
+		<mapper resource="/mappers/meetingRoom-mapper.xml" />
 	</mappers>
 
 </configuration>
