@@ -27,8 +27,7 @@
 		<typeAlias type="com.workever.wk.commute.model.vo.Commute" alias="Commute"/>
 		<typeAlias type="com.workever.wk.user.model.vo.Dept" alias="Dept"/>
 		<typeAlias type="com.workever.wk.workBoard.model.vo.workBoard" alias="workBoard"/>
-		<typeAlias type="com.workever.wk.mail.model.vo.MailSend" alias="MailSend"/>
-		<typeAlias type="com.workever.wk.mail.model.vo.MailReceive" alias="MailReceive"/>
+		<typeAlias type="com.workever.wk.mail.model.vo.Mail" alias="Mail"/>
 		<typeAlias type="com.workever.wk.mail.model.vo.MailFiles" alias="MailFiles"/>
 	</typeAliases>
 	

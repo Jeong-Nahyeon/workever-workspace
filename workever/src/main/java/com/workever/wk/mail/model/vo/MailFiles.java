@@ -12,7 +12,7 @@ import lombok.ToString;
 public class MailFiles {
 
 	private String mfNo;			// 파일번호
-	private String msNo;			// 발신메일번호
+	private String mfMsNo;			// 발신메일번호
 	private String mfOriginName;	// 원본파일명
 	private String mfChangeName;	// 수정파일명
 	private String mfPath;			// 저장경로
