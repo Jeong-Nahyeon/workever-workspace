@@ -21,4 +21,7 @@ public class Commute {
 	private String cmWorkingHours;
 	
 	private String userName;
+	
+	private String otWorkingHours;
+	private String totalWorkingHours;
 }

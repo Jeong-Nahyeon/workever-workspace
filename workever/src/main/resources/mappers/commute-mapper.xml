@@ -13,6 +13,9 @@
 		<result column="cm_working_hours" property="cmWorkingHours" />
 		
 		<result column="user_name" property="userName" />
+		
+		<result column="ot_working_hours" property="otWorkingHours" />
+		<result column="total_working_hours" property="totalWorkingHours" />
 	</resultMap>
 	
 	<resultMap id="ApprovalResult" type="Approval">
@@ -247,6 +250,54 @@
 	
 	
 	<!-- 근무 내역 -->
+	
+	<select id="whSelectListCount" resultType="_int">
+		select count(*)
+		  from (
+		        select 
+		               cm_no 
+		             , user_no
+		             , cm_date
+		             , cm_working_hours
+		             , (
+		                select ot_working_hours
+		                  from approval_overtime ao
+		                  join approval a on (ao.apvl_no = a.apvl_no)
+		                 where a.apvl_writer= 3
+		                   and c.cm_date = ao.ot_date
+		             ) ot_working_hours
+		          from commute c
+		         where user_no = #{ userNo }
+		       )
+	</select>
+	
+	<select id="whSelectList" resultMap="commuteResult">
+		select cm_no
+		     , user_no
+		     , cm_date
+		     , cm_working_hours
+		     , nvl(ot_working_hours, 0) as "ot_working_hours"
+		     , cm_working_hours + nvl(ot_working_hours, 0) as "total_working_hours"
+		  from (
+		        select 
+		               cm_no 
+		             , user_no
+		             , cm_date
+		             , cm_working_hours
+		             , (
+		                select ot_working_hours
+		                  from approval_overtime ao
+		                  join approval a on (ao.apvl_no = a.apvl_no)
+		                 where a.apvl_writer= 3
+		                   and c.cm_date = ao.ot_date
+		               ) ot_working_hours
+		          from commute c
+		         where user_no = #{ userNo }
+		         order
+            		by cm_no desc
+		  )
+	</select>
+	
 	
 	
 	<!-- 휴가 관리 (유저) -->

@@ -111,6 +111,26 @@ public class CommuteDao {
 	
 	
 	/*
+	 * 근무 내역 (User)
+	 */
+	
+	public int whSelectListCount(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("commuteMapper.whSelectListCount", userNo);
+	}
+
+	public ArrayList<Commute> whSelectList(SqlSessionTemplate sqlSession, int userNo, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.whSelectList", userNo, rowBounds);
+	}
+
+	
+	
+	/*
 	 * 휴가 관리 (User)
 	 */
 	

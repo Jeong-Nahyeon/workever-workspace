@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script> 
 
@@ -75,7 +76,7 @@
 			<div id="wh_select" style="width: 1000px; margin: auto;">
 				<div align="center">
 					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput">
+					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday">
 					<button id="whSelBtn">조 회</button>
 				</div>
 
@@ -117,7 +118,7 @@
 			<br><br><br>
 
 			<div class="select-area" style="width: 80%; margin: auto;">
-				<h6 style="float: left;">조회 결과 <b>xx</b>건</h6>
+				<h6 style="float: left;">조회 결과 <b id="selectCount">xx</b>건</h6>
 			
 				<table class="table" style="text-align: center;">
 				  	<thead>
@@ -135,76 +136,85 @@
 							<td>0</td>
 							<td>8:00</td>
 						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
 				  	</tbody>
 				</table>
 			</div>
 
 			<br>
 
-			<div class="paging-area" align="center"; style="padding: 20px 0px 100px 0px;">
-				페이징
+			<div class="card-footer" style="background-color: #f4f6f9;">
+				<nav aria-label="Contacts Page Navigation">
+					<ul class="pagination justify-content-center m-0">
+
+					</ul>
+				</nav>
 			</div>
 		</div>
 		<!-- /.content-wrapper -->
 		
+		
+		<script>
+				$(function(){
+					ajaxSelectWorkingHoursList(1)
+				})
+				
+				function ajaxSelectWorkingHoursList(cpageNo) {
+					
+					$.ajax({
+						url: "list.wh",
+						type: "POST",
+						data: {
+							userNo: '${loginUser.userNo}',
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.list) {
+		    					value += "<tr>"
+		    						   +	"<td>" + result.list[i].cmDate + "</td>"
+									   +	"<td>" + result.list[i].cmWorkingHours + "</td>"	   
+		    					       + 	"<td>" + result.list[i].otWorkingHours + "</td>"
+		    					       +	"<td>" + result.list[i].totalWorkingHours + "</td>"
+		    					value  + "</tr>";
+		    				}
+		
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.listCount);
+		    			
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectWorkingHoursList(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectWorkingHoursList(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectWorkingHoursList(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("연장근무리스트 조회용 ajax 통신실패");
+						}
+					})
+				}
+			</script>
+			
+		
 		<jsp:include page="../common/footer.jsp" />
 	</div>
-	
-	<jsp:include page="../common/scripts.jsp" />
+
 	
 </body>
 </html>

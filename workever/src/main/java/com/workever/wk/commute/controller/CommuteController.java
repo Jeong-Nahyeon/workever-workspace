@@ -156,6 +156,25 @@ public class CommuteController {
 		return "commute/workingHours";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="list.wh", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxSelectWorkingHoursList(int userNo, int currentPage) {
+		
+		int listCount = cService.whSelectListCount(userNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Commute> list = cService.whSelectList(userNo, pi);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("listCount", listCount);
+		result.put("list", list);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result);
+		
+	}
+	
+	
 	
 	// 휴가 관리
 	

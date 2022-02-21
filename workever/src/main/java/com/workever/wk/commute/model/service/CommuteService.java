@@ -43,6 +43,15 @@ public interface CommuteService {
 	
 	
 	/*
+	 * 근무 내역
+	 */
+	
+	// 근무내역 조회용
+	int whSelectListCount(int userNo);
+	ArrayList<Commute> whSelectList(int userNo, PageInfo pi);
+		
+	
+	/*
 	 * 휴가 관리
 	 */
 	
@@ -74,6 +83,8 @@ public interface CommuteService {
 	// Admin 연장근무 조회용
 	int adOtSelectListCount();
 	ArrayList<Approval> adOtSelectList(PageInfo pi);
+	
+	
 	
 	
 
