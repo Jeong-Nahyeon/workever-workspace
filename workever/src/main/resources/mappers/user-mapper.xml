@@ -155,6 +155,66 @@
 		    , '관리자'
 		    , 'A'
 		    )
+		into approval_form
+			(
+			  apvl_form_no
+			, apvl_form_name
+			, com_no
+			)
+			values
+			(
+			  1
+			, '휴가 신청서'
+			, SEQ_COMPANY.currval
+			)
+		into approval_form
+			(
+			  apvl_form_no
+			, apvl_form_name
+			, com_no
+			)	
+			values
+			(
+			  2
+			, '연장 근무 신청서'
+			, SEQ_COMPANY.currval
+			)
+		into approval_form
+			(
+			  apvl_form_no
+			, apvl_form_name
+			, com_no
+			)	
+			values
+			(
+			  3
+			, '업무 보고서'
+			, SEQ_COMPANY.currval
+			)
+		into approval_form
+			(
+			  apvl_form_no
+			, apvl_form_name
+			, com_no
+			)	
+			values
+			(
+			  4
+			, '지출 품의서'
+			, SEQ_COMPANY.currval
+			)
+		into approval_form
+			(
+			  apvl_form_no
+			, apvl_form_name
+			, com_no
+			)	
+			values
+			(
+			  5
+			, '출장 신청서'
+			, SEQ_COMPANY.currval
+			)
 		select *
 		  from DUAL
 	</insert>
