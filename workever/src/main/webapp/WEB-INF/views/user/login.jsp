@@ -81,7 +81,13 @@
 </style>
 </head>
 <body>
-    <span>${alertMvMsg}</span>
+    <c:if test="${ not empty alertMsg }">
+		<script>
+			alert("${alertMsg}");
+		</script>
+		<c:remove var="alertMsg" scope="request" />
+	</c:if>
+    <!--<span>${alertMvMsg}</span>-->
     <div id="start-header">
         <div id="header-font">
             <a href="${pageContext.request.contextPath}">

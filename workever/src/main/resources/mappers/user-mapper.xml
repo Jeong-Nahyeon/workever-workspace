@@ -110,7 +110,7 @@
 	</select>
 	
 	<!-- 회원가입(관리자) -->
-	<select id="insertCompany" parameterType="hashMap">
+	<insert id="insertCompany" parameterType="hashMap">
 		insert all
 		into company
 		    values
@@ -124,9 +124,17 @@
 		    , null
 		    , null
 		    ) 
-		into users
+        into dept
+            values
+            (
+              SEQ_dept.nextval
+            , SEQ_COMPANY.currval
+            , '임원'
+            )
+        into users
 		    (
 		      user_no
+            , dept_no
 		    , com_no
 		    , user_email
 		    , user_name
@@ -138,6 +146,7 @@
 		    values
 		    (
 		      SEQ_USERS.nextval
+            , SEQ_DEPT.currval
 		    , SEQ_COMPANY.currval
 		    , #{userEmail}
 		    , #{comName}
@@ -148,7 +157,7 @@
 		    )
 		select *
 		  from DUAL
-	</select>
+	</insert>
 	
 	<!-- 회원가입(사원) -->
   	<insert id="insertUser">

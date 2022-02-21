@@ -49,7 +49,8 @@ public class UserController {
 	@RequestMapping("login.us")
 	public String loginUser(User u, HttpSession session, Model model) {
 		User loginUser = uService.loginUser(u);
-		
+		System.out.println(u);
+		System.out.println(loginUser);
 		if(loginUser != null && bcryptPasswordEncoder.matches(u.getUserPwd(), loginUser.getUserPwd())) {
 			session.setAttribute("loginUser", loginUser);
 			//System.out.println(loginUser);
@@ -145,8 +146,8 @@ public class UserController {
 	// 회원가입(관리자) 서비스
 	@RequestMapping("insert.ad")
 	public String insertCompany(User u, Company c, HttpSession session, Model model) {
-		System.out.println(u);
-		System.out.println(c);
+		//System.out.println(u);
+		//System.out.println(c);
 		
 		// 암호화 작업
 		String encPwd = bcryptPasswordEncoder.encode(u.getUserPwd());
@@ -167,7 +168,8 @@ public class UserController {
 		int result = uService.insertCompany(admin);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			model.addAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
 			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");

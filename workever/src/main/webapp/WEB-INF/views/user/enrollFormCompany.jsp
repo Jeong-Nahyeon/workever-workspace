@@ -111,6 +111,8 @@
 
 <body>
 
+	
+
 	<div id="start-header">
         <div id="header-font">
             <a href="${pageContext.request.contextPath}">
@@ -420,7 +422,7 @@
 				$('#checkPwd-check').text('비밀번호가 일치하지 않습니다.');
 				$('#checkPwd-check').css('color', 'red');
 				$('#company-pwdcheck').css('border', '2px solid red');
-				$('#company-pwdcheck').focus();
+				$('#company-pwd').focus();
 			} else {
 				$('#checkPwd-check').text('');
 				$('#company-pwdcheck').css('border', '1px solid #ced4da');
