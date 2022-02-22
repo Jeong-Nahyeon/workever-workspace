@@ -19,7 +19,7 @@
 		}
 	
 		.workList{ 
-		top: -250px;
+		top: -230px;
 		left: 20%;
 		position: relative;
 		/*border:1px solid red;*/
@@ -37,7 +37,7 @@
     	margin-bottom: 20px !important; 
 		}
 		
-		#workBtn{
+		#back{
 		float:right;
 		margin-right: 300px;
 		margin-top: 50px
@@ -59,30 +59,31 @@
 		
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
-			<button type="button" id="workBtn" class="btn btn-primary">닫기</button>
+		
+			<button type="button" id="back" class="btn btn-primary" onclick="javascript:history.go(-1);">닫기</button>
 		
 		
 		
 			<div class="seletor" >
 				<b style="font-size:17px">업무 구분</b><br>
 				<div style="height: 10px"></div>
-				<input type="radio" name="workDivision" value="myWork">내 업무<br>
-		        <input type="radio" name="workDivision" value="allWork">전체업무<br>
+				<input type="radio" name="workDivision" value="myWork">&nbsp;&nbsp;&nbsp;내 업무<br>
+		        <input type="radio" name="workDivision" value="allWork">&nbsp;&nbsp;&nbsp;전체업무<br>
 	
 				<br><br>
 				
 				<b style="font-size:17px">상태</b><br>
 				<div style="height: 10px"></div>
-				<input type="radio" name="status" value="progress">진행<br>
-		        <input type="radio" name="status" value="complete">완료<br>
-		        <input type="radio" name="status" value="hold">보류<br>
+				<input type="radio" name="status" value="progress">&nbsp;&nbsp;&nbsp;진행<br>
+		        <input type="radio" name="status" value="complete">&nbsp;&nbsp;&nbsp;완료<br>
+		        <input type="radio" name="status" value="hold">&nbsp;&nbsp;&nbsp;보류<br>
 			</div>
 			
 			<div class="workList">
 				<h4>내 업무(3)</h4>
 				<br>
 	            <table id="workList" class="table" align="center">
-	                <thead>
+	                <thead align="center">
 			                <tr>
 			                  	<th>번호</th>
 			                  	<th>상태</th>
@@ -92,13 +93,13 @@
 			                  	<th>수정일</th>
 			                </tr>
 	                </thead>
-	                <tbody>
+	                <tbody align="center">
 		                
 		                    <tr>
 		                        <td> 1 </td>
 		                        <td> <span class="badge badge-pill badge-primary">완료</span> </td>
 		                        <td> 낮음 </td>
-		                        <td> 업무글 작성</td>
+		                        <td> sds</td>
 		                        <td>홍길동</td>
 		                        <td>2021-12-01</td>
 		                    </tr>

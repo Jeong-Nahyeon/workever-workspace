@@ -171,7 +171,7 @@
 				
 				<form id="enrollForm1" method="post" action="insert.pro">
 					<span class="title">프로젝트명</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input class="projectName" name="proTitle" placeholder="프로젝트명 입력" required>
+					<input class="projectName" name="proTitle" placeholder="프로젝트명 입력" autocomplete='off' required>
 					<br><br><br>
 					
 					<span class="title">담당자 승인 후 참여 여부</span>&nbsp;&nbsp;

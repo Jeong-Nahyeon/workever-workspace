@@ -14,15 +14,15 @@ import com.workever.wk.workBoard.model.vo.workBoard;
 public class workBoardServiceImpl implements workBoardService{
 
 	@Autowired
-	private workBoardDao bDao;
+	private workBoardDao wbDao;
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
 	
-	@Override
-	public int insertBoard(workBoard b) {
-		return 0;
+	@Override//게시판 입력
+	public int insertBoard(workBoard wb) {
+		return wbDao.insertBoard(sqlSession, wb);
 	}
 
 	@Override

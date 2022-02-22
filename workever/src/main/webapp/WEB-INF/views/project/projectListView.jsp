@@ -93,7 +93,7 @@
 					
 					<c:forEach var="p" items="${list}">
 						<div class="myProEl"> 
-							<div class="project"><br>
+							<div class="project" onclick="detailPro(${p.proNo})"><br>
 								<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
 								
 								
@@ -134,8 +134,17 @@
 		
 			            }
 		            </script>
-					
+					<script>
+			            function detailPro(no){
+  
+			            	  document.getElementById("proNo").value = no;
+			            	  
+			            	  $("#postForm").attr("action", "detail.pro").submit();
+		
+			            }
+		            </script>
 				</div><!-- 여기까지가 myPro-->
+
 				
 			</div>
 			
@@ -153,5 +162,8 @@
 	<script>
 	  $.widget.bridge('uibutton', $.ui.button)
 	</script>
+
+	
+	
 </body>
 </html>

@@ -21,4 +21,5 @@ public class Project {
 	 private String proDept;
 	 private String deptUserName;
 	 private String deptUserNo;
+	 private String proUserName;
 }

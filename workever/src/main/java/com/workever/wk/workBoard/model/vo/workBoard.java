@@ -23,6 +23,11 @@ public class workBoard {
 	 private String workContent;
 	 private String workCreateDate;
 	 private String boardStatus;
-	 private String workwriter;
+	 private String workBoardWriter;
+	 private String workTitle;
+	 private String atSavePath;
+	 private String atOriginName;
+	 private String atChangeName;
+
 
 }

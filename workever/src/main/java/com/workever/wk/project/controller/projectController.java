@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.workever.wk.project.model.service.ProjectService;
 import com.workever.wk.project.model.vo.Project;
 import com.workever.wk.user.model.vo.User;
+import com.workever.wk.workBoard.model.vo.workBoard;
 
 import jdk.nashorn.internal.ir.RuntimeNode.Request;
 
@@ -31,6 +32,7 @@ public class projectController {
 	public ModelAndView projectList(ModelAndView mv) {
 		
 		ArrayList<Project> list = pService.selectList();
+		//           System.out.println(list);
 		
 		mv.addObject("list", list)
 		  .setViewName("project/projectListView");
@@ -40,7 +42,7 @@ public class projectController {
 	
 	@RequestMapping("enroll.pro")
 	public String enrollProject() {
-		return "project/projectDetailView";
+		return "project/projectEnrollForm";
 		
 	}
 	
@@ -89,14 +91,43 @@ public class projectController {
 	}
 	
 	@RequestMapping("detail.pro")
-	public String detailProject() {
-		return "project/projectDetailView";
+	public ModelAndView selectProject(int proNo, ModelAndView mv) {
+		
+		System.out.println(proNo);
+		
+		ArrayList<workBoard> list = pService.selectProject(proNo);
+		ArrayList<Project> list2 = pService.selectOther(proNo);// 참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
+		
+		//System.out.println(list);
+		System.out.println(list2);
+		
+		mv.addObject("list", list)
+		  .addObject("list2", list2)
+		  .addObject("proNo", proNo)
+		  .setViewName("project/projectDetailView");
+		
+		return mv;
 		
 	}
 	
-	
-	
-	
+	/*
+	@RequestMapping("detail.pro")
+	public ModelAndView selectProject(int proNo, ModelAndView mv) {
+		
+		System.out.println(proNo);
+		
+		ArrayList<workBoard> list = pService.selectProject(proNo);
+		ArrayList<Project> list2 = pService.selectList();
+		
+		System.out.println(list);
+		mv.addObject("list", list)
+		  .addObject("proNo", proNo)
+		  .setViewName("project/projectDetailView");
+		
+		return mv;
+		
+	}
+	*/
 	
 	//업무조회 리스트이동 
 	@RequestMapping("list.work")

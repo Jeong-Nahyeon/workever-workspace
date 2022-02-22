@@ -13,6 +13,7 @@
 		<result column="PRODEPT" property="proDept" />
 		<result column="USER_NAME" property="deptUserName" />
 		<result column="USER_NO" property="deptUserNo" />
+		<result column="PRO_USERNAME" property="proUserName" />
 	</resultMap>
 	
 	
@@ -29,7 +30,10 @@
 		<result column="WORK_CONTENT" property="workContent" />
 		<result column="WORK_CREATE_DATE" property="workCreateDate" />
 		<result column="BOARD_STATUS" property="boardStatus" />
-		<result column="WORKBOARD_WRITER" property="workwriter" />
+		<result column="WORKBOARD_WRITER" property="workBoardWriter" />
+		<result column="PRO_NUMBERPEOPLE" property="proNumberPeople" />
+		<result column="WORK_TITLE" property="workTitle" />
+		
 	</resultMap>
 	
 	
@@ -122,9 +126,86 @@
 	     where PRO_NO = #{proNo}
 	</update>
 	
+	
+	<select id="selectProject" resultMap="workBoardResult">
+		select
+		       WORKBOARD_NO
+			 , USER_NO
+			 , PRO_NO
+			 , WORK_MANAGER
+			 , WORK_STARTDATE
+			 , WORK_ENDDATE
+			 , WORK_STATUS
+			 , WORK_PRIORITY
+			 , WORK_PROGRESS
+			 , WORK_CONTENT
+			 , TO_CHAR(WORK_CREATE_DATE,'YYYY-MM-DD') "WORK_CREATE_DATE"
+			 , WORKBOARD_WRITER
+			 , WORK_TITLE
+			from WORKBOARD
+			where PRO_NO = #{proNo}
+			  AND BOARD_STATUS='Y'
+	</select>
+
 	<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 여기부터 게시판 매퍼 -@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
 	
+	<select id="selectOther" resultMap="projectResult">
+	    select
+			    PRO_NUMBERPEOPLE
+			  , (
+			      select listagg(u.user_name, ', ') within group(order by u.user_name)
+	               from users u, project_member pm
+			       where u.user_no = pm.user_no
+			         and p.pro_no = pm.pro_no
+			    ) PRO_USERNAME
+			from project p
+			where PRO_STATUS = 'Y'
+	          and pro_no = #{proNo}
+			order
+			  by PRO_NO desc
+			  
+	</select>
 	
+	
+	
+	<insert id="insertWorkBoard" >
+		insert 
+		  into WORKBOARD
+		  ( 
+		   	WORKBOARD_NO
+		  , PRO_NO 
+		  ,	USER_NO
+		  ,	WORK_MANAGER
+		  ,	WORK_STARTDATE
+		  ,	WORK_ENDDATE
+		  ,	WORK_STATUS
+		  ,	WORK_PRIORITY
+		  ,	WORK_PROGRESS
+		  ,	WORK_CONTENT
+		  ,	WORKBOARD_WRITER
+		  , WORK_TITLE
+		 
+		  )
+		  VALUES(
+		    seq_workboard.nextval
+		  , PRO_NO 
+		  ,	USER_NO
+		  ,	WORK_MANAGER
+		  ,	WORK_STARTDATE
+		  ,	WORK_ENDDATE
+		  ,	WORK_STATUS
+		  ,	WORK_PRIORITY
+		  ,	WORK_PROGRESS
+		  ,	WORK_CONTENT
+		  ,	WORKBOARD_WRITER
+		  , WORK_TITLE
+		  )
+		  
+	
+	
+	
+	
+	</insert>
 	
 	
 </mapper>

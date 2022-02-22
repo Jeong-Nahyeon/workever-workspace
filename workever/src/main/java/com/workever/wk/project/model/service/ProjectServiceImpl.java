@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.workever.wk.project.model.dao.ProjectDao;
 import com.workever.wk.project.model.vo.Project;
 import com.workever.wk.user.model.vo.User;
+import com.workever.wk.workBoard.model.vo.workBoard;
 
 
 
@@ -58,17 +59,23 @@ public class ProjectServiceImpl implements ProjectService{
 		return pDao.deleteProject(sqlSession, proNo);
 	}
 	
-	
 	@Override
-	public Project detailProject(int projectNo) {
-		return null;
+	public ArrayList<workBoard> selectProject(int proNo) {
+		return pDao.selectProject(sqlSession, proNo);
 	}
-
 
 	@Override
 	public int updatetProject(Project p) {
 		return 0;
 	}
+
+	//참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
+	@Override
+	public ArrayList<Project> selectOther(int proNo) {
+		return pDao.selectOther(sqlSession, proNo);
+	}
+
+
 
 
 

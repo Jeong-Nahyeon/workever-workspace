@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.workever.wk.project.model.vo.Project;
 import com.workever.wk.user.model.vo.User;
+import com.workever.wk.workBoard.model.vo.workBoard;
 
 @Repository
 public class ProjectDao {
@@ -51,6 +52,18 @@ public class ProjectDao {
 	public int deleteProject(SqlSessionTemplate sqlSession, int proNo) {
 		return sqlSession.update("projectMapper.deleteProject", proNo);
 	}
+
+	// 프로젝트 상세 조회
+	public ArrayList<workBoard> selectProject(SqlSessionTemplate sqlSession, int proNo) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectProject", proNo);
+	}
+
+	// 참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
+	public ArrayList<Project> selectOther(SqlSessionTemplate sqlSession, int proNo) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectOther", proNo);
+
+	}
+
 
 
 }
