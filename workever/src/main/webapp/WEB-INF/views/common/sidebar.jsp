@@ -96,7 +96,6 @@
 	          </ul>
 	        </li>
 
-			<!-- 근태관리 -->
 			<li class="nav-item ">
 				<a href="#" class="nav-link">
 				  <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
@@ -105,33 +104,68 @@
 					<i class="right fas fa-angle-left"></i>
 				  </p>
 				</a>
-				<ul class="nav nav-treeview">
-				  <li class="nav-item">
-					<a href="./index.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>출퇴근 관리</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="./index2.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>월 근무내역</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="./index3.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>휴가 관리</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="./index3.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>연장근무 관리</p>
-					</a>
-				  </li>
-				</ul>
+				<c:choose>
+					<c:when test="${ loginUser.userAuth eq 'S' }">
+						<ul class="nav nav-treeview">
+						  <li class="nav-item">
+							<a href="commute.cm" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>출퇴근 관리</p>
+							</a>
+						  </li>
+						  <li class="nav-item">
+							<a href="commute.wh" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>월 근무내역</p>
+							</a>
+						  </li>
+						  <li class="nav-item">
+							<a href="commute.do" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>휴가 관리</p>
+							</a>
+						  </li>
+						  <li class="nav-item">
+							<a href="commute.ot" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>연장근무 관리</p>
+							</a>
+						  </li>
+						</ul>
+					</c:when>
+					
+					<c:otherwise>
+						<!-- 근태관리 admin -->
+						<ul class="nav nav-treeview">
+						  <li class="nav-item">
+							<a href="adCommute.cm" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>출퇴근 관리</p>
+							</a>
+						  </li>
+						  <li class="nav-item">
+							<a href="adCommute.wh" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>월 근무내역</p>
+							</a>
+						  </li>
+						  <li class="nav-item">
+							<a href="adCommute.do" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>휴가 관리</p>
+							</a>
+						  </li>
+						  <li class="nav-item">
+							<a href="adCommute.ot" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>연장근무 관리</p>
+							</a>
+						  </li>
+						</ul>
+					</c:otherwise>
+				</c:choose>
 			</li>
+				
 
 			<!-- 업무관리 -->
 			<li class="nav-item ">
