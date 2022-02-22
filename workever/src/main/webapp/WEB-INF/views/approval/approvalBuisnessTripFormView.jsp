@@ -115,7 +115,7 @@
 
 										<table border class="lineTb">
 											<tr style="height:40px;">
-												<td>${ list.userName }</td>
+												<td>${ list.userName } ${ list.userRank }</td>
 											</tr>
 											<tr style="height:130px;">
 												<c:choose>

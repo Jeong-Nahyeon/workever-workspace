@@ -13,7 +13,7 @@
   	<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style>
 	div, input, textarea{ box-sizing:border-box;}
 
@@ -120,14 +120,10 @@
 							<tr style="border-bottom:1px solid gray;">
 								<th width="150">결재 양식</th>
 								<td width="10"></td>
-								<td width="920">
-									<select name="apvlFormNo" id="formNo" required>
-										<option value="">-----선택-----</option>
-										<c:forEach var="form" items="${ formList }">
-											<option value="${ form.apvlFormNo }">${ form.apvlFormName }</option>
-										</c:forEach>
-									</select>
-									<button type="button" class="btn btn-sm" id="formBtn" onclick="formSelect();">선택</button>
+								<td width="920" height="70">
+									<c:forEach var="f" items="${ formList }">
+										<input type="radio" id="${ f.apvlFormNo }" name="apvlFormNo" value="${ f.apvlFormNo }"><label for="${ f.apvlFormNo }">${ f.apvlFormName }</label>&nbsp;&nbsp;&nbsp;
+									</c:forEach>
 								</td>
 							</tr>
 							<tr>
@@ -231,8 +227,8 @@
 	  $.widget.bridge('uibutton', $.ui.button)
 	</script>
 	<script>
-		function formSelect(){
-			const formNo = $("option:selected").val();
+		$("input[name=apvlFormNo]").change(function(){
+			const formNo = $("input[name=apvlFormNo]:checked").val();
 			console.log(formNo);
 			
 			if(formNo == 1) {				
@@ -247,9 +243,8 @@
 				$("#form").load("buisnessTripForm.ap");
 			}else {
 				$("#form").html('<div align="center" style="padding:100px;">양식을 선택해주세요.</div>');
-			}
-			
-		}
+			}			
+		})
 		let maxLine = 0;
 		let lineArr = [];
 		
@@ -274,13 +269,17 @@
 		})
 		
 		function checkForm(){
-				if($("#lineTb>tbody").text() == null){
-					alert("결재선을 지정해주세요.");
-					return false;
-				}
-				return true;
+			console.log($("#lineTb>tbody").text());
+			
+			if($("#lineTb>tbody").text().trim() == ""){
+				alert("결재선을 지정해주세요.");
+				return false;
+			}else {
 				
+				return true;
 			}
+			
+		}
 		
 
 		$(function(){

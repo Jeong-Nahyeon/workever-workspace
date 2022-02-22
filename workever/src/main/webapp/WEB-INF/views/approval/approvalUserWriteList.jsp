@@ -80,10 +80,12 @@
 			                <br><br>
                     	</c:when>
                     	<c:when test="${ category eq 'title' }">
+                    		<button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='writeList.ap'">전체보기</button><br><br>
                     		<p class="searchResult">제목으로 "${ keyword }" 검색 결과<p>
                     		<br>
                     	</c:when>
                     	<c:otherwise>
+                    		<button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='writeList.ap'">전체보기</button><br><br>
                     		<p class="searchResult">결재 종류로 "${ keyword }" 검색 결과<p>
                     		<br>
                     	</c:otherwise>
