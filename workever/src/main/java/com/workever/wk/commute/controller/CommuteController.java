@@ -149,7 +149,7 @@ public class CommuteController {
 	}
 	
 	
-	// 월 근무내역
+	// 근무내역
 	
 	@RequestMapping("commute.wh")
 	public String workingHours() {
@@ -174,6 +174,27 @@ public class CommuteController {
 		
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="search.wh", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxSelectWorkingHoursSearch(int userNo, String startday, String endday, int currentPage) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userNo", userNo);
+		map.put("startday", startday);
+		map.put("endday", endday);
+		
+		int searchCount = cService.whSelectSearchCount(map);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		ArrayList<Commute> searchList = cService.whSelectSearchList(map, pi);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("searchCount", searchCount);
+		result.put("searchList", searchList);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result);
+	}
 	
 	
 	// 휴가 관리

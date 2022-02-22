@@ -127,6 +127,20 @@ public class CommuteDao {
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.whSelectList", userNo, rowBounds);
 	}
+	
+	public int whSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectOne("commuteMapper.whSelectSearchCount", map);
+	}
+
+	public ArrayList<Commute> whSelectSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.whSelectSearchList", map, rowBounds);
+	}
 
 	
 	
@@ -226,6 +240,8 @@ public class CommuteDao {
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.adOtSelectList", null, rowBounds);
 	}
+
+	
 
 	
 

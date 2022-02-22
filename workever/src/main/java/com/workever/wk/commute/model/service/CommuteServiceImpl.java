@@ -111,6 +111,16 @@ public class CommuteServiceImpl implements CommuteService{
 	public ArrayList<Commute> whSelectList(int userNo, PageInfo pi) {
 		return cDao.whSelectList(sqlSession, userNo, pi);
 	}
+	
+	@Override
+	public int whSelectSearchCount(Map<String, Object> map) {
+		return cDao.whSelectSearchCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Commute> whSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.whSelectSearchList(sqlSession, map, pi);
+	}
 
 
 	
@@ -187,6 +197,8 @@ public class CommuteServiceImpl implements CommuteService{
 	public ArrayList<Approval> adOtSelectList(PageInfo pi) {
 		return cDao.adOtSelectList(sqlSession, pi);
 	}
+
+	
 
 	
 

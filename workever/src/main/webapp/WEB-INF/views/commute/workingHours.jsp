@@ -77,7 +77,7 @@
 				<div align="center">
 					<span class="sm_title">날짜</span>
 					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday">
-					<button id="whSelBtn">조 회</button>
+					<button id="whSelBtn" onclick="ajaxSelectWorkingHoursSearch(1)">조 회</button>
 				</div>
 
 				<br><br><br>
@@ -91,26 +91,9 @@
 				</div>
 
 				<script>
-					let doChart = document.getElementById('doChart').getContext('2d');
-
-					let lineChart = new Chart(doChart, {
-						type: 'line',
-						data: {
-							labels: ['2022-02-07', '2022-02-08', '2022-02-09', '2022-02-10', '2022-02-11'],
-							datasets: [{
-								label: '일별 근무시간',
-								data: [
-									8.04,
-									7.89,
-									8.00,
-									4.09,
-									8.00
-								],
-								fill: false,
-								borderColor: '#4E73DF'
-							}]
-						}
-					})
+					
+					
+					
 				</script>
 
 			</div>
@@ -203,9 +186,119 @@
 		    				}
 		    										
 		    				$(".pagination").html(paging);
+		    				
+		    				
+		    				// chart
+		    				
+		    				chartDate=[];
+	           				chartTime=[];
+		    				
+	           				for(let i in result.list) {
+	           					chartDate.push(result.list[i].cmDate);
+	           					chartTime.push(result.list[i].totalWorkingHours);
+	           				}
+		    				
+		    				
+	        				let doChart = document.getElementById('doChart').getContext('2d');
+
+	        				let lineChart = new Chart(doChart, {
+	        					type: 'line',
+	        					data: {
+	        						labels: chartDate, // x축
+	        						datasets: [{
+	        							label: '일별 근무시간',
+	        							data: chartTime, // y축
+	        							fill: false,
+	        							borderColor: '#4E73DF'
+	        						}]
+	        					}
+	        				})
+		    				
 							
 						}, error:function() {
 							console.log("연장근무리스트 조회용 ajax 통신실패");
+						}
+					})
+				}
+				
+				
+				function ajaxSelectWorkingHoursSearch(cpageNo) {
+					
+					$.ajax({
+						url: "search.wh",
+						type: "POST",
+						data: {
+							userNo: '${loginUser.userNo}',
+							startday: $('input[name=startday]').val(),
+							endday: $('input[name=endday]').val(),
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+							for(let i in result.searchList) {
+								value += "<tr>"
+		    						   +	"<td>" + result.searchList[i].cmDate + "</td>"
+									   +	"<td>" + result.searchList[i].cmWorkingHours + "</td>"	   
+		    					       + 	"<td>" + result.searchList[i].otWorkingHours + "</td>"
+		    					       +	"<td>" + result.searchList[i].totalWorkingHours + "</td>"
+		    					value  + "</tr>";
+		    				}
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.searchCount);
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectWorkingHoursSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectWorkingHoursSearch(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectWorkingHoursSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+		    				
+		    				
+		    				// chart
+		    				
+		    				chartDate=[];
+	           				chartTime=[];
+		    				
+	           				for(let i in result.searchList) {
+	           					chartDate.push(result.searchList[i].cmDate);
+	           					chartTime.push(result.searchList[i].totalWorkingHours);
+	           				}
+		    				
+		    				
+	        				let doChart = document.getElementById('doChart').getContext('2d');
+
+	        				let lineChart = new Chart(doChart, {
+	        					type: 'line',
+	        					data: {
+	        						labels: chartDate, // x축
+	        						datasets: [{
+	        							label: '일별 근무시간',
+	        							data: chartTime, // y축
+	        							fill: false,
+	        							borderColor: '#4E73DF'
+	        						}]
+	        					}
+	        				})
+		    				
+		    				
+						}, error:function() {
+							console.log("근무내역 검색용 ajax 통신실패");
 						}
 					})
 				}

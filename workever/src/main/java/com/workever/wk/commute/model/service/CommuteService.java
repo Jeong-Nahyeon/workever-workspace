@@ -49,6 +49,10 @@ public interface CommuteService {
 	// 근무내역 조회용
 	int whSelectListCount(int userNo);
 	ArrayList<Commute> whSelectList(int userNo, PageInfo pi);
+	
+	// 근무내역 검색용
+	int whSelectSearchCount(Map<String, Object> map);
+	ArrayList<Commute> whSelectSearchList(Map<String, Object> map, PageInfo pi);
 		
 	
 	/*

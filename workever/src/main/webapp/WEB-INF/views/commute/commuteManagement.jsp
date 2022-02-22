@@ -475,7 +475,7 @@
 						
 						
 					}, error:function() {
-						console.log("근태 검색용 ajax 통신실패")
+						console.log("근태 검색용 ajax 통신실패");
 					}
 				})
 			}

@@ -249,7 +249,7 @@
 	
 	
 	
-	<!-- 근무 내역 -->
+	<!-- 근무 내역 (유저) -->
 	
 	<select id="whSelectListCount" resultType="_int">
 		select count(*)
@@ -298,6 +298,54 @@
 		  )
 	</select>
 	
+	<select id="whSelectSearchCount" resultType="_int">
+		select count(*)
+		  from (
+		        select 
+		               cm_no 
+		             , user_no
+		             , cm_date
+		             , cm_working_hours
+		             , (
+		                select ot_working_hours
+		                  from approval_overtime ao
+		                  join approval a on (ao.apvl_no = a.apvl_no)
+		                 where a.apvl_writer= 3
+		                   and c.cm_date = ao.ot_date
+		             ) ot_working_hours
+		          from commute c
+		         where user_no = #{ userNo }
+		           and cm_date between #{ startday } and #{ endday }
+		       )
+	</select>
+	
+	<select id="whSelectSearchList" resultMap="commuteResult">
+		select cm_no
+		     , user_no
+		     , cm_date
+		     , cm_working_hours
+		     , nvl(ot_working_hours, 0) as "ot_working_hours"
+		     , cm_working_hours + nvl(ot_working_hours, 0) as "total_working_hours"
+		  from (
+		        select 
+		               cm_no 
+		             , user_no
+		             , cm_date
+		             , cm_working_hours
+		             , (
+		                select ot_working_hours
+		                  from approval_overtime ao
+		                  join approval a on (ao.apvl_no = a.apvl_no)
+		                 where a.apvl_writer= 3
+		                   and c.cm_date = ao.ot_date
+		               ) ot_working_hours
+		          from commute c
+		         where user_no = #{ userNo }
+		           and cm_date between #{ startday } and #{ endday }
+		         order
+            		by cm_no asc
+		  )
+	</select>
 	
 	
 	<!-- 휴가 관리 (유저) -->
