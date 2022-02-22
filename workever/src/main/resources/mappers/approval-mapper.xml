@@ -110,7 +110,7 @@
 			   count(*)
 		  from approval
 		 where not apvl_status = 'D'
-		   and apvl_writer = #{loginUserNo}
+		   and apvl_writer = #{userNo}
 	</select>
 	
 	<select id="userWriteApprovalList" resultMap="userWriterApprovalListResult">
@@ -124,20 +124,28 @@
 		  from approval
 		  join approval_form using (apvl_form_no)
 		 where not apvl_status = 'D'
-		   and apvl_writer = #{loginUserNo}
+		   and apvl_writer = #{userNo}
+		   and com_no = #{comNo}
 		 order
 		    by apvl_no desc   
 	</select>
 	
-	<select id="writeIngCategoryListCount" resultType="_int">
+	<select id="writeCategoryListCount" resultType="_int">
 		select
 			   count(*)
 		  from approval
-		 where apvl_status in ('I', 'S')
-		   and apvl_writer = #{loginUserNo}
+		  <choose>
+		  	<when test="category == 'SI'">
+		  		where apvl_status in ('I', 'S')
+		  	</when>
+		  	<otherwise>
+		  		where apvl_status in ('C', 'R')
+		  	</otherwise>
+		  </choose>
+		   and apvl_writer = #{loginUser.userNo}
 	</select>
 	
-	<select id="writeIngCategoryList" resultMap="userWriterApprovalListResult">
+	<select id="writeCategoryList" resultMap="userWriterApprovalListResult">
 		select
 		       apvl_no
 		     , apvl_writer
@@ -147,32 +155,16 @@
 		     , apvl_status
 		  from approval
 		  join approval_form using (apvl_form_no)
-		 where apvl_status in ('I', 'S')
-		   and apvl_writer = #{loginUserNo}
-		 order
-		    by apvl_no desc
-	</select>
-	
-	<select id="writeCompleteCategoryListCount" resultType="_int">
-		select
-			   count(*)
-		  from approval
-		 where apvl_status in ('C', 'R')
-		   and apvl_writer = #{loginUserNo}
-	</select>
-	
-	<select id="writeCompleteCategoryList" resultMap="userWriterApprovalListResult">
-		select
-		       apvl_no
-		     , apvl_writer
-		     , apvl_form_name
-		     , apvl_title
-		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
-		     , apvl_status
-		  from approval
-		  join approval_form using (apvl_form_no)
-		 where apvl_status in ('C', 'R')
-		   and apvl_writer = #{loginUserNo}
+		 <choose>
+		  	<when test="category == 'SI'">
+		  		where apvl_status in ('I', 'S')
+		  	</when>
+		  	<otherwise>
+		  		where apvl_status in ('C', 'R')
+		  	</otherwise>
+		  </choose>
+		   and apvl_writer = #{loginUser.userNo}
+		   and com_no = #{loginUser.comNo}
 		 order
 		    by apvl_no desc
 	</select>
@@ -186,9 +178,11 @@
 		 join Users u on (a.apvl_writer = u.user_no)
 		where (apvl_line_status = 'S'
 		  and apvl_status in ('S', 'I')
-		  and al.user_no = #{loginUserNo})
+		  and al.user_no = #{userNo}
+		  and af.com_no = #{comNo})
 		   or (apvl_line_status in ('A', 'R')
-		  and al.user_no = #{loginUserNo})
+		  and al.user_no = #{userNo}
+		  and af.com_no = #{comNo})
 	</select>
 	
 	<select id="userReceiveApprovalList" resultMap="userReceiveApprovalListResult">
@@ -206,9 +200,11 @@
           join Users u on (a.apvl_writer = u.user_no)
 		 where (apvl_line_status = 'S'
            and apvl_status in ('S', 'I')
-		   and al.user_no = #{loginUserNo})
+		   and al.user_no = #{userNo}
+		   and af.com_no = #{comNo})
             or (apvl_line_status in ('A', 'R')
-		   and al.user_no = #{loginUserNo})
+		   and al.user_no = #{userNo}
+		   and af.com_no = #{comNo})
           order
 		    by a.apvl_no desc  
 	</select>
@@ -233,7 +229,25 @@
 		     by apvl_line_turn
 	</select>
 	
-	<select id="receiveIngCategoryList" resultMap="userReceiveApprovalListResult">
+	<select id="receiveCategoryListCount" resultType="_int">
+		select
+			   count(*)
+		  from approval
+		  join approval_line using (apvl_no)
+		 <choose>
+          	<when test="category == 'AR'">
+          		where apvl_line_status in ('A', 'R')
+          		
+          	</when>
+          	<otherwise>
+          		where apvl_line_status = 'S'
+           		  and apvl_status in ('S', 'I')
+          	</otherwise>
+          </choose>
+		   and user_no = #{loginUser.userNo}
+	</select>
+	
+	<select id="receiveCategoryList" resultMap="userReceiveApprovalListResult">
 		select
 		       a.apvl_no as "apvl_no"
 		     , user_name
@@ -246,47 +260,18 @@
 		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
           join approval_line al on (a.apvl_no = al.apvl_no)
           join Users u on (a.apvl_writer = u.user_no)
-		 where apvl_line_status = 'S'
-           and apvl_status in ('S', 'I')
-		   and al.user_no = #{loginUserNo}
-		 order
-		    by a.apvl_no desc
-	</select>
-	
-	<select id="receiveIngCategoryListCount" resultType="_int">
-		select
-			   count(*)
-		  from approval
-		  join approval_line using (apvl_no)
-		 where apvl_line_status = 'S'
-           and apvl_status in ('S', 'I')
-		   and user_no = #{loginUserNo}
-	</select>
-	
-	<select id="receiveCompleteCategoryListCount" resultType="_int">
-		select
-			   count(*)
-		  from approval
-		  join approval_line using (apvl_no)
-		 where apvl_line_status in ('A', 'R')
-		   and user_no = #{loginUserNo}
-	</select>
-	
-	<select id="receiveCompleteCategoryList" resultMap="userReceiveApprovalListResult">
-		select
-		       a.apvl_no as "apvl_no"
-		     , user_name
-		     , user_rank
-		     , apvl_form_name
-		     , apvl_title
-		     , to_char(apvl_create_date, 'YYYY.MM.DD') as "apvl_create_date"
-		     , apvl_line_status
-		  from approval a
-		  join approval_form af on (a.apvl_form_no = af.apvl_form_no)
-          join approval_line al on (a.apvl_no = al.apvl_no)
-          join Users u on (a.apvl_writer = u.user_no)
-		 where apvl_line_status in ('A', 'R')
-		   and al.user_no = #{loginUserNo}
+          <choose>
+          	<when test="category == 'AR'">
+          		where apvl_line_status in ('A', 'R')
+          	</when>
+          	<otherwise>
+          		where apvl_line_status = 'S'
+           		  and apvl_status in ('S', 'I')
+          	</otherwise>
+          </choose>
+		
+		   and al.user_no = #{loginUser.userNo}
+		   and af.com_no = #{loginUser.comNo}
 		 order
 		    by a.apvl_no desc
 	</select>
@@ -362,6 +347,7 @@
 			 , apvl_form_status
 		  from approval_form
 		 where apvl_form_status = 'Y'
+		   and com_no = #{comNo}
 	</select>
 	
 	<insert id="insertApvlLine" parameterType="Map">
@@ -715,7 +701,8 @@
 		  from approval
           join approval_form using (apvl_form_no)
 		 where not apvl_status = 'D'
-		   and apvl_writer = #{loginUserNo}
+		   and apvl_writer = #{loginUser.userNo}
+		   and com_no = #{loginUser.comNo}
 		   <choose>
 		   		<when test="category == 'title'">
 		   			and apvl_title like '%'||#{keyword}||'%'
@@ -737,7 +724,8 @@
 		  from approval
 		  join approval_form using (apvl_form_no)
 		 where not apvl_status = 'D'
-		   and apvl_writer = #{loginUserNo}
+		   and apvl_writer = #{loginUser.userNo}
+		   and com_no = #{loginUser.comNo}
            <choose>
 		   		<when test="category == 'title'">
 		   			and apvl_title like '%'||#{keyword}||'%'
@@ -759,9 +747,11 @@
 		 join Users u on (a.apvl_writer = u.user_no)
 		where ((apvl_line_status = 'S'
 		  and apvl_status in ('S', 'I')
-		  and al.user_no = #{loginUserNo})
+		  and al.user_no = #{loginUser.userNo}
+		  and af.com_no = #{loginUser.comNo})
 		   or (apvl_line_status in ('A', 'R')
-		  and al.user_no = #{loginUserNo}))
+		  and al.user_no = #{loginUser.userNo})
+		  and af.com_no = #{loginUser.comNo})
 		  <choose>
 		  	<when test="category == 'title'">
 		  		and a.apvl_title like '%'||#{keyword}||'%'
@@ -790,9 +780,11 @@
           join Users u on (a.apvl_writer = u.user_no)
 		 where ((apvl_line_status = 'S'
            and apvl_status in ('S', 'I')
-		   and al.user_no = #{loginUserNo})
+		   and al.user_no = #{loginUser.userNo}
+		   and af.com_no = #{loginUser.comNo})
             or (apvl_line_status in ('A', 'R')
-		   and al.user_no = #{loginUserNo}))
+		   and al.user_no = #{loginUser.userNo})
+		   and af.com_no = #{loginUser.comNo})
 		   <choose>
 		  	<when test="category == 'title'">
 		  		and a.apvl_title like '%'||#{keyword}||'%'
@@ -807,4 +799,51 @@
           order
 		    by a.apvl_no desc
 	</select>
+	
+	<select id="selectAllFormList" resultMap="formListResult">
+		select
+			   apvl_form_no
+			 , apvl_form_name
+			 , apvl_form_status
+		  from approval_form
+		 where com_no = #{comNo}
+			   
+	</select>
+	
+	<update id="removeForm">
+			update
+			       approval_form
+			   set apvl_form_status = 'N'
+			 where com_no = #{comNo}
+			   and apvl_form_no in
+		<foreach collection="apvlFormNo" item="formNo" open="(" close=")" separator=",">
+			    #{formNo}
+		</foreach>
+	</update>
+	
+	<update id="addForm">
+			update
+			       approval_form
+			   set apvl_form_status = 'Y'
+			 where com_no = #{comNo}
+			   and apvl_form_no in
+		<foreach collection="apvlFormNo" item="formNo" open="(" close=")" separator=",">
+			    #{formNo}
+		</foreach>
+	</update>
+	
+	<select id="changeStatusFormList" resultMap="formListResult">
+		select
+			   apvl_form_no
+			 , apvl_form_name
+			 , apvl_form_status
+		  from approval_form
+		 where com_no = #{comNo}
+		   and apvl_form_no in
+		   <foreach collection="apvlFormNo" item="formNo" open="(" close=")" separator=",">
+		   		#{formNo}
+		   </foreach>
+	</select>
+	
+
 </mapper>

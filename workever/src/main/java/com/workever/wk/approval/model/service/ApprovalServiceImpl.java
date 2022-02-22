@@ -31,37 +31,37 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	// 내가 작성한 결재 리스트 카운트
 	@Override
-	public int userWriteListCount(int loginUserNo) {
-		return aDao.userWriteListCount(sqlSession, loginUserNo);
+	public int userWriteListCount(User loginUser) {
+		return aDao.userWriteListCount(sqlSession, loginUser);
 	}
 	
 	// 내가 작성한 결재 리스트 조회
 	@Override
-	public ArrayList<Approval> userWriteApprovalList(PageInfo pi, int loginUserNo) {
-		return aDao.userWriteApprovalList(sqlSession, pi, loginUserNo);
+	public ArrayList<Approval> userWriteApprovalList(PageInfo pi, User loginUser) {
+		return aDao.userWriteApprovalList(sqlSession, pi, loginUser);
 	}
 	
 	// 내가 작성한 결재 카테고리 조회 카운트
 	@Override
-	public int writeChangeCategoryListCount(String category, int loginUserNo) {
-		return aDao.writeChangeCategoryListCount(sqlSession, category, loginUserNo);
+	public int writeChangeCategoryListCount(Map<String,Object> map) {
+		return aDao.writeChangeCategoryListCount(sqlSession, map);
 	}
-	// 내가 작성한 결재 리스트 카테고리별 조회(ajax)
+	// 내가 작성한 결재 리스트 카테고리별 조회
 	@Override
-	public ArrayList<Approval> writeChangeCategoryList(PageInfo pi, String category, int loginUserNo) {
-		return aDao.writeChangeCategoryList(sqlSession, pi, category, loginUserNo);
+	public ArrayList<Approval> writeChangeCategoryList(PageInfo pi, Map<String,Object> map) {
+		return aDao.writeChangeCategoryList(sqlSession, pi, map);
 	}
 	
 	// 내가 수신한 결재 리스트 카운트
 	@Override
-	public int userReceiveListCount(int loginUserNo) {
-		return aDao.userReceiveListCount(sqlSession, loginUserNo);
+	public int userReceiveListCount(User loginUser) {
+		return aDao.userReceiveListCount(sqlSession, loginUser);
 	}
 
 	// 내가 수신한 결재 리스트 조회
 	@Override
-	public ArrayList<Approval> userReceiveApprovalList(PageInfo pi, int loginUserNo) {
-		return aDao.userReceiveApprovalList(sqlSession, pi, loginUserNo);
+	public ArrayList<Approval> userReceiveApprovalList(PageInfo pi, User loginUser) {
+		return aDao.userReceiveApprovalList(sqlSession, pi, loginUser);
 	}
 	
 	// 내가 수신한 결재 결재선 조회
@@ -72,14 +72,14 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	// 내가 수신한 결재 카테고리 조회 카운트
 	@Override
-	public int receiveChangeCategoryListCount(String category, int loginUserNo) {
-		return aDao.receiveChangeCategoryListCount(sqlSession, category, loginUserNo);
+	public int receiveChangeCategoryListCount(Map<String,Object> map) {
+		return aDao.receiveChangeCategoryListCount(sqlSession, map);
 	}
 	
 	// 내가 수신한 결재 리스트 카테고리별 조회(ajax)
 	@Override
-	public ArrayList<Approval> receiveChangeCategoryList(String category, PageInfo pi, int loginUserNo) {
-		return aDao.receiveChangeCategoryList(sqlSession, category, pi, loginUserNo);
+	public ArrayList<Approval> receiveChangeCategoryList(PageInfo pi, Map<String,Object> map) {
+		return aDao.receiveChangeCategoryList(sqlSession, pi, map);
 	}
 	
 	// 작성자 부서명 조회
@@ -118,8 +118,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public ArrayList<ApprovalForm> selectFormList() {
-		return aDao.selectFormList(sqlSession);
+	public ArrayList<ApprovalForm> selectFormList(int comNo) {
+		return aDao.selectFormList(sqlSession, comNo);
 	}
 	
 	// 전자 결재 상세 조회
@@ -212,6 +212,32 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.searchReceiveApvlList(sqlSession, pi, map);
 	}
 	
+	// 전체 결재 양식 조회
+	@Override
+	public ArrayList<ApprovalForm> selectAllFormList(int comNo) {
+		return aDao.selectAllFormList(sqlSession, comNo);
+	}
+	
+	
+	// 결재 양식 remove
+	@Override
+	public int ajaxRemoveForm(Map<String, Object> map) {
+		return aDao.ajaxRemoveForm(sqlSession, map);
+	}
+
+	// 결재 양식 add
+	@Override
+	public int ajaxAddForm(Map<String, Object> map) {
+		return aDao.ajaxAddForm(sqlSession, map);
+	}
+	
+	// 변경된 양식 정보 조회
+	@Override
+	public ArrayList<ApprovalForm> changeStatusFormList(Map<String, Object> map) {
+		return aDao.changeStatusFormList(sqlSession, map);
+	}
+
+
 	
 
 	

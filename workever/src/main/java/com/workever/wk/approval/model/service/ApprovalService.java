@@ -19,22 +19,22 @@ public interface ApprovalService {
 	
 	
 	// 1. 내가 작성한 결재 리스트 서비스 (페이징)
-	int userWriteListCount(int loginUserNo);
-	ArrayList<Approval> userWriteApprovalList(PageInfo pi, int loginUserNo);
+	int userWriteListCount(User loginUser);
+	ArrayList<Approval> userWriteApprovalList(PageInfo pi, User loginUser);
 	
-	int writeChangeCategoryListCount(String category, int loginUserNo);
-	ArrayList<Approval> writeChangeCategoryList(PageInfo pi, String category, int loginUserNo);
+	int writeChangeCategoryListCount(Map<String,Object> map);
+	ArrayList<Approval> writeChangeCategoryList(PageInfo pi, Map<String,Object> map);
 	
 	// 결재선 정보 가져오기
 	ArrayList<ApprovalLine> approvalLineList(int apvlNo);
 
 	// 2. 내가 수신한 결재 리스트 서비스 (페이징)
-	int userReceiveListCount(int loginUserNo);
-	ArrayList<Approval> userReceiveApprovalList(PageInfo pi, int loginUserNo);
+	int userReceiveListCount(User loginUser);
+	ArrayList<Approval> userReceiveApprovalList(PageInfo pi, User loginUser);
 	
 	
-	int receiveChangeCategoryListCount(String category, int loginUserNo);
-	ArrayList<Approval> receiveChangeCategoryList(String category, PageInfo pi, int loginUserNo);
+	int receiveChangeCategoryListCount(Map<String,Object> map);
+	ArrayList<Approval> receiveChangeCategoryList(PageInfo pi, Map<String,Object> map);
 	
 	
 	// 3. 전자 결재 작성하기 서비스
@@ -45,7 +45,7 @@ public interface ApprovalService {
 	ArrayList<User> userSearchList(Map<String,Object> map); // 사원 검색(ajax)
 	User selectUser(int selectUserNo); // 사원 선택(ajax)
 	int insertApproval(Map<String,Object> map); // 전자결재 작성
-	ArrayList<ApprovalForm> selectFormList();
+	ArrayList<ApprovalForm> selectFormList(int comNo);
 	
 	
 	// 4. 전자결재 상세 조회 서비스
@@ -78,4 +78,10 @@ public interface ApprovalService {
 	// 11. 수신한 전자결재 검색 서비스
 	int searchReceiveApvlListCount(Map<String,Object> map);
 	ArrayList<Approval> searchReceiveApvlList(PageInfo pi, Map<String,Object> map);
+
+	// 12. 관리자 양식관리 서비스
+	ArrayList<ApprovalForm> selectAllFormList(int comNo); // 전체 결재 양식 조회
+	int ajaxRemoveForm(Map<String,Object> map); // 전자결재 양식 remove
+	int ajaxAddForm(Map<String,Object> map);
+	ArrayList<ApprovalForm> changeStatusFormList(Map<String,Object> map); // 변경된 양식 정보 조회
 }

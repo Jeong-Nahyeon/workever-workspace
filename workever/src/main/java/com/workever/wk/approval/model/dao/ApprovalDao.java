@@ -23,38 +23,29 @@ import com.workever.wk.user.model.vo.User;
 public class ApprovalDao {
 	
 	// 내가 작성한 결재 리스트 카운트
-	public int userWriteListCount(SqlSessionTemplate sqlSession, int loginUserNo) {
-		return sqlSession.selectOne("approvalMapper.userWriteListCount", loginUserNo);
+	public int userWriteListCount(SqlSessionTemplate sqlSession, User loginUser) {
+		return sqlSession.selectOne("approvalMapper.userWriteListCount", loginUser);
 	}
 	
 	// 내가 작성한 결재 리스트 조회
-	public ArrayList<Approval> userWriteApprovalList(SqlSessionTemplate sqlSession, PageInfo pi, int loginUserNo) {
+	public ArrayList<Approval> userWriteApprovalList(SqlSessionTemplate sqlSession, PageInfo pi, User loginUser) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return (ArrayList)sqlSession.selectList("approvalMapper.userWriteApprovalList", loginUserNo, rowBounds);
+		return (ArrayList)sqlSession.selectList("approvalMapper.userWriteApprovalList", loginUser, rowBounds);
 	}
 	
 	// 내가 작성한 결재 카테고리 리스트 카운트
-	public int writeChangeCategoryListCount(SqlSessionTemplate sqlSession, String category, int loginUserNo) {
-		if(category.equals("SI")) {
-			return sqlSession.selectOne("approvalMapper.writeIngCategoryListCount", loginUserNo);			
-		}else {
-			return sqlSession.selectOne("approvalMapper.writeCompleteCategoryListCount", loginUserNo);			
-		}
+	public int writeChangeCategoryListCount(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.selectOne("approvalMapper.writeCategoryListCount", map);			
 	}
-	// 내가 작성한 결재 리스트 카테고리별 조회(ajax)
-	public ArrayList<Approval> writeChangeCategoryList(SqlSessionTemplate sqlSession, PageInfo pi, String category, int loginUserNo) {
+	
+	// 내가 작성한 결재 리스트 카테고리별 조회
+	public ArrayList<Approval> writeChangeCategoryList(SqlSessionTemplate sqlSession, PageInfo pi, Map<String,Object> map) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		if(category.equals("SI")) {
-			return (ArrayList)sqlSession.selectList("approvalMapper.writeIngCategoryList", loginUserNo, rowBounds);			
-		}else {
-			return (ArrayList)sqlSession.selectList("approvalMapper.writeCompleteCategoryList", loginUserNo, rowBounds);			
-		}
+		return (ArrayList)sqlSession.selectList("approvalMapper.writeCategoryList", map, rowBounds);			
 	}
 	
 	// 결재 결재선 조회
@@ -63,39 +54,31 @@ public class ApprovalDao {
 	}
 	
 	// 내가 수신한 결재 리스트 카운트
-	public int userReceiveListCount(SqlSessionTemplate sqlSession, int loginUserNo) {
-		return sqlSession.selectOne("approvalMapper.userReceiveListCount", loginUserNo);
+	public int userReceiveListCount(SqlSessionTemplate sqlSession, User loginUser) {
+		return sqlSession.selectOne("approvalMapper.userReceiveListCount", loginUser);
 	}
 	
-	// 내가 수신한 결재 리스트 조회
-	public ArrayList<Approval> userReceiveApprovalList(SqlSessionTemplate sqlSession, PageInfo pi, int loginUserNo)	{
+	// 내가 수신한 결재 리스트 조회s
+	public ArrayList<Approval> userReceiveApprovalList(SqlSessionTemplate sqlSession, PageInfo pi, User loginUser)	{
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
-		return (ArrayList)sqlSession.selectList("approvalMapper.userReceiveApprovalList", loginUserNo, rowBounds);
+		return (ArrayList)sqlSession.selectList("approvalMapper.userReceiveApprovalList", loginUser, rowBounds);
 	}
 	
 	// 내가 작성한 결재 카테고리 리스트 카운트
-	public int receiveChangeCategoryListCount(SqlSessionTemplate sqlSession, String category, int loginUserNo) {
-		if(category.equals("S")) {
-			return sqlSession.selectOne("approvalMapper.receiveIngCategoryListCount", loginUserNo);			
-		}else {
-			return sqlSession.selectOne("approvalMapper.receiveCompleteCategoryListCount", loginUserNo);			
-		}
+	public int receiveChangeCategoryListCount(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.selectOne("approvalMapper.receiveCategoryListCount", map);			
 	}
 		
-	// 내가 수신한 결재 리스트 카테고리별 조회(ajax)
-	public ArrayList<Approval> receiveChangeCategoryList(SqlSessionTemplate sqlSession, String category, PageInfo pi, int loginUserNo) {
+	// 내가 수신한 결재 리스트 카테고리별 조회
+	public ArrayList<Approval> receiveChangeCategoryList(SqlSessionTemplate sqlSession, PageInfo pi, Map<String,Object> map) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		if(category.equals("S")) {
-			return (ArrayList)sqlSession.selectList("approvalMapper.receiveIngCategoryList", loginUserNo, rowBounds);			
-		}else {
-			return (ArrayList)sqlSession.selectList("approvalMapper.receiveCompleteCategoryList", loginUserNo, rowBounds);			
-		}
+		System.out.println(map);
+		return (ArrayList)sqlSession.selectList("approvalMapper.receiveCategoryList", map, rowBounds);			
 	}
 	
 	// 결재 작성자 부서명 조회
@@ -132,8 +115,8 @@ public class ApprovalDao {
 	}
 	
 	// 전자결재 양식 리스트 조회
-	public ArrayList<ApprovalForm> selectFormList(SqlSessionTemplate sqlSession) {
-		return (ArrayList)sqlSession.selectList("approvalMapper.selectFormList");
+	public ArrayList<ApprovalForm> selectFormList(SqlSessionTemplate sqlSession, int comNo) {
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectFormList", comNo);
 	}
 	
 	// 전자결재 조회
@@ -232,5 +215,27 @@ public class ApprovalDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return (ArrayList)sqlSession.selectList("approvalMapper.searchReceiveApvlList", map, rowBounds);
 	}
+	
+	// 전채 양식 조회
+	public ArrayList<ApprovalForm> selectAllFormList(SqlSessionTemplate sqlSession, int comNo){
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectAllFormList", comNo);
+	}
+
+	// 결재 양식 remove
+	public int ajaxRemoveForm(SqlSessionTemplate session, Map<String,Object> map) {
+		return session.update("approvalMapper.removeForm", map);
+	}
+	
+	// 결재 양식 add
+	public int ajaxAddForm(SqlSessionTemplate session, Map<String,Object> map) {
+		return session.update("approvalMapper.addForm", map);
+	}
+	
+	// 변경된 양식 정보 조회
+	public ArrayList<ApprovalForm> changeStatusFormList(SqlSessionTemplate session, Map<String,Object> map) {
+		return (ArrayList)session.selectList("approvalMapper.changeStatusFormList", map);
+	}
+	
+	
 	
 }

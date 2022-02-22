@@ -13,4 +13,5 @@ public class ApprovalForm { // 결재 양식 vo
 	private int apvlFormNo;
 	private String apvlFormName;
 	private String apvlFormStatus;
+	private int comNo;
 }

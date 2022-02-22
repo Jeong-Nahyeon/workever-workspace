@@ -2,6 +2,7 @@ package com.workever.wk.approval.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -39,12 +40,12 @@ public class approvalController {
 	@RequestMapping("writeList.ap")
 	public String userWriteApprovalList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, HttpSession session) {
 		
-		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		User loginUser = (User)session.getAttribute("loginUser");
 		
-		int listCount = aService.userWriteListCount(loginUserNo);
+		int listCount = aService.userWriteListCount(loginUser);
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
-		ArrayList<Approval> list = aService.userWriteApprovalList(pi, loginUserNo);
+		ArrayList<Approval> list = aService.userWriteApprovalList(pi, loginUser);
 		ArrayList<ApprovalLine> lineList = new ArrayList<>();
 		for(Approval a : list) {
 			
@@ -69,12 +70,15 @@ public class approvalController {
 	@RequestMapping("writeChangeCategory.ap")
 	public String writeChangeCategoryList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, String category, HttpSession session) {
 		
-		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
-		System.out.println(category);
-		int listCount = aService.writeChangeCategoryListCount(category, loginUserNo);
+		User loginUser = (User)session.getAttribute("loginUser");
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("category", category);
+		map.put("loginUser", loginUser);
+		int listCount = aService.writeChangeCategoryListCount(map);
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
-		ArrayList<Approval> list = aService.writeChangeCategoryList(pi, category, loginUserNo);
+		ArrayList<Approval> list = aService.writeChangeCategoryList(pi, map);
 		
 		ArrayList<ApprovalLine> lineList = new ArrayList<>();
 		for(Approval a : list) {			
@@ -100,12 +104,12 @@ public class approvalController {
 	@RequestMapping("receiveList.ap")
 	public String userReceiveApprovalList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, HttpSession session) {
 		
-		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		User loginUser = (User)session.getAttribute("loginUser");
 		
-		int listCount = aService.userReceiveListCount(loginUserNo);
+		int listCount = aService.userReceiveListCount(loginUser);
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
-		ArrayList<Approval> list = aService.userReceiveApprovalList(pi, loginUserNo);
+		ArrayList<Approval> list = aService.userReceiveApprovalList(pi, loginUser);
 		ArrayList<ApprovalLine> lineList = new ArrayList<>();
 		for(Approval a : list) {
 			switch(a.getApvlStatus()) {
@@ -127,12 +131,15 @@ public class approvalController {
 		@RequestMapping("receiveChangeCategory.ap")
 		public String receiveChangeCategoryList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, String category, HttpSession session) {
 			
-			int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
-			
-			int listCount = aService.receiveChangeCategoryListCount(category, loginUserNo);
+			User loginUser = (User)session.getAttribute("loginUser");
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("category", category);
+			map.put("loginUser", loginUser);
+			System.out.println(category);
+			int listCount = aService.receiveChangeCategoryListCount(map);
 			
 			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
-			ArrayList<Approval> list = aService.receiveChangeCategoryList(category, pi, loginUserNo);
+			ArrayList<Approval> list = aService.receiveChangeCategoryList(pi, map);
 			ArrayList<ApprovalLine> lineList = new ArrayList<>();
 			for(Approval a : list) {
 				switch(a.getApvlStatus()) {
@@ -188,7 +195,7 @@ public class approvalController {
 	public String enrollForm(Model model, HttpSession session) {
 		User loginUser = (User)session.getAttribute("loginUser");
 		ArrayList<Dept> dept = aService.selectDeptList(Integer.parseInt(loginUser.getComNo()));
-		ArrayList<ApprovalForm> formList = aService.selectFormList();
+		ArrayList<ApprovalForm> formList = aService.selectFormList(Integer.parseInt(loginUser.getComNo()));
 		model.addAttribute("formList", formList);
 		model.addAttribute("dept", dept);
 		return "approval/approvalEnrollForm";
@@ -515,11 +522,11 @@ public class approvalController {
 	// 작성한 전자결재 검색하기
 	@RequestMapping("writerSearch.ap")
 	public String searchWriteApproval(Model model, int cpage, String category, String keyword, HttpSession session) {
-		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		User loginUser = (User)session.getAttribute("loginUser");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("category", category);
 		map.put("keyword", keyword);
-		map.put("loginUserNo", loginUserNo);
+		map.put("loginUser", loginUser);
 		
 		int listCount = aService.searchWriteApvlListCount(map);
 		PageInfo pi = Pagination.getPageInfo(listCount, cpage, 5, 10);
@@ -551,11 +558,11 @@ public class approvalController {
 	// 수신한 전자결재 검색하기
 	@RequestMapping("receiveSearch.ap")
 	public String searchReceiveApproval(Model model, int cpage, String category, String keyword, HttpSession session) {
-		int loginUserNo = Integer.parseInt(((User)session.getAttribute("loginUser")).getUserNo());
+		User loginUser = (User)session.getAttribute("loginUser");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("category", category);
 		map.put("keyword", keyword);
-		map.put("loginUserNo", loginUserNo);
+		map.put("loginUser", loginUser);
 		
 		int listCount = aService.searchReceiveApvlListCount(map);
 		
@@ -578,6 +585,60 @@ public class approvalController {
 		model.addAttribute("category", category);
 		System.out.println(category);
 		return "approval/approvalUserReceiveList";
+	}
+	
+	// 관리자 전자결재 양식 관리
+	@RequestMapping("admin.ap")
+	public String adminApprovalForm(Model model, HttpSession session) {
+		User admin = (User)session.getAttribute("loginUser");
+		ArrayList<ApprovalForm> formList = aService.selectAllFormList(Integer.parseInt(admin.getComNo()));
+		model.addAttribute("formList", formList);
+		return "approval/adminApprovalForm";
+	}
+	
+	// 관리자 결재 양식 remove(ajax)
+	@ResponseBody
+	@RequestMapping(value="setRemoveForm.ap", produces="application/json; charset=utf-8")
+	public String ajaxRemoveForm(@RequestParam(value="apvlFormNo[]") List<Integer> apvlFormNo, int comNo) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("comNo", comNo);
+		map.put("apvlFormNo", apvlFormNo);
+		
+		int result = aService.ajaxRemoveForm(map); 
+		
+		ArrayList<ApprovalForm> formList = aService.selectAllFormList(comNo);
+
+		return new Gson().toJson(formList);
+	}
+	
+	// 관리자 결재 양식 add (ajax)
+	@ResponseBody
+	@RequestMapping(value="setAddForm.ap", produces="application/json; charset=utf-8")
+	public String ajaxAddForm(@RequestParam(value="apvlFormNo[]") List<Integer> apvlFormNo, int comNo) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("comNo", comNo);
+		map.put("apvlFormNo", apvlFormNo);
+		
+		int result = aService.ajaxAddForm(map); 
+		
+		ArrayList<ApprovalForm> formList = aService.selectAllFormList(comNo);
+		
+		return new Gson().toJson(formList);
+	}
+
+	// 관리자 결재 양식 리스트 조회(ajax)
+	@ResponseBody
+	@RequestMapping(value="formList.ap", produces="application/json; charset=utf-8")
+	public String ajaxFormList(int comNo) {
+
+		ArrayList<ApprovalForm> formList = aService.selectAllFormList(comNo);
+		return new Gson().toJson(formList);
+	}
+	
+	@RequestMapping("admin.mr")
+	public String adminMeetingRoom(Model model, HttpSession session) {
+	
+		return "meetingRoom/adminMeetingRoom";
 	}
 	
 }
