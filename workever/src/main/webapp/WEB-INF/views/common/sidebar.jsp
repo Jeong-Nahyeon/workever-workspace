@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -247,18 +248,36 @@
 				  </p>
 				</a>
 				<ul class="nav nav-treeview">
-				  <li class="nav-item">
-					<a href="./index.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>내가 작성한 결재</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="./index2.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>내가 수신한 결재</p>
-					</a>
-				  </li>
+					<c:choose>
+						<c:when test="${ loginUser.userAuth eq 'A' }">
+							<li class="nav-item">
+								<a href="admin.ap" class="nav-link">
+								  <i class="far fa-circle nav-icon"></i>
+								  <p>결재 양식 관리</p>
+								</a>
+							  </li>
+						</c:when>
+						<c:otherwise>
+							  <li class="nav-item">
+								<a href="enrollForm.ap" class="nav-link">
+								  &nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;
+								  <p>결재 작성하기</p>
+								</a>
+							  </li>
+							  <li class="nav-item">
+								<a href="writeList.ap" class="nav-link">
+								  <i class="far fa-circle nav-icon"></i>
+								  <p>내가 작성한 결재</p>
+								</a>
+							  </li>
+							  <li class="nav-item">
+								<a href="receiveList.ap" class="nav-link">
+								  <i class="far fa-circle nav-icon"></i>
+								  <p>내가 수신한 결재</p>
+								</a>
+							  </li>
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</li>
 
@@ -300,15 +319,31 @@
 			</li>
 
 			<!-- 회의실예약 -->
-			<li class="nav-item ">
-				<a href="#" class="nav-link">
-				  <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
-				  <p class="sidebar-menufont" align="center">
-					회의실예약
-					<i class="right fas fa-angle-left"></i>
-				  </p>
-				</a>
-			</li>
+			<c:choose>
+				<c:when test="${ loginUser.userAuth eq 'A' }">
+					<li class="nav-item ">
+						<a href="admin.mr" class="nav-link">
+						  <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
+						  <p class="sidebar-menufont" align="center">
+							회의실 관리
+							<i class="right fas fa-angle-left"></i>
+						  </p>
+						</a>
+					</li>
+				</c:when>
+				<c:otherwise>
+					<li class="nav-item ">
+						<a href="reservation.mr" class="nav-link">
+						  <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
+						  <p class="sidebar-menufont" align="center">
+							회의실 예약
+							<i class="right fas fa-angle-left"></i>
+						  </p>
+						</a>
+					</li>
+				</c:otherwise>
+			</c:choose>
+			
 
 			<!-- 조직도 -->
 			<li class="nav-item ">
