@@ -47,6 +47,7 @@
 		<mapper resource="/mappers/mail-mapper.xml" />
 		<mapper resource="/mappers/meetingRoom-mapper.xml" />
 		<mapper resource="/mappers/calendar-mapper.xml" />
+		<mapper resource="/mappers/chatting-mapper.xml" />
 	</mappers>
 
 </configuration>
