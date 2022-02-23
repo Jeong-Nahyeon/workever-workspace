@@ -1,4 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meetingRoomMapper">
+	<resultMap id="meetingRoomResult" type="MeetingRoom">
+		<result column="mr_code" property="mrCode"/>
+		<result column="mr_name" property="mrName"/>
+		<result column="mr_place" property="mrPlace"/>
+		<result column="mr_status" property="mrStatus"/>
+	</resultMap>
+	
+	<resultMap id="meetingRoomReservationResult" type="MeetingRoomReservation">
+		<result column="mr_reservation_no" property="mrReservationNo"/>
+		<result column="user_no" property="userNo"/>
+		<result column="mr_code" property="mrCode"/>
+		<result column="mr_reservation_date" property="mrReservationDate"/>
+		<result column="mr_start_time" property="mrStartTime"/>
+		<result column="mr_end_time" property="mrEndTime"/>
+		<result column="mr_use" property="mrUse"/>
+		<result column="mr_reservation_status" property="mrReservationStatus"/>
+		<result column="mr_name" property="mrName"/>
+		<result column="mr_place" property="mrPlace"/>
+	</resultMap>
+	
+	<update id="reservationListUpdate">
+		update
+			   meeting_room_revervation
+		   set 
+		       mr_reservation_status = 'F'
+		 where to_date(mr_reservation_date, 'YY/MM/DD') <![CDATA[ < ]]> sysdate
+		   and user_no = #{ userNo }
+	</update>
+	
+	<select id="selectMrList" resultMap="meetingRoomResult">
+		select
+		  	   mr_code
+		  	 , mr_name
+		  	 , mr_place
+		  from	  
+			   meeting_room
+		 where mr_status = 'Y'
+		   and com_no = #{comNo}
+	</select>
+	
+	<select id="selectMrReservationList" resultMap="meetingRoomReservationResult">
+		select
+		       mr_reservation_no
+		     , mr_code
+		     , mr_name
+		     , mr_reservation_date
+		     , mr_start_time
+		     , mr_end_time
+		     , mr_use
+		     , mr_reservation_status
+		  from meeting_room_revervation
+		  join meeting_room using (mr_code)
+		 where user_no = #{userNo}
+		   and com_no = #{comNo}	 
+		   and mr_reservation_status in ('R', 'F')
+	</select>
+	
+	<select id="selectEvent" resultMap="meetingRoomReservationResult">
+		select
+		       mr_reservation_no
+		     , mr_code
+		     , mr_name
+		     , mr_reservation_date
+		     , mr_start_time
+		     , mr_end_time
+		     , mr_use
+		     , mr_reservation_status
+		     , mr_place
+		  from meeting_room_revervation
+		  join meeting_room using (mr_code)
+		 where mr_reservation_no = #{reserveNo}
+	</select>
+	
+	<select id="selectTime" resultMap="meetingRoomReservationResult">
+		select
+		       substr(mr_start_time, 0, 2) as "mr_start_time"
+     		 , substr(mr_end_time, 0, 2) as "mr_end_time"
+		  from meeting_room_revervation
+		  join meeting_room using (mr_code)
+		 where com_no = #{loginUser.comNo}
+		   and mr_reservation_date = #{reserveDate}
+		   and mr_code = #{mrCode}
+	</select>
+	
+	<insert id="insertMrReservation">
+		insert
+		  into meeting_room_revervation
+		  (
+		    mr_reservation_no
+		  , user_no
+		  , mr_code
+		  , mr_reservation_date
+		  , mr_start_time
+		  , mr_end_time
+		  , mr_use
+		  )
+		  values
+		  (
+		    SEQ_MEETING_ROOM_REVERVATION.NEXTVAL
+		  , #{loginUser.userNo}
+		  , #{mr.mrCode} 
+		  , #{mr.mrReservationDate}
+		  , #{mr.mrStartTime} || ':00'
+		  , #{mr.mrEndTime} || ':00'
+		  , #{mr.mrUse}
+		  )
+	</insert>
+	
+	<update id="cancelMrReservation">
+		update
+			   meeting_room_revervation
+		   set 
+		       mr_reservation_status = 'C'
+		 where mr_reservation_no = #{mrReservationNo}
+	</update>
 </mapper>

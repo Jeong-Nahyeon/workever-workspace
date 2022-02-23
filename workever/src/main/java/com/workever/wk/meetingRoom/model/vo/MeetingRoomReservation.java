@@ -18,4 +18,7 @@ public class MeetingRoomReservation {
 	private String mrEndTime;
 	private String mrUse;
 	private String mrReservationStatus;
+	
+	private String mrName;
+	private String mrPlace;
 }
