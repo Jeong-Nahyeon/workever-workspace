@@ -70,6 +70,11 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	// 메인(로그인후)페이지 연결
+	@RequestMapping("main.do")
+	public String mianPage() {
+		return "user/main";
+	}
 
 	// 회원가입 폼 페이지 연결(관리자)
 	@RequestMapping("enrollForm.ad")

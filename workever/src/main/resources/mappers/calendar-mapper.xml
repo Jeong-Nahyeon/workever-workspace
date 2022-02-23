@@ -1,4 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="calendarMapper">
+
+	<resultMap type="Calendar" id="calendarResult">
+		<result column="ca_no" property="calNo" />
+		<result column="user_no" property="userNo" />
+		<result column="ca_title" property="calTitle" />
+		<result column="ca_memo" property="calMemo" />
+		<result column="ca_startdate" property="calStartDate" />
+		<result column="ca_enddate" property="calEndDate" />
+		<result column="ca_color" property="calColor" />
+		<result column="ca_category" property="calCategory" />
+	</resultMap>
+
+	<select id="selectCompanyCalendar" resultMap="calendarResult">
+		select
+		       ca_no
+		     , user_no
+		     , ca_title
+		     , ca_memo
+		     , ca_startdate
+		     , ca_enddate
+		     , ca_color
+		     , ca_category
+		     , com_no
+		  from calendar
+		  join users using (user_no)
+		 where ca_category = '전사'
+		   and com_no = 1
+	</select>
+	
+	<!-- 전사 일정 등록 -->
+	<select id="insertCalendarCompany">
+		insert 
+		  into calendar
+		       (
+		         ca_no
+		       , user_no
+		       , ca_title
+		       , ca_memo
+		       , ca_startdate
+		       , ca_enddate
+		       , ca_color
+		       , ca_category
+		       )
+		  values
+		       (
+		         SEQ_calendar.nextval
+		       , #{userNo}
+		       , #{calTitle}
+		       , #{calMemo}
+		       , #{calStartDate}
+		       , #{calEndDate}
+		       , #{calColor}
+		       , #{calCategory}
+		       )
+	</select>
 </mapper>
