@@ -93,6 +93,10 @@
 		width:20px;
 		height:20px;
 	}
+	
+	.modal{
+		margin-top:150px;
+	}
 
 </style>
 </head>

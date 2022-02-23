@@ -222,18 +222,18 @@ public class ApprovalDao {
 	}
 
 	// 결재 양식 remove
-	public int ajaxRemoveForm(SqlSessionTemplate session, Map<String,Object> map) {
-		return session.update("approvalMapper.removeForm", map);
+	public int ajaxRemoveForm(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.update("approvalMapper.removeForm", map);
 	}
 	
 	// 결재 양식 add
-	public int ajaxAddForm(SqlSessionTemplate session, Map<String,Object> map) {
-		return session.update("approvalMapper.addForm", map);
+	public int ajaxAddForm(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.update("approvalMapper.addForm", map);
 	}
 	
 	// 변경된 양식 정보 조회
-	public ArrayList<ApprovalForm> changeStatusFormList(SqlSessionTemplate session, Map<String,Object> map) {
-		return (ArrayList)session.selectList("approvalMapper.changeStatusFormList", map);
+	public ArrayList<ApprovalForm> changeStatusFormList(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return (ArrayList)sqlSession.selectList("approvalMapper.changeStatusFormList", map);
 	}
 	
 	

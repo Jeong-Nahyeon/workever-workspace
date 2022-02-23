@@ -78,7 +78,9 @@
 		height:18px;
 	}
 
-
+	.modal{
+		margin-top:150px;
+	}
 
 </style>
 </head>

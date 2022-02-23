@@ -77,7 +77,7 @@
 	}
 	
 	.modal{
-		margin-top:300px;
+		margin-top:150px;
 	}
 
 </style>
