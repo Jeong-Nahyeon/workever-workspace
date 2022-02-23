@@ -25,7 +25,6 @@ public class workBoard {
 	 private String boardStatus;
 	 private String workBoardWriter;
 	 private String workTitle;
-	 private String atSavePath;
 	 private String atOriginName;
 	 private String atChangeName;
 

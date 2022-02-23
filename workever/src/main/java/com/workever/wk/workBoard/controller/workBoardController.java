@@ -26,10 +26,30 @@ public class workBoardController {
 	private workBoardService wbService;
 	
 	@RequestMapping("insert.work")
-	public int insertBoard(workBoard wb, MultipartFile upfile, HttpSession session, Model model) {
-		System.out.println(wb);
+	public String insertBoard(workBoard wb, MultipartFile upfile, HttpSession session, Model model) {
+
+			
+		if(!upfile.getOriginalFilename().equals("")) {
+			
+			String changeName = saveFile(upfile, session);
+			wb.setAtOriginName(upfile.getOriginalFilename());
+			wb.setAtChangeName("resources/workBoard_upfiles/" + changeName);
+		}
 		
-		return 0;
+		System.out.println(wb);
+		System.out.println(upfile);
+		
+		int result = wbService.insertBoard(wb);
+		int result2 = wbService.insertAttachment(wb);
+		
+		if(result > 0 && result2 > 0) { 
+			session.setAttribute("alertMsg", "게시글이 등록되었습니다.");
+			return "redirect:detail.pro?proNo="+wb.getProNo();
+			
+		}else { //실패 => 에러페이지 포워딩
+			model.addAttribute("errorMsg","게시글 등록 실패");
+			return "common/errorPage";
+		}
 		
 	}
 	
@@ -37,7 +57,7 @@ public class workBoardController {
 	
 	public String saveFile(MultipartFile upfile, HttpSession session) {
 		//파일명 수정작업 후 서버에 업로드시키기("flower.png"=> "년월일시분초+랜덤숫자5개"
-		String originName = upfile.getOriginalFilename(); // "flower.png"
+		String originName = upfile.getOriginalFilename(); 
 		
 		//"년월일시분초+랜덤숫자5개"
 		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());

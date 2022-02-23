@@ -150,8 +150,9 @@
 	<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 여기부터 게시판 매퍼 -@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
 	
 	<select id="selectOther" resultMap="projectResult">
-	    select
-			    PRO_NUMBERPEOPLE
+            select
+	    		PRO_MANAGER
+			  , PRO_NUMBERPEOPLE
 			  , (
 			      select listagg(u.user_name, ', ') within group(order by u.user_name)
 	               from users u, project_member pm
@@ -188,24 +189,39 @@
 		  )
 		  VALUES(
 		    seq_workboard.nextval
-		  , PRO_NO 
-		  ,	USER_NO
-		  ,	WORK_MANAGER
-		  ,	WORK_STARTDATE
-		  ,	WORK_ENDDATE
-		  ,	WORK_STATUS
-		  ,	WORK_PRIORITY
-		  ,	WORK_PROGRESS
-		  ,	WORK_CONTENT
-		  ,	WORKBOARD_WRITER
-		  , WORK_TITLE
+		  , #{proNo} 
+		  ,	#{userNo}
+		  ,	#{workManager}
+		  ,	#{workStartDate}
+		  ,	#{workEndDate}
+		  ,	#{workStatus}
+		  ,	#{workPriority}
+		  ,	#{workProgress}
+		  ,	#{workContent}
+		  ,	#{workBoardWriter}
+		  , #{workTitle}
 		  )
-		  
-	
-	
-	
-	
 	</insert>
 	
+	<insert id="insertAttachment" >
+		insert 
+		  into ATTACHMENT
+		  ( 
+			  ATTACH_NO
+			, WORKBOARD_NO
+			, ATTACH_ORIGIN_NAME
+			, ATTACH_CHANGE_NAME
+			, ATTACH_STATUS
+		 
+		  )
+		  VALUES(
+		  	  SEQ_ATTACHMENT.nextval
+			, seq_workboard.currval
+			, #{atOriginName}
+			, #{atChangeName}
+			, 'Y'
+
+		  )
 	
+	</insert>
 </mapper>

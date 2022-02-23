@@ -98,7 +98,7 @@ public class projectController {
 		ArrayList<workBoard> list = pService.selectProject(proNo);
 		ArrayList<Project> list2 = pService.selectOther(proNo);// 참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
 		
-		//System.out.println(list);
+		System.out.println(list);
 		System.out.println(list2);
 		
 		mv.addObject("list", list)

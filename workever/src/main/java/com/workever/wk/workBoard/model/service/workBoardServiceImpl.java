@@ -24,6 +24,11 @@ public class workBoardServiceImpl implements workBoardService{
 	public int insertBoard(workBoard wb) {
 		return wbDao.insertBoard(sqlSession, wb);
 	}
+	
+	@Override // 첨부파일 입력
+	public int insertAttachment(workBoard wb) {
+		return wbDao.insertAttachment(sqlSession, wb);
+	}
 
 	@Override
 	public int increaseCount(int boardNo) {
@@ -54,5 +59,6 @@ public class workBoardServiceImpl implements workBoardService{
 	public int insertReply(Reply r) {
 		return 0;
 	}
+
 
 }

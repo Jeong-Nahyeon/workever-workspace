@@ -251,7 +251,7 @@
 						<input type="hidden" name="proNo" value= ${ proNo }>
 						<br>
 						<div>
-							<input type="text" class="workTitle" name="workTitle" id="workTitle" placeholder="업무명을 입력하세요.(50자 이내)" required>
+							<input type="text" class="workTitle" name="workTitle" id="workTitle" placeholder="업무명을 입력하세요.(50자 이내)" autocomplete='off' required>
 						</div>
 						<hr>
 						<!--진행 완료 보류 결정공간-->
@@ -274,7 +274,7 @@
 						<!--담당자 결정공간-->
 						<div>
 							<i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<select name="workManager" class="manager" style="width: 120px; height: 30px;"> 
+							<select name="workManager" id="managerArea" class="manager" style="width: 120px; height: 30px;"> 
 								<option value="이희승">이희승</option>
 								<option value="김정현">김정현</option>
 								<option value="김지우">김지우</option>
@@ -435,7 +435,11 @@
 							<hr>
 					
 							<!--업무 진행도-->
-	
+							<div class="slidecontainer">
+						 		<input type="range" name="workProgress" min="1" max="100" value="${ w.workProgress }" class="slider" id="myRange">
+						  		<p>진행도: ${ w.workProgress }<span id="value"></span></p>
+						  		
+							</div>
 	
 					
 							<hr>
@@ -456,8 +460,12 @@
 							<div>
 								<textarea name="workContent" class="workContent" readonly>${w.workContent}</textarea>
 							</div>
+							
+							
+							<!-- 첨부파일 넣는곳 -->
+							
 							<br>
-						</div>
+						</div><br><br>
 						<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기부터 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 					</c:forEach>	
 				</c:if>
@@ -491,7 +499,7 @@
 				<div class="invite"><!-- 전체 참여자-->
 					<div style=""><br>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<b>전체참여자 &nbsp; ${ list2.get(0).proNumberPeople }명</b>
+						<b>전체참여자 &nbsp; ${ list2.get(0).proNumberPeople + 1 }명</b>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
 						    초대하기
@@ -502,28 +510,53 @@
 							<div id="pjmemlist">
 									<ul>
 										<li>
-											<span class="pjusername"></span>
+											<span style="font-weight:bold" class="pjusername">${ list2.get(0).proManager }</span>
 										</li>
 									</ul>
-			
 								
-								
-								<div class="part-title">내부참여자&nbsp;</div><hr>
-									<ul>
+								<div class="part-title">내부참여자&nbsp;(${ list2.get(0).proNumberPeople })</div><hr>
+									<ul id="proMemberList">
 										<li>
-											<span class="pjusername"></span>
 											<b>홍길동</b><br><br>
-											<b>홍길동</b><br><br>
-											<b>홍길동</b><br><br>
-											<b>홍길동</b><br><br>
-											<b>홍길동</b><br><br>
-											<b>홍길동</b><br><br>
-											<b>홍길동</b><br><br>
-											
-											<b>홍길동</b>
 										</li>
+										
 									</ul>
 							</div>
+							<script>
+								$(function(){
+									var Member = '${ list2.get(0).proUserName}';
+									var MemberSplit = Member.split(',');
+									
+									let value = "";
+									
+									for(let i in MemberSplit){
+										
+										value += "<li>"
+										      +		"<b>" + MemberSplit[i] + "</b><br><br>"
+										      + "</li>";
+									}
+									$("#proMemberList").html(value);
+								})
+							
+							</script>
+							
+							<script>
+								$(function(){
+									var Member = '${ list2.get(0).proUserName}';
+									var MemberSplit = Member.split(',');
+									
+									let value = "";
+									
+									for(let i in MemberSplit){
+										
+										value += "<option value="+ MemberSplit[i] + ">" + MemberSplit[i]+ "</option>";
+									}
+									$("#managerArea").html(value);
+								})
+							
+							</script>
+							
+							
 					</div>
 				</div>
 			</div>
