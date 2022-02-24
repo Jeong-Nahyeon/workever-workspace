@@ -250,19 +250,19 @@
 							</a>
 						</li>
 						<li class="nav-item cus-li">
-							<a href="" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>
-								<p class="sidebar-li-font">부서별일정</p>
-							</a>
-						</li>
-						<li class="nav-item cus-li">
 							<a href="companyCalendar.do" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p class="sidebar-li-font">전사일정</p>
 							</a>
 						</li>
 						<li class="nav-item cus-li">
-							<a href="" class="nav-link">
+							<a href="deptCalendar.do" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p class="sidebar-li-font">부서별일정</p>
+							</a>
+						</li>
+						<li class="nav-item cus-li">
+							<a href="userCalendar.do" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p class="sidebar-li-font">개인일정</p>
 							</a>
