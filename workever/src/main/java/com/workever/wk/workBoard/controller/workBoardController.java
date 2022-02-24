@@ -53,7 +53,39 @@ public class workBoardController {
 		
 	}
 	
+	@RequestMapping("work.all")
+	public String allWork() {
+		return "project/allWorkList";
+	}
+	
+	@RequestMapping("work.my")
+	public String myWork() {
+		return "project/myWorkList";
+	}
 
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public String saveFile(MultipartFile upfile, HttpSession session) {
 		//파일명 수정작업 후 서버에 업로드시키기("flower.png"=> "년월일시분초+랜덤숫자5개"

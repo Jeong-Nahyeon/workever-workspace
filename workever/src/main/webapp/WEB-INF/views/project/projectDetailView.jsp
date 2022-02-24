@@ -47,8 +47,8 @@
 
 	}
 		input[type="radio"]:checked + label{
-		background-color: rgb(78, 115, 223);
-		color: white;
+		background-color: rgb(78, 115, 223) !important;
+		color: white !important;
 	}
 
 
@@ -274,12 +274,11 @@
 						<!--담당자 결정공간-->
 						<div>
 							<i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<select name="workManager" id="managerArea" class="manager" style="width: 120px; height: 30px;"> 
-								<option value="이희승">이희승</option>
-								<option value="김정현">김정현</option>
-								<option value="김지우">김지우</option>
-							</select>
-				
+								<select name="workManager" class="manager" style="width: 120px; height: 30px;"> 
+									<c:forTokens var="n" items="${ list2.get(0).proUserName}" delims=",">
+										<option value="${ n }">${ n }</option>
+									</c:forTokens>
+								</select>
 						</div>
 						
 						<hr>
@@ -375,7 +374,7 @@
 							<br>
 							<div style="margin-right:30px">
 								<i class="fas fa-user-circle fa-lg"></i>
-								<b>홍길동</b><br>&nbsp;&nbsp;&nbsp;&nbsp;
+								<b>${w.workBoardWriter}</b><br>&nbsp;&nbsp;&nbsp;&nbsp;
 								<span style="font-size:12px;">${w.workCreateDate }</span>
 							</div>
 							<br>
@@ -385,7 +384,7 @@
 							</div>
 							<hr>
 							<!--진행 완료 보류 결정공간-->
-							<div>
+							<div class="workBoardNo${w.workBoardNo}">
 								<i class="fab fa-firefox fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="radio" id="progress"  name="type" value="진행">
 								<label  for="progress">진행</label>
@@ -396,28 +395,38 @@
 								<input type="radio" id="hold"  name="type" value="보류">			
 								<label for="hold">보류</label>
 							</div>
-								
+							
+							
 							<script>
-	
-								$(":radio[name='type']").each(function() {
-							        if($(this).val() == '${w.workStatus}') 
-							              $(this).attr('checked', true);
-							 });
+							
+							$(".workBoardNo${w.workBoardNo} :radio[name='type']").each(function() {
+						        if($(this).val() == '${w.workStatus}') {
+						              $(this).attr('checked', true);
+						              $(this).next().css({"backgroundColor": "rgb(78, 115, 223)", "color":"white"});
+						        }
+							});
+							
 							</script>
 					
 							<hr>
 					
 							<!--담당자 결정공간-->
-							<div>
+							<div class="workBoardNo1${w.workBoardNo}">
 								<i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<select name="manager" class="manager" style="width: 120px; height: 30px;"> 
-									<option value="">이희승</option>
-									<option value="">김정현</option>
-									<option value="">김지우</option>
+									<c:forTokens var="n" items="${ list2.get(0).proUserName}" delims=",">
+										<option value="${ n }">${ n }</option>
+									</c:forTokens>
 								</select>
-					
 							</div>
 							
+							<script>
+							$(".workBoardNo1${w.workBoardNo} .manager option").each(function() {
+						        if($(this).val() == '${w.workManager}') {
+						              $(this).attr('selected', true);
+						        }
+							});
+							</script>
 							<hr>
 					
 							<!--시작날짜 공간-->
@@ -445,14 +454,22 @@
 							<hr>
 					
 							<!--업무 순위-->
-							<div>
+							<div class="workBoardNo2${w.workBoardNo}">
 								<i class="fas fa-list-ol fa-lg"></i>&nbsp;&nbsp;&nbsp;
 								<select name="workPriority" class="workrank" style="width: 120px; height: 30px;"> 
-									<option value="high">높음</option>
-									<option value="middle" selected>중간</option>
-									<option value="low">낮음</option>
+									<option value="높음">높음</option>
+									<option value="중간">중간</option>
+									<option value="낮음">낮음</option>
 								</select>
 							</div>
+							
+							<script>
+								$(".workBoardNo2${w.workBoardNo} .workrank option").each(function() {
+							        if($(this).val() == '${w.workPriority}') {
+							              $(this).attr('selected', true);
+							        }
+								});
+							</script>
 							
 							<hr>
 							
@@ -460,13 +477,21 @@
 							<div>
 								<textarea name="workContent" class="workContent" readonly>${w.workContent}</textarea>
 							</div>
-							
-							
+							<hr>
+							<div>
 							<!-- 첨부파일 넣는곳 -->
-							
+								<c:choose>
+		                    		<c:when test="${ empty w.atOriginName }">
+		                    			첨부파일이 없습니다.
+		                    		</c:when>
+		                    		<c:otherwise>
+		                        		첨부파일 <br> <a href="${ b.atChangeName }" download="${ w.atOriginName }">${ w.atOriginName }</a>
+		                    		</c:otherwise>
+	                    		</c:choose>
+							</div>
 							<br>
 						</div><br><br>
-						<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기부터 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+						<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기까지 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 					</c:forEach>	
 				</c:if>
 					
@@ -536,22 +561,6 @@
 										      + "</li>";
 									}
 									$("#proMemberList").html(value);
-								})
-							
-							</script>
-							
-							<script>
-								$(function(){
-									var Member = '${ list2.get(0).proUserName}';
-									var MemberSplit = Member.split(',');
-									
-									let value = "";
-									
-									for(let i in MemberSplit){
-										
-										value += "<option value="+ MemberSplit[i] + ">" + MemberSplit[i]+ "</option>";
-									}
-									$("#managerArea").html(value);
 								})
 							
 							</script>

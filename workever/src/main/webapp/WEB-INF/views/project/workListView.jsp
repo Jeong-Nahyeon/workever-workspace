@@ -22,9 +22,8 @@
 		top: -230px;
 		left: 20%;
 		position: relative;
-		/*border:1px solid red;*/
+		border:1px solid red;
 		width:1100px;
-		
 		
 		}
 		
@@ -67,8 +66,8 @@
 			<div class="seletor" >
 				<b style="font-size:17px">업무 구분</b><br>
 				<div style="height: 10px"></div>
-				<input type="radio" name="workDivision" value="myWork">&nbsp;&nbsp;&nbsp;내 업무<br>
-		        <input type="radio" name="workDivision" value="allWork">&nbsp;&nbsp;&nbsp;전체업무<br>
+		        <input type="radio" name="workDivision" value="1" checked>&nbsp;&nbsp;&nbsp;전체업무<br>
+				<input type="radio" name="workDivision" value="2">&nbsp;&nbsp;&nbsp;내 업무<br>
 	
 				<br><br>
 				
@@ -80,7 +79,7 @@
 			</div>
 			
 			<div class="workList">
-				<h4>내 업무(3)</h4>
+				<h4>전체 업무(3)</h4>
 				<br>
 	            <table id="workList" class="table" align="center">
 	                <thead align="center">
@@ -143,5 +142,19 @@
 	<script>
 	  $.widget.bridge('uibutton', $.ui.button)
 	</script>
+	
+	<script>
+		$("input[name=workDivision]").change(function(){
+			const formNo = $("input[name=workDivision]:checked").val();
+			console.log(formNo);
+			
+			if(formNo == 1) {				
+				$(".workList").load("work.all");
+			}else if(formNo == 2){
+				$(".workList").load("work.my");
+			}		
+		})
+	</script>
+	
 </body>
 </html>

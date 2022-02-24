@@ -33,7 +33,8 @@
 		<result column="WORKBOARD_WRITER" property="workBoardWriter" />
 		<result column="PRO_NUMBERPEOPLE" property="proNumberPeople" />
 		<result column="WORK_TITLE" property="workTitle" />
-		
+		<result column="ATTACH_ORIGIN_NAME" property="atOriginName" />
+		<result column="ATTACH_CHANGE_NAME" property="atChangeName" />
 	</resultMap>
 	
 	
@@ -142,7 +143,10 @@
 			 , TO_CHAR(WORK_CREATE_DATE,'YYYY-MM-DD') "WORK_CREATE_DATE"
 			 , WORKBOARD_WRITER
 			 , WORK_TITLE
+             , ATTACH_ORIGIN_NAME
+             , ATTACH_CHANGE_NAME
 			from WORKBOARD
+            JOIN ATTACHMENT USING (WORKBOARD_NO)
 			where PRO_NO = #{proNo}
 			  AND BOARD_STATUS='Y'
 	</select>
@@ -154,7 +158,7 @@
 	    		PRO_MANAGER
 			  , PRO_NUMBERPEOPLE
 			  , (
-			      select listagg(u.user_name, ', ') within group(order by u.user_name)
+			      select listagg(u.user_name, ',') within group(order by u.user_name)
 	               from users u, project_member pm
 			       where u.user_no = pm.user_no
 			         and p.pro_no = pm.pro_no
