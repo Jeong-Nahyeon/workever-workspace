@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="todoMapper">
+
+	<select id="selectTodoList">
+		select 
+		       todo_no
+		     , user_no
+		     , todo_title
+		     , todo_memo
+		     , todo_imp
+		     , todo_date
+		     , todo_status
+		  from todo
+		 where user_no = #{userNo}
+	</select>
+</mapper>
