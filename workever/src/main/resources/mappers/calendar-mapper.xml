@@ -56,4 +56,76 @@
 		       , #{calCategory}
 		       )
 	</select>
+	
+	<!-- 전사 일정 수정 -->
+	<update id="updateCalendarCompany">
+		update calendar
+		   set ca_title = #{calTitle}
+		     , ca_memo = #{calMemo}
+		     , ca_startdate = #{calStartDate}
+		     , ca_enddate = #{calEndDate}
+		     , ca_color = #{calColor}
+		 where ca_no = #{calNo}
+	</update>
+	
+	<!-- 전사 일정 삭제 -->
+	<delete id="deleteCalendarCompany">
+		delete 
+		  from calendar
+		 where ca_no = #{calNo}
+	</delete>
+	
+	<!-- 부서별 일정 조회 -->
+	<select id="selectDeptCalendar" resultMap="calendarResult">
+		select
+		       ca_no
+		     , user_no
+		     , ca_title
+		     , ca_memo
+		     , ca_startdate
+		     , ca_enddate
+		     , ca_color
+		     , ca_category
+		     , dept_no
+		  from calendar
+		  join users using (user_no)
+		 where ca_category = '부서'
+		   and dept_no = #{deptNo}
+		   and com_no = #{comNo}
+	</select>
+	
+	<!-- 부서 휴가 조회 -->
+	<select id="selectDeptDayoff" resultMap="calendarResult">
+		select 
+		       APVL_WRITER||'dayoff' as "CA_NO"
+		     , concat(off_start_date, ' 09:00') as "CA_STARTDATE"
+		     , concat(off_end_date, ' 18:00') as "CA_ENDDATE"
+		     , off_reason as "CA_MEMO"
+		     , concat(user_name, substr(APVL_FORM_NAME, 1, 2)) as "CA_TITLE"
+		  from users
+		  join approval on (user_no = apvl_writer)
+		  join approval_dayoff using (apvl_no)
+		  join approval_form using (APVL_FORM_NO)
+		 where dept_no = #{deptNo}
+		   and apvl_status = 'C'
+	</select>
+	
+	<!-- 개인 일정 조회 -->
+	<select id="selectUserCalendar" resultMap="calendarResult">
+		select
+		       ca_no
+		     , user_no
+		     , ca_title
+		     , ca_memo
+		     , ca_startdate
+		     , ca_enddate
+		     , ca_color
+		     , ca_category
+		     , com_no
+		  from calendar
+		  join users using (user_no)
+		 where ca_category = '개인'
+		   and com_no = #{comNo}
+		   and user_no = #{userNo}
+	</select>
 </mapper>

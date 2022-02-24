@@ -25,9 +25,40 @@ public class CalendarServiceImpl implements CalendarService{
 		return cDao.selectCompanyCalendar(sqlSession, user);
 	}
 
-	// 전사 일정 등록
+	// 일정 등록
 	@Override
-	public int insertCalendarCompany(Calendar calendar) {
-		return cDao.insertCalendarCompany(sqlSession, calendar);
+	public int insertCalendar(Calendar calendar) {
+		return cDao.insertCalendar(sqlSession, calendar);
 	}
+
+	// 일정 수정
+	@Override
+	public int updateCalendar(Calendar calendar) {
+		return cDao.updateCalendar(sqlSession, calendar);
+	}
+
+	// 일정 삭제
+	@Override
+	public int deleteCalendar(String calNo) {
+		return cDao.deleteCalendar(sqlSession, calNo);
+	}
+
+	// 부서별 일정 조회(ajax)
+	@Override
+	public ArrayList<Calendar> selectDeptCalendar(User user) {
+		return cDao.selectDeptCalendar(sqlSession, user);
+	}
+
+	// 개인 일정 조회(ajax)
+	@Override
+	public ArrayList<Calendar> selectUserCalendar(User user) {
+		return cDao.selectUserCalendar(sqlSession, user);
+	}
+
+	// 부서 휴가 조회
+	@Override
+	public ArrayList<Calendar> selectDeptDayoff(User user) {
+		return cDao.selectDeptDayoff(sqlSession, user);
+	}
+
 }

@@ -1,19 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
+
 <!-- Tempusdominus Bootstrap 4 -->
 <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.css">
 
 <!-- moment -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
 <style>
     div{box-sizing: border-box;}
     a{color: rgb(66, 66, 66);}
@@ -35,7 +34,6 @@
         float: right;
         color: white;
     }
-  
 
     /*캘린더영역*/
     #calendar{
@@ -97,23 +95,19 @@
 
     <div class="content-wrapper">
         <div class="content-title">
-            <span>전사캘린더</span>
-            <c:if test="${loginUser.userAuth eq 'A'}">
+            <span>내 캘린더</span>
                 <button id="btn-insertCompanyCal">일정등록하기</button>
-            </c:if>
         </div>
         
 
         <div class="containder-fluid">
-           
-                <div class="col-md-9" style="margin: auto;">
-                    <div class="card">
-                        <div class="card-body p-0">
-                            <div id="calendar"></div>
-                        </div>
+            <div class="col-md-9" style="margin: auto;">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div id="calendar"></div>
                     </div>
                 </div>
-            
+            </div>
         </div>
     </div>
 
@@ -150,14 +144,14 @@
                     <div class="cal-date">
                         
                     </div>
-                    <c:if test="${loginUser.userAuth eq 'A'}">
-                        <div class="cal-button">
-                            <div>
-                                <a href="#" id="btn-updateCal"><i class="fas fa-align-justify update"></i></a>
-                                <a href="#" id="btn-deleteCal"><i class="far fa-trash-alt delete"></i></a>
-                            </div>
+                    
+                    <div class="cal-button">
+                        <div>
+                            <a href="#" id="btn-updateCal"><i class="fas fa-align-justify update"></i></a>
+                            <a href="#" id="btn-deleteCal"><i class="far fa-trash-alt delete"></i></a>
                         </div>
-                    </c:if>
+                    </div>
+                    
                     <div style="border-bottom: 1px solid lightgray;">
                         <div class="cal-memo">
                             <span>메모 : </span>
@@ -168,7 +162,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- 일정 등록 모달 -->
     <div class="modal" id="modal-inserCal">
         <div class="modal-dialog modal-dialog-centered">
@@ -191,7 +185,7 @@
                 <form method="post" class="CalendarForm">
                     <div class="modal-body">
                         <input type="hidden" id="userNo" name="userNo" value="${loginUser.userNo}">
-                        <input type="hidden" name="calCategory" value="전사">
+                        <input type="hidden" name="calCategory" value="개인">
                         <input type="hidden" name="calNo" id="calNo">
                         <input type="hidden" id="submitCheck" value="">
                         <div class="form-group">
@@ -372,11 +366,11 @@
                         url: 'calendarlist.cal',
                         data: {
                             user: '${loginUser}',
-                            category : '전사'
+                            category : '개인'
                         },
                         dataType: 'json',
                         success: function (result) {
-                            //console.log(result);
+                            console.log(result);
                             
                             for(var cal in result){
                                 var id = result[cal].calNo;
@@ -402,7 +396,9 @@
                         }, error: function () {
 
                         }
-                    })
+                    }) // ajax 끝
+
+                    
                 ], // events 끝
                 
                 eventClick:function(info){
@@ -414,6 +410,7 @@
                     var endDate = moment(info.event._instance.range.end).utc().format('YYYY-MM-DD');
                     var allDate = startDate + ' ~ ' + endDate;
                     var memo = info.event._def.extendedProps.description;
+                    var id = info.event._def.publicId;
 
                     $('#cal-selectDay').text(titleDate);
                     $(".cal-title").text(info.event._def.title);
@@ -422,7 +419,12 @@
                     $('.colorCode').val(info.event._def.ui.backgroundColor);
                     $('.startDate-val').val(moment(info.event._instance.range.start).utc().format('YYYY-MM-DD HH:mm'))
                     $('.endDate-val').val(moment(info.event._instance.range.end).utc().format('YYYY-MM-DD HH:mm'))
-                    $('.cal-id').val(info.event._def.publicId);
+                    $('.cal-id').val(id);
+                    if(id.indexOf('dayoff') == -1){
+                        $('.cal-button>div').show();
+                    }else{
+                        $('.cal-button>div').hide();
+                    }
                     if(memo != null){
                         $('.cal-memoContent').text(info.event._def.extendedProps.description);
                     }else{
@@ -545,7 +547,7 @@
                 $('#endDate>input').val(root.siblings('.endDate-val').val());
                 $('#calMemo').val(root.siblings().children('.cal-memo').children('.cal-memoContent').text());
                 $('#checkDate').val('true');
-
+                
                 $('#submitCheck').val('update');
 
                 $('#modal-inserCal').modal({backdrop: 'static', keyboard: false});

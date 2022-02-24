@@ -17,7 +17,32 @@ public class CalendarDao {
 	}
 	
 	// 전사 일정 등록
-	public int insertCalendarCompany(SqlSessionTemplate sqlSession, Calendar calendar) {
+	public int insertCalendar(SqlSessionTemplate sqlSession, Calendar calendar) {
 		return sqlSession.insert("calendarMapper.insertCalendarCompany", calendar);
+	}
+	
+	// 전사 일정 수정
+	public int updateCalendar(SqlSessionTemplate sqlSession, Calendar calendar) {
+		return sqlSession.update("calendarMapper.updateCalendarCompany", calendar);
+	}
+	
+	// 전사 일정 삭제
+	public int deleteCalendar(SqlSessionTemplate sqlSession, String calNo) {
+		return sqlSession.delete("calendarMapper.deleteCalendarCompany", calNo);
+	}
+	
+	// 	부서별 일정 조회(ajax)
+	public ArrayList<Calendar> selectDeptCalendar(SqlSessionTemplate sqlSession, User user){
+		return (ArrayList)sqlSession.selectList("calendarMapper.selectDeptCalendar", user);
+	}
+	
+	// 부서 휴가 조회
+	public ArrayList<Calendar> selectDeptDayoff(SqlSessionTemplate sqlSession, User user){
+		return (ArrayList)sqlSession.selectList("calendarMapper.selectDeptDayoff", user);
+	}
+	
+	// 개인 일정 조회(ajax)
+	public ArrayList<Calendar> selectUserCalendar(SqlSessionTemplate sqlSession, User user){
+		return (ArrayList)sqlSession.selectList("calendarMapper.selectUserCalendar", user);
 	}
 }
