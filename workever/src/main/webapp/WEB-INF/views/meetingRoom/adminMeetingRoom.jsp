@@ -20,7 +20,7 @@
 		#meetingRoom-area{
 		/* border:1px solid black; */
 		margin:auto;
-		width:1150px;
+		width:1050px;
 		padding-top:50px;
 		padding-bottom:100px;
 		}
