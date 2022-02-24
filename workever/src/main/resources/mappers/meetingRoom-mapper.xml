@@ -55,7 +55,14 @@
 		  join meeting_room using (mr_code)
 		 where user_no = #{userNo}
 		   and com_no = #{comNo}	 
-		   and mr_reservation_status in ('R', 'F')
+		   <choose>
+		   	  <when test='userAuth == "A"'>
+		   	  	   and mr_reservation_status in ('D', 'F')
+		   	  </when>
+			  <otherwise>
+				   and mr_reservation_status in ('R', 'F')
+			  </otherwise>
+		   </choose>
 	</select>
 	
 	<select id="selectEvent" resultMap="meetingRoomReservationResult">
@@ -83,6 +90,7 @@
 		 where com_no = #{loginUser.comNo}
 		   and mr_reservation_date = #{reserveDate}
 		   and mr_code = #{mrCode}
+		   and mr_reservation_status in ('R', 'D')
 	</select>
 	
 	<insert id="insertMrReservation">
@@ -116,4 +124,66 @@
 		       mr_reservation_status = 'C'
 		 where mr_reservation_no = #{mrReservationNo}
 	</update>
+	
+	<insert id="adminMeetingRoomDisabled">
+		insert
+		  into meeting_room_revervation
+		  (
+		    mr_reservation_no
+		  , user_no
+		  , mr_code
+		  , mr_reservation_date
+		  , mr_start_time
+		  , mr_end_time
+		  , mr_use
+		  , mr_reservation_status
+		  )
+		  values
+		  (
+		    SEQ_MEETING_ROOM_REVERVATION.NEXTVAL
+		  , #{loginUser.userNo}
+		  , #{mr.mrCode} 
+		  , #{mr.mrReservationDate}
+		  , #{mr.mrStartTime} || ':00'
+		  , #{mr.mrEndTime} || ':00'
+		  , '비활성'
+		  , 'D'
+		  )
+	</insert>
+	
+	<update id="mrDelete">
+		update
+			   meeting_room
+		   set 
+		       mr_status = 'N'
+		 where mr_code = #{mrCode}
+	</update>
+	
+	<update id="mrUpdate">
+		update
+			   meeting_room
+		   set 
+		       mr_name = #{mrName}
+		     , mr_place = #{mrPlace}
+		 where mr_code = #{mrCode}
+	</update>
+	
+	<insert id="mrAdd">
+		insert
+		  into meeting_room
+		  (
+		    mr_code
+		  , mr_name
+		  , mr_place
+		  , com_no
+		  )
+		  values
+		  (
+		    SEQ_MEETING_ROOM.NEXTVAL
+		  , #{mrName}
+		  , #{mrPlace}
+		  , #{comNo}
+		  )
+		      
+	</insert>
 </mapper>

@@ -634,11 +634,6 @@ public class approvalController {
 		ArrayList<ApprovalForm> formList = aService.selectAllFormList(comNo);
 		return new Gson().toJson(formList);
 	}
-	
-	@RequestMapping("admin.mr")
-	public String adminMeetingRoom(Model model, HttpSession session) {
-	
-		return "meetingRoom/adminMeetingRoom";
-	}
+
 	
 }

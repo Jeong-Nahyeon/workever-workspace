@@ -32,4 +32,16 @@ public interface MeetingRoomService {
 	
 	// 회의실 예약 취소
 	int cancelMrReservation(int mrReservationNo);
+	
+	// 관리자 회의실 비활성화
+	int adminMeetingRoomDisabled(Map<String,Object> map);
+	
+	// 관리자 회의실 삭제
+	int mrDelete(int mrCode);
+	
+	// 관리자 회의실 수정
+	int mrUpdate(MeetingRoom mr);
+	
+	// 관리자 회의실 추가
+	int mrAdd(MeetingRoom mr);
 }

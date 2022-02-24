@@ -3,8 +3,6 @@ package com.workever.wk.meetingRoom.model.service;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +62,31 @@ public class MeetingRoomServiceImpl implements MeetingRoomService{
 	public int cancelMrReservation(int mrReservationNo) {
 		return mDao.cancelMrReservation(sqlSession, mrReservationNo);
 	}
+
+	// 관리자 회의실 비활성화
+	@Override
+	public int adminMeetingRoomDisabled(Map<String, Object> map) {
+		return mDao.adminMeetingRoomDisabled(sqlSession, map);
+	}
+
+	// 관리자 회의실 삭제
+	@Override
+	public int mrDelete(int mrCode) {
+		return mDao.mrDelete(sqlSession, mrCode);
+	}
+
+	// 관리자 회의실 수정
+	@Override
+	public int mrUpdate(MeetingRoom mr) {
+		return mDao.mrUpdate(sqlSession, mr);
+	}
+
+	// 관리자 회의실 추가
+	@Override
+	public int mrAdd(MeetingRoom mr) {
+		return mDao.mrAdd(sqlSession, mr);
+	}
+	
+	
 
 }

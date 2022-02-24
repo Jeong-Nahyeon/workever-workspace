@@ -47,4 +47,24 @@ public class MeetingRoomDao {
 	public int cancelMrReservation(SqlSessionTemplate sqlSession, int mrReservationNo) {
 		return sqlSession.update("meetingRoomMapper.cancelMrReservation", mrReservationNo);
 	}
+	
+	// 관리자 회의실 비활성호
+	public int adminMeetingRoomDisabled(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		return sqlSession.insert("meetingRoomMapper.adminMeetingRoomDisabled", map);
+	}
+	
+	// 관리자 회의실 삭제
+	public int mrDelete(SqlSessionTemplate sqlSession, int mrCode) {
+		return sqlSession.update("meetingRoomMapper.mrDelete", mrCode);
+	}
+	
+	// 관리자 회의실 수정
+	public int mrUpdate(SqlSessionTemplate sqlSession, MeetingRoom mr) {
+		return sqlSession.update("meetingRoomMapper.mrUpdate", mr);
+	}
+	
+	// 관리자 회의실 추가
+	public int mrAdd(SqlSessionTemplate sqlSession, MeetingRoom mr) {
+		return sqlSession.insert("meetingRoomMapper.mrAdd", mr);
+	}
 }

@@ -15,4 +15,5 @@ public class MeetingRoom {
 	private String mrPlace;
 	private String mrStatus;
 	
+	private int comNo;
 }
