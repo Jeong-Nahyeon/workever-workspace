@@ -2,4 +2,274 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="mailMapper">
 
+	<resultMap id="mailResult" type="Mail">
+		<result column="ms_no" property="msNo" />
+		<result column="ms_user_no" property="msUserNo" />
+		<result column="ms_sender" property="msSender" />
+		<result column="ms_title" property="msTitle" />
+		<result column="ms_content" property="msContent" />
+		<result column="ms_date" property="msDate" />
+		<result column="ms_folder" property="msFolder" />
+		<result column="ms_status" property="msStatus" />
+		<result column="ms_file_count" property="msFileCount" />
+		<result column="mr_no" property="mrNo" />
+		<result column="mr_ms_no" property="mrMsNo" />
+		<result column="mr_user_no" property="mrUserNo" />
+		<result column="mr_receiver" property="mrReceiver" />
+		<result column="mr_cc" property="mrCC" />
+		<result column="mr_read" property="mrRead" />
+		<result column="mr_folder" property="mrFolder" />
+		<result column="mr_status" property="mrStatus" />
+		<result column="ms_dept_name" property="msDeptName" />
+		<result column="ms_user_rank" property="msUserRank" />
+		<result column="ms_user_name" property="msUserName" />
+		<result column="mr_dept_name" property="mrDeptName" />
+		<result column="mr_user_rank" property="mrUserRank" />
+		<result column="mr_user_name" property="mrUserName" />
+	</resultMap>
+	
+	<resultMap id="mailFilesResult" type="MailFiles">
+		<result column="mf_no" property="mfNo" />
+		<result column="mf_ms_no" property="mfMsNo" />
+		<result column="mf_origin_name" property="mfOriginName" />
+		<result column="mf_change_name" property="mfChangeName" />
+		<result column="mf_path" property="mfPath" />
+	</resultMap>
+	
+	<select id="selectIncomingMailListCount" resultType="_int">
+		select
+		       count(*)
+		  from mail_receive
+		  join mail_send on (mr_ms_no = ms_no)
+		  join users u on (ms_user_no = user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		 where mr_user_no = #{userNo} 
+		   and mr_status = 'Y'
+		   and mr_folder = 'R'
+	</select>
+
+	<select id="selectIncomingMailList" resultMap="mailResult">
+		select
+		       mr_no
+		     , mr_ms_no
+		     , mr_user_no
+		     , ms_user_no
+		     , dept_name as "ms_dept_name"
+		     , user_rank as "ms_user_rank"
+		     , user_name as "ms_user_name"
+		     , mr_receiver
+		     , mr_read
+		     , ms_title
+		     , to_char(ms_date, 'YY-MM-DD HH:MI:SS') as "ms_date"
+		     , ms_file_count
+		  from mail_receive
+		  join mail_send on (mr_ms_no = ms_no)
+		  join users u on (ms_user_no = user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		 where mr_user_no = #{userNo} 
+		   and mr_status = 'Y'
+		   and mr_folder = 'R'
+		 order
+		    by mr_no desc
+	</select>
+	
+	<update id="deleteTrashIncomingMail">
+		update
+			   mail_receive
+		   set mr_folder = 'D'
+		 where  mr_status = 'Y'
+		   and mr_no = #{mrNo}  	   
+	</update>
+	
+	<update id="updateRead">
+		update
+			   mail_receive
+		   set mr_read = 'Y'
+		 where mr_status = 'Y'
+		   and mr_no = #{mrNo}  	   
+	</update>
+	
+	<update id="updateNoRead">
+		update
+			   mail_receive
+		   set mr_read = 'N'
+		 where mr_status = 'Y'
+		   and mr_no = #{mrNo}  	   
+	</update>
+	
+	<select id="selectIncomingMail" resultMap="mailResult">
+		select
+		       mr_no
+		     , mr_user_no
+		     , mr_receiver
+		     , mr_read
+		     , mr_ms_no     
+		     , ms_user_no
+		     , dept_name as "ms_dept_name"
+		     , user_rank as "ms_user_rank"
+		     , user_name as "ms_user_name"
+		     , ms_sender
+		     , ms_title
+		     , ms_content
+		     , to_char(ms_date, 'YY-MM-DD HH:MI:SS') as "ms_date"
+		  from mail_receive
+		  join mail_send on (mr_ms_no = ms_no)
+		  join users u on (ms_user_no = user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		 where mr_status = 'Y' 
+		   and mr_no = ${mrNo}
+	</select>
+	
+	<select id="selectCcList" resultMap="mailResult">
+		select
+		       mr_user_no
+		     , dept_name as "mr_dept_name"
+		     , user_rank as "mr_user_rank"
+		     , user_name as "mr_user_name"
+		     , mr_receiver
+		  from mail_receive
+		  join users u on (mr_user_no = user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		 where mr_ms_no = #{msNo}
+		   and mr_cc = 'Y'
+	</select>
+	
+	<select id="selectMailFileList" resultMap="mailFilesResult">
+		select
+		       mf_no
+		     , mf_origin_name
+		     , mf_change_name
+		     , mf_path
+		  from mail_files
+		 where mf_ms_no = #{msNo}
+	</select>
+	
+	<select id="selectOutgoingMailListCount" resultType="_int">
+		select
+		       count(*)
+		  from mail_send
+		 where ms_status = 'Y'
+		   and ms_user_no = #{msUserNo}
+	</select>
+	
+	<select id="selectOutgoingMailList" resultMap="mailResult">
+		select
+		       ms_no
+		     , ms_user_no
+		     , ms_title
+		     , to_char(ms_date, 'YY-MM-DD HH:MI:SS') as "ms_date"
+		     , ms_file_count
+		  from mail_send
+		 where ms_status = 'Y'
+		   and ms_user_no = #{msUserNo}
+	</select>
+	
+	<select id="selectOutgoingMail" resultMap="mailResult">
+		select
+		       ms_no
+		     , ms_sender       
+		     , ms_title
+		     , ms_content
+		     , to_char(ms_date, 'YY-MM-DD HH:MI:SS') as "ms_date"
+		  from mail_send
+		 where ms_status = 'Y'
+		   and ms_no = #{msNo}
+	</select>
+	
+	<select id="selectReceiveList" resultMap="mailResult">
+		select
+		       mr_no
+		     , mr_user_no
+		     , dept_name as "mr_dept_name"
+		     , user_rank as "mr_user_rank"
+		     , user_name as "mr_user_name"
+		     , mr_receiver
+		     , mr_ms_no
+		  from mail_receive
+		  join users on (mr_user_no = user_no)
+		  join dept using (dept_no)
+		 where mr_ms_no = #{msNo}
+		   and mr_cc = 'N'
+	</select>
+	
+	<update id="deleteOutgoingMailList">
+		update
+			   mail_send
+		   set ms_status = 'N'
+		 where ms_no = #{msNo}
+	</update>
+	
+	<select id="selectTrashMailListCount" resultType="_int">
+		select
+		       count(*)
+		  from mail_receive
+		  join mail_send on (mr_ms_no = ms_no)
+		  join users u on (ms_user_no = user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		 where mr_user_no = #{mrUserNo} 
+		   and mr_status = 'Y'
+		   and mr_folder = 'D'
+	</select>
+
+	<select id="selectTrashMailList" resultMap="mailResult">
+		select
+		       mr_no
+		     , mr_ms_no
+		     , mr_user_no
+		     , ms_user_no
+		     , dept_name as "ms_dept_name"
+		     , user_rank as "ms_user_rank"
+		     , user_name as "ms_user_name"
+		     , mr_receiver
+		     , mr_read
+		     , ms_title
+		     , to_char(ms_date, 'YY-MM-DD HH:MI:SS') as "ms_date"
+		     , ms_file_count
+		  from mail_receive
+		  join mail_send on (mr_ms_no = ms_no)
+		  join users u on (ms_user_no = user_no)
+		  join dept d on (u.dept_no = d.dept_no)
+		 where mr_user_no = #{mrUserNo} 
+		   and mr_status = 'Y'
+		   and mr_folder = 'D'
+		 order
+		    by mr_no desc
+	</select>
+	
+	<update id="deleteIncomingMailList">
+		update
+			   mail_receive
+		   set mr_status = 'N'
+		 where mr_no = #{mrNo}  	   
+	</update>
+	
+	<select id="selectExistingSenderMailCount" resultType="_int">
+		select count(*)
+		  from mail_send
+		 where ms_status = 'Y'
+		   and ms_no = #{msNo}
+	</select>
+	
+	<select id="selectExistingReceiverMailCount" resultType="_int">
+		select
+		       count(*) 
+		  from mail_receive
+		 where mr_status = 'Y'
+		   and mr_ms_no = #{msNo}
+	</select>
+	
+	<delete id="deleteMailFileList">
+		delete
+		  from mail_files
+		 where mf_ms_no = #{msNo} 
+	</delete>
+	
+	<update id="updateToInbox">
+		update
+		       mail_receive
+		   set mr_folder = 'R'
+		 where mr_status = 'Y'
+		   and mr_no = #{mrNo}      
+	</update>
+		
 </mapper>

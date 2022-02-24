@@ -1,5 +1,61 @@
 package com.workever.wk.mail.model.service;
 
-public interface MailService {
+import java.util.ArrayList;
 
+import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.mail.model.vo.Mail;
+import com.workever.wk.mail.model.vo.MailFiles;
+
+public interface MailService {
+	
+	// 받은메일함
+	
+	// 받은메일함 서비스
+	int selectIncomingMailListCount(String mrUserNo); // 받은메일 총 개수
+	ArrayList<Mail> selectIncomingMailList(PageInfo pi, String mrUserNo); // 받은메일 목록 조회
+	
+	// 받은메일 삭제(삭제메일함으로 이동) 서비스
+	int deleteTrashIncomingMail(String mrNo); // 받은메일 삭제(삭제메일함으로 이동)
+	
+	// 메일 읽음/안읽음 처리 서비스
+	int updateRead(String mrNo); // 읽음 처리
+	int updateNoRead(String mrNo); // 안읽음 처리
+	
+	// 받은메일 서비스
+	Mail selectIncomingMail(Mail m); // 받은메일 상세 조회
+	ArrayList<Mail> selectCcList(String msNo); // 참조자 목록 조회
+	ArrayList<MailFiles> selectMailFileList(String msNo); // 첨부파일 목록 조회
+	
+	
+	// 보낸메일함
+	
+	// 보낸메일함 서비스
+	int selectOutgoingMailListCount(String msUserNo); // 보낸메일 총 개수
+	ArrayList<Mail> selectOutgoingMailList(PageInfo pi, String msUserNo); // 보낸메일 목록 조회
+	
+	// 보낸메일 삭제 서비스
+	int deleteOutgoingMailList(String msNo); // 보낸메일 완전 삭제
+	
+	// 보낸메일 서비스
+	Mail selectOutgoingMail(String msNo); // 보낸메일 상세 조회
+	ArrayList<Mail> selectReceiveList(String msNo); // 수신자 목록 조회
+	
+	
+	
+	// 삭제메일함
+	
+	// 삭제메일함 서비스
+	int selectTrashMailListCount(String mrUserNo); // 삭제 메일 총 개수
+	ArrayList<Mail> selectTrashMailList(PageInfo pi, String mrUserNo); // 삭제메일 목록 조회
+	
+	// 메일 완전 삭제 서비스
+	int deleteIncomingMailList(String mrNo); // 받은메일 완전 삭제
+	int selectExistingSenderMailCount(String msNo); // 완전 삭제 안된 발신자 메일 수
+	int selectExistingReceiverMailCount(String msNo); // 완전 삭제 안된 수신자/참조자 메일 수
+	int deleteMailFileList(String msNo); // 발신자 및 수신자, 참조자 메일 완전 삭제 시 첨부파일 삭제
+	int deleteOutGoingMailList(String msNo); // 보낸메일 완전 삭제
+	
+	// 삭제메일함에서 받은메일함으로 메일 이동 서비스
+	int updateToInbox(String mrNo); // 받은메일함으로 메일 이동
+	
 }

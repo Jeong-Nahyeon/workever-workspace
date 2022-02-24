@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+        
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,7 @@
 <title>보낸메일</title>
 
 <jsp:include page="../common/links.jsp" />
+<jsp:include page="../common/scripts.jsp" />
 
 <style>
 	
@@ -76,6 +80,15 @@
       font-size: 13px;
       font-weight:600 !important;
     }
+    
+    /* 설정한 영역 범위 넘어가면 ...으로 표시  */
+    .hide-area{
+      width:900px;
+      height:35px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }    
 
 
     /* 메일 내용 영역 */
@@ -101,6 +114,35 @@
     .btns-area button:hover{
         color: white;
     }  
+
+    /* 요청처리 여부 확인 모달창 영역 */
+    #confirm-modal h6{
+      margin-left:220px;
+    }
+
+    #confirm-modal .modal-body{
+      height:130px;
+      text-align:center;
+      line-height:100px;
+    }
+   
+    .confirm-modal-btns{
+      /* border:1px solid red; */
+      display: inline-block;
+      margin-right:160px;
+    }
+    
+    .confirm-modal-btns button{
+      
+      width:75px;
+      
+    }
+
+    #confirm-btn{
+      border:1px solid #4E73DF;
+      background: #4E73DF;
+      color: white;
+    }
 
 </style>
 </head>
@@ -134,59 +176,107 @@
 		
 		            <!-- 삭제 버튼 영역 -->
 		            <div class="card-header mail-btns-area"> 
-		              <button class="btn btn-sm">삭제</button>
+		              <button type="button" id="delete-btn" class="btn btn-sm" onclick="postFormSubmit();">완전삭제</button>
 		            </div>
 		            <!-- /.card-header -->
-		
+					<!-- 완전삭제 버튼 클릭 시 발신메일번호 post 방식으로 전달 -->
+					<form id="postForm" method="post">
+						<input type="hidden" name="msNo" value="${ mail.msNo }" /> 
+					</form>
+					
 		            <div class="card-body">
-		
 		              <table id="mail-detail">
 		                <thead>
 		                  <tr>
-		                    <th style="padding-top:0">보낸사람</th>
-		                    <td style="padding-top:0">홍길동</td>
+		                    <th style="padding-top:0; width:170px;">보낸사람</th>
+		                    <td style="padding-top:0">${ loginUser.userName }</td>
 		                  </tr>
 		                  <tr>
 		                    <th>제목</th>
-		                    <td>메일제목들어가는자리</td>
-		                  </tr>
-		                    <th>발신일시</th>
-		                    <td>2022-00-00 00:00</td>
+		                    <td>${ mail.msTitle }</td>
 		                  </tr>
 		                  <tr>
-		                    <th>받는사람</th>
+		                    <th>발신일시</th>
+		                    <td>${ mail.msDate }</td>
+		                  </tr>
+		                  <tr>
+		                    <th>
+		                    	받는사람
+		                    	<button type="button" id="r-control-btn" class="btn btn-sm btn-default">▼</button>
+		                    </th>
 		                    <td>
 		                      <div class="receivers-area">
-		                        <span>
-		                        <span>
-		                          <label>김말똥 &lt;workever_f@gmail.com&gt;</label>
-		                        </span>
+		                        <c:forEach var="r" items="${ receiverList }">
+			                        <span>
+			                          <label>
+			                          	<c:choose>
+				                          	<c:when test="${ not empty r.mrUserName }">
+				                          		<c:if test="${ r.mrDeptName ne '임원' }">
+				                          			${ r.mrUserName }
+				                          		</c:if>
+				                          		${ r.mrUserRank }
+				                          		${ r.mrUserName }
+					                          	&lt;${ r.mrReceiver }&gt;
+				                          	</c:when>
+				                          	<c:otherwise>
+				                          		${ r.mrReceiver }
+				                          	</c:otherwise>
+			                          	</c:choose>
+			                          </label>
+			                        </span>
+		                        </c:forEach>
 		                      </div>
 		                    </td>
 		                  </tr>
 		                  <tr>
 		                    <th> <!-- ▼ 버튼 누르면 토글로 열려야함 -->
-		                      참조
-		                      <button class="btn btn-sm btn-default">▼</button>
+		                     	 참조
+		                      <button type="button" id="cc-control-btn" class="btn btn-sm btn-default">▼</button>
 		                    </th>
 		                    <td>
 		                      <div class="cc-area">
-		                        <span>
-		                          <label>workever_b@gmail.com</label>
-		                        </span>
-		                        <span>
-		                          <label>김말순 &lt;workever_g@gmail.com&gt;</label>
-		                        </span>
-		                        <span>
-		                          <label>workever_d@gmail.com</label>
-		                        </span>
+		                        <c:choose>
+		                      		<c:when test="${ empty ccList }">
+		                      			참조자 없음
+			                        </c:when>
+			                        <c:otherwise>
+			                        	<c:forEach var="cc" items="${ ccList }">
+					                        <span>
+					                          <label>
+					                          	<c:choose>
+						                          	<c:when test="${ not empty cc.mrUserName }">
+						                          		<c:if test="${ cc.mrDeptName ne '임원' }">
+						                          			${ cc.mrUserName }
+						                          		</c:if>
+						                          		${ cc.mrUserRank }
+						                          		${ cc.mrUserName }
+							                          	&lt;${ cc.mrReceiver }&gt;
+						                          	</c:when>
+						                          	<c:otherwise>
+						                          		${ cc.mrReceiver }
+						                          	</c:otherwise>
+					                          	</c:choose>
+					                          </label>
+					                        </span>
+				                        </c:forEach>
+			                        </c:otherwise>
+		                        </c:choose>
 		                      </div>
 		                    </td>
 		                  </tr>
 		                  <tr>
 		                    <th>첨부파일</th>
 		                    <td>
-		                      <a href="#">dddddd.jpg</a>
+		                      <c:choose>
+								<c:when test="${ empty mailFileList }">
+									첨부파일 없음
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="mf" items="${ mailFileList }">
+										<a href="${ mf.mfPath }${ mf.mfChangeName }" download="${ mf.mfOriginName }" >${ mf.mfOriginName }</a><br>
+									</c:forEach>
+								</c:otherwise>
+							  </c:choose>
 		                    </td>
 		                  </tr>
 		                  <tr align="center">
@@ -195,32 +285,9 @@
 		                  <tr>
 		                </thead>
 		                <tbody>
+		                  <tr>
 		                    <td colspan="2">
-		                      <div class="mail-content-area">
-		                        <h1><u>Heading Of Message</u></h1>
-		                        <h4>Subheading</h4>
-		                        <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
-		                          was born and I will give you a complete account of the system, and expound the actual teachings
-		                          of the great explorer of the truth, the master-builder of human happiness. No one rejects,
-		                          dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
-		                          how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
-		                          is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
-		                          but because occasionally circumstances occur in which toil and pain can procure him some great
-		                          pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
-		                          except to obtain some advantage from it? But who has any right to find fault with a man who
-		                          chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
-		                          produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
-		                          dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
-		                          blinded by desire, that they cannot foresee</p>
-		                        <ul>
-		                          <li>List item one</li>
-		                          <li>List item two</li>
-		                          <li>List item three</li>
-		                          <li>List item four</li>
-		                        </ul>
-		                        <p>Thank you,</p>
-		                        <p>John Doe</p>
-		                    </div>
+		                      <div class="mail-content-area">${ mail.msContent }</div>
 		                    </td>
 		                  </tr>
 		               </tbody>
@@ -229,11 +296,11 @@
 		            <!-- /.card-body -->
 		
 		
-		          <!-- 페이징 처리 영역 -->
+		          <!-- 목록 버튼 영역 -->
 		          <div class="card-footer">
 		
 		            <div class="btns-area">
-		              <button class="btn btn-sm">목록</button>
+		              <button type="button" class="btn btn-sm" onclick="location.href='outbox.mail';">목록</button>
 		            </div>
 		
 		          </div>
@@ -257,7 +324,101 @@
     </div>
     <!-- ./wrapper -->
 
-	<jsp:include page="../common/scripts.jsp" />
 
+
+    <!-- 요청처리 여부 확인 모달창 -->
+	<!-- The Modal -->
+	<div class="modal fade" id="confirm-modal">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	    
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h6 class="modal-title"><b>확인</b></h6>
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	        <b id="modal-massege">삭제하시겠습니까?</b>
+	      </div>
+	      
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	          <div class="confirm-modal-btns">
+	            <button class="btn btn-sm btn-default" data-dismiss="modal">취소</button>
+	            <button id="confirm-btn" class="btn btn-sm">확인</button>
+	          </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+	</div>	
+	
+	
+	
+	<script>
+		
+		$(function(){
+			
+			// 보낸사람 영역 버튼 클릭 시 (수신자 목록 숨기기/보이기)
+			$("#r-control-btn").click(function(){
+				
+				const $rArea = $(this).parent().next().find("div");
+				
+				if($rArea.hasClass("hide-area")){
+					
+					$rArea.removeClass("hide-area");
+					$(this).text("▲");
+					
+				}else{
+					
+					
+					$rArea.addClass("hide-area");
+					$(this).text("▼");
+				}
+		
+			});
+			
+			// 참조 영역 버튼 클릭 시 (참조자 목록 숨기기/보이기)
+			$("#cc-control-btn").click(function(){
+				
+				const $ccArea = $(this).parent().next().find("div");
+				
+				if($ccArea.hasClass("hide-area")){
+					
+					$ccArea.removeClass("hide-area");
+					$(this).text("▲");
+					
+				}else{
+					
+					
+					$ccArea.addClass("hide-area");
+					$(this).text("▼");
+				}
+		
+			});
+			
+		});
+		
+		
+		
+	  // 완전삭제 버튼 클릭 시 post 방식으로 게시글 번호 전달
+	  function postFormSubmit(){
+		  
+	    // 요청처리 여부 확인 모달창 오픈
+        $("#confirm-modal").modal({backdrop: "static"});
+      
+		  // 확인 버튼 클릭 시 완전삭제 요청 처리
+	      $("#confirm-btn").click(function(){
+	    	
+	      $("#postForm").attr("action", "deleteog.mail").submit();
+		      
+		});
+		  
+	  }
+
+	</script>
+	
 </body>
 </html>
