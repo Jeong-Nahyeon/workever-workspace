@@ -7,6 +7,10 @@ import com.workever.wk.user.model.vo.User;
 
 public interface ChattingService {
 	
+	// 주소록
 	int abSelectListCount();
 	ArrayList<User> abSelectList(PageInfo pi);
+	
+	// 채팅 초대 리스트
+	ArrayList<User> ivSelectList();
 }

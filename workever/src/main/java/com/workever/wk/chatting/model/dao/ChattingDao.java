@@ -24,5 +24,9 @@ public class ChattingDao {
 	        
 		return (ArrayList)sqlSession.selectList("userMapper.abSelectList", null, rowBounds);
 	}
+
+	public ArrayList<User> ivSelectList(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("chattingMapper.ivSelectList");
+	}
 	
 }

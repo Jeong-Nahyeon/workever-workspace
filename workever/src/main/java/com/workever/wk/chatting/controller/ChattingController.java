@@ -34,13 +34,23 @@ public class ChattingController {
 		return "chatting/addressBook"; 
 	}
 	
+	
+	
 	@RequestMapping("detail.ch")
 	public String chatDetailView() {
 		return "chatting/chatDetailView";
 	}
 	
 	@RequestMapping("invitation.ch")
-	public String chatInvitationList() {
-		return "chatting/chatInvitationList";
+	public String chatInvitationList(Model model) {
+		
+		int listCount = cService.abSelectListCount();
+		
+		ArrayList<User> list = cService.ivSelectList();
+		
+		model.addAttribute("listCount", listCount);
+		model.addAttribute("list", list);
+		
+		return "chatting/chatInvitationList"; 
 	}
 }

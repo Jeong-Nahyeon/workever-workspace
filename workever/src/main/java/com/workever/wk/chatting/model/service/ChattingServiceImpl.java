@@ -20,7 +20,8 @@ public class ChattingServiceImpl implements ChattingService {
 	private SqlSessionTemplate sqlSession;
 	
 	
-
+	// 주소록
+	
 	@Override
 	public int abSelectListCount() {
 		return cDao.abSelectListCount(sqlSession);
@@ -29,6 +30,15 @@ public class ChattingServiceImpl implements ChattingService {
 	@Override
 	public ArrayList<User> abSelectList(PageInfo pi) {
 		return cDao.abSelectList(sqlSession, pi);
+	}
+	
+	
+	
+	// 채팅
+	
+	@Override
+	public ArrayList<User> ivSelectList() {
+		return cDao.ivSelectList(sqlSession);
 	}
 
 }
