@@ -32,4 +32,33 @@ public class OrganogramDao {
 		return (ArrayList)sqlSession.selectList("organogramMapper.selectAllUser", loginUser, rowBounds);
 	}
 
+	// 부서별 사원수 조회
+	public int selectUserDeptListCount(SqlSessionTemplate sqlSession, User loginUser) {
+		return sqlSession.selectOne("organogramMapper.selectUserDeptListCount", loginUser);
+	}
+
+	// 부서별 사원 조회
+	public ArrayList<User> selectUser(SqlSessionTemplate sqlSession, User loginUser, PageInfo pi) {
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("organogramMapper.selectUser", loginUser, rowBounds);
+	}
+
+	// 부서 추가
+	public int insertDept(SqlSessionTemplate sqlSession, Dept dept) {
+		return sqlSession.insert("organogramMapper.insertDept", dept);
+	}
+
+	// 부서 수정
+	public int updateDept(SqlSessionTemplate sqlSession, Dept dept) {
+		return sqlSession.update("organogramMapper.updateDept", dept);
+	}
+
+	// 부서 삭제
+	public int deleteDept(SqlSessionTemplate sqlSession, Dept dept) {
+		return sqlSession.delete("organogramMapper.deleteDept", dept);
+	}
+
 }

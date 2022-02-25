@@ -40,13 +40,17 @@
 		<result column="dept_no" property="deptNo"/>
 		<result column="dept_name" property="deptName"/>
 		<result column="com_no" property="comNo"/>
+		<result column="user_count" property="userCount" />
 	</resultMap>
 
 	<!-- 부서 목록 -->
 	<select id="selectDept" resultMap="deptResult">
-  		select dept_name, d.com_no, d.dept_no
+  		select dept_name, d.com_no, d.dept_no, count(u.user_no) as "USER_COUNT"
 		  from dept d
-		 where d.com_no = #{comNo}
+		  left join users u on (d.dept_no = u.dept_no)
+		 where d.com_no = 1
+		 group by dept_name, d.com_no, d.dept_no
+		 order by dept_no asc
   	</select>
   	
   	<!-- 전체사원 리스트 수 -->
@@ -56,6 +60,8 @@
 		  from users
 		 where com_no = #{comNo}
 		   and user_auth = 'S'
+		   and user_status = '재직'
+		   and user_enabled = 'Y'
 	</select>
 	
 	<!-- 전체사원 조회 -->
@@ -66,6 +72,7 @@
 		       , user_rank
 		       , user_email
 		       , user_auth
+		       , user_filepath
 		       , d.dept_no
 		       , dept_name
 		       , c.com_no
@@ -73,7 +80,69 @@
 		  from users u
 		  join dept d on (u.dept_no = d.dept_no)
 		  join company c on (u.com_no = c.com_no)
-		 where u.com_no = 1
+		 where u.com_no = #{comNo}
 		   and user_status = '재직'
+		   and user_auth = 'S'
+		   and user_enabled = 'Y'
 	</select>
+	
+	<!-- 부서별 사원수 조회 -->
+	<select id="selectUserDeptListCount" resultType="_int">
+		select 
+			   count(*)
+		  from users
+		 where com_no = #{comNo}
+		   and user_auth = 'S'
+		   and user_status = '재직'
+		   and dept_no = #{orgCategory}
+		   and user_enabled = 'Y'
+	</select>
+	
+	<!-- 부서별 사원 조회 -->
+	<select id="selectUser" resultMap="userResult">
+		select 
+		         user_no
+		       , user_name
+		       , user_rank
+		       , user_email
+		       , user_auth
+		       , user_filepath
+		       , d.dept_no
+		       , dept_name
+		       , c.com_no
+		       , com_name
+		  from users u
+		  join dept d on (u.dept_no = d.dept_no)
+		  join company c on (u.com_no = c.com_no)
+		 where u.com_no = #{comNo}
+		   and u.dept_no = #{orgCategory}
+		   and user_status = '재직'
+		   and user_auth = 'S'
+		   and user_enabled = 'Y'
+	</select>
+	
+	<!-- 부서 추가 -->
+	<insert id="insertDept">
+		insert into dept
+		 values
+		 (
+		   SEQ_dept.nextval
+		 , #{comNo}
+		 , #{deptName}
+		 )
+	</insert>
+	
+	<!-- 부서 수정 -->
+	<update id="updateDept">
+		update dept
+		   set dept_name = #{deptName}
+		 where dept_no = #{deptNo}
+	</update>
+	
+	<!-- 부서 삭제 -->
+	<delete id="deleteDept">
+		delete 
+		  from dept
+		 where dept_no = #{deptNo}
+	</delete>
 </mapper>

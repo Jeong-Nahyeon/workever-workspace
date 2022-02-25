@@ -40,4 +40,7 @@ public class User {
 	private String category;
 	private String group;
 	private String keyword;
+	
+	// 조직도 카테고리
+	private String orgCategory;
 }

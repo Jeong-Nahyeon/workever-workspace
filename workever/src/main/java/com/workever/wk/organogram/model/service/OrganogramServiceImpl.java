@@ -38,4 +38,34 @@ public class OrganogramServiceImpl implements OrganogramService {
 		return oDao.selectAllUser(sqlSession, loginUser, pi);
 	}
 
+	// 부서별 사원 수 조회
+	@Override
+	public int selectUserDeptListCount(User loginUser) {
+		return oDao.selectUserDeptListCount(sqlSession, loginUser);
+	}
+
+	// 부서별 사원 조회
+	@Override
+	public ArrayList<User> selectUser(User loginUser, PageInfo pi) {
+		return oDao.selectUser(sqlSession, loginUser, pi);
+	}
+
+	// 부서 추가
+	@Override
+	public int insertDept(Dept dept) {
+		return oDao.insertDept(sqlSession, dept);
+	}
+
+	// 부서 수정
+	@Override
+	public int updateDept(Dept dept) {
+		return oDao.updateDept(sqlSession, dept);
+	}
+
+	// 부서 삭제
+	@Override
+	public int deleteDept(Dept dept) {
+		return oDao.deleteDept(sqlSession, dept);
+	}
+
 }

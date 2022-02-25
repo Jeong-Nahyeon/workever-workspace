@@ -15,4 +15,6 @@ public class Dept {
 	private String deptNo;
 	private String comNo;
 	private String deptName;
+	
+	private String userCount;
 }

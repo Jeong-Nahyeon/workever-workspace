@@ -16,4 +16,19 @@ public interface OrganogramService {
 	
 	// 전체 사원 조회
 	ArrayList<User> selectAllUser(User loginUser, PageInfo pi);
+	
+	// 부서별 사원 수 조회
+	int selectUserDeptListCount(User loginUser);
+	
+	// 부서별 사원 조회
+	ArrayList<User> selectUser(User loginUser, PageInfo pi);
+	
+	// 부서 추가
+	int insertDept(Dept dept);
+	
+	// 부서 수정
+	int updateDept(Dept dept);
+	
+	// 부서 삭제
+	int deleteDept(Dept dept);
 }
