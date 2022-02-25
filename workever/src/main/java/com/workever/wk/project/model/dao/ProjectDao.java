@@ -12,8 +12,8 @@ import com.workever.wk.workBoard.model.vo.workBoard;
 @Repository
 public class ProjectDao {
 	
-	public ArrayList<Project> selectList(SqlSessionTemplate sqlSession){
-		 return (ArrayList)sqlSession.selectList("projectMapper.selectList");
+	public ArrayList<Project> selectList(SqlSessionTemplate sqlSession, int userNo){
+		 return (ArrayList)sqlSession.selectList("projectMapper.selectList", userNo);
 	}
 		
 	

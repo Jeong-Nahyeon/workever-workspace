@@ -26,8 +26,8 @@ public class ProjectServiceImpl implements ProjectService{
 
 	
 	@Override
-	public ArrayList<Project> selectList() {
-		return pDao.selectList(sqlSession);
+	public ArrayList<Project> selectList(int userNo) {
+		return pDao.selectList(sqlSession, userNo);
 	}
 	
 	

@@ -12,6 +12,7 @@ import lombok.ToString;
 
 public class Project {
 	 private int proNo;
+	 private int userNo;
 	 private String proTitle;
 	 private String proGrantWhether;
 	 private String proCreateDate;

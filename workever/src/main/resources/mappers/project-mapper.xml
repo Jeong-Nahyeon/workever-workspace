@@ -40,7 +40,7 @@
 	
 	<select id="selectList" resultMap="projectResult">
 		select
-		    PRO_NO
+		    p.PRO_NO
 		  , PRO_TITLE
 		  , PRO_GRANT_WHETHER
 		  , PRO_CREATE_DATE
@@ -53,10 +53,11 @@
 		         and p.pro_no = pd.pro_no
 		    ) PRODEPT
 		from project p
+        JOIN PROJECT_MEMBER pm ON(p.pro_no = pm.pro_no)
 		where PRO_STATUS = 'Y'
+        AND USER_NO = #{userNo}
 		order
-		  by PRO_NO desc
-	
+		  by p.PRO_NO desc
 	</select>
 
 	<select id="selectMem" resultMap="projectResult">

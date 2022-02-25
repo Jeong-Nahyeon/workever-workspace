@@ -185,11 +185,17 @@
 				  </li>
 				
 				  <li class="nav-item">
-					<a href="list.pro" class="nav-link">
+					<a href="#" onclick="proList(${loginUser.userNo});" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>프로젝트 조회</p>
 					</a>
-				  </li>
+				  </li>	
+				  <script>
+				 	 function proList(userNo){
+				 		 location.href="list.pro?userNo="+userNo;
+				 	 }
+				  </script>		 
+				  
 				  <li class="nav-item">
 					<a href="" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>

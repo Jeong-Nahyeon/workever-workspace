@@ -9,7 +9,7 @@ import com.workever.wk.workBoard.model.vo.workBoard;
 public interface ProjectService{
 	
 	// 프로젝트 리스트 조회 서비스
-	ArrayList<Project> selectList();
+	ArrayList<Project> selectList(int userNo);
 	
 	
 	// 프로젝트 작성하기 서비스

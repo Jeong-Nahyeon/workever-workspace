@@ -29,10 +29,11 @@ public class projectController {
 	private ProjectService pService;
 	
 	@RequestMapping("list.pro")
-	public ModelAndView projectList(ModelAndView mv) {
+	public ModelAndView projectList(int userNo, ModelAndView mv) {
 		
-		ArrayList<Project> list = pService.selectList();
-		//           System.out.println(list);
+		System.out.println(userNo);
+		ArrayList<Project> list = pService.selectList(userNo);
+		//System.out.println(list);
 		
 		mv.addObject("list", list)
 		  .setViewName("project/projectListView");
