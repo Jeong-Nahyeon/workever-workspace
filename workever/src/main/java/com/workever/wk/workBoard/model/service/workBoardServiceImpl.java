@@ -29,7 +29,28 @@ public class workBoardServiceImpl implements workBoardService{
 	public int insertAttachment(workBoard wb) {
 		return wbDao.insertAttachment(sqlSession, wb);
 	}
+	
+	
+	@Override
+	public ArrayList<workBoard> myWork(int proNo, String workManager) {
+		return wbDao.myWork(sqlSession, proNo, workManager);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/////////////////////////////////////////////////////////////////
 
+	
 	@Override
 	public int increaseCount(int boardNo) {
 		return 0;
@@ -59,6 +80,7 @@ public class workBoardServiceImpl implements workBoardService{
 	public int insertReply(Reply r) {
 		return 0;
 	}
+
 
 
 }

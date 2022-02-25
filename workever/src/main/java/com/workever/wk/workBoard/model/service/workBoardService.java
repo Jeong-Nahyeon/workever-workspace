@@ -29,5 +29,8 @@ public interface workBoardService {
 
 		// 첨부파일 입력
 		int insertAttachment(workBoard wb);
+
+		// 내 업무 검색하는 메소드
+		ArrayList<workBoard> myWork(int proNo, String workManager);
 		
 }

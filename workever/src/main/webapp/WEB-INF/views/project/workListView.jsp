@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,7 +81,7 @@
 			</div>
 			
 			<div class="workList">
-				<h4>전체 업무(3)</h4>
+				<h4>전체 업무 (${ list.size() })</h4>
 				<br>
 	            <table id="workList" class="table" align="center">
 	                <thead align="center">
@@ -89,36 +91,35 @@
 			                  	<th>우선순위</th>
 			                  	<th>제목</th>
 			                  	<th>담장자</th>
-			                  	<th>수정일</th>
+			                  	<th>시작일</th>
+			                  	<th>마감일</th>
 			                </tr>
 	                </thead>
 	                <tbody align="center">
-		                
+	                	<c:if test="${ not empty list }">
+							<c:forEach var="w" items="${ list }">
 		                    <tr>
-		                        <td> 1 </td>
-		                        <td> <span class="badge badge-pill badge-primary">완료</span> </td>
-		                        <td> 낮음 </td>
-		                        <td> sds</td>
-		                        <td>홍길동</td>
-		                        <td>2021-12-01</td>
+		                        <td> ${w.workBoardNo } </td>
+		                        <c:choose>
+		                        	<c:when test="${ w.workStatus eq '완료' }">
+		                        		<td> <span class="badge badge-pill badge-primary">${ w.workStatus }</span> </td>
+		                        	</c:when>
+		                        	<c:when test="${ w.workStatus eq '진행' }">
+		                        		<td> <span class="badge badge-pill badge-success">${ w.workStatus }</span> </td>
+		                        	</c:when>
+		                        	<c:otherwise>
+		                        		 <td> <span class="badge badge-pill badge-warning">${ w.workStatus }</span> </td>
+		                        	</c:otherwise>
+		                        </c:choose>
+		                        
+		                        <td> ${w.workPriority } </td>
+		                        <td> ${w.workTitle }</td>
+		                        <td>${w.workManager }</td>
+		                        <td>${w.workStartDate }</td>
+		                        <td>${w.workEndDate }</td>
 		                    </tr>
-		                    
-	   	                    <tr>
-		                        <td> 1 </td>
-		                        <td> <span class="badge badge-pill badge-success">진행</span> </td>
-		                        <td> 낮음 </td>
-		                        <td> 업무글 작성</td>
-		                        <td>홍길동</td>
-		                        <td>2021-12-01</td>
-		                    </tr>
-		                    <tr>
-		                        <td> 1 </td>
-		                        <td> <span class="badge badge-pill badge-warning">보류</span> </td>
-		                        <td> 낮음 </td>
-		                        <td> 업무글 작성</td>
-		                        <td>홍길동</td>
-		                        <td>2021-12-01</td>
-		                    </tr>
+							</c:forEach>
+						</c:if>
 		                
 	                </tbody>
 	            </table>
@@ -149,9 +150,9 @@
 			console.log(formNo);
 			
 			if(formNo == 1) {				
-				$(".workList").load("work.all");
+				$(".workList").load("work.all?proNo=" + ${list.get(0).proNo});
 			}else if(formNo == 2){
-				$(".workList").load("work.my");
+				$(".workList").load("work.my?proNo=" + ${list.get(0).proNo}+"&workManager="+"${loginUser.userName}");
 			}		
 		})
 	</script>

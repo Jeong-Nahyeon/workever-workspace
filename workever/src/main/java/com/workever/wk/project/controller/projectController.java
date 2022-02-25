@@ -131,8 +131,12 @@ public class projectController {
 	
 	//업무조회 리스트이동 
 	@RequestMapping("list.work")
-	public String workList() {
-		return "project/workListView";
+	public ModelAndView workList(int proNo, ModelAndView mv) {
+		ArrayList<workBoard> list = pService.selectProject(proNo);
+		System.out.println(list);
 		
+		mv.addObject("list", list)
+		  .setViewName("project/workListView");
+		return mv;
 	}
 }

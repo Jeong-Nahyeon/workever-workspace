@@ -3,6 +3,7 @@ package com.workever.wk.workBoard.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,8 @@ public class workBoardController {
 	
 	@Autowired
 	private workBoardService wbService;
+	@Autowired
+	private ProjectService pService;
 	
 	@RequestMapping("insert.work")
 	public String insertBoard(workBoard wb, MultipartFile upfile, HttpSession session, Model model) {
@@ -53,14 +56,32 @@ public class workBoardController {
 		
 	}
 	
+	//전체 업무 조회
 	@RequestMapping("work.all")
-	public String allWork() {
-		return "project/allWorkList";
+	public ModelAndView allWork(int proNo, ModelAndView mv) {
+		
+		System.out.println(proNo);
+		ArrayList<workBoard> list = pService.selectProject(proNo);
+		
+		mv.addObject("list", list)
+		  .setViewName("project/allWorkList");
+		
+		return mv;
 	}
 	
+	// 내 업무 조회
 	@RequestMapping("work.my")
-	public String myWork() {
-		return "project/myWorkList";
+	public ModelAndView myWork(int proNo, String workManager, ModelAndView mv) {
+		//System.out.println(proNo);
+		//System.out.println(workManager);
+		
+		ArrayList<workBoard> list = wbService.myWork(proNo, workManager);
+		
+		//System.out.println(list);
+		mv.addObject("list", list)
+		  .setViewName("project/myWorkList");
+		
+		return mv;
 	}
 
 

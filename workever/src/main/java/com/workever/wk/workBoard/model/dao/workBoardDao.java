@@ -1,5 +1,9 @@
 package com.workever.wk.workBoard.model.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +21,26 @@ public class workBoardDao {
 	public int insertAttachment(SqlSessionTemplate sqlSession, workBoard wb) {
 		return sqlSession.insert("projectMapper.insertAttachment", wb);
 	}
+	// 내업무 가져올 메소드
+	public ArrayList<workBoard> myWork(SqlSessionTemplate sqlSession, int proNo, String workManager) {
+		System.out.println(proNo);
+		System.out.println(workManager);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("proNo", proNo);
+		map.put("workManager", workManager); 
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMyWork", map);
+	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

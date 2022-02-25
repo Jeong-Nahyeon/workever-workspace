@@ -149,13 +149,16 @@
             JOIN ATTACHMENT USING (WORKBOARD_NO)
 			where PRO_NO = #{proNo}
 			  AND BOARD_STATUS='Y'
+			  order
+			  by WORKBOARD_NO desc
 	</select>
 
 	<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 여기부터 게시판 매퍼 -@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
 	
 	<select id="selectOther" resultMap="projectResult">
             select
-	    		PRO_MANAGER
+                PRO_NO
+	    	  ,	PRO_MANAGER
 			  , PRO_NUMBERPEOPLE
 			  , (
 			      select listagg(u.user_name, ',') within group(order by u.user_name)
@@ -226,6 +229,30 @@
 			, 'Y'
 
 		  )
-	
 	</insert>
+	
+	<select id="selectMyWork" resultMap="workBoardResult">
+		select
+		       WORKBOARD_NO
+			 , USER_NO
+			 , PRO_NO
+			 , WORK_MANAGER
+			 , WORK_STARTDATE
+			 , WORK_ENDDATE
+			 , WORK_STATUS
+			 , WORK_PRIORITY
+			 , WORK_TITLE
+			from WORKBOARD
+            JOIN ATTACHMENT USING (WORKBOARD_NO)
+			where PRO_NO = #{proNo}
+			  AND BOARD_STATUS='Y'
+              AND WORK_MANAGER= #{workManager}
+			  order
+			  by WORKBOARD_NO desc
+	
+	
+	
+	
+	
+	</select>
 </mapper>

@@ -516,7 +516,8 @@
 				<script>
 				$(function(){
 					$(".workLookup").click(function(){
-						location.href='list.work';
+						console.log("${list2.get(0).proNo}");
+						location.href='list.work?proNo='+ ${list2.get(0).proNo};
 					});
 				})
 				</script>
