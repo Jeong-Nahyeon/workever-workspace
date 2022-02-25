@@ -76,19 +76,19 @@
 	          </a>
 	          <ul class="nav nav-treeview">
 	            <li class="nav-item">
-	              <a href="./index.html" class="nav-link">
+	              <a href="inbox.mail" class="nav-link">
 	                <i class="far fa-circle nav-icon"></i>
 	                <p>받은메일함</p>
 	              </a>
 	            </li>
 	            <li class="nav-item">
-	              <a href="./index2.html" class="nav-link">
+	              <a href="outbox.mail" class="nav-link">
 	                <i class="far fa-circle nav-icon"></i>
 	                <p>보낸메일함</p>
 	              </a>
 	            </li>
 	            <li class="nav-item">
-	              <a href="./index3.html" class="nav-link">
+	              <a href="trashbox.mail" class="nav-link">
 	                <i class="far fa-circle nav-icon"></i>
 	                <p>삭제메일함</p>
 	              </a>
@@ -332,25 +332,25 @@
 				</a>
 				<ul class="nav nav-treeview">
 				  <li class="nav-item">
-					<a href="./index.html" class="nav-link">
+					<a href="list.nbo" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>공지사항</p>
 					</a>
 				  </li>
 				  <li class="nav-item">
-					<a href="./index2.html" class="nav-link">
+					<a href="list.dbo" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>부서별 게시판</p>
 					</a>
 				  </li>
 				  <li class="nav-item">
-					<a href="./index3.html" class="nav-link">
+					<a href="list.abo" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>익명 게시판</p>
 					</a>
 				  </li>
 				  <li class="nav-item">
-					<a href="./index3.html" class="nav-link">
+					<a href="list.mdbo" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>나의 게시글</p>
 					</a>
@@ -415,7 +415,7 @@
 				  </li>
 				</ul>
 			</li>
-			
+		  </ul>
 	    </nav>
 	    <!-- /.sidebar-menu -->
 	  </div>
