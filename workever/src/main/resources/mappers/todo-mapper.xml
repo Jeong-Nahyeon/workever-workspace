@@ -2,7 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="todoMapper">
 
-	<select id="selectTodoList">
+	<resultMap type="Todo" id="todoResult">
+		<result column="todo_no" property="todoNo" />
+		<result column="user_no" property="userNo" />
+		<result column="todo_title" property="todoTitle" />
+		<result column="todo_imp" property="todoImp" />
+		<result column="todo_memo" property="todoMemo" />
+		<result column="todo_date" property="todoDate" />
+		<result column="todo_status" property="todoStatus" />
+	</resultMap>
+
+	<select id="selectTodoList" resultMap="todoResult">
 		select 
 		       todo_no
 		     , user_no
@@ -13,5 +23,54 @@
 		     , todo_status
 		  from todo
 		 where user_no = #{userNo}
+		   and todo_date = #{today}
 	</select>
+	
+	<!-- todo 등록 -->
+	<insert id="insertTodo" >
+		insert
+		  into todo
+		       (
+		         todo_no
+		       , user_no
+		       , todo_title
+		       , todo_memo
+		       , todo_imp
+		       , todo_date
+		       , todo_status
+		       )
+		 values
+		       (
+		         SEQ_TODO.nextval
+		       , #{userNo}
+		       , #{todoTitle}
+		       , #{todoMemo}
+		       , #{todoImp}
+		       , #{todoDate}
+		       , 'S'
+		       )
+	</insert>
+	
+	<!-- todo 상태 변경 -->
+	<update id="updateTodoCheck">
+		update todo
+		   set todo_status = #{todoStatus}
+		 where todo_no = #{todoNo}
+	</update>
+	
+	<!-- todo 수정 -->
+	<update id="updateTodo">
+		update todo
+		   set todo_title = #{todoTitle}
+		     , todo_memo = #{todoMemo}
+		     , todo_imp = #{todoImp}
+		 where todo_no = #{todoNo}
+	</update>
+	
+	<!-- todo 삭제 -->
+	<delete id="deleteTodo">
+		delete
+		  from todo
+		 where todo_no = #{todoNo}
+	</delete>
 </mapper>

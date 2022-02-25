@@ -19,5 +19,8 @@ public class Todo {
 	private String todoImp;
 	private String todoDate;
 	private String todoStatus;
+	
+	// 오늘날짜
+	private String today;
 
 }
