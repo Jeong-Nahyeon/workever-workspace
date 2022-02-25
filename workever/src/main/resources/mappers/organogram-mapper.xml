@@ -1,4 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="organogramMapper">
+
+	<resultMap type="User" id="userResult">
+		<result column="user_no" property="userNo" />
+		<result column="dept_no" property="deptNo" />
+		<result column="com_no" property="comNo" />
+		<result column="user_email" property="userEmail" />
+		<result column="user_name" property="userName" />
+		<result column="user_phone" property="userPhone" />
+		<result column="user_pwd" property="userPwd" />
+		<result column="user_rank" property="userRank" />
+		<result column="user_joindate" property="userJoinDate" />
+		<result column="user_resdate" property="userResDate" />
+		<result column="user_status" property="userStatus" />
+		<result column="user_enabled" property="userEnabled" />
+		<result column="user_filepath" property="userFilePath" />
+		<result column="user_auth" property="userAuth" />
+		<result column="user_annual_date" property="userAnnualDate" />
+		<result column="user_use_date" property="userUseDate" />
+		
+		<result column="dept_name" property="deptName" />
+		<result column="com_Name" property="comName"/>
+		<result column="com_Phone" property="comPhone" />
+	</resultMap>
+	
+	<resultMap type="Company" id="companyResult">
+		<result column="com_no" property="comNo"/>
+		<result column="com_name" property="comName"/>
+		<result column="com_phone" property="comPhone"/>
+		<result column="com_class" property="comClass"/>
+		<result column="com_encode" property="comEncode"/>
+		<result column="com_originname" property="comOriginName"/>
+		<result column="com_changename" property="comChangeName"/>
+		<result column="com_logopath" property="comLogoPath"/>
+	</resultMap>
+	
+	<resultMap type="Dept" id="deptResult">
+		<result column="dept_no" property="deptNo"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="com_no" property="comNo"/>
+	</resultMap>
+
+	<!-- 부서 목록 -->
+	<select id="selectDept" resultMap="deptResult">
+  		select dept_name, d.com_no, d.dept_no
+		  from dept d
+		 where d.com_no = #{comNo}
+  	</select>
+  	
+  	<!-- 전체사원 리스트 수 -->
+	<select id="selectUserListCount" resultType="_int">
+		select 
+			   count(*)
+		  from users
+		 where com_no = #{comNo}
+		   and user_auth = 'S'
+	</select>
+	
+	<!-- 전체사원 조회 -->
+	<select id="selectAllUser" resultMap="userResult">
+		select 
+		         user_no
+		       , user_name
+		       , user_rank
+		       , user_email
+		       , user_auth
+		       , d.dept_no
+		       , dept_name
+		       , c.com_no
+		       , com_name
+		  from users u
+		  join dept d on (u.dept_no = d.dept_no)
+		  join company c on (u.com_no = c.com_no)
+		 where u.com_no = 1
+		   and user_status = '재직'
+	</select>
 </mapper>

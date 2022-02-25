@@ -24,7 +24,7 @@ public class OrganogramController {
 	private OrganogramService oService;
 	
 	@Autowired
-	private UserService uService;
+	private UserService uService; 
 	
 	// 조직도 화면 연결
 	@RequestMapping("organogram.do")
@@ -45,6 +45,7 @@ public class OrganogramController {
 		model.addAttribute("userList", userList);
 		model.addAttribute("pi", pi);
 		model.addAttribute("deptList", deptList);
+		
 		
 		return "organogram/organogram";
 	}

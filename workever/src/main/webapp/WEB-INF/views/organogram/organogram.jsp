@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,8 +90,8 @@
 
         <div class="organogram-content">
             <div class="row">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-3">
+                
+                <div class="col-sm-4">
                     <div class="card">
                         <div class="card-body">
 
@@ -106,40 +107,30 @@
                             <div class="dept-name">
                                 <a href="">
                                     <i class="fas fa-angle-double-right"></i>
-                                    <span>마케팅팀</span>
+                                    <span>전체사원</span>
                                 </a>
+                            </div>
 
-                                <!-- 관리자 -->
-                                <button class="dept-update">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                                <!-- 관리자 -->
-                            </div>
-                            
+                            <c:forEach var="d" items="${deptList}">
+                                <div class="dept-name">
+                                    <a href="">
+                                        <i class="fas fa-angle-double-right"></i>
+                                        <span>${d.deptName}</span>
+                                    </a>
+    
+                                    <!-- 관리자 -->
+                                    <button class="dept-update">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <!-- 관리자 -->
+                                </div>
+                            </c:forEach>
 
-                            <div class="dept-name">
-                                <a href="">
-                                    <i class="fas fa-angle-double-right"></i>
-                                    <span>마케팅팀</span>
-                                </a>
-                            </div>
-                            <div class="dept-name">
-                                <a href="">
-                                    <i class="fas fa-angle-double-right"></i>
-                                    <span>마케팅팀</span>
-                                </a>
-                            </div>
-                            <div class="dept-name">
-                                <a href="">
-                                    <i class="fas fa-angle-double-right"></i>
-                                    <span>마케팅팀</span>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
     
-                <div class="col-sm-6">
+                <div class="col-sm-8">
                     <div class="card">
                         <div class="card-header">
                             <span class="card-title">마케팅팀</span>
