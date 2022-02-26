@@ -24,7 +24,7 @@
 		top: -230px;
 		left: 20%;
 		position: relative;
-		border:1px solid red;
+		/*border:1px solid red;*/
 		width:1100px;
 		
 		}

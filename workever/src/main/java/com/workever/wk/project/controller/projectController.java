@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.common.template.Pagination;
 import com.workever.wk.project.model.service.ProjectService;
 import com.workever.wk.project.model.vo.Project;
 import com.workever.wk.user.model.vo.User;
@@ -40,7 +43,8 @@ public class projectController {
 		return mv;
 		
 	}
-	
+
+
 	@RequestMapping("enroll.pro")
 	public String enrollProject() {
 		return "project/projectEnrollForm";
@@ -92,17 +96,23 @@ public class projectController {
 	}
 	
 	@RequestMapping("detail.pro")
-	public ModelAndView selectProject(int proNo, ModelAndView mv) {
+	public ModelAndView selectProject(@RequestParam(value="cpage", defaultValue="1") int currentPage, int proNo, ModelAndView mv) {
 		
 		System.out.println(proNo);
 		
-		ArrayList<workBoard> list = pService.selectProject(proNo);
+		int listCount = pService.selectListCount(proNo);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		
+		
+		ArrayList<workBoard> list = pService.selectWorkList(proNo, pi);
 		ArrayList<Project> list2 = pService.selectOther(proNo);// 참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
 		
 		System.out.println(list);
 		System.out.println(list2);
 		
-		mv.addObject("list", list)
+		mv.addObject("pi", pi)
+		  .addObject("list", list)
 		  .addObject("list2", list2)
 		  .addObject("proNo", proNo)
 		  .setViewName("project/projectDetailView");
@@ -111,24 +121,6 @@ public class projectController {
 		
 	}
 	
-	/*
-	@RequestMapping("detail.pro")
-	public ModelAndView selectProject(int proNo, ModelAndView mv) {
-		
-		System.out.println(proNo);
-		
-		ArrayList<workBoard> list = pService.selectProject(proNo);
-		ArrayList<Project> list2 = pService.selectList();
-		
-		System.out.println(list);
-		mv.addObject("list", list)
-		  .addObject("proNo", proNo)
-		  .setViewName("project/projectDetailView");
-		
-		return mv;
-		
-	}
-	*/
 	
 	//업무조회 리스트이동 
 	@RequestMapping("list.work")

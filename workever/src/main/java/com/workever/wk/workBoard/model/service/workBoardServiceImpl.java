@@ -37,6 +37,15 @@ public class workBoardServiceImpl implements workBoardService{
 	}
 	
 	
+	@Override
+	public ArrayList<Reply> selectReplyList(int boardNo) {
+		return null;
+	}
+	
+	@Override
+	public int insertReply(Reply r) {
+		return wbDao.insertReply(sqlSession, r);
+	}
 	
 	
 	
@@ -71,15 +80,6 @@ public class workBoardServiceImpl implements workBoardService{
 		return 0;
 	}
 
-	@Override
-	public ArrayList<Reply> selectReplyList(int boardNo) {
-		return null;
-	}
-
-	@Override
-	public int insertReply(Reply r) {
-		return 0;
-	}
 
 
 

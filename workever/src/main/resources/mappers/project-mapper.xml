@@ -37,6 +37,26 @@
 		<result column="ATTACH_CHANGE_NAME" property="atChangeName" />
 	</resultMap>
 	
+	<resultMap id="replyResult" type="Reply">
+		<result column="REPLY_NO" property="replyNo" />
+		<result column="WORKBOARD_NO" property="refWorkBoard" />
+		<result column="USER_NO" property="userNo" />
+		<result column="REPLY_WRITER" property="replyWriter" />
+		<result column="REPLY_CONTENT" property="replyContent" />
+		<result column="REPLY_CREATE_DATE" property="replyCreateDate" />
+		<result column="REPLY_UPDATE_DATE" property="replyUpdateDate" />
+		<result column="REPLY_STATUS" property="replyStatus" />
+	</resultMap>
+	
+	<select id="selectListCount" resultType="_int">
+		select
+		      count(*)
+		 from WORKBOARD
+	    where BOARD_STATUS='Y'
+	      AND PRO_NO = #{proNo}
+	</select>
+	
+	
 	
 	<select id="selectList" resultMap="projectResult">
 		select
@@ -250,10 +270,58 @@
               AND WORK_MANAGER= #{workManager}
 			  order
 			  by WORKBOARD_NO desc
+	</select>
+	
+	<insert id="insertReply">
+		insert
+		  into PROJECT_REPLY
+		  (
+		  	REPLY_NO
+		  , WORKBOARD_NO
+		  , USER_NO
+		  , REPLY_CONTENT
+		  , REPLY_WRITER
+
+		  )
+		  values
+		  (
+		  	SEQ_PROJECT_REPLY.nextval
+		  , #{refWorkBoard}
+		  , #{userNo}
+		  , #{replyContent}
+		  , #{replyWriter}
+		  )
+	</insert>
 	
 	
-	
-	
+	<select id="selectReplyList" resultMap="replyResult">
+		select
+			   reply_no
+			 , reply_writer
+			 , reply_content
+			 , to_char(create_date,'YYYY-MM-DD') as "create_date"
+		from reply
+	   where ref_bno = #{boardNo}
+	     and status = 'Y'
+	   order
+	      by reply_no desc
 	
 	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

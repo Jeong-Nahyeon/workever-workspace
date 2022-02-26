@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.workever.wk.workBoard.model.vo.Reply;
 import com.workever.wk.workBoard.model.vo.workBoard;
 
 @Repository
@@ -21,6 +22,7 @@ public class workBoardDao {
 	public int insertAttachment(SqlSessionTemplate sqlSession, workBoard wb) {
 		return sqlSession.insert("projectMapper.insertAttachment", wb);
 	}
+	
 	// 내업무 가져올 메소드
 	public ArrayList<workBoard> myWork(SqlSessionTemplate sqlSession, int proNo, String workManager) {
 		System.out.println(proNo);
@@ -29,6 +31,11 @@ public class workBoardDao {
 		map.put("proNo", proNo);
 		map.put("workManager", workManager); 
 		return (ArrayList)sqlSession.selectList("projectMapper.selectMyWork", map);
+	}
+
+	// 댓글 입력 메소드
+	public int insertReply(SqlSessionTemplate sqlSession, Reply r) {
+		return sqlSession.insert("projectMapper.insertReply", r);
 	}
 
 	

@@ -35,6 +35,8 @@
 		<typeAlias type="com.workever.wk.todo.model.vo.Todo" alias="Todo" />
 		<typeAlias type="com.workever.wk.organogram.model.vo.Organogram" alias="Organogram"/>
 		<typeAlias type="com.workever.wk.alert.model.vo.Alert" alias="Alert"/>
+		<typeAlias type="com.workever.wk.workBoard.model.vo.Reply" alias="Reply"/>
+		
 	</typeAliases>
 	
 	<mappers>

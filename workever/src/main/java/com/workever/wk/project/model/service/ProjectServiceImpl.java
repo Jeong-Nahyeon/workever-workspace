@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.project.model.dao.ProjectDao;
 import com.workever.wk.project.model.vo.Project;
 import com.workever.wk.user.model.vo.User;
@@ -23,13 +24,31 @@ public class ProjectServiceImpl implements ProjectService{
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-
-	
 	@Override
 	public ArrayList<Project> selectList(int userNo) {
 		return pDao.selectList(sqlSession, userNo);
 	}
 	
+
+	@Override
+	public int selectListCount(int proNo) {
+		return pDao.selectListCount(sqlSession, proNo);
+	}
+	
+	
+	@Override
+	public ArrayList<workBoard> selectWorkList(int proNo, PageInfo pi) {
+		return pDao.selectWorkList(sqlSession, proNo ,pi);
+	}
+
+	
+	
+	
+	
+	
+	
+	
+
 	
 	@Override
 	public ArrayList<Project> selectMem(int num) {
@@ -74,6 +93,12 @@ public class ProjectServiceImpl implements ProjectService{
 	public ArrayList<Project> selectOther(int proNo) {
 		return pDao.selectOther(sqlSession, proNo);
 	}
+
+
+
+
+
+
 
 
 

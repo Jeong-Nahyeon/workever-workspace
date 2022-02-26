@@ -2,14 +2,25 @@ package com.workever.wk.project.model.service;
 
 import java.util.ArrayList;
 
+import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.project.model.vo.Project;
 import com.workever.wk.user.model.vo.User;
 import com.workever.wk.workBoard.model.vo.workBoard;
 
 public interface ProjectService{
 	
-	// 프로젝트 리스트 조회 서비스
+	// 프로젝트 리스트 조회 서비스(내가 해당하는 프로젝트 구해오기)
 	ArrayList<Project> selectList(int userNo);
+	
+	// 게시글 몇개인지 조회해오기
+	int selectListCount(int proNo);
+	
+	
+	
+	ArrayList<workBoard> selectWorkList(int proNo, PageInfo pi);
+	
+	
+	
 	
 	
 	// 프로젝트 작성하기 서비스
@@ -38,6 +49,8 @@ public interface ProjectService{
 
 	//참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
 	ArrayList<Project> selectOther(int proNo);
+
+
 
 
 	

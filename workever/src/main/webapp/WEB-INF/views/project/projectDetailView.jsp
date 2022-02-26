@@ -19,7 +19,6 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
 	
-	
     <style>
     	input[type="radio"]{
 		display: none;
@@ -353,7 +352,7 @@
 						
 						<!--업무 내용-->
 						<div>
-							<textarea name="workContent" class="workContent"></textarea>
+							<textarea name="workContent" class="workContent" required></textarea>
 						</div>
 						
 						<hr>
@@ -370,7 +369,7 @@
 				<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기부터 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 				<c:if test="${ not empty list }">
 					<c:forEach var="w" items="${ list }">
-						<div style="background-color: white;">
+						<div style="background-color: white;" class="allBoard">
 							<br>
 							<div style="margin-right:30px">
 								<i class="fas fa-user-circle fa-lg"></i>
@@ -490,10 +489,129 @@
 	                    		</c:choose>
 							</div>
 							<br>
+							
+							<div>
+							<span style="margin-left:660px">댓글 (<span id="rcount">3</span>)</span>
+								<table id="replyArea" class="table" align="center">
+					                <thead>
+					                
+					                </thead>
+					                <tbody>
+					                    <tr>
+				                    	  <th colspan="2">
+				                          	<textarea id="reply${w.workBoardNo}" cols="55" rows="2" style="resize:none; width:100%"></textarea>
+					                      </th>
+					                      
+					                      <th style="vertical-align: middle">
+					                      	<button onclick="addReply(${w.workBoardNo});" class="btn btn-secondary">등록하기</button>
+					                      </th>
+					                    </tr>
+					                </tbody>
+					            </table>
+							</div>
+							<input type="hidden" class="workBoardNo" value="${w.workBoardNo }">
 						</div><br><br>
 						<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기까지 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 					</c:forEach>	
 				</c:if>
+				<script>
+			    	/*$(function(){ 잠시만 주석처리
+			    		$(".allBoard").each(function(){
+			    		    $.ajax({
+			    		         url:"rlist.bo",
+			    		         data:{bno:$(this).children(".workBoardNo")},
+			    		        
+			    		         success:function(list){
+			    		        	 
+			    		         },error:function(){
+			    		        	 
+			    		         }
+			    			})
+			    		})
+			    	})*/
+			    	
+			    	//댓글 조회용 메소드
+			    	/*function selectReplyList(){ 
+			    		$.ajax({
+			    			url:"rlist.bo",
+			    			data:{bno:${b.boardNo}},
+			    			success:function(list){
+			    				
+			    				let value = "";
+			    				for(let i in list){
+			                         value += "<tr>"
+							               +	"<th>" + list[i].replyWriter + "</th>"
+							               +	"<td>" + list[i].replyContent + "</td>"
+							               +	"<td>" + list[i].createDate + "</td>"
+			                    		   + "</tr>";
+			    				}
+			    				
+			    				$("#replyArea tbody").html(value);
+			    				$("#rcount").text(list.length);
+			    				
+			    			},error:function(){
+			    				console.log("댓글리스트 조회용 ajax통신실패")
+			    			}
+			    		})
+			    	}*/
+			    	
+			    	// 댓글 작성용 메소드
+					function addReply(refWorkBoard){
+
+			    		if($("#reply"+refWorkBoard).val().trim().length != 0){ // 유효한 댓글작성시 => insert ajax요청 (trim 공백제거 메소드)
+			    			$.ajax({
+			    				url:"rinsert.bo",
+			    				data:{
+			    					refWorkBoard:refWorkBoard,
+			    					replyContent:$("#reply"+refWorkBoard).val(),
+			    					replyWriter:"${loginUser.userName}",
+			    					userNo:"${loginUser.userNo}"
+			    				
+			    				},success:function(status){
+			    					if(status == "success"){
+			    						selectReplyList(); // 댓글리스트 조회용 메소드 호출
+			    						$("#reply"+refWorkBoard).val("");//작성란 비워주기
+			    					
+			    					}
+			    				},error:function(){
+			        				console.log("댓글 입력용 ajax통신실패")
+			        			}
+			    			})
+			    		}else{
+			    			alertify.alert("댓글 작성후 등록해주세요!");
+			    		}
+					}	
+			    	
+				</script>
+			
+				<div id="pagingArea">
+	                <ul class="pagination">
+	                
+	                    <c:choose>
+	                    	<c:when test="${ pi.currentPage eq 1 }">
+		                    	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                  			<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ pi.currentPage - 1 }&proNo=${list.get(0).proNo}">Previous</a></li>
+	                    	</c:otherwise>
+	                    </c:choose>
+	                    
+	                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+	                   		<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ p }&proNo=${list.get(0).proNo}"> ${ p } </a></li>
+	                    </c:forEach>
+	                    
+	                    
+	                    <c:choose>
+	                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+	                    		<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                  			<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ pi.currentPage + 1 }&&proNo=${list.get(0).proNo}">Next</a></li>
+	                    	</c:otherwise>
+	                    </c:choose>                    
+	                </ul>
+	            </div>
+		
 					
 			</div><!--전체감싸는 div 끝-->
 		
@@ -618,15 +736,8 @@
 		<!-- 모달창 부분끝 -->
 	<jsp:include page="../common/scripts.jsp" />
 	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
 	
-	
-	
-	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	<script>
-	  $.widget.bridge('uibutton', $.ui.button)
-	</script>
+
 </body>
 </html>

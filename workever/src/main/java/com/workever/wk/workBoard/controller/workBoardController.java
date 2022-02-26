@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.workever.wk.project.model.service.ProjectService;
 import com.workever.wk.workBoard.model.service.workBoardService;
+import com.workever.wk.workBoard.model.vo.Reply;
 import com.workever.wk.workBoard.model.vo.workBoard;
 
 
@@ -39,8 +42,8 @@ public class workBoardController {
 			wb.setAtChangeName("resources/workBoard_upfiles/" + changeName);
 		}
 		
-		System.out.println(wb);
-		System.out.println(upfile);
+		//System.out.println(wb);
+		//System.out.println(upfile);
 		
 		int result = wbService.insertBoard(wb);
 		int result2 = wbService.insertAttachment(wb);
@@ -72,12 +75,12 @@ public class workBoardController {
 	// 내 업무 조회
 	@RequestMapping("work.my")
 	public ModelAndView myWork(int proNo, String workManager, ModelAndView mv) {
-		//System.out.println(proNo);
-		//System.out.println(workManager);
+		System.out.println(proNo);
+		System.out.println(workManager);
 		
 		ArrayList<workBoard> list = wbService.myWork(proNo, workManager);
 		
-		//System.out.println(list);
+		System.out.println(list);
 		mv.addObject("list", list)
 		  .setViewName("project/myWorkList");
 		
@@ -89,6 +92,23 @@ public class workBoardController {
 	
 	
 	
+	@ResponseBody
+	@RequestMapping(value = "rlist.bo", produces="application/json; charset=UTF-8")
+	public String ajaxSelectReplyList(int bno) {
+		
+		ArrayList<Reply> list = wbService.selectReplyList(bno);
+		return new Gson().toJson(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "rinsert.bo")
+	public void ajaxInsertReply(Reply r) {
+		System.out.println(r);
+		
+		//int result = wbService.insertReply(r);
+		//return result>0 ? "success" : "fail";
+
+	}
 	
 	
 	
