@@ -7,6 +7,13 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.css">
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- moment -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <style>
     div{box-sizing: border-box;}
@@ -37,18 +44,33 @@
         margin-bottom: 0;
     }
 
-    #userRank{
+    #userRank, #userJoinDate{
         border: none;
         border-bottom: 1px solid lightgray;
+        width: 150px;
+        font-size: 13px;
     }
     .enable-modal{
         border: none;
         color: blue;
         background-color: white;
     }
-    #userRank{
-        width: 150px;
+
+    
+
+    #enableContent{
+        text-align: center; 
+        margin: auto; margin-bottom: 50px; 
     }
+    .td-title{
+        font-size: 13px;
+        width: 100px; height: 30px;
+    }
+    .datepick{
+        text-decoration: none;
+        color: lightgray;
+    }
+
 </style>
 </head>
 <body>
@@ -142,22 +164,32 @@
                             부서와 직급을 선택하세요.
                         </span> 
                     </div>
-                    <div style="text-align: center; margin-bottom: 50px;">
-                        <label for="" style="margin-right: 10px; font-size: 13px;">
-                            부서
-                        </label>
-                        <select name="" id="userDept" style="border: 1px solid lightgray; width: 150px; font-size: 13px;">
-                            <c:forEach var="dept" items="${deptList}">
-                                <option value="${dept.deptNo}">${dept.deptName}</option>
-                            </c:forEach>
-                        </select>
-                        <br>
-                        
-                        <label for="" style="margin-right: 10px; font-size: 13px;">
-                            직급
-                        </label>
-                        <input type="text" name="userRank" id="userRank">
-                    </div>
+                    <table id="enableContent" >
+                        <tr>
+                            <td class="td-title">부서</td>
+                            <td> 
+                                <select name="" id="userDept" style="border: 1px solid lightgray; width: 150px; font-size: 13px;">
+                                    <c:forEach var="dept" items="${deptList}">
+                                        <option value="${dept.deptNo}">${dept.deptName}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="td-title">직급</td>
+                            <td>
+                                <input type="text" name="userRank" id="userRank">
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="td-title">입사일</td>
+                            <td>
+                                <input type="text" name="userJoinDate" id="userJoinDate">
+                            </td>
+                        </tr>
+                    </table>
                     <div style="text-align: center;">
                         <button type="button" class="btn" id="btn-enable"
                         style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
@@ -165,7 +197,7 @@
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" 
                         style="width: 90px; margin-left: 60px;">
-                            미승인
+                            취소
                         </button>
                     </div>
                     
@@ -174,6 +206,12 @@
         </div>
     </div>
     <jsp:include page="../common/scripts.jsp" />
+    <!-- jQuery UI 1.11.4 -->
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- datetimepicker -->
+    
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <script>
         $(function(){
@@ -184,27 +222,33 @@
                 $('#modal-userName').text($(this).parent().siblings(".userName").text());
                 $('#modal-userEmail').text($(this).parent().siblings(".userEmail").text());
 
-                $('#modal-userEnable').modal();
+                $('#modal-userEnable').modal('show');
             });
 
             $('#btn-enable').click(function(){
                 var userDept = $('#userDept option:selected').val();
                 var userRank = $('#userRank');
+                var userJoinDate = $('#userJoinDate');
 
                 if(userRank.val() == ''){
                     alert('직급을 입력해주세요.');
                     userRank.focus();
+                }else if(userJoinDate.val() == ''){
+                    alert('입사일을 입력해주세요.');
+                    userJoinDate.focus();
                 }else{
                     $.ajax({
                         url: "updateEnable.ad",
                         data:{
                             deptNo:userDept,
                             userRank:userRank.val(),
-                            userEmail:$('#modal-userEmail').text()
+                            userEmail:$('#modal-userEmail').text(),
+                            userJoinDate:userJoinDate.val()
                         },
                         success:function(result){
                             console.log(result);
                             if(result == 'NNNNY'){
+                                $('#modal-userEnable').modal('hide');
                                 alert('회원상태를 변경했습니다.');
                                 location.reload();
                             }else{
@@ -217,6 +261,21 @@
                     })
                 }
             })
+
+            $('#userJoinDate').datepicker({
+                dateFormat: 'mm/dd/yy'
+                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+                ,changeYear: true //option값 년 선택 가능
+                ,changeMonth: true //option값  월 선택 가능                
+                ,buttonText: "선택" //버튼 호버 텍스트              
+                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] 
+                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] 
+                ,dayNamesMin: ['일','월','화','수','목','금','토'] 
+                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일']
+
+            });
         })
     </script>
 </body>

@@ -320,7 +320,7 @@
 		     , user_enabled
 		  from users
 		 where user_enabled = 'N'
-		   and user_status = '재직'
+		   and user_status = '대기'
 		   and com_no = #{cno}
   	</select>
   	
@@ -330,6 +330,7 @@
   		   set dept_no = #{deptNo}
   		     , user_rank = #{userRank}
   		     , user_enabled = 'Y'
+  		     , user_joindate = #{userJoinDate}
   		 where user_email = #{userEmail}
   	</update>
   	
@@ -365,11 +366,13 @@
 		             , com_phone
 				     , user_status
 		             , user_filepath
+		             , user_resdate
 				  from users u
 				  join dept d on (d.dept_no = u.dept_no)
 		          join company c on (c.com_no = u.com_no)
 				 where u.com_no = #{comNo}
 				   and user_auth = 'S'
+				   and user_status in ('재직','휴직','퇴사')
 				 order
 				    by (case when user_status = '재직' then 1 else 2 end),
 				        user_name asc
@@ -386,11 +389,13 @@
 		             , com_phone
 				     , user_status
 		             , user_filepath
+		             , user_resdate
 				  from users u
 				  join dept d on (d.dept_no = u.dept_no)
 		          join company c on (c.com_no = u.com_no)
 				 where u.com_no = #{comNo}
 				   and user_auth = 'S'
+				   and user_status in ('재직','휴직','퇴사')
 				   and user_status = #{category}
 			</otherwise>
 		</choose>
@@ -404,9 +409,22 @@
 	</update>
 	
 	<update id="adminUpdateStatusUser">
-		update users
-		   set user_status = #{userStatus}
-		 where user_email = #{userEmail}
+		<choose>
+			<when test="userStatus.equals('재직')">
+				update users
+				   set user_status = #{userStatus}
+				     , user_resdate = #{userResDate}
+				     , user_enabled = 'Y'
+				 where user_email = #{userEmail}
+			</when>
+			<otherwise>
+				update users
+				   set user_status = #{userStatus}
+				     , user_resdate = #{userResDate}
+				     , user_enabled = 'N'
+				 where user_email = #{userEmail}
+			</otherwise>
+		</choose>
 	</update>
 	
 	<!-- 관리자 사원 검색 -->
@@ -440,11 +458,13 @@
 		             , com_phone
 				     , user_status
 		             , user_filepath
+		             , user_resdate
 				  from users u
 				  join dept d on (d.dept_no = u.dept_no)
 		          join company c on (c.com_no = u.com_no)
 				 where u.com_no = #{comNo}
 				   and user_auth = 'S'
+				   and user_status in ('재직','휴직','퇴사')
 				  	 <if test="group == 'user-Name'">
 					 	and user_name = #{keyword}
 					 </if>
@@ -470,11 +490,13 @@
 		             , com_phone
 				     , user_status
 		             , user_filepath
+		             , user_resdate
 				  from users u
 				  join dept d on (d.dept_no = u.dept_no)
 		          join company c on (c.com_no = u.com_no)
 				 where u.com_no = #{comNo}
 				   and user_auth = 'S'
+				   and user_status in ('재직','휴직','퇴사')
 				   and user_status = #{category}
 				   	 <if test="group == 'user-Name'">
 					 	and user_name = #{keyword}

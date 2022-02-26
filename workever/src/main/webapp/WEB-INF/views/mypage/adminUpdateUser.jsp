@@ -7,7 +7,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
-<jsp:include page="../common/scripts.jsp" />
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.css">
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- moment -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 <style>
     div{box-sizing: border-box;}
     .content-wrapper{overflow: hidden; position: relative;}
@@ -99,6 +106,13 @@
         width: 180px; font-size: 15px;
     }
 
+    #userResDate{
+        border: none;
+        border-bottom: 1px solid lightgray;
+        width: 150px;
+        font-size: 13px;
+    }
+
     /* 검색 영역*/
     .search-select{
         width: 100px;
@@ -171,6 +185,7 @@
                                 <input type="hidden" class="userFilePath" value="${user.userFilePath}" >
                                 <input type="hidden" class="userPhone" value="${user.userPhone}">
                                 <input type="hidden" class="deptNo" value="${user.deptNo}">
+                                <input type="hidden" class="userResDate" value="${user.userResDate}">
                                 <td><input type="checkbox" name="" class="info-check"></td>
                                 <td><a class="openUserInfo userName">${user.userName}</a></td>
                                 <td class="deptName">${user.deptName}</td>
@@ -362,13 +377,17 @@
                                 사원
                             </span><br>
                         </div>
-                        <div style="text-align: center; margin-bottom: 50px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
                             <select name="userStatus" id="status-userStatus" style="border: 1px solid lightgray; width: 150px; font-size: 13px;">
                                 <option value="재직">재직</option>
                                 <option value="휴직">휴직</option>
                                 <option value="퇴사">퇴사</option>
                             </select>
                             <br>
+                        </div>
+                        <div id="status-out" style="text-align: center; margin-bottom: 30px;">
+                            <label for="userResDate" style="font-size: 13px;">퇴사일</label>
+                            <input type="text" name="userResDate" id="userResDate">
                         </div>
                         <div style="text-align: center;">
                             <button type="button" class="btn" id="btn-enablesub" 
@@ -456,7 +475,14 @@
         </div>
         
     </div>
+    <jsp:include page="../common/scripts.jsp" />
+    <!-- jQuery UI 1.11.4 -->
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- datetimepicker -->
     
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
     <!-- 검색 키워드 고정 -->
     <c:if test="${not empty group}">
         <script>
@@ -469,7 +495,7 @@
     <!-- 분류 선택시 선택값 고정 -->
 	<c:if test="${not empty category}">
         <script>
-            console.log("하하하하하하")
+            //console.log("하하하하하하")
             $("select[name=category] option[value=${category}]").attr("selected", true)
         </script>
     </c:if>
@@ -477,12 +503,21 @@
 
     <script>
         $(function(){
+            // 상태변경 모달 띄우기
             $('.user-modal').click(function(){
                 $('#status-userName').text($(this).parent().siblings().children('.userName').text());
                 $('#status-deptName').text($(this).parent().siblings('.deptName').text());
                 $('#status-userRank').text($(this).parent().siblings('.userRank').text());
-                $('#status-userStatus').val($(this).text()).prop("selected", true);
                 $('#enable-userEmail').val($(this).parent().siblings(".userEmail").val());
+
+                var userStatus = $(this).text();
+                $('#status-userStatus').val(userStatus).prop("selected", true);
+                if(userStatus == '퇴사'){
+                    $('#status-out').show();
+                    $('#userResDate').val($(this).parent().siblings('.userResDate').val())
+                }else{
+                    $('#status-out').hide();
+                }
                 
                 if($(this).parent().siblings('.userFilePath').val() != ''){
                     $(".status-userImg>img").attr('src', $(this).parent().siblings('.userFilePath').val());
@@ -491,6 +526,19 @@
                 }
                 $('#user-status').modal();
             });
+
+            $('#status-userStatus').change(function(){
+                var result = $('#status-userStatus option:selected').val();
+                var result2 = $('#status-userStatus').val();
+
+                if(result2 != '퇴사'){
+                    $('#status-out').hide();
+                }else{
+                    $('#status-out').show();
+                }
+            })
+            
+            // 정보변경 모달 띄우기
             $('.openUserInfo').click(function(){
                 $('#modal-userEmail').text($(this).parent().siblings(".userEmail").val());
                 $('#input-Email').val($(this).parent().siblings(".userEmail").val());
@@ -516,7 +564,8 @@
                     type:'post',
                     data:{
                         userEmail : $('#enable-userEmail').val(),
-                        userStatus : $("#status-userStatus").val()
+                        userStatus : $("#status-userStatus").val(),
+                        userResDate : $('#userResDate').val()
                     },
                     success:function(result){
                         if(result == 'NNNNY'){
@@ -554,6 +603,22 @@
                     }
                 }
             })
+
+            // date
+            $('#userResDate').datepicker({
+                dateFormat: 'mm/dd/yy'
+                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+                ,changeYear: true //option값 년 선택 가능
+                ,changeMonth: true //option값  월 선택 가능                
+                ,buttonText: "선택" //버튼 호버 텍스트              
+                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] 
+                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] 
+                ,dayNamesMin: ['일','월','화','수','목','금','토'] 
+                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일']
+
+            });
 
         })
     </script>
