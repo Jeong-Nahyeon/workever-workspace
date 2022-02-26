@@ -81,7 +81,14 @@
 			</div>
 			
 			<div class="workList">
-				<h4>전체 업무 (${ list.size() })</h4>
+				<c:choose>
+				   	<c:when test="${ not empty list }">
+				   		<h4>전체 업무 (${ list.size() })</h4>
+				   	</c:when>
+				   	<c:otherwise>
+				   		<h4>전체 업무 (0)</h4>
+				   	</c:otherwise>
+				</c:choose>
 				<br>
 	            <table id="workList" class="table" align="center">
 	                <thead align="center">
@@ -96,7 +103,8 @@
 			                </tr>
 	                </thead>
 	                <tbody align="center">
-	                	<c:if test="${ not empty list }">
+	                <c:choose>
+	                	<c:when test="${ not empty list }">
 							<c:forEach var="w" items="${ list }">
 		                    <tr>
 		                        <td> ${w.workBoardNo } </td>
@@ -119,9 +127,12 @@
 		                        <td>${w.workEndDate }</td>
 		                    </tr>
 							</c:forEach>
-						</c:if>
-		                
-	                </tbody>
+						</c:when>
+						<c:otherwise>
+		                	<td colspan=7 style="text-align: center;"> <span>해당 업무가 없습니다.</span> </td>
+		                </c:otherwise>
+					</c:choose>  
+	               </tbody>
 	            </table>
 			</div>
 		
@@ -140,22 +151,19 @@
 	<jsp:include page="../common/scripts.jsp" />
 	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	<script>
-	  $.widget.bridge('uibutton', $.ui.button)
-	</script>
-	
-	<script>
+		<script>
 		$("input[name=workDivision]").change(function(){
 			const formNo = $("input[name=workDivision]:checked").val();
 			console.log(formNo);
 			
 			if(formNo == 1) {				
-				$(".workList").load("work.all?proNo=" + ${list.get(0).proNo});
+				$(".workList").load("work.all?proNo=" + ${proNo});
 			}else if(formNo == 2){
-				$(".workList").load("work.my?proNo=" + ${list.get(0).proNo}+"&workManager="+"${loginUser.userName}");
+				$(".workList").load("work.my?proNo=" + ${proNo}+"&workManager="+"${loginUser.userName}");
 			}		
 		})
 	</script>
 	
+
 </body>
 </html>

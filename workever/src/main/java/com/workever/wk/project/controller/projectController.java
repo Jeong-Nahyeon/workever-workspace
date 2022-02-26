@@ -128,7 +128,8 @@ public class projectController {
 		ArrayList<workBoard> list = pService.selectProject(proNo);
 		System.out.println(list);
 		
-		mv.addObject("list", list)
+		mv.addObject("proNo", proNo)
+		  .addObject("list", list)
 		  .setViewName("project/workListView");
 		return mv;
 	}

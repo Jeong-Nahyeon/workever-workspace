@@ -592,12 +592,12 @@
 		                    	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
 	                    	</c:when>
 	                    	<c:otherwise>
-	                  			<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ pi.currentPage - 1 }&proNo=${list.get(0).proNo}">Previous</a></li>
+	                  			<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ pi.currentPage - 1 }&proNo=${list2.get(0).proNo}">Previous</a></li>
 	                    	</c:otherwise>
 	                    </c:choose>
 	                    
 	                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-	                   		<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ p }&proNo=${list.get(0).proNo}"> ${ p } </a></li>
+	                   		<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ p }&proNo=${list2.get(0).proNo}"> ${ p } </a></li>
 	                    </c:forEach>
 	                    
 	                    
@@ -606,7 +606,7 @@
 	                    		<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
 	                    	</c:when>
 	                    	<c:otherwise>
-	                  			<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ pi.currentPage + 1 }&&proNo=${list.get(0).proNo}">Next</a></li>
+	                  			<li class="page-item"><a class="page-link" href="detail.pro?cpage=${ pi.currentPage + 1 }&&proNo=${list2.get(0).proNo}">Next</a></li>
 	                    	</c:otherwise>
 	                    </c:choose>                    
 	                </ul>

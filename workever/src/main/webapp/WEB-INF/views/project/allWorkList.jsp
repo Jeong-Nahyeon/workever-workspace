@@ -9,8 +9,15 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<c:choose>
+	   	<c:when test="${ not empty list }">
+	   		<h4>전체 업무 (${ list.size() })</h4>
+	   	</c:when>
+	   	<c:otherwise>
+	   		<h4>전체 업무 (0)</h4>
+	   	</c:otherwise>
+	</c:choose>
 
-<h4>전체 업무 (${ list.size() })</h4>
 <br>
          <table id="workList" class="table" align="center">
              <thead align="center">
@@ -25,32 +32,35 @@
                </tr>
              </thead>
              <tbody align="center">
-              
-                	<c:if test="${ not empty list }">
-							<c:forEach var="w" items="${ list }">
+              		<c:choose> 	
+						<c:when test="${ not empty list }">
+								<c:forEach var="mw" items="${ list }">
 		                    <tr>
-		                        <td> ${w.workBoardNo } </td>
+		                        <td> ${mw.workBoardNo } </td>
 		                        <c:choose>
-		                        	<c:when test="${ w.workStatus eq '완료' }">
-		                        		<td> <span class="badge badge-pill badge-primary">${ w.workStatus }</span> </td>
+		                        	<c:when test="${ mw.workStatus eq '완료' }">
+		                        		<td> <span class="badge badge-pill badge-primary">${ mw.workStatus }</span> </td>
 		                        	</c:when>
-		                        	<c:when test="${ w.workStatus eq '진행' }">
-		                        		<td> <span class="badge badge-pill badge-success">${ w.workStatus }</span> </td>
+		                        	<c:when test="${ mw.workStatus eq '진행' }">
+		                        		<td> <span class="badge badge-pill badge-success">${ mw.workStatus }</span> </td>
 		                        	</c:when>
-		                        	<c:otherwise>
-		                        		 <td> <span class="badge badge-pill badge-warning">${ w.workStatus }</span> </td>
-		                        	</c:otherwise>
+		                        	<c:when test="${ mw.workStatus eq '보류' }">
+		                        		<td> <span class="badge badge-pill badge-warning">${ mw.workStatus }</span> </td>
+		                        	</c:when>
 		                        </c:choose>
 		                        
-		                        <td> ${w.workPriority } </td>
-		                        <td> ${w.workTitle }</td>
-		                        <td>${w.workManager }</td>
-		                        <td>${w.workStartDate }</td>
-		                        <td>${w.workEndDate }</td>
+		                        <td> ${mw.workPriority } </td>
+		                        <td> ${mw.workTitle }</td>
+		                        <td>${mw.workManager }</td>
+		                        <td>${mw.workStartDate }</td>
+		                        <td>${mw.workEndDate }</td>
 		                    </tr>
 							</c:forEach>
-						</c:if>
-             </tbody>
+						</c:when>
+						<c:otherwise>
+		                	<td colspan=7 style="text-align: center;"> <span>해당 업무가 없습니다.</span> </td>
+		                </c:otherwise>
+					</c:choose>
          </table>
 
 </body>
