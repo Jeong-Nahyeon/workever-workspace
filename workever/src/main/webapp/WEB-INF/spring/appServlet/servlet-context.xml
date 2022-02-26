@@ -38,6 +38,13 @@
 			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
 		</websocket:handshake-interceptors>
 	</websocket:handlers>
+
+   <beans:bean id="chatEchoHandler" class="com.workever.wk.socket.ChatEchoHandler"></beans:bean>
+	
+	<websocket:handlers>
+      <websocket:mapping handler="chatEchoHandler" path="/echo-handle" />
+      <websocket:sockjs />
+   </websocket:handlers>	
 	
 </beans:beans>
 
