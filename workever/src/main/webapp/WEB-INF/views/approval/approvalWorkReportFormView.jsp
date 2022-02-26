@@ -375,7 +375,7 @@
 	            </div>
 	            <div class="modal-footer justify-content-between">
 	              <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-	              <button type="submit" class="btn btn-primary">확인</button>
+	              <button type="submit" class="btn btn-primary" id="apvlAlarm">확인</button>
 	            </div>
             </form>
           </div>
@@ -413,6 +413,16 @@
 		<jsp:include page="../common/footer.jsp" />
 	</div>
 	<jsp:include page="../common/scripts.jsp" />
+	
+	<script>
+		$("#apvlAlarm").click(function(){
+			if(socket != null){
+				let socketMsg = "apvl,${apvl.apvlTitle},${apvl.apvlNo},${apvl.apvlWriter}";
+				console.log(socketMsg)
+				socket.send(socketMsg);
+			}
+		})
+	</script>
 
 </body>
 </html>

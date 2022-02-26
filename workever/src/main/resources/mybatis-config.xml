@@ -34,6 +34,7 @@
 		<typeAlias type="com.workever.wk.calendar.model.vo.Calendar" alias="Calendar"/>
 		<typeAlias type="com.workever.wk.todo.model.vo.Todo" alias="Todo" />
 		<typeAlias type="com.workever.wk.organogram.model.vo.Organogram" alias="Organogram"/>
+		<typeAlias type="com.workever.wk.alert.model.vo.Alert" alias="Alert"/>
 	</typeAliases>
 	
 	<mappers>
@@ -52,6 +53,7 @@
 		<mapper resource="/mappers/chatting-mapper.xml" />
 		<mapper resource="/mappers/todo-mapper.xml" />
 		<mapper resource="/mappers/organogram-mapper.xml" />
+		<mapper resource="/mappers/alert-mapper.xml" />
 	</mappers>
 
 </configuration>

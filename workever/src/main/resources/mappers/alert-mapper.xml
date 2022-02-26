@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="alertMapper">
+	<insert id="insertAlert">
+		insert
+		  into alert
+		  (
+		    alert_no
+		  , alert_type
+		  , alert_board_no
+		  , alert_content
+		  , alert_receive_user
+		  , alert_date
+		  )
+		  values
+		  (
+		    SEQ_ALERT.NEXTVAL
+		  , #{alertType}
+		  , #{alertBoardNo}
+		  , #{alertContent}
+		  , #{alertReceiveUser}
+		  , sysdate
+		  )
+		
+		  
+	</insert>
+</mapper>
