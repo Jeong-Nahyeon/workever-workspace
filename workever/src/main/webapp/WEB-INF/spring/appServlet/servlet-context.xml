@@ -74,7 +74,6 @@
    			<exclude-mapping path="/views/user/main.jsp"/>
    			<exclude-mapping path="/echo"/>
    			
-	
    			<beans:bean class="com.workever.wk.common.interceptor.LoginInterceptor" id="loginInterceptor" />
    		</interceptor>
    		
@@ -97,6 +96,23 @@
    			<mapping path="/addDept.do"/>
    			<mapping path="/updateDept.do"/>
    			<mapping path="/deleteDept.do"/>
+   			
+   			<mapping path="/insert.nbo"/>
+   			<mapping path="/updateForm.nbo"/>
+   			<mapping path="/update.nbo"/>
+   			<mapping path="/delete.nbo"/>
+   			
+   			<mapping path="/list.bo"/>
+   			<mapping path="/detail.bo"/>
+   			<mapping path="/blind.bo"/>
+   			<mapping path="/cancel.bo"/>
+   			<mapping path="/delete.bo"/>
+   			
+   			<mapping path="/list.re"/>
+   			<mapping path="/detail.re"/>
+   			<mapping path="/blind.re"/>
+   			<mapping path="/cancel.re"/>
+   			<mapping path="/delete.re"/>
    			
    			<beans:bean class="com.workever.wk.common.interceptor.AdminAuthenticationInterceptor" id="adminAuthenticationInterceptor" />
    		</interceptor>
