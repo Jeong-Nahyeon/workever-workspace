@@ -231,9 +231,9 @@
 									labels: '바울랩매출액',
 									data:[50,20,40],
 									backgroundColor:[
-										'rgb(101, 180, 233)',
-										'rgb(95, 201, 95)',
-										'rgb(247, 202, 54)'
+										'rgb(95, 201, 95)',//초록색
+										'rgb(101, 180, 233)',//파란색
+										'rgb(247, 202, 54)'//노란색
 									]
 								}]
 							}
@@ -492,10 +492,10 @@
 							<br>
 							<hr>
 							<!-- 댓글보이는곳  -->
-							<div>
-							<span style="margin-left:660px">댓글 (<span id="rcount">3</span>)</span>
+							<div class="z">
+								<span style="margin-left:660px">댓글 (<span id="rcount">3</span>)</span>
 								<table id="replyArea${w.workBoardNo}" class="table" align="center">
-					                <thead>
+					                <thead class="zzz">
 	
 					                </thead>
 					                <tbody>
@@ -525,6 +525,7 @@
 			    		         data:{bno:$(this).prev().val()},
 			    		        
 			    		         success:function(list){
+			    		        	 console.log(list);
 			    		        	 let value = "";
 			    		        	 if(list.length > 0){
 				    		        	 for(let i in list){
@@ -539,9 +540,10 @@
 			    		        			  	+	"<th>" + "댓글이 존재하지 않습니다." + "</th>"
 			    		        			 	+ "</tr>";
 			    		        	 }
-			    		        	 $(this "div").eq(10).$("thead").html(value);
-			    		        	 $("#rcount").text(list.length);
-			    		        	 
+									 //$(this).children("div").eq(10).children().eq(1).children().eq(0).html(value);
+									 $(this).find(".z thead").html(value);
+									 
+									 console.log($(this).children("div").eq(10));
 			    		         },error:function(){
 			    		        	 console.log("댓글리스트 조회용 ajax통신실패")
 			    		         }

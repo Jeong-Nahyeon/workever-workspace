@@ -108,7 +108,8 @@
 											<div style="margin-left:180px"><b><span> ${p.proNumberPeople}명 참여중 </span></b></div>
 				                        	
 											<c:if test="${loginUser.userName.equals(p.proManager)}">
-												<a style="font-size:12px; color: red;'" onclick="deleteconfirm(${p.proNo})">삭제하기</a>
+												<a style="font-size:13px; color: red;" onclick="deleteconfirm(${p.proNo})">삭제하기</a>
+												<a style="font-size:13px; color: blue;" onclick="">수정하기</a> 
 											</c:if>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											
