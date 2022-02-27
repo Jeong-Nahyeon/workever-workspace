@@ -48,10 +48,12 @@
     .start-content{
         overflow: hidden;
         height: 100%;
+        background-image:url('resources/images/bg_img2.png');
     }
-    #start-img img{
+    #start-img{
         width: 100%;
         height: 230px;
+        margin:0;
     }
     #start-text{margin-top: 40px;}
 
@@ -94,9 +96,7 @@
     </div>
 
 	<div class="start-content">
-        <div id="start-img">
-            <img src="resources/images/startImage.jpg" alt="">
-        </div>
+        <div id="start-img"></div>
 
         <div id="start-text">
             <span style="font-size: 25px; font-weight: bold; padding-bottom: 20px; margin-left: 550px;">
