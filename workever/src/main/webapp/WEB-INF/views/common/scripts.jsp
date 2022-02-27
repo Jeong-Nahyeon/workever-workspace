@@ -25,7 +25,9 @@
 					success:function(result){
 						for(let i in result){
 							alertList += "<div class='dropdown-divider'></div>"
-									  +     "<a href='" + result[i].alertUrl + "' class='dropdown-item' val='" + result[i].alertNo + "')>"
+									  +     "<a href='#' class='dropdown-item' val='" +  result[i].alertUrl + "' onclick='alertCheck(this);')>"
+									  +			"<input type='hidden' name='alertUrl' value='" + result[i].alertUrl + "'>"
+									  +			"<input type='hidden' name='alertNo' value='" + result[i].alertNo + "'>"
 									  +    		"<div class='alertArea' style='width:100%'>"
 									  +     		"<div class='alertTitle'>"
 									  +     			"<span style='font-size:15px;font-weight:700;margin-right:30px;'>" + result[i].alertType + "</span>"
@@ -61,10 +63,22 @@
 			
 		})
 			
+		function alertCheck(e){
+			$.ajax({
+				url:"alertCheck.al",
+				data:{alertNo:$(e).children("input[name=alertNo]").val()},
+				success:function(result){
+					console.log("ajax통신 성공");
+				},error:function(){
+					console.log("ajax통신 실패");
+				}
+			})
+			location.href = $(e).children("input[name=alertUrl]").val();
+		}
 		
 		function connectWs(){
 			
-			var ws = new WebSocket("ws://localhost:8007/wk/echo");
+			var ws = new WebSocket("ws://" + location.host + "/wk/echo");
 			socket = ws;
 			
 			// 커넥션 연결됐을 때 실행 (클라이언트 접속 시)
