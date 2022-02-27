@@ -2,6 +2,8 @@ package com.workever.wk.chatting.controller;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,9 @@ public class ChattingController {
 	
 	@Autowired
 	private ChattingService cService;
+	
+	private Logger logger = LoggerFactory.getLogger(ChattingController.class);
+	
 	
 	
 	@RequestMapping("addressBook.do")
@@ -52,5 +57,13 @@ public class ChattingController {
 		model.addAttribute("list", list);
 		
 		return "chatting/chatInvitationList"; 
+	}
+	
+	
+	@RequestMapping("chat.do")
+	public String chat(Model model) {
+		logger.info("[Controller] : chat.do");
+		
+		return "chatting/chatting";
 	}
 }
