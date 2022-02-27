@@ -88,9 +88,15 @@
 								
 									<div class="card-footer">
 										<div class="text-right">
-											<a href="#" class="btn btn-sm bg-teal">
+											<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal">
 												<i class="fas fa-comments"></i>
 											</a>
+											
+											<script>
+												function chatPopup(){
+													window.open("chat.do", "chat", "width=400, height=500");
+												}
+											</script>
 										</div>
 									</div>
 								</div>
