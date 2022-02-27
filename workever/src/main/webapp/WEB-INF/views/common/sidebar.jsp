@@ -265,7 +265,7 @@
 				</a>
 				<ul class="nav nav-treeview">
 				  <li class="nav-item">
-					<a href="./index.html" class="nav-link">
+					<a href="todo.do" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>ToDo</p>
 					</a>
@@ -277,12 +277,6 @@
 					  <i class="right fas fa-angle-left"></i>
 					</a>
 					<ul class="nav nav-treeview">
-						<li class="nav-item cus-li">
-							<a href="" class="nav-link">
-								<i class="far fa-circle nav-icon"></i>
-								<p class="sidebar-li-font">전체일정</p>
-							</a>
-						</li>
 						<li class="nav-item cus-li">
 							<a href="companyCalendar.do" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
@@ -425,33 +419,13 @@
 
 			<!-- 조직도 -->
 			<li class="nav-item ">
-				<a href="#" class="nav-link">
+				<a href="organogram.do" class="nav-link">
 				  <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
 				  <p class="sidebar-menufont" align="center">
 					조직도
 					<i class="right fas fa-angle-left"></i>
 				  </p>
 				</a>
-				<ul class="nav nav-treeview">
-				  <li class="nav-item">
-					<a href="./index.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Dashboard v1</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="./index2.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Dashboard v2</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="./index3.html" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Dashboard v3</p>
-					</a>
-				  </li>
-				</ul>
 			</li>
 		  </ul>
 	    </nav>
