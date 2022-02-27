@@ -402,6 +402,25 @@
 	</div>
 	
 	<jsp:include page="../common/scripts.jsp" />
+
+	<script>
+		$(function(){
+
+			// todo 조회
+			todoList();
+		})
+
+		function todoList(){
+			$.ajax({
+				url:"mainTodoList.do",
+				success:function(result){
+					console.log(result);
+				},error:function(){
+					console.log("MainTodoList ajax 통신 실패");
+				}
+			})
+		}
+	</script>
 </body>
 
 </html>

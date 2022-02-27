@@ -36,4 +36,9 @@ public class TodoDao {
 	public int deleteTodo(SqlSessionTemplate sqlSession, String todoNo) {
 		return sqlSession.delete("todoMapper.deleteTodo", todoNo);
 	}
+
+	// main todo
+	public ArrayList<Todo> mainTodoList(SqlSessionTemplate sqlSession, HashMap<String, String> user) {
+		return (ArrayList)sqlSession.selectList("todoMapper.mainTodoList", user);
+	}
 }

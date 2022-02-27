@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.workever.wk.todo.model.service.TodoService;
 import com.workever.wk.todo.model.vo.Todo;
 import com.workever.wk.user.model.vo.User;
@@ -105,5 +106,26 @@ public class TodoController {
 		int result = tService.deleteTodo(todoNo);
 		
 		return result > 0 ? "NNNNY" : "NNNNN";
+	}
+	
+	// 메인페이지 todolist 조회
+	@ResponseBody
+	@RequestMapping("mainTodoList.do")
+	public String mainTodoList(HttpSession session) {
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yy/MM/dd");
+		String today = now.format(format);
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		String userNo = loginUser.getUserNo();
+		
+		HashMap<String, String> user = new HashMap<String, String>();
+		user.put("userNo", userNo);
+		user.put("today", today);
+		
+		ArrayList<Todo> todoList = tService.mainTodoList(user);
+		Gson gson = new Gson();
+		return gson.toJson(todoList);
+		
 	}
 }

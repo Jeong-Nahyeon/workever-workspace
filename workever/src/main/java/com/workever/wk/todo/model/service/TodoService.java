@@ -22,4 +22,6 @@ public interface TodoService {
 	// todo 삭제
 	int deleteTodo(String todoNo);
 
+	// mainTodoList 조회
+	ArrayList<Todo> mainTodoList(HashMap<String, String> user);
 }

@@ -49,4 +49,10 @@ public class TodoServiceImpl implements TodoService{
 	public int deleteTodo(String todoNo) {
 		return tDao.deleteTodo(sqlSession, todoNo);
 	}
+
+	// main todo 조회
+	@Override
+	public ArrayList<Todo> mainTodoList(HashMap<String, String> user) {
+		return tDao.mainTodoList(sqlSession, user);
+	}
 }

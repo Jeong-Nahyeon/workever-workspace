@@ -73,4 +73,32 @@
 		  from todo
 		 where todo_no = #{todoNo}
 	</delete>
+	
+	<!-- main todo -->
+	<select id="mainTodoList" resultMap="todoResult">
+		select 
+		       todo_no
+		     , user_no
+		     , todo_title
+		     , todo_memo
+		     , todo_imp
+		     , todo_date
+		     , todo_status
+		  from 
+          (select 
+                  todo_no
+                , user_no
+                , todo_title
+                , todo_memo
+                , todo_imp
+                , todo_date
+                , todo_status
+             from todo 
+            order 
+               by todo_date asc
+          )
+		 where user_no = #{userNo}
+		   and todo_date = #{today}
+           and ROWNUM between 1 and 5
+	</select>
 </mapper>
