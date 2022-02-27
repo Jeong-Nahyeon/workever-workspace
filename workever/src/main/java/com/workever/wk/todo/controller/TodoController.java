@@ -43,6 +43,7 @@ public class TodoController {
 		//System.out.println(todoList);
 		
 		model.addAttribute("todoList", todoList);
+		model.addAttribute("today", today);
 		return "schedule/todo";
 	}
 	

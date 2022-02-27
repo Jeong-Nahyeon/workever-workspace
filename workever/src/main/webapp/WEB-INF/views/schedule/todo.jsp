@@ -67,7 +67,9 @@
     <div class="content-wrapper kanban">
         <div class="content-title">
             <span>ToDo</span>
-            <span style="margin-left: 20px; font-size: 15px">2022년 01월 22일</span>
+            <span style="margin-left: 20px; font-size: 15px">
+                ${today}
+            </span>
         </div>
 
         <div class="todo-area">
