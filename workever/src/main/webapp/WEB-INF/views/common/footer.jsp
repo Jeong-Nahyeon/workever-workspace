@@ -8,10 +8,9 @@
 </head>
 <body>
 	<footer class="main-footer">
-	  <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-	  All rights reserved.
+	  Welcome to <strong><a href="/">Workever</a></strong>!
 	  <div class="float-right d-none d-sm-inline-block">
-	    <b>Version</b> 3.1.0
+	    KH Final Project Group 5. <b>E1I4</b>
 	  </div>
 	</footer>
 	

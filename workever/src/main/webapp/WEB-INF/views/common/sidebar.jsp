@@ -24,6 +24,20 @@
 	}
 	.cus-li{padding-left: 20px;}
 	.sidebar-li-font{font-size: 13px;}
+	
+	
+	.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    	background-color: transparent;
+	}
+	
+	[class*=sidebar-dark-] .nav-sidebar>.nav-item>.nav-link.active {
+    	box-shadow:none !important;
+	}
+	/*
+	.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active:hover {
+    	background-color: rgba(255,255,255,.1);
+	}
+	*/
 </style>
 </head>
 <body>
@@ -39,6 +53,7 @@
 	  <!-- Sidebar -->
 	  <div class="sidebar">
 	    <!-- Sidebar user panel (optional) -->
+	    <!-- 
 	    <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid lightgray;">
 	      <div class="image">
 	        <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
@@ -47,7 +62,7 @@
 	        <a href="#" class="d-block">Alexander Pierce</a>
 	      </div>
 	    </div>
-	
+	    -->
 	    <!-- SidebarSearch Form 
 	    <div class="form-inline">
 	      <div class="input-group" data-widget="sidebar-search">
@@ -66,33 +81,46 @@
 	      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 	        <!-- Add icons to the links using the .nav-icon class
 	             with font-awesome or any other icon font library -->
-	        <li class="nav-item ">
+	        <li class="nav-item">
 	          <a href="#" class="nav-link active">
 	            <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
 	            <p class="sidebar-menufont" align="center">
-	              메일
-	              <i class="right fas fa-angle-left"></i>
-	            </p>
+					메일
+					<i class="right fas fa-angle-left"></i>
+				</p>
 	          </a>
 	          <ul class="nav nav-treeview">
-	            <li class="nav-item">
-	              <a href="inbox.mail" class="nav-link">
-	                <i class="far fa-circle nav-icon"></i>
-	                <p>받은메일함</p>
-	              </a>
-	            </li>
-	            <li class="nav-item">
-	              <a href="outbox.mail" class="nav-link">
-	                <i class="far fa-circle nav-icon"></i>
-	                <p>보낸메일함</p>
-	              </a>
-	            </li>
-	            <li class="nav-item">
-	              <a href="trashbox.mail" class="nav-link">
-	                <i class="far fa-circle nav-icon"></i>
-	                <p>삭제메일함</p>
-	              </a>
-	            </li>
+	          <c:choose>
+	          	 <c:when test="${ loginUser.userRank ne '관리자' }">
+		            <li class="nav-item">
+		              <a href="compose.mail" class="nav-link">
+		                <i class="fas fa-plus nav-icon"></i>
+		                <p>메일 작성하기</p>
+		              </a>
+		            </li>
+		            <li class="nav-item">
+		              <a href="inbox.mail" class="nav-link">
+		                <i class="far fa-circle nav-icon"></i>
+		                <p>받은메일함</p>
+		              </a>
+		            </li>
+		            <li class="nav-item">
+		              <a href="outbox.mail" class="nav-link">
+		                <i class="far fa-circle nav-icon"></i>
+		                <p>보낸메일함</p>
+		              </a>
+		            </li>
+		            <li class="nav-item">
+		              <a href="trashbox.mail" class="nav-link">
+		                <i class="far fa-circle nav-icon"></i>
+		                <p>삭제메일함</p>
+		              </a>
+		            </li>
+		            </c:when>
+		            <c:otherwise>
+		            	<p style="color:white; text-align:center;">사원만 이용가능합니다.</p>
+		            </c:otherwise>
+	            </c:choose>
 	          </ul>
 	        </li>
 
@@ -332,29 +360,39 @@
 				</a>
 				<ul class="nav nav-treeview">
 				  <li class="nav-item">
-					<a href="list.nbo" class="nav-link">
+					<a href="list.nbo" class="nav-link" style="display: inline-block; width: 160px;">
 					  <i class="far fa-circle nav-icon"></i>
-					  <p>공지사항</p>
+					  공지사항
 					</a>
+					<c:if test="${ loginUser.userRank eq '관리자' }">
+						<a href="enrollForm.nbo" class="btn btn-sm btn-default" style="color:#4E73DF !important; font-size: 10px; font-weight: bolder;">공지작성</a>
+					</c:if>
 				  </li>
+				  <c:if test="${ loginUser.userRank ne '관리자' }">
+					  <li class="nav-item">
+						<a href="list.dbo" class="nav-link">
+						  <i class="far fa-circle nav-icon"></i>
+						  <p>부서별 게시판</p>
+						</a>
+					  </li>
+				  </c:if>
 				  <li class="nav-item">
-					<a href="list.dbo" class="nav-link">
+					<a href="list.abo" class="nav-link" style="display: inline-block; width: 160px;">
 					  <i class="far fa-circle nav-icon"></i>
-					  <p>부서별 게시판</p>
+					   익명 게시판
 					</a>
+					<c:if test="${ loginUser.userRank eq '관리자' }">
+						<a href="list.bo" class="btn btn-sm btn-default" style="color:#4E73DF !important; font-size: 10px; font-weight: bolder;">신고관리</a>
+					</c:if>
 				  </li>
-				  <li class="nav-item">
-					<a href="list.abo" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>익명 게시판</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="list.mdbo" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>나의 게시글</p>
-					</a>
-				  </li>
+				  <c:if test="${ loginUser.userRank ne '관리자' }">
+					  <li class="nav-item">
+						<a href="list.mdbo" class="nav-link">
+						  <i class="far fa-circle nav-icon"></i>
+						  <p>나의 게시글</p>
+						</a>
+					  </li>
+				  </c:if>
 				</ul>
 			</li>
 
