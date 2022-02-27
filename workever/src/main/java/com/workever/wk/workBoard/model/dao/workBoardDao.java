@@ -38,8 +38,10 @@ public class workBoardDao {
 		return sqlSession.insert("projectMapper.insertReply", r);
 	}
 
-	
-	
+	// 댓글 조회 메소드
+	public ArrayList<Reply> selectReplyList(SqlSessionTemplate sqlSession, int refWorkBoard) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectReplyList", refWorkBoard);
+	}
 	
 	
 	

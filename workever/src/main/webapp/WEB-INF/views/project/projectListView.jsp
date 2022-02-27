@@ -87,34 +87,40 @@
 				</div>
 
 				<hr>
-
 				<div class="myPro">
 					<b><p style="font-size:30px">Project</p></b>
+	                    <c:choose>
+	                    	<c:when test="${not empty list}">
+								<c:forEach var="p" items="${list}">
+									<div class="myProEl"> 
+										<div class="project" onclick="detailPro(${p.proNo})"><br>
+											<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
+											
+											
+											<div><span style="font-size:13px">${p.proDept}</span></div>
+										
+											<br><br>
+											<c:if test="${not empty p.proGrantWhether}">
+												<i class="fas fa-lock fa-lg" style="float:right;margin-right:37px;"></i>
+				                        	</c:if>
+				                        	<br>
+				                        	
+											<div style="margin-left:180px"><b><span> ${p.proNumberPeople}명 참여중 </span></b></div>
+				                        	
+											<c:if test="${loginUser.userName.equals(p.proManager)}">
+												<a style="font-size:12px; color: red;'" onclick="deleteconfirm(${p.proNo})">삭제하기</a>
+											</c:if>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											
+										</div>
+									</div> 
+								</c:forEach>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                    		<b><h4>참여하고 있는 프로젝트가 없습니다.</h4></b>
+	                    	</c:otherwise>
+	                    </c:choose>                    
 					
-					<c:forEach var="p" items="${list}">
-						<div class="myProEl"> 
-							<div class="project" onclick="detailPro(${p.proNo})"><br>
-								<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
-								
-								
-								<div><span style="font-size:13px">${p.proDept}</span></div>
-							
-								<br><br>
-								<c:if test="${not empty p.proGrantWhether}">
-									<i class="fas fa-lock fa-lg" style="float:right;margin-right:37px;"></i>
-	                        	</c:if>
-	                        	<br>
-	                        	
-								<div style="margin-left:180px"><b><span> ${p.proNumberPeople}명 참여중 </span></b></div>
-	                        	
-								<c:if test="${loginUser.userName.equals(p.proManager)}">
-									<a style="font-size:12px; color: red;'" onclick="deleteconfirm(${p.proNo})">삭제하기</a>
-								</c:if>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								
-							</div>
-						</div> 
-					</c:forEach>
 					
 					<form id="postForm" action="" method="post">
 						<input type="hidden" id="proNo" name="proNo" value="">

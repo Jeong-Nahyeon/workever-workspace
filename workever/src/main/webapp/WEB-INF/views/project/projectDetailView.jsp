@@ -369,6 +369,7 @@
 				<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기부터 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 				<c:if test="${ not empty list }">
 					<c:forEach var="w" items="${ list }">
+						<input type="hidden" class="workBoardNo${w.workBoardNo}" value="${w.workBoardNo }">
 						<div style="background-color: white;" class="allBoard">
 							<br>
 							<div style="margin-right:30px">
@@ -489,12 +490,13 @@
 	                    		</c:choose>
 							</div>
 							<br>
-							
+							<hr>
+							<!-- 댓글보이는곳  -->
 							<div>
 							<span style="margin-left:660px">댓글 (<span id="rcount">3</span>)</span>
-								<table id="replyArea" class="table" align="center">
+								<table id="replyArea${w.workBoardNo}" class="table" align="center">
 					                <thead>
-					                
+	
 					                </thead>
 					                <tbody>
 					                    <tr>
@@ -509,51 +511,44 @@
 					                </tbody>
 					            </table>
 							</div>
-							<input type="hidden" class="workBoardNo" value="${w.workBoardNo }">
+							
 						</div><br><br>
 						<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%여기까지 밑에 보여지는 게시글 목록%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 					</c:forEach>	
 				</c:if>
 				<script>
-			    	/*$(function(){ 잠시만 주석처리
+				
+			    	$(function(){ 
 			    		$(".allBoard").each(function(){
 			    		    $.ajax({
 			    		         url:"rlist.bo",
-			    		         data:{bno:$(this).children(".workBoardNo")},
+			    		         data:{bno:$(this).prev().val()},
 			    		        
 			    		         success:function(list){
+			    		        	 let value = "";
+			    		        	 if(list.length > 0){
+				    		        	 for(let i in list){
+					                         value += "<tr>"
+									               +	"<th>" + list[i].replyWriter + "</th>"
+									               +	"<td>" + list[i].replyContent + "</td>"
+									               +	"<td>" + list[i].replyCreateDate + "</td>"
+					                    		   + "</tr>";
+					    				}
+			    		        	 }else{
+			    		        		 value += "<tr>"
+			    		        			  	+	"<th>" + "댓글이 존재하지 않습니다." + "</th>"
+			    		        			 	+ "</tr>";
+			    		        	 }
+			    		        	 $(this "div").eq(10).$("thead").html(value);
+			    		        	 $("#rcount").text(list.length);
 			    		        	 
 			    		         },error:function(){
-			    		        	 
+			    		        	 console.log("댓글리스트 조회용 ajax통신실패")
 			    		         }
 			    			})
 			    		})
-			    	})*/
+			    	})
 			    	
-			    	//댓글 조회용 메소드
-			    	/*function selectReplyList(){ 
-			    		$.ajax({
-			    			url:"rlist.bo",
-			    			data:{bno:${b.boardNo}},
-			    			success:function(list){
-			    				
-			    				let value = "";
-			    				for(let i in list){
-			                         value += "<tr>"
-							               +	"<th>" + list[i].replyWriter + "</th>"
-							               +	"<td>" + list[i].replyContent + "</td>"
-							               +	"<td>" + list[i].createDate + "</td>"
-			                    		   + "</tr>";
-			    				}
-			    				
-			    				$("#replyArea tbody").html(value);
-			    				$("#rcount").text(list.length);
-			    				
-			    			},error:function(){
-			    				console.log("댓글리스트 조회용 ajax통신실패")
-			    			}
-			    		})
-			    	}*/
 			    	
 			    	// 댓글 작성용 메소드
 					function addReply(refWorkBoard){

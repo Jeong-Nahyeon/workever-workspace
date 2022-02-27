@@ -296,15 +296,16 @@
 	
 	<select id="selectReplyList" resultMap="replyResult">
 		select
-			   reply_no
-			 , reply_writer
-			 , reply_content
-			 , to_char(create_date,'YYYY-MM-DD') as "create_date"
-		from reply
-	   where ref_bno = #{boardNo}
-	     and status = 'Y'
+			   REPLY_NO
+			 , WORKBOARD_NO
+			 , REPLY_WRITER
+			 , REPLY_CONTENT
+			 , to_char(REPLY_CREATE_DATE,'YYYY-MM-DD') as "REPLY_CREATE_DATE"
+		from PROJECT_REPLY
+	   where WORKBOARD_NO = #{refWorkBoard}
+	     and REPLY_STATUS = 'Y'
 	   order
-	      by reply_no desc
+	      by REPLY_NO desc
 	
 	</select>
 	

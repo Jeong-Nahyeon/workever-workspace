@@ -96,17 +96,21 @@ public class workBoardController {
 	@RequestMapping(value = "rlist.bo", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReplyList(int bno) {
 		
+		System.out.println(bno);
 		ArrayList<Reply> list = wbService.selectReplyList(bno);
+		System.out.println(list);
 		return new Gson().toJson(list);
 	}
 	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "rinsert.bo")
-	public void ajaxInsertReply(Reply r) {
+	public String ajaxInsertReply(Reply r) {
 		System.out.println(r);
 		
-		//int result = wbService.insertReply(r);
-		//return result>0 ? "success" : "fail";
+		int result = wbService.insertReply(r);
+		return result>0 ? "success" : "fail";
 
 	}
 	

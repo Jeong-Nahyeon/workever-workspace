@@ -22,7 +22,7 @@ public interface workBoardService {
 		int updateBoard(workBoard wb);
 		
 		// 6. 댓글 리스트 조회용 서비스 (ajax)
-		ArrayList <Reply> selectReplyList(int boardNo);
+		ArrayList <Reply> selectReplyList(int refWorkBoard);
 		
 		// 7. 댓글 작성용 서비스 (ajax)
 		int insertReply(Reply r);
