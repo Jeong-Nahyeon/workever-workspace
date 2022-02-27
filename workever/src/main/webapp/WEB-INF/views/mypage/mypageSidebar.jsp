@@ -38,15 +38,7 @@
 	
 	  <!-- Sidebar -->
 	  <div class="sidebar">
-	    <!-- Sidebar user panel (optional) -->
-	    <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid lightgray;">
-	      <div class="image">
-	        <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-	      </div>
-	      <div class="info">
-	        <a href="#" class="d-block">Alexander Pierce</a>
-	      </div>
-	    </div>
+	    
 	
 	    <!-- SidebarSearch Form 
 	    <div class="form-inline">
@@ -67,7 +59,7 @@
 	        <!-- Add icons to the links using the .nav-icon class
 	             with font-awesome or any other icon font library -->
 	        <li class="nav-item ">
-	          <a href="#" class="nav-link">
+	          <a href="main.do" class="nav-link">
 	            <!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
 	            <p class="sidebar-menufont" align="center">
 	              HOME

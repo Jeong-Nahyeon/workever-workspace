@@ -354,6 +354,9 @@ public class UserController {
 		}
 		
 		//System.out.println(u);
+		String userPhone = u.getUserPhone();
+		u.setUserPhone(userPhone.replaceAll("[^0-9]", ""));
+		//System.out.println("바꾼전화번호 : " + u.getUserPhone());
 		int result = uService.updateUserProfile(u);
 		
 		if(result > 0) {
@@ -382,13 +385,14 @@ public class UserController {
 	// 관리자 프로필 변경
 	@RequestMapping("update.ad")
 	public String updateAdminProfile(User u, MultipartFile adUpfile ,HttpSession session, Model model) {
-		System.out.println(u);
-		System.out.println(adUpfile);
+		//System.out.println("관리자 프로필 수정 : " + u);
+		//System.out.println("관리자 프로필 수정 이미지 : " + adUpfile);
 		
 		if(!adUpfile.getOriginalFilename().equals("")) {
 			// 기존 첨부파일 있을 경우 (프로필이미지) 삭제
 			if(u.getUserFilePath() != null) {
 				new File(session.getServletContext().getRealPath(u.getUserFilePath())).delete();
+				System.out.println("기존파일삭제실행됨");
 			}
 			
 			// 새로운 첨부파일 서버 업로드
@@ -397,6 +401,11 @@ public class UserController {
 			// User 객체에 새로운 첨부파일 정보 담기
 			u.setUserFilePath("resources/users_upfiles/" + changeName);
 		}
+		
+		String userPhone = u.getUserPhone();
+		String comPhone = u.getComPhone();
+		u.setUserPhone(userPhone.replaceAll("[^0-9]", ""));
+		u.setComPhone(comPhone.replaceAll("[^0-9]", ""));
 		
 		int result = uService.updateAdminProfile(u);
 		if(result > 0) {

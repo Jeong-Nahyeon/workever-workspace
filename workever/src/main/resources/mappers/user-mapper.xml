@@ -62,7 +62,7 @@
 		     , user_use_date
              , dept_name
              , com_name
-             , com_phone
+             , REGEXP_REPLACE(com_phone, '(02|.{3})(.+)(.{4})', '\1-\2-\3') com_phone
 		  from users u
           join dept d on (d.dept_no = u.dept_no)
           join company c on (c.com_no = u.com_no)

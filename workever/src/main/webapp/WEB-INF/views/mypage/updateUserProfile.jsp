@@ -113,6 +113,7 @@
                                         <label for="file" class="btn btn-light" id="btn-selectphoto">
                                             <i class="fas fa-camera-retro fa-lg"></i>
                                             <input type="file" name="upfile" id="file">
+                                            <input type="hidden" name="userFilePath" value="${loginUser.userFilePath}">
                                         </c:otherwise>
                                 </c:choose>
                             </div>
