@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="alertMapper">
+	
+	<resultMap id="alertResult" type="Alert">
+		<result column="alert_no" property="alertNo"/>
+		<result column="alert_type" property="alertType"/>
+		<result column="alert_board_no" property="alertBoardNo"/>
+		<result column="alert_content" property="alertContent"/>
+		<result column="alert_receive_user" property="alertReceiveUser"/>
+		<result column="alert_date" property="alertDate"/>
+		<result column="alert_check" property="alertCheck"/>
+	</resultMap>
+
 	<insert id="insertAlert">
 		insert
 		  into alert
@@ -21,7 +32,37 @@
 		  , #{alertReceiveUser}
 		  , sysdate
 		  )
-		
-		  
 	</insert>
+	
+	<select id="alertCount" resultType="_int">
+		select
+			   count(*)
+		  from alert
+		 where alert_receive_user = #{loginUserNo}
+		   and alert_check = 'N'
+	</select>
+	
+	<select id="alertSelect" resultMap="alertResult">
+		select
+			   alert_no
+			 , alert_type
+			 , alert_board_no
+			 , alert_content
+			 , alert_receive_user
+			 , to_char(alert_date, 'YYYY.MM.DD HH24:MI') as "alert_date"
+			 , alert_check
+		  from alert
+		 where alert_receive_user = #{loginUserNo}
+		   and alert_check = 'N'
+		 order
+		    by alert_no desc
+	</select>
+	
+	<update id="alertCheck">
+		update
+		       alert
+		   set 
+		       alert_check = 'Y'
+		 where alert_no = #{alertNo}
+	</update>
 </mapper>

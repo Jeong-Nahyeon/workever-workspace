@@ -13,7 +13,52 @@
 		
 		$(document).ready(function(){
 			connectWs();
+			msgCount();
 			//readAlarms();
+			
+			$("#alertBtn").click(function(){
+				let alertList = "";
+			
+				$.ajax({
+					url:"alertSelect.al",
+					data:{loginUserNo:${loginUser.userNo}},
+					success:function(result){
+						for(let i in result){
+							alertList += "<div class='dropdown-divider'></div>"
+									  +     "<a href='" + result[i].alertUrl + "' class='dropdown-item' val='" + result[i].alertNo + "')>"
+									  +    		"<div class='alertArea' style='width:100%'>"
+									  +     		"<div class='alertTitle'>"
+									  +     			"<span style='font-size:15px;font-weight:700;margin-right:30px;'>" + result[i].alertType + "</span>"
+									  +     			"<span style='font-size:12px;'>" + result[i].alertDate + "</span>"
+									  +     		"</div>"
+									  +    			"<div class='alertContent'><p style='word-break:break-all;font-size:12px;'>" + result[i].alertContent + "</p></div>"
+									  +    		"</div>"
+									  +     "</a>";
+						}
+						
+						$("#alertDropdown").html(alertList);
+					},error:function(){
+						console.log("ajax통신 실패");
+					}
+				})
+			})
+			
+			/*
+			$("#alertDropdown  a").click(function(){
+				console.log("클릭");
+				$.ajax({
+					url:"alertCheck.al",
+					data:{alertNo:$(this).val()},
+					success:function(result){
+						console.log("ajax통신 성공");
+					},error:function(){
+						console.log("ajax통신 실패");
+					}
+				})
+				
+			})*/
+			
+			
 		})
 			
 		
@@ -32,7 +77,9 @@
 			ws.onmessage = function(event) {
 				console.log(event.data+'\n');
 				toastr.options.positionClass = "toast-bottom-right";
-				toastr.success(event.data)	
+				toastr.success(event.data);
+				msgCount();
+				
 			};
 			
 			// 커넥션 끊겼을 때
@@ -46,4 +93,22 @@
 				console.log('error: '+ error);
 			};
 		}
+		
+		function msgCount(){
+			$.ajax({
+				url:"alertCount.al",
+				data:{loginUserNo:${loginUser.userNo}},
+				success:function(result){
+						if(result > 0){
+							$("#alertCount").text(result);
+						}else{
+							$("#alertCount").text(0);
+						}
+				},error:function(){
+					console.log("ajax통신 실패");
+				}
+			})
+		}
+		
+		
 	</script>

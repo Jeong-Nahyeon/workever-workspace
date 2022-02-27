@@ -17,5 +17,7 @@ public class Alert {
 	private int alertReceiveUser;
 	private String alertDate;
 	private String alertCheck;
+	
 	private String sendUser;
+	private String alertUrl;
 }
