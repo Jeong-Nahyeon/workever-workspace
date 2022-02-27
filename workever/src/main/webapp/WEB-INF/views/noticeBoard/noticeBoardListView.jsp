@@ -515,6 +515,21 @@
 	<script>
 		$(function(){
 			
+            // 공지사항 게시판 검색 시 아무것도 입력 안 했을 때 검색 방지
+            $("#search-area button[type=submit]").click(function(){
+
+                let keyword = $("#search-area input[name=keyword]").val().trim();
+
+                if(keyword == ""){
+
+                    alert("검색할 키워드를 입력해주세요.");
+
+                }
+
+            });
+			
+			
+			
 			// 공지사항 게시판 목록 및 검색 목록 순차 정렬 조회 (최신순/오래된순)
 			$("select[name=orderList]").change(function(){
 				
