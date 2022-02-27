@@ -65,13 +65,17 @@ public class projectController {
 	@RequestMapping("insert.pro")
 	public String insertProject(HttpSession session, Model model, Project p) {
 		
+		User loginUser = (User)session.getAttribute("loginUser");
+		
+		String userNo = loginUser.getUserNo();
+		
 		int result = pService.insertProject(p);
 		int result1 = pService.insertMember(p);
 		int result2 = pService.insertDept(p);
 		
 		if(result > 0 && result1 > 0 && result2 > 0) { 
 			session.setAttribute("alertMsg", "프로젝트가 성공적으로 생성되었습니다.");
-			return "redirect:list.pro";
+			return "redirect:list.pro?userNo="+userNo;
 			
 		}else { //실패 => 에러페이지 포워딩
 			model.addAttribute("errorMsg","프로젝트가 등록 실패!");
