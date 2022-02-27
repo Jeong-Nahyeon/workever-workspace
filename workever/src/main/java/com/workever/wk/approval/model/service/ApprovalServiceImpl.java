@@ -17,6 +17,7 @@ import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
 import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
@@ -235,6 +236,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public ArrayList<ApprovalForm> changeStatusFormList(Map<String, Object> map) {
 		return aDao.changeStatusFormList(sqlSession, map);
+	}
+
+	// 휴가 승인시 근태 테이블 insert 메소드
+	@Override
+	public int dayOffCommuteInsert(Map<String,Object> map) {
+		return aDao.dayOffCommuteInsert(sqlSession, map);
 	}
 
 

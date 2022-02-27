@@ -12,6 +12,7 @@ import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
 import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
@@ -67,6 +68,7 @@ public interface ApprovalService {
 	
 	// 8. 전자결재 승인 서비스(완료 결재)
 	int lastApproveApproval(ApprovalLine approveApvl, String apvlFormNo);
+	int dayOffCommuteInsert(Map<String,Object> map);
 	
 	// 9. 전자결재 수정 서비스
 	int updateApproval(Map<String,Object> map);

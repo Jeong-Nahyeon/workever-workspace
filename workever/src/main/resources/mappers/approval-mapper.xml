@@ -308,6 +308,7 @@
 		                                      and user_auth = 'A'))
 		   and u.com_no = #{comNo}
 		   and dept_no = #{deptNo}
+		   and u.user_enabled = 'Y'
 	</select>
 	
 	<select id="userSearchList" resultMap="userListResult" parameterType="Map">
@@ -325,6 +326,7 @@
                                     where com_no = #{comNo}
                                       and user_auth = 'A'))
 		   and u.com_no = #{comNo}
+		   and u.user_enabled = 'Y'
 		   and (dept_name like '%'||#{keyword}||'%' or user_name like '%'||#{keyword}||'%')
 	</select>
 	
@@ -618,6 +620,27 @@
 	                       from approval
 	                      where apvl_no = #{ apvlNo })
 	</update>
+	
+	<insert id="dayOffCommuteInsert" parameterType="Map">
+		insert 
+		  into commute 
+		  (
+		    cm_no
+		  , user_no
+		  , cm_date
+		  , cm_state) 
+		  select 
+		  		 seq_commute.nextval
+		  		, A.*
+		  	from(
+		  <foreach collection="cmList" item="cm" separator="UNION ALL">
+			  select  
+				   #{cm.userNo}
+				  , #{cm.cmDate}
+				  , #{cm.cmState}
+				  from dual
+ 		  </foreach>) A
+	</insert>
 	
 	<update id="approvalUpdate">
 		update

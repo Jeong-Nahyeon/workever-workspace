@@ -16,6 +16,7 @@ import com.workever.wk.approval.model.vo.ApprovalLine;
 import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
 import com.workever.wk.common.model.vo.PageInfo;
+import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
@@ -178,6 +179,11 @@ public class ApprovalDao {
 		}else {
 			return result1 * result2;
 		}
+	}
+	
+	public int dayOffCommuteInsert(SqlSessionTemplate sqlSession, Map<String,Object> map) {
+		System.out.println(map);
+		return sqlSession.insert("approvalMapper.dayOffCommuteInsert", map);
 	}
 	
 	// 전자결재 수정

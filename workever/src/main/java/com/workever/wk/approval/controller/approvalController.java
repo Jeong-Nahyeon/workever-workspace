@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import javax.servlet.http.HttpSession;
 
@@ -26,6 +30,7 @@ import com.workever.wk.approval.model.vo.ApprovalOverTimeForm;
 import com.workever.wk.approval.model.vo.ApprovalWorkReportForm;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
+import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.Dept;
 import com.workever.wk.user.model.vo.User;
 
@@ -35,6 +40,19 @@ public class approvalController {
 	@Autowired
 	private ApprovalService aService;
 
+	
+	private static String AddDate(String strDate, int year, int month, int day) throws Exception { 
+		SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		Date dt = dtFormat.parse(strDate);
+		cal.setTime(dt);
+		cal.add(Calendar.YEAR, year);
+		cal.add(Calendar.MONTH, month);
+		cal.add(Calendar.DATE, day);
+		return dtFormat.format(cal.getTime()); 
+	}
+
+	
 	
 	// 내가 작성한 결재 리스트 조회
 	@RequestMapping("writeList.ap")
@@ -428,6 +446,37 @@ public class approvalController {
 		approveApvl.setUserNo(loginUserNo);
 		
 		int result = aService.lastApproveApproval(approveApvl, apvlFormNo);
+		
+		if(apvlFormNo.equals("1")) {
+			Map<String,Object> map = new HashMap<>();
+			ArrayList<Commute> cmList = new ArrayList<>();
+			
+			Approval apvl = aService.selectApproval(apvlNo);
+			ApprovalDayOffForm dayOff = aService.selectDayOffForm(apvlNo);
+			
+			for(int i=0; i<dayOff.getOffTotalDate(); i++) {
+				Commute cm = new Commute();
+				
+				cm.setUserNo(String.valueOf(apvl.getApvlWriter()));
+				
+				try {
+					cm.setCmDate(AddDate(dayOff.getOffStartDate(), 0, 0, i));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				cm.setCmState("5");
+				
+				cmList.add(cm);
+				
+				map.put("cmList", cmList);
+			}
+			
+			aService.dayOffCommuteInsert(map);
+			
+		}
+		
+		
 		
 		if(result > 0) {
 			return "redirect:detail.ap?apvlNo=" + apvlNo;
