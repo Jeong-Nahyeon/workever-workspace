@@ -59,7 +59,7 @@ public class UserController {
 			//System.out.println(loginUser);
 			//System.out.println(u.getUserPwd());
 			model.addAttribute("loginMsg", "로그인 실패");
-			return "user/login";
+			return "common/errorPage";
 		}
 	}
 	
@@ -552,4 +552,10 @@ public class UserController {
 		return result > 0 ? "NNNNY" : "NNNNN";
 	}
 	
+	
+	// errorPage연결(interceptor)
+	@RequestMapping("error.do")
+	public String errorPage() {
+		return "common/errorPage";
+	}
 }
