@@ -28,9 +28,10 @@ public class AlertController {
 	
 	@ResponseBody
 	@RequestMapping(value="alertSelect.al", produces="application/json; charset=utf-8")
-	public String ajaxAlertSelect(int loginUserNo) {
+	public String ajaxAlertSelect(int loginUserNo, Model model) {
 		
 		ArrayList<Alert> alertList = alService.alertSelect(loginUserNo);
+		int count = alService.alertCount(loginUserNo);
 		
 		for(Alert al : alertList) {
 			switch(al.getAlertType()) {
@@ -51,7 +52,11 @@ public class AlertController {
 				al.setAlertType("전자 결재");break;
 			}
 		}
-		return new Gson().toJson(alertList);
+		
+		model.addAttribute("alertList", alertList);
+		model.addAttribute("count", count);
+		
+		return new Gson().toJson(model);
 	}
 	
 	@ResponseBody

@@ -17,32 +17,7 @@
 			//readAlarms();
 			
 			$("#alertBtn").click(function(){
-				let alertList = "";
-			
-				$.ajax({
-					url:"alertSelect.al",
-					data:{loginUserNo:${loginUser.userNo}},
-					success:function(result){
-						for(let i in result){
-							alertList += "<div class='dropdown-divider'></div>"
-									  +     "<a href='#' class='dropdown-item' val='" +  result[i].alertUrl + "' onclick='alertCheck(this);')>"
-									  +			"<input type='hidden' name='alertUrl' value='" + result[i].alertUrl + "'>"
-									  +			"<input type='hidden' name='alertNo' value='" + result[i].alertNo + "'>"
-									  +    		"<div class='alertArea' style='width:100%'>"
-									  +     		"<div class='alertTitle'>"
-									  +     			"<span style='font-size:15px;font-weight:700;margin-right:30px;'>" + result[i].alertType + "</span>"
-									  +     			"<span style='font-size:12px;'>" + result[i].alertDate + "</span>"
-									  +     		"</div>"
-									  +    			"<div class='alertContent'><p style='word-break:break-all;font-size:12px;'>" + result[i].alertContent + "</p></div>"
-									  +    		"</div>"
-									  +     "</a>";
-						}
-						
-						$("#alertDropdown").html(alertList);
-					},error:function(){
-						console.log("ajax통신 실패");
-					}
-				})
+				msgList();
 			})
 			
 			/*
@@ -93,6 +68,7 @@
 				toastr.options.positionClass = "toast-bottom-right";
 				toastr.success(event.data);
 				msgCount();
+				msgList();
 				
 			};
 			
@@ -118,6 +94,37 @@
 						}else{
 							$("#alertCount").text(0);
 						}
+				},error:function(){
+					console.log("ajax통신 실패");
+				}
+			})
+		}
+		
+		function msgList(){
+			let alertList = "";
+			
+			$.ajax({
+				url:"alertSelect.al",
+				data:{loginUserNo:${loginUser.userNo}},
+				success:function(result){
+					alertList += "<span class='dropdown-item dropdown-header'>미확인 알림 " + result.count + "개</span>";
+					
+					for(let i in result.alertList){
+						alertList += "<div class='dropdown-divider'></div>"
+								  +     "<a href='#' class='dropdown-item' onclick='alertCheck(this);')>"
+								  +			"<input type='hidden' name='alertUrl' value='" + result.alertList[i].alertUrl + "'>"
+								  +			"<input type='hidden' name='alertNo' value='" + result.alertList[i].alertNo + "'>"
+								  +    		"<div class='alertArea' style='width:100%'>"
+								  +     		"<div class='alertTitle'>"
+								  +     			"<span style='font-size:15px;font-weight:700;margin-right:30px;'>" + result.alertList[i].alertType + "</span>"
+								  +     			"<span style='font-size:12px;'>" + result.alertList[i].alertDate + "</span>"
+								  +     		"</div>"
+								  +    			"<div class='alertContent'><p style='word-break:break-all;font-size:12px;'>" + result.alertList[i].alertContent + "</p></div>"
+								  +    		"</div>"
+								  +     "</a>";
+					}
+					
+					$("#alertDropdown").html(alertList);
 				},error:function(){
 					console.log("ajax통신 실패");
 				}
