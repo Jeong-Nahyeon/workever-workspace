@@ -24,7 +24,7 @@
 
 	}
 	.teamPro{
-		/*border: 1px solid red;
+		/*border: 1px solid red;*/
 	}
 	.myPro{
 		/*border: 1px solid blue;*/
@@ -35,7 +35,7 @@
 		height:225px;
 		border-radius:20px;
 		background-color: rgb(214, 214, 214);
-		/*border: 1px solid yellow;*/
+		border: 1px solid yellow;
 		
 	}
 	.project>*{
@@ -93,8 +93,8 @@
 	                    	<c:when test="${not empty list}">
 								<c:forEach var="p" items="${list}">
 									<div class="myProEl"> 
-										<div class="project" onclick="detailPro(${p.proNo})"><br>
-											<p style="font-size:20px; font-weight:bold;">${p.proTitle}</p>
+										<div class="project"><br>
+											<p style="font-size:20px; font-weight:bold;" onclick="detailPro(${p.proNo})">${p.proTitle}</p>
 											
 											
 											<div><span style="font-size:13px">${p.proDept}</span></div>
@@ -108,7 +108,7 @@
 											<div style="margin-left:180px"><b><span> ${p.proNumberPeople}명 참여중 </span></b></div>
 				                        	
 											<c:if test="${loginUser.userName.equals(p.proManager)}">
-												<a style="font-size:13px; color: red;" onclick="deleteconfirm(${p.proNo})">삭제하기</a>
+												<a style="font-size:13px; color: red;" onclick="deleteconfirm(${p.proNo});">삭제하기</a>
 												<a style="font-size:13px; color: blue;" onclick="">수정하기</a> 
 											</c:if>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -129,16 +129,20 @@
 					
 					 <script>
 			            function deleteconfirm(no){
+			            	
+			   				  console.log(no);
+			   				  
+			            	  document.getElementById("proNo").value = no;
 			            	  const result = confirm('정말로 삭제하시겠습니까?\n삭제하시면 복구할 수 없습니다.');
 			            	  
-			            	  document.getElementById("proNo").value = no;
+			            	  console.log($("#postForm").val());
 			            	  
 		            		  if(result){
 			            		$("#postForm").attr("action", "delete.pro").submit();
 			            	  }else{
 			            		  return false;
 			            	  }
-		
+							  
 			            }
 		            </script>
 					<script>
