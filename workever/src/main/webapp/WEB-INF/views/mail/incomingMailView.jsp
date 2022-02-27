@@ -88,26 +88,31 @@
    
     /* 참조영역 영역 : 설정한 영역 범위 넘어가면 ...으로 표시  */
     .hide-area{
-      width:900px;
-      height:35px;
+      width:1400px;
+      height:45px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .sender-area span, .cc-area span{
-      background:#dce6ff;
-      margin-right:10px;
-      cursor: pointer;
+      border:2px solid #4E73DF;
+	  background:white;
+	  margin-right:10px;
+	  margin-bottom:10px;
+	  height:25px;
+	  line-height:20px;
+	  display:inline-block;
     }
 
     .sender-area label, .cc-area label{
       box-sizing:border-box;
-      margin-bottom:0;
-      margin-left:20px;
-      margin-right:20px;
-      font-size: 12px;
-      font-weight:600 !important;
+	  margin-bottom:0;
+	  margin-left:20px;
+	  margin-right:20px;
+	  font-size:13px;
+	  font-weight:600 !important;
+	  color:#4E73DF;
     }
 
 
@@ -275,7 +280,7 @@
 		              <table id="mail-detail">
 		                <thead>
 		                  <tr>
-		                    <th style="padding-top:0; width:170px;">받는사람</th>
+		                    <th style="padding-top:0; width:140px;">받는사람</th>
 		                    <td style="padding-top:0">${ loginUser.userName }</td>
 		                  </tr>
 		                  <tr>
@@ -321,7 +326,7 @@
 					                          	<c:choose>
 						                          	<c:when test="${ not empty cc.mrUserName }">
 						                          		<c:if test="${ cc.mrDeptName ne '임원' }">
-						                          			${ cc.mrUserName }
+						                          			${ cc.mrDeptName }
 						                          		</c:if>
 						                          		${ cc.mrUserRank }
 						                          		${ cc.mrUserName }
@@ -487,6 +492,7 @@
 					
 					$ccArea.addClass("hide-area");
 					$(this).text("▼");
+					
 				}
 		
 			});

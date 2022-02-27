@@ -67,24 +67,29 @@
     }
 
     .receivers-area span, .cc-area span{
-      background:#dce6ff;
-      margin-right:10px;
-      cursor: pointer;
+      border:2px solid #4E73DF;
+	  background:white;
+	  margin-right:10px;
+	  margin-bottom:10px;
+	  height:25px;
+	  line-height:20px;
+	  display:inline-block;
     }
 
     .receivers-area label, .cc-area label{
       box-sizing:border-box;
-      margin-bottom:0;
-      margin-left:20px;
-      margin-right:20px;
-      font-size: 13px;
-      font-weight:600 !important;
+	  margin-bottom:0;
+	  margin-left:20px;
+	  margin-right:20px;
+	  font-size:13px;
+	  font-weight:600 !important;
+	  color:#4E73DF;
     }
     
     /* 설정한 영역 범위 넘어가면 ...으로 표시  */
     .hide-area{
-      width:900px;
-      height:35px;
+      width:1400px;
+      height:45px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -188,7 +193,7 @@
 		              <table id="mail-detail">
 		                <thead>
 		                  <tr>
-		                    <th style="padding-top:0; width:170px;">보낸사람</th>
+		                    <th style="padding-top:0; width:140px;">보낸사람</th>
 		                    <td style="padding-top:0">${ loginUser.userName }</td>
 		                  </tr>
 		                  <tr>
@@ -205,7 +210,7 @@
 		                    	<button type="button" id="r-control-btn" class="btn btn-sm btn-default">▼</button>
 		                    </th>
 		                    <td>
-		                      <div class="receivers-area">
+		                      <div class="receivers-area hide-area">
 		                        <c:forEach var="r" items="${ receiverList }">
 			                        <span>
 			                          <label>
@@ -234,7 +239,7 @@
 		                      <button type="button" id="cc-control-btn" class="btn btn-sm btn-default">▼</button>
 		                    </th>
 		                    <td>
-		                      <div class="cc-area">
+		                      <div class="cc-area hide-area">
 		                        <c:choose>
 		                      		<c:when test="${ empty ccList }">
 		                      			참조자 없음

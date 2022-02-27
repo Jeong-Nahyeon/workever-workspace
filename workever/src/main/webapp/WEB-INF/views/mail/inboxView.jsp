@@ -496,7 +496,7 @@
 									
 									$("#confirm-modal").modal("hide"); 
 					 				
-					 				$("#alert-message").text("성공적으로 삭제되었습니다");
+					 				$("#alert-message").text("성공적으로 삭제되었습니다(삭제메일함 이동)");
 									$("#alert-message-modal").modal({backdrop: "static"});
 									
 									$("#close-btn").click(function(){

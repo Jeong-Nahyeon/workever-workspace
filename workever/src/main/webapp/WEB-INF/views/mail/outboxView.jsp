@@ -233,7 +233,7 @@
 					                      </div>
 					                    </td>
 					                    <td>
-					                      <c:if test="${ m.msFileCount }">
+					                      <c:if test="${ m.msFileCount > 0 }">
 						                      <!-- case1. 첨부파일 있을 경우 -->
 						                      <i class="fas fa-paperclip"></i>
 					                      </c:if>

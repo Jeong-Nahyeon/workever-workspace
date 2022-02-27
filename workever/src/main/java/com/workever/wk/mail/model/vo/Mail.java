@@ -27,7 +27,7 @@ public class Mail {
 	private String mrMsNo;			// 발신메일번호
 	private String mrUserNo;		// 수신자사원번호
 	private String mrReceiver;		// 수신자이메일
-	private String mrCC;			// 참조여부(Y 참조자 O / N 참조자 X)
+	private String mrCc;			// 참조여부(Y 참조자 O / N 참조자 X)
 	private String mrRead;			// 읽음상태(Y 읽음 / N 안읽음)
 	private String mrFolder;		// 보관폴더(R 받은메일함 / D 삭제메일함)
 	private String mrStatus;		// 영구삭제여부(Y 보관 / N 삭제)	
@@ -39,6 +39,8 @@ public class Mail {
 	private String mrDeptName;		// 수신자부서명
 	private String mrUserRank;		// 수신자직금명
 	private String mrUserName;		// 수신자명
+	
+	private String comName;			// 회사명
 	
 	
 }

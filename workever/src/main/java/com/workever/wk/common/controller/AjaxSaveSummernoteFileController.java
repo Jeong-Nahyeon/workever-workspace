@@ -19,7 +19,7 @@ import com.google.gson.JsonObject;
 @Controller
 public class AjaxSaveSummernoteFileController {
 	
-	/** [공지사항 게시판] 섬머노트 기능으로 등록된 이미지 저장 후 내용 영역으로 해당 이미지의 저장된 경로 바로 응답 데이터 전달
+	/** [커뮤니티] 섬머노트 기능으로 등록된 이미지 저장 후 내용 영역으로 해당 이미지의 저장된 경로 바로 응답 데이터 전달
 	 * @param multipartFile : 섬머노트 기능으로 내용 영역에 등록된 이미지
 	 * @param request
 	 * @return
@@ -34,13 +34,20 @@ public class AjaxSaveSummernoteFileController {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	/** [메일] 섬머노트 기능으로 등록된 이미지 저장 후 내용 영역으로 해당 이미지의 저장된 경로 바로 응답 데이터 전달
+	 * @param multipartFile : 섬머노트 기능으로 내용 영역에 등록된 이미지
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="uploadSummernoteImageFile.mail", produces = "application/json; charset=utf8")
+	public String uploadMailSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) {
+		
+		String savePath = "resources/mail_upfiles/summernote_upfiles/";
+		
+		return saveFile(multipartFile, request, savePath);
+		
+	}
 	
 	
 	

@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+     
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메일 작성</title>
+<title>메일 전달</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
@@ -179,7 +182,7 @@
 		    <div class="container-fluid">
 		      <div class="row mb-2">
 		        <div class="col-sm-6">
-		          <h1 id="page-title">메일 작성</h1>
+		          <h1 id="page-title">메일 답장</h1>
 		        </div>
 		      </div>
 		    </div><!-- /.container-fluid -->
@@ -204,7 +207,7 @@
 			                  <tr>
 			                    <th width="140px">제목</th>
 			                    <td>
-			                      <input type="text" name="msTitle" class="form-control" required>  
+			                      <input type="text" name="msTitle" class="form-control" value="FW: ${ mail.msTitle }" required>  
 			                    </td>
 			                  </tr>
 			                  <tr>
@@ -230,7 +233,19 @@
 									<button type="button" id="add-file-btn" class="btn btn-sm">파일추가</button>
 									<span id="attach-comment">첨부파일은 최대 5개까지만 등록 가능합니다</span>
 								  <!-- 미리보기 영역 -->
-								  <div class="attach-preview-area"></div>
+								  <div class="attach-preview-area">
+								  	<c:if test="${ not empty mailFileList }">
+										<c:forEach var="i" begin="0" end="${ mailFileList.size() - 1 }">
+											<div class="preview">
+												<input type="hidden" name="efList[${ i }].mfOriginName" value="${ mailFileList[i].mfOriginName }" />
+												<input type="hidden" name="efList[${ i }].mfChangeName" value="${ mailFileList[i].mfChangeName }" />
+												<input type="hidden" name="efList[${ i }].mfPath" value="${ mailFileList[i].mfPath }" />
+									        	<p class="origin-name">${ mailFileList[i].mfOriginName }</p> 
+									        	<a href="#" name="${ mailFileList[i].mfNo }" class="existing-file"><i class="fas fa-times"></i></a>
+									        </div>
+									    </c:forEach>    
+							        </c:if>
+								  </div>
 			                    </td>
 			                  </tr>
 			                </thead>
@@ -241,7 +256,45 @@
 			                  <tr>
 			                    <td colspan="2">
 			                      <div class="form-group">
-			                        <textarea id="mail-textarea" name="msContent" class="form-control" required></textarea>
+			                        <textarea id="mail-textarea" name="msContent" class="form-control" required><br><br><br>
+			                        	
+			                        	<blockquote>
+			                        		<b>----- Original Message -----</b><br>
+			                        		<c:choose>
+				                        		<c:when test="${ mail.mrCc eq 'N' }">
+					                        		<b>From : </b>
+					                        		<c:if test="${ mail.msDeptName  ne '임원' }">
+					                        			${ mail.msDeptName }
+					                        		</c:if> 
+					                        		${ mail.msUserRank } ${ mail.msUserName } &lt; ${ mail.msSender } &gt;
+					                        		<br><b>To : </b>
+					                        		<c:if test="${ loginUser.deptName  ne '임원' }">
+					                        			${ loginUser.deptName }
+					                        		</c:if> 
+					                        		${ loginUser.userRank } ${ loginUser.userName } &lt; ${ loginUser.userEmail } &gt;
+					                        		<br><b>Cc : </b>
+					                        		<br><b>Sent : </b> ${ mail.msDate }
+					                        		<br><b>Subject : </b> ${ mail.msTitle }
+				                        		</c:when>
+				                        		<c:otherwise>
+				                        			<b>From : </b>
+					                        		<c:if test="${ mail.msDeptName  ne '임원' }">
+					                        			${ mail.msDeptName }
+					                        		</c:if> 
+					                        		${ mail.msUserRank } ${ mail.msUserName } &lt; ${ mail.msSender } &gt;
+					                        		<br><b>To : </b>
+					                        		<br><b>Cc : </b>
+					                        		<c:if test="${ loginUser.deptName  ne '임원' }">
+					                        			${ loginUser.deptName }
+					                        		</c:if> 
+					                        		${ loginUser.userRank } ${ loginUser.userName } &lt; ${ loginUser.userEmail } &gt;
+				                        			<br><b>Sent : </b> ${ mail.msDate }
+					                        		<br><b>Subject : </b> ${ mail.msTitle }
+				                        		</c:otherwise>
+			                        		</c:choose><br><br>${ mail.msContent }
+			                        	</blockquote>
+			                        	
+			                       </textarea>
 			                    </div>
 			                    </td>
 			                  </tr>
@@ -281,6 +334,8 @@
 		
 	</div>
 	<!-- ./wrapper -->
+	
+	
 	
 	<!-- form input 엔터키 누를 때 submit 방지 -->	
 	<script>
@@ -632,6 +687,13 @@
 		        $(id).remove(); // 해당 아이디가 부여된 input:file 요소 제거
 		        $(this).parent().remove(); // 미리보기 영역의 해당 미리보기용 요소 제거
 		        
+		    });
+		    
+		    // 기존에 존재하는 첨부파일 삭제 버튼 클릭 시
+		    $(document).on("click", ".existing-file", function(){
+		    	
+		    	$(this).parent().remove();
+		    	
 		    });
 		    
 		});

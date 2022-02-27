@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+ 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메일 작성</title>
+<title>메일 답장</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <jsp:include page="../common/links.jsp" />
@@ -179,7 +182,7 @@
 		    <div class="container-fluid">
 		      <div class="row mb-2">
 		        <div class="col-sm-6">
-		          <h1 id="page-title">메일 작성</h1>
+		          <h1 id="page-title">메일 답장</h1>
 		        </div>
 		      </div>
 		    </div><!-- /.container-fluid -->
@@ -190,7 +193,7 @@
 		    <div class="container-fluid">
 		      <div class="row">
 		        <div class="col-12">
-		          <div class="card"> 
+		          <div class="card">
 		            
 		            <div class="card-body">
 						<form id="mail-form" name="mailForm" action="" method="post" enctype="multipart/form-data" onsubmit="postFormSubmit(2);">
@@ -204,7 +207,7 @@
 			                  <tr>
 			                    <th width="140px">제목</th>
 			                    <td>
-			                      <input type="text" name="msTitle" class="form-control" required>  
+			                      <input type="text" name="msTitle" class="form-control" value="RE: ${ mail.msTitle }" required>  
 			                    </td>
 			                  </tr>
 			                  <tr>
@@ -241,7 +244,45 @@
 			                  <tr>
 			                    <td colspan="2">
 			                      <div class="form-group">
-			                        <textarea id="mail-textarea" name="msContent" class="form-control" required></textarea>
+			                        <textarea id="mail-textarea" name="msContent" class="form-control" required><br><br><br>
+			                        	
+			                        	<blockquote>
+			                        		<b>----- Original Message -----</b><br>
+			                        		<c:choose>
+				                        		<c:when test="${ mail.mrCc eq 'N' }">
+					                        		<b>From : </b>
+					                        		<c:if test="${ mail.msDeptName  ne '임원' }">
+					                        			${ mail.msDeptName }
+					                        		</c:if> 
+					                        		${ mail.msUserRank } ${ mail.msUserName } &lt; ${ mail.msSender } &gt;
+					                        		<br><b>To : </b>
+					                        		<c:if test="${ loginUser.deptName  ne '임원' }">
+					                        			${ loginUser.deptName }
+					                        		</c:if> 
+					                        		${ loginUser.userRank } ${ loginUser.userName } &lt; ${ loginUser.userEmail } &gt;
+					                        		<br><b>Cc : </b>
+					                        		<br><b>Sent : </b> ${ mail.msDate }
+					                        		<br><b>Subject : </b> ${ mail.msTitle }
+				                        		</c:when>
+				                        		<c:otherwise>
+				                        			<b>From : </b>
+					                        		<c:if test="${ mail.msDeptName  ne '임원' }">
+					                        			${ mail.msDeptName }
+					                        		</c:if> 
+					                        		${ mail.msUserRank } ${ mail.msUserName } &lt; ${ mail.msSender } &gt;
+					                        		<br><b>To : </b>
+					                        		<br><b>Cc : </b>
+					                        		<c:if test="${ loginUser.deptName  ne '임원' }">
+					                        			${ loginUser.deptName }
+					                        		</c:if> 
+					                        		${ loginUser.userRank } ${ loginUser.userName } &lt; ${ loginUser.userEmail } &gt;
+				                        			<br><b>Sent : </b> ${ mail.msDate }
+					                        		<br><b>Subject : </b> ${ mail.msTitle }
+				                        		</c:otherwise>
+			                        		</c:choose><br><br>${ mail.msContent }
+			                        	</blockquote>
+			                        	
+			                        </textarea>
 			                    </div>
 			                    </td>
 			                  </tr>
@@ -281,6 +322,38 @@
 		
 	</div>
 	<!-- ./wrapper -->
+	
+	
+	
+	<!-- 받는사람 정보 입력  -->
+	<script>
+		$(function(){
+			if("${ mail.mrUserNo  }" != null){
+				
+	        	let id = makeid(10);
+	        	
+	            let result = "<span id='"+ id +"'>"
+	            		   + "<input type='hidden' name='mrUserNoList' value='${ mail.msUserNo }' required/>"
+	            		   + "<label>";
+	            		   
+			               if( "${ mail.msDeptName }" != '임원'){
+			                	
+			                	result += "${ mail.msDeptName }";
+			                	
+			               }		   
+	            		   
+	               result += " ${ mail.msUserRank } ${ mail.msUserName } &lt; ${ mail.msSender } &gt;</label>"
+	            		   + "<a href='#" + id + "' class='delete-address-btn'><i class='fas fa-times'></i></a>"
+	          			   + "</span>";
+	          			   
+	          	$(".receivers-area").append(result);
+				
+			}
+			
+		});
+	</script>
+	
+	
 	
 	<!-- form input 엔터키 누를 때 submit 방지 -->	
 	<script>

@@ -1,6 +1,7 @@
 package com.workever.wk.mail.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,9 +10,84 @@ import org.springframework.stereotype.Repository;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.mail.model.vo.Mail;
 import com.workever.wk.mail.model.vo.MailFiles;
+import com.workever.wk.user.model.vo.User;
 
 @Repository
 public class MailDao {
+	
+	// 메일 작성
+	
+	/** 사원 목록 조회(주소록)
+	 * @param sqlSession
+	 * @param map
+	 * @return
+	 */
+	public ArrayList<User> autoSearch(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+		
+		return (ArrayList)sqlSession.selectList("mailMapper.autoSearch", map);
+		
+	}
+	
+	
+	
+	// 메일 발송
+	
+	/** 수신/참조 메일 대상 사원의 이메일 조회
+	 * @param sqlSession
+	 * @param userNo
+	 * @return
+	 */
+	public String selectMailReceiver(SqlSessionTemplate sqlSession, String userNo) {
+		
+		return sqlSession.selectOne("mailMapper.selectMailReceiver", userNo);
+		
+	}
+	
+	/** 발신자 보낸메일 등록
+	 * @param sqlSession
+	 * @param mail
+	 * @return
+	 */
+	public int insertMsMail(SqlSessionTemplate sqlSession, Mail mail) {
+		
+		return sqlSession.insert("mailMapper.insertMsMail", mail);
+		
+	}
+	
+	/** 메일 첨부파일 등록
+	 * @param sqlSession
+	 * @param mf
+	 * @return
+	 */
+	public int insertFile(SqlSessionTemplate sqlSession, MailFiles mf) {
+		
+		return sqlSession.insert("mailMapper.insertFile", mf);
+		
+	}
+	
+	/** 수신자 참조메일 등록
+	 * @param sqlSession
+	 * @param rm
+	 * @return
+	 */
+	public int insertCcMail(SqlSessionTemplate sqlSession, Mail rm) {
+		
+		return sqlSession.insert("mailMapper.insertCcMail", rm);
+		
+	}
+	
+	/** 수신자 받은메일 등록
+	 * @param sqlSession
+	 * @param rm
+	 * @return
+	 */
+	public int insertMrMail(SqlSessionTemplate sqlSession, Mail rm) {
+		
+		return sqlSession.insert("mailMapper.insertMrMail", rm);
+		
+	}
+	
+	
 	
 	// 받은메일함
 	

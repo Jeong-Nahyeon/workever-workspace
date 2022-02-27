@@ -1,17 +1,23 @@
 package com.workever.wk.mail.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -20,6 +26,7 @@ import com.workever.wk.common.template.Pagination;
 import com.workever.wk.mail.model.service.MailService;
 import com.workever.wk.mail.model.vo.Mail;
 import com.workever.wk.mail.model.vo.MailFiles;
+import com.workever.wk.mail.template.SaveMailFiles;
 import com.workever.wk.user.model.vo.User;
 
 @Controller
@@ -27,6 +34,230 @@ public class MailController {
 	
 	@Autowired
 	private MailService mService;
+	
+
+	
+	// 메일 작성
+	
+	/** 메일 작성 페이지 포워딩
+	 * @return
+	 */
+	@RequestMapping("compose.mail")
+	public String composeMailForm() {
+		
+		return "mail/composeMailForm";
+		
+	}	
+	
+	/** [Ajax] 메일 작성 시 수신메일과 참조메일란에 주소 입력를 입력할 때마다 자동으로 사내 사원의 이메일과 일치하는 주소록 목록  응답 데이터로 전달
+	 * @param searchValue : 사용자가 입력한 메일 주소 키워드
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="userList.search", produces="application/json; charset=UTF-8")
+	public String ajaxAutoSearch(String searchValue, HttpSession session) {
+		
+		User loginUser = (User)session.getAttribute("loginUser");
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("comNo", loginUser.getComNo());
+		map.put("searchValue", searchValue);
+		
+		ArrayList<User> rList = mService.autoSearch(map);
+		
+		return new Gson().toJson(rList);
+		
+	}
+	
+	
+	// 메일 전송
+	@RequestMapping("send.mail")
+	public String sendMail(Mail mail, String[] mrUserNoList, String[] extMailList, String[] ccMrUserNoList, String[] ccExtMailList,
+			MultipartFile[] upfile, MailFiles existingFile, HttpSession session, Model model) {
+		
+		User loginUser = (User)session.getAttribute("loginUser");
+		
+		ArrayList<Mail> intList = new ArrayList<>(); // 사내
+		ArrayList<Mail> extList = new ArrayList<>(); // 외부
+		ArrayList<MailFiles> fileList = new ArrayList<>(); // 첨부파일
+		ArrayList<MailFiles> efList = existingFile.getEfList(); // 기존 첨부파일
+		
+		if(efList != null) { // 받은메일 전달 시 기존에 존재하는 파일 목록 있을 경우
+			
+			for(MailFiles mf :efList) {
+				
+				
+				// 기존 파일 복제
+				
+				// 새로운 파일명 생성
+				String originName = mf.getMfOriginName();
+				
+				String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+				int ranNum = (int)(Math.random() * 90000 + 10000); 
+				String ext = originName.substring(originName.lastIndexOf("."));
+				
+				String changeName = currentTime + ranNum + ext;
+				
+				// 파일 복제
+				File originFile = new File(session.getServletContext().getRealPath(mf.getMfPath() + mf.getMfChangeName()));
+				File copyFile = new File(session.getServletContext().getRealPath(mf.getMfPath() + changeName));
+				
+				try {
+					
+					FileUtils.copyFile(originFile, copyFile);
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				// 새로운 파일명으로 변경 후 새로 DB에 넣을 메일파일 목록에 추가
+				mf.setMfChangeName(changeName);
+				fileList.add(mf);
+				
+			}
+				
+			
+		}
+		
+		// 사내 수신메일
+		if(mrUserNoList != null) { 
+			
+			for(String mrUserNo : mrUserNoList) {
+				
+				Mail rm = new Mail(); // 사내 수신메일
+				
+				rm.setMrUserNo(mrUserNo);
+				rm.setMrReceiver(mService.selectMailReceiver(mrUserNo)); // 이메일
+				
+				intList.add(rm);
+				
+			}
+			
+		}
+		
+		// 사내 참조메일
+		if(ccMrUserNoList != null) { 
+			
+			for(String ccMrUserNo : ccMrUserNoList) {
+				
+				Mail cm = new Mail(); // 사내 참조메일
+				
+				cm.setMrUserNo(ccMrUserNo);
+				cm.setMrReceiver(mService.selectMailReceiver(ccMrUserNo));
+				cm.setMrCc("Y"); // 참조자 여부
+				
+				intList.add(cm);
+				
+			}
+			
+		}
+		
+		// 외부 수신메일
+		if(extMailList != null) { 
+			
+			for(String extMail : extMailList) {
+				
+				Mail extRm = new Mail(); // 외부 수신메일
+				
+				extRm.setMsSender(mail.getMsSender()); // 발신 이메일
+				extRm.setMrReceiver(extMail); // 수신 이메일
+				extRm.setMsTitle(mail.getMsTitle()); // 메일 제목
+				extRm.setMsContent(mail.getMsContent()); // 메일 내용
+				extRm.setComName(loginUser.getComName()); // 회사명
+				extRm.setMsDeptName(loginUser.getDeptName()); // 부서명
+				extRm.setMsUserRank(loginUser.getUserRank()); // 직급명
+				extRm.setMsUserName(loginUser.getUserName()); // 사원명
+				
+				extList.add(extRm);
+				
+			}
+			
+		}
+		
+		// 외부 참조메일
+		if(ccExtMailList != null) { 
+			
+			for(String ccExtMail : ccExtMailList) {
+				
+				Mail extCm = new Mail(); // 외부 참조메일
+				
+				extCm.setMsSender(mail.getMsSender()); // 발신 이메일
+				extCm.setMrReceiver(ccExtMail); // 수신 이메일
+				extCm.setMsTitle(mail.getMsTitle()); // 메일 제목
+				extCm.setMsContent(mail.getMsContent()); // 메일 내용
+				extCm.setMrCc("Y"); // 참조 여부
+				extCm.setComName(loginUser.getComName()); // 회사명
+				extCm.setMsDeptName(loginUser.getDeptName()); // 부서명
+				extCm.setMsUserRank(loginUser.getUserRank()); // 직급명
+				extCm.setMsUserName(loginUser.getUserName()); // 사원명
+				
+				extList.add(extCm);
+				
+			}
+			
+		}
+		
+		// 첨부파일
+		if(upfile != null) { // 첨부파일이 존재할 경우
+			
+			String savePath = "resources/mail_upfiles/";
+			
+			for(int i=0; i<upfile.length; i++) {
+				
+				if(!upfile[i].getOriginalFilename().equals("")) {
+					
+					String changeName = SaveMailFiles.saveFile(upfile[i], session, savePath);
+					
+					MailFiles mf = new MailFiles();
+					mf.setMfOriginName(upfile[i].getOriginalFilename());
+					mf.setMfChangeName(changeName);
+					mf.setMfPath(savePath);
+					
+					fileList.add(mf);
+					
+				}
+				
+			}
+			
+		}
+		
+		int result1 = mService.sendMail(mail, intList, fileList); // 사내메일
+
+		int result2 = 1; // 외부메일
+		
+		if(!extList.isEmpty()) {
+			
+			result2 = mService.sendExtMail(session, extList, fileList);
+			
+		}
+		
+		if(result1 * result2 > 0) {
+			
+			session.setAttribute("successMsg", "메일이 성공적으로 발송되었습니다");
+			return "redirect:inbox.mail";
+			
+		}else {
+			
+			if(!fileList.isEmpty()) { // 첨부파일 있는 경우
+				
+				for(MailFiles file : fileList) {
+					
+					new File(session.getServletContext().getRealPath(file.getMfPath() + file.getMfChangeName())).delete();
+					// 삭제 시키고자하는 파일을 찾아서 File 객체에 담아서 삭제		
+				
+				}
+				
+			}
+			
+			model.addAttribute("errorMsg", "메일 발송 실패");
+			return "common/errorPage";
+			
+		}
+		
+	}
+
+	
 	
 	// 받은메일함
 	
@@ -208,6 +439,43 @@ public class MailController {
 		
 	}
 	
+	/** 받은메일 답장 요청 시 해당 받은 메일 및 첨부파일 조회 후 답장 폼 페이지 포워딩
+	 * @param m : 사용자가 요청한 답장할 받은메일의 번호와 발신 사원의 번호를 담은 객체
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("response.mail")
+	public String responseMailForm(Mail m, Model model) {
+		
+		Mail mail = mService.selectIncomingMail(m); // 받은메일 조회
+				
+		model.addAttribute("mail", mail);
+		
+		return "mail/responseMailForm";
+		
+	}
+	
+	/** 받은메일 전달 요청 시 해당 받은 메일 및 첨부파일 조회 후 답장 폼 페이지 포워딩
+	 * @param m : 사용자가 요청한 답장할 받은메일의 번호와 발신 사원의 번호를 담은 객체
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping("deliver.mail")
+	public ModelAndView deliverMailForm(Mail m, ModelAndView mv) {
+		
+		Mail mail = mService.selectIncomingMail(m); // 받은메일 조회
+		
+		// 첨부파일 목록 조회
+		ArrayList<MailFiles> mailFileList = mService.selectMailFileList(m.getMrMsNo());
+		
+		mv.addObject("mail", mail)
+		  .addObject("mailFileList", mailFileList)
+		  .setViewName("mail/deliverMailForm");
+
+		return mv;
+		
+	}
+	
 	
 	
 	// 보낸메일함
@@ -244,7 +512,7 @@ public class MailController {
 	 */
 	@ResponseBody
 	@RequestMapping("deleteogl.mail")
-	public String ajaxDeleteOutgoingMailList(@RequestParam(value="deleteList[]") List<String> deleteList) {
+	public String ajaxDeleteOutgoingMailList(@RequestParam(value="deleteList[]") List<String> deleteList, HttpSession session) {
 		
 		int result1 = 0; // 받은메일 완전 삭제
 		int result2 = 1; // 첨부파일 삭제
@@ -259,9 +527,17 @@ public class MailController {
 				
 				int receiverMailCount = mService.selectExistingReceiverMailCount(msNo); // 완전 삭제 안된 수신자/참조자 메일 수 (완전 삭제 시 0 | 존재 시 0 이상)
 				
-				if(receiverMailCount == 0) { // 관련 메일이 모두 완전 삭제된 경우 => 해당 메일 첨부파일 삭제
+				if(receiverMailCount == 0) { // 관련 메일이 모두 완전 삭제된 경우 => 해당 메일 첨부파일 삭제, DB 데이터 삭제
+					
+					for(MailFiles mf : list) {
+						
+						new File(session.getServletContext().getRealPath(mf.getMfPath() + mf.getMfChangeName())).delete();
+						
+					}
 					
 					result2 = mService.deleteMailFileList(msNo);
+					
+					
 					
 				}
 				
@@ -318,12 +594,18 @@ public class MailController {
 		int result2 = 1; // 해당 메일 첨부파일 삭제 
 		
 		ArrayList<MailFiles> list = mService.selectMailFileList(msNo);
-		System.out.println(list);
+		
 		if(list != null) { // 첨부파일이 존재할 경우
 			
 			int receiverMailCount = mService.selectExistingReceiverMailCount(msNo); // 완전 삭제 안된 수신자/참조자 메일 수 (완전 삭제 시 0 | 존재 시 0 이상)
 			
 			if(receiverMailCount == 0) { // 관련 메일이 모두 완전 삭제된 경우 => 해당 메일 첨부파일 삭제
+				
+				for(MailFiles mf : list) {
+					
+					new File(session.getServletContext().getRealPath(mf.getMfPath() + mf.getMfChangeName())).delete();
+					
+				}
 				
 				result2 = mService.deleteMailFileList(msNo);
 				
@@ -382,7 +664,7 @@ public class MailController {
 	@ResponseBody
 	@RequestMapping("deleteicl.mail")
 	public String ajaxDeleteIncomingMailList(@RequestParam(value="deleteList[]") List<String> deleteList, 
-			@RequestParam(value="mrMsNoList[]") List<String> mrMsNoList) {
+			@RequestParam(value="mrMsNoList[]") List<String> mrMsNoList, HttpSession session) {
 		
 		int result1 = 0; // 받은메일 완전 삭제
 		int result2 = 1; // 첨부파일 삭제
@@ -403,6 +685,12 @@ public class MailController {
 				int receiverMailCount = mService.selectExistingReceiverMailCount(mrMsNo); // 완전 삭제 안된 수신자/참조자 메일 수 (완전 삭제 시 0 | 존재 시 0 이상)
 				
 				if(senderMailCount == 0 && receiverMailCount == 0) { // 관련 메일이 모두 완전 삭제된 경우 => 해당 메일 첨부파일 삭제
+					
+					for(MailFiles mf : list) {
+						
+						new File(session.getServletContext().getRealPath(mf.getMfPath() + mf.getMfChangeName())).delete();
+						
+					}					
 					
 					result2 = mService.deleteMailFileList(mrMsNo);
 					
@@ -459,6 +747,12 @@ public class MailController {
 			
 			if(senderMailCount == 0 && receiverMailCount == 0) { // 관련 메일이 모두 완전 삭제된 경우 => 해당 메일 첨부파일 삭제
 				
+				for(MailFiles mf : list) {
+					
+					new File(session.getServletContext().getRealPath(mf.getMfPath() + mf.getMfChangeName())).delete();
+					
+				}	
+				
 				result2 = mService.deleteMailFileList(mrMsNo);
 				
 			}
@@ -478,21 +772,5 @@ public class MailController {
 		}
 		
 	}
-	
-	
-	
-	// 테스트용 삭제 예정
 
-	
-	
-	/** 메일 작성 페이지 응답하는 메소드
-	 * @return : composeMailForm.jsp
-	 */
-	@RequestMapping("compose.mail")
-	public String composeMailForm() {
-		
-		return "mail/composeMailForm";
-		
-	}
-	
 }

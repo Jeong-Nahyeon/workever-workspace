@@ -1,12 +1,30 @@
 package com.workever.wk.mail.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpSession;
 
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.mail.model.vo.Mail;
 import com.workever.wk.mail.model.vo.MailFiles;
+import com.workever.wk.user.model.vo.User;
 
 public interface MailService {
+	
+	// 메일 작성
+	
+	// 이메일 작성 시 자동 완성 검색용
+	ArrayList<User> autoSearch(HashMap<String, String> map); // 사원 목록 조회(주소록)
+	
+
+	
+	// 메일 발송
+	String selectMailReceiver(String userNo); // 수신/참조 메일 대상 사원의 이메일 조회
+	int sendMail(Mail mail, ArrayList<Mail> intList, ArrayList<MailFiles> fileList); // 사내메일
+	int sendExtMail(HttpSession session, ArrayList<Mail> extList, ArrayList<MailFiles> fileList); // 외부메일
+	
+	
 	
 	// 받은메일함
 	
@@ -27,6 +45,7 @@ public interface MailService {
 	ArrayList<MailFiles> selectMailFileList(String msNo); // 첨부파일 목록 조회
 	
 	
+
 	// 보낸메일함
 	
 	// 보낸메일함 서비스
