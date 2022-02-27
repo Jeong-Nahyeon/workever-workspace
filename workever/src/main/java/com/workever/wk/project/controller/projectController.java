@@ -86,11 +86,14 @@ public class projectController {
 	@RequestMapping("delete.pro")
 	public String deleteProject(int proNo, HttpSession session,Model model) {
 		
+		User loginUser = (User)session.getAttribute("loginUser");
+		String userNo = loginUser.getUserNo();
+		
 		int result = pService.deleteProject(proNo);
 		
 		if(result > 0) { 
 			session.setAttribute("alertMsg", "프로젝트가 삭제되었습니다.");
-			return "redirect:list.pro";
+			return "redirect:list.pro?userNo="+userNo;
 			
 		}else { 
 			model.addAttribute("errorMsg","게시글 삭제실패");
@@ -102,7 +105,7 @@ public class projectController {
 	@RequestMapping("detail.pro")
 	public ModelAndView selectProject(@RequestParam(value="cpage", defaultValue="1") int currentPage, int proNo, ModelAndView mv) {
 		
-		System.out.println(proNo);
+		//System.out.println(proNo);
 		
 		int listCount = pService.selectListCount(proNo);
 		
@@ -112,8 +115,8 @@ public class projectController {
 		ArrayList<workBoard> list = pService.selectWorkList(proNo, pi);
 		ArrayList<Project> list2 = pService.selectOther(proNo);// 참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
 		
-		System.out.println(list);
-		System.out.println(list2);
+		//System.out.println(list);
+		//System.out.println(list2);
 		
 		mv.addObject("pi", pi)
 		  .addObject("list", list)
@@ -130,7 +133,7 @@ public class projectController {
 	@RequestMapping("list.work")
 	public ModelAndView workList(int proNo, ModelAndView mv) {
 		ArrayList<workBoard> list = pService.selectProject(proNo);
-		System.out.println(list);
+		//System.out.println(list);
 		
 		mv.addObject("proNo", proNo)
 		  .addObject("list", list)

@@ -229,7 +229,7 @@
 								labels:['진행','완료','보류'],
 								datasets :[{
 									labels: '바울랩매출액',
-									data:[50,20,40],
+									data:[50,20,12],
 									backgroundColor:[
 										'rgb(95, 201, 95)',//초록색
 										'rgb(101, 180, 233)',//파란색
@@ -518,12 +518,19 @@
 				</c:if>
 				<script>
 				
+			    		
 			    	$(function(){ 
+			    		selectReplyList();
+			    	})
+			    	
+			    	
+			    	
+			    	function selectReplyList(){
 			    		$(".allBoard").each(function(){
 			    		    $.ajax({
 			    		         url:"rlist.bo",
 			    		         data:{bno:$(this).prev().val()},
-			    		        
+			    		         context:this,
 			    		         success:function(list){
 			    		        	 console.log(list);
 			    		        	 let value = "";
@@ -549,8 +556,8 @@
 			    		         }
 			    			})
 			    		})
-			    	})
-			    	
+			    			
+			    	}
 			    	
 			    	// 댓글 작성용 메소드
 					function addReply(refWorkBoard){
@@ -566,7 +573,7 @@
 			    				
 			    				},success:function(status){
 			    					if(status == "success"){
-			    						selectReplyList(); // 댓글리스트 조회용 메소드 호출
+			    						selectReplyList();
 			    						$("#reply"+refWorkBoard).val("");//작성란 비워주기
 			    					
 			    					}
