@@ -420,7 +420,7 @@
 	<script>
 		$("#apvlAlarm").click(function(){
 			if(socket != null){
-				let socketMsg = "apvl,${apvl.apvlTitle},${apvl.apvlNo},${apvl.apvlWriter}";
+				let socketMsg = "apvl,${apvl.apvlTitle},${apvl.apvlNo},${apvl.apvlWriter},${loginUser.userName}";
 				console.log(socketMsg)
 				socket.send(socketMsg);
 			}

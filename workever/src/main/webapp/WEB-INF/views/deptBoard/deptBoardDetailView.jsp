@@ -625,6 +625,12 @@
 							
 						}
 						
+						if(socket != null){
+							let socketMsg = "dbo,${db.dbTitle},${db.dbNo},${db.userNo},${loginUser.userName}";
+							console.log(socketMsg)
+							socket.send(socketMsg);
+						}
+						
 					}, error:function(){
 						
 	    				console.log("댓글 등록용 ajax 통신 실패");		
