@@ -19,6 +19,8 @@
 	<!-- 부트스트랩 템플릿 용 폴더로 추가 -->
 	<resources mapping="/plugins/**" location="/resources/plugins/"/>
 	<resources mapping="/dist/**" location="/resources/dist/"/>
+	<resources mapping="start/plugins/**" location="/resources/plugins/"/>
+	<resources mapping="start/dist/**" location="/resources/dist/"/>
 
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -45,6 +47,42 @@
       <websocket:mapping handler="chatEchoHandler" path="/echo-handle" />
       <websocket:sockjs />
    </websocket:handlers>	
+   
+   <!-- 로그인 관련 interceptor -->
+   <interceptors>
+   		<interceptor>
+   			<mapping path="/**"/>
+   			
+   			<exclude-mapping path="/startPage.jsp"/>
+   			<exclude-mapping path="/resources/**"/>
+   			<exclude-mapping path="/views/**"/>
+   			<exclude-mapping path="/views/user/main.jsp"/>
+   			<exclude-mapping path="/login.do"/>
+   			<exclude-mapping path="/enrollForm.ad"/>
+   			<exclude-mapping path="/enrollForm.us"/>
+   			<exclude-mapping path="/login.us"/>
+   			<exclude-mapping path="/emailDoubleCheck.do"/>
+   			<exclude-mapping path="/companyCodeCheck.ad"/>
+   			<exclude-mapping path="/companyCodeCheck.us"/>
+   			<exclude-mapping path="/sendEmail.do"/>
+   			<exclude-mapping path="/insert.ad"/>
+   			<exclude-mapping path="/insert.us"/>
+   			<exclude-mapping path="/findPwd.do"/>
+   			<exclude-mapping path="/pwdEmailCheck.do"/>
+   			<exclude-mapping path="/findPwd.us"/>
+   			<exclude-mapping path="/main.do"/>
+   			<exclude-mapping path="/views/user/main.jsp"/>
+   			<exclude-mapping path="/echo"/>
+   			
+	
+   			<beans:bean class="com.workever.wk.common.interceptor.LoginInterceptor" id="loginInterceptor" />
+   		</interceptor>
+   		
+   		<interceptor>
+   			<mapping path="/login.us"/>
+   			<beans:bean class="com.workever.wk.common.interceptor.LoginAfterInterceptor" id="loginAfterInterceptor"/>
+   		</interceptor>
+   </interceptors>
 	
 </beans:beans>
 

@@ -67,8 +67,7 @@
           join dept d on (d.dept_no = u.dept_no)
           join company c on (c.com_no = u.com_no)
 		 where user_email = #{userEmail}
-		   and user_enabled = 'Y'
-		   and user_status = '재직'
+		   and user_status in ('재직','대기')
 	</select>
 	
 	<select id="emailDoubleCheck" resultType="_int">

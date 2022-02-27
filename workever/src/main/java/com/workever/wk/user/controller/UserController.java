@@ -58,8 +58,8 @@ public class UserController {
 		}else {
 			//System.out.println(loginUser);
 			//System.out.println(u.getUserPwd());
-			model.addAttribute("errorMsg", "로그인 실패");
-			return "common/errorPage";
+			model.addAttribute("loginMsg", "로그인 실패");
+			return "user/login";
 		}
 	}
 	

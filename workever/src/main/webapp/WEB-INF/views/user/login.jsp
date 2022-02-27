@@ -59,7 +59,7 @@
 
     .btn-login{
         text-align: center;
-        margin-top: 70px; margin-bottom: 20px;
+        margin-top: 50px; margin-bottom: 20px;
     }
     .btn-login button{
         width: 150px; height: 35px;
@@ -77,6 +77,9 @@
         text-decoration: none;
         font-size: 13px;
         color: black;
+    }
+    #loginCheck span{
+        color: red;
     }
 </style>
 </head>
@@ -118,6 +121,14 @@
                             <label for="user-pwd">비밀번호</label>
                             <input type="password" class="form-control" id="user-pwd" name="userPwd" placeholder="Password">
                         </div>
+                        <c:if test="${not empty loginMsg}">
+                            <div id="loginCheck">
+                                <span>
+                                    이메일, 비밀번호를 확인해주세요!
+                                </span>
+                            </div>
+                            <c:remove var="loginMsg" scope="request"/>
+                        </c:if>
                         <div class="btn-login">
                             <button type="submit">로그인</button>
                         </div>
@@ -132,5 +143,13 @@
 
     <jsp:include page="startFooter.jsp"></jsp:include>
     <jsp:include page="../common/scripts.jsp" />
+
+    <script>
+        $(function(){
+            $('#user-email').click(function(){
+                $('#loginCheck').hide();
+            })
+        })
+    </script>
 </body>
 </html>
