@@ -78,9 +78,27 @@
    			<beans:bean class="com.workever.wk.common.interceptor.LoginInterceptor" id="loginInterceptor" />
    		</interceptor>
    		
+   		<!-- 로그인 후 가입승인 체크 -->
    		<interceptor>
    			<mapping path="/login.us"/>
    			<beans:bean class="com.workever.wk.common.interceptor.LoginAfterInterceptor" id="loginAfterInterceptor"/>
+   		</interceptor>
+   		
+   		<!-- 관리자 interceptor -->
+   		<interceptor>
+   			<mapping path="/updateForm.ad"/>
+   			<mapping path="/update.ad"/>
+   			<mapping path="/usermanage.ad"/>
+   			<mapping path="/updateUserInfo.ad"/>
+   			<mapping path="/updateStatus.ad"/>
+   			<mapping path="/searchUser.ad"/>
+   			<mapping path="/userenable.ad"/>
+   			<mapping path="/updateEnable.ad"/>
+   			<mapping path="/addDept.do"/>
+   			<mapping path="/updateDept.do"/>
+   			<mapping path="/deleteDept.do"/>
+   			
+   			<beans:bean class="com.workever.wk.common.interceptor.AdminAuthenticationInterceptor" id="adminAuthenticationInterceptor" />
    		</interceptor>
    </interceptors>
 	

@@ -16,10 +16,18 @@ public class LoginAfterInterceptor extends HandlerInterceptorAdapter {
 		
 		HttpSession session = request.getSession();
 		User loginUser = (User)session.getAttribute("loginUser");
-		if(loginUser.getUserStatus().equals("대기")) {
-			modelAndView.setViewName("user/loginFail");
+		
+		if(loginUser == null) {
+			request.setAttribute("loginMsg", "로그인 실패");
+			modelAndView.setViewName("user/login");
+			//modelAndView.setViewName("common/errorPage");
 		}else {
-			modelAndView.setViewName("user/main");
+			if(loginUser.getUserStatus().equals("대기")) {
+				modelAndView.setViewName("user/loginFail");
+			}else {
+				modelAndView.setViewName("user/main");
+			}
 		}
+		
 	}
 }
