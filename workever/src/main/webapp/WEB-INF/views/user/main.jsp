@@ -148,6 +148,26 @@
 	}
 	.project-etc span{float: left;}
 	.project-etc i{float: right;}
+	
+	
+	
+	/* 공지사항 영역 */
+	#notice-list{
+		height:290px;
+		border-bottom:2px solid #DEE2E6;
+	}
+	
+	/* 제목 영역 : 설정한 영역 범위 넘어가면 ...으로 표시  */
+	#notice-list .notice-title{
+		width:400px;
+		height:24px;
+	 overflow: hidden;
+	 text-overflow: ellipsis;
+	 white-space: nowrap;
+	 
+	 cursor:pointer;
+	}
+	
 </style>
 
 <body class="hold-transition sidebar-mini">
@@ -220,30 +240,16 @@
 
 						<!-- /.card-body -->
 						<div class="card-body">
-							<table class="table table-sm">
+							<table id="notice-list" class="table table-sm">
 								<thead>
 									<tr>
-										<th style="width: 5%;">#</th>
-										<th style="width: 65%;">제목</th>
-										<th style="width: 30%;">작성일</th>
+										<th style="width: 15%;">#</th>
+										<th style="width: 70%;">제목</th>
+										<th style="width: 15%;">작성일</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td>공지사항1</td>
-										<td>2021-02-20</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>공지사항2</td>
-										<td>2021-02-20</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>공지사항3</td>
-										<td>2021-02-20</td>
-									</tr>
+									<!-- 공지사항 목록 조회 -->
 								</tbody>
 							</table>
 						</div>
@@ -408,6 +414,16 @@
 
 			// todo 조회
 			todoList();
+			
+			
+			
+			// 공지사항 조회
+			noticeList();
+			
+			// 공지사항 상세조회
+			detailNotice();
+			
+			
 		})
 
 		function todoList(){
@@ -420,6 +436,68 @@
 				}
 			})
 		}
+		
+		
+		
+		// 공지사항 조회용
+		function noticeList(){
+			
+			$.ajax({
+				url:"main.nbo",
+				success:function(list){
+									
+					let result = "";
+					
+					if(list.length > 0){
+						
+						for(let i in list){
+							
+							result += "<tr>"
+									+ "<td>" + list[i].nbNo + "</td>"
+									+ "<td>";
+							if(list[i].correct == "Y"){
+								
+								result += "<div class='notice-title'><span class='badge bg-primary'>new</span>&nbsp;&nbsp;&nbsp;" + list[i].nbTitle + "</div></td>";
+							
+							}else{
+								
+								result += "<div class='notice-title'>" + list[i].nbTitle + "</div></td>";
+								
+							}		
+							
+							result += "<td>" + list[i].nbDate + "</td></tr>";
+						
+						}
+						
+					}else{
+						
+						result += "<td colspan='3'>공지사항 게시글이 없습니다.</td>";
+						
+					}
+					
+					
+					$("#notice-list tbody").html(result);
+					
+				}, error:function(){
+					
+					console.log("메인용 공지사항 목록 조회 ajax 통신 실패");
+					
+				}
+				
+			});
+			
+		}
+		
+		// 공지시항 상세 조회용
+		function detailNotice(){
+			
+			$("#notice-list").on("click", ".notice-title", function(){
+				
+				location.href = "detail.nbo?nbno=" + $(this).parent().prev().text();
+				
+			});
+		}
+		
 	</script>
 </body>
 

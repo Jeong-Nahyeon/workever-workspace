@@ -191,5 +191,15 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		return nDao.deleteCommunityFileList(sqlSession, nbNo);
 		
 	}
+
+	/**
+	 * 메인용 공지사항 목록 조회
+	 */
+	@Override
+	public ArrayList<NoticeBoard> selectMainNoticeBoardList() {
+		
+		return nDao.selectMainNoticeBoardList(sqlSession);
+		
+	}
 	
 }

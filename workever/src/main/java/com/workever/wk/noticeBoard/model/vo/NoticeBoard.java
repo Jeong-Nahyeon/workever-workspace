@@ -19,4 +19,6 @@ public class NoticeBoard {
 	private String nbDate;		// 작성일
 	private String nbStatus;	// 게시상태(Y 게시 / N 비게시)
 	
+	private String correct;		// 메인용 공지사항 조회 시 오늘 날짜와 게시글 날짜 일치 여부 (Y 일치)
+	
 }

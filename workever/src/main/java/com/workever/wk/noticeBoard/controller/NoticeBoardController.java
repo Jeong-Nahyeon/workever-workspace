@@ -1,8 +1,12 @@
 package com.workever.wk.noticeBoard.controller;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,9 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
 import com.workever.wk.community.model.vo.CommunityFiles;
@@ -356,6 +362,44 @@ public class NoticeBoardController {
 			return "common/errorPage";
 			
 		}
+		
+	}
+	
+	/** [Ajax] 메인용 공지사항 목록 조회 후 응답 데이터로 전달
+	 * @param currentPage : 사용자가 요청한 페이지 수
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="main.nbo", produces="application/json; charset=UTF-8")
+	public String ajaxSelectMainNoticeBoardList(@RequestParam(value="cpage", defaultValue="1") int currentPage) {
+				
+		ArrayList<NoticeBoard> noticeList = nService.selectMainNoticeBoardList();
+		
+		
+		for(NoticeBoard nb : noticeList){
+			
+			SimpleDateFormat sdformat = new  SimpleDateFormat("yyyy-MM-dd");
+			String today = sdformat.format(new Date());
+			
+            Date date1 = null;
+            Date date2 = null;
+			try {
+				
+				date1 = sdformat.parse(nb.getNbDate()); // 공지사항 작성일
+				date2 = sdformat.parse(today); // 오늘 날짜
+				
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} 
+
+            if (date1.equals(date2)){ // 공지사항 작성일과 오늘 날짜 일치할 경우 
+
+            	nb.setCorrect("Y");
+            }
+	            	
+	     }
+		
+		return new Gson().toJson(noticeList);
 		
 	}
 	

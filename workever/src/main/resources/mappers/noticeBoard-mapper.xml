@@ -242,4 +242,22 @@
 		   and cf_ref_no = #{nbNo}	
 	</delete>
 	
+	<select id="selectMainNoticeBoardList" resultMap="noticeBoardResult">
+		select *
+		  from (
+		         select rownum rnum, n.*
+		           from (
+		                  select
+		                         nb_no
+		                       , nb_title
+		                       , to_char(nb_date, 'YYYY-MM-DD') as "nb_date"
+		                   from n_board
+		                   where nb_status = 'Y'
+		                   order
+		                      by nb_no desc
+		                ) n
+		        )
+		 where rnum between 1 and 7
+	</select>
+	
 </mapper>

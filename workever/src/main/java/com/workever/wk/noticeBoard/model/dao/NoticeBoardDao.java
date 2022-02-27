@@ -239,4 +239,15 @@ public class NoticeBoardDao {
 		
 	}
 	
+	/** 메인용 공지사항 목록 조회
+	 * @param sqlSession
+	 * @param pi
+	 * @return
+	 */
+	public ArrayList<NoticeBoard> selectMainNoticeBoardList(SqlSessionTemplate sqlSession) {
+		
+		return (ArrayList)sqlSession.selectList("noticeBoardMapper.selectMainNoticeBoardList");
+		
+	}
+	
 }
