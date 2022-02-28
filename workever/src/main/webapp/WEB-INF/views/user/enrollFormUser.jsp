@@ -300,8 +300,8 @@
 		</div>
 
 		<!-- 이메일 인증 모달 -->
-		<div class="modal" id="emailcheck">
-			<div class="modal-dialog modal-dialog-centered">
+		<div class="modal fade" id="emailcheck">
+			<div class="modal-dialog">
 				<div class="modal-content">
 	
 					<!-- Modal Header -->
@@ -336,6 +336,43 @@
 						<div style="text-align: center;">
 							<button type="button" class="btn btn-secondary" id="modal-send" style="width: 90px;" disabled="disabled">
 								인증
+							</button>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 알림 모달 -->
+		<div class="modal fade" id="alertMsg">
+			<div class="modal-dialog">
+				<div class="modal-content">
+	
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<div style="width: 100%; text-align: center;">
+							<span style="font-size: 17px; font-weight: 700;">
+								알림
+							</span>
+						</div>
+						<button type="button" class="close" data-dismiss="modal">
+							&times;
+						</button>
+					</div>
+	
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div style="text-align: center;">
+							<span id="alertMsg-text"
+							style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+								
+							</span><br>
+						</div>
+						<div style="text-align: center; margin-top: 60px;">
+							<button type="button" class="btn" data-dismiss="modal" 
+							style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+								닫기
 							</button>
 						</div>
 						
@@ -388,12 +425,12 @@
 		})
 
 		// 비밀번호 중복확인
-		$('#user-pwdcheck').blur(function () {
+		$('#user-pwdcheck').keyup(function () {
 			if ($('#user-pwdcheck').val() != $('#user-pwd').val()) {
 				$('#checkPwd-check').text('비밀번호가 일치하지 않습니다.');
 				$('#checkPwd-check').css('color', 'red');
 				$('#user-pwdcheck').css('border', '2px solid red');
-				$('#user-pwdcheck').focus();
+				$('#checkPwd').focus();
 			} else {
 				$('#checkPwd-check').text('');
 				$('#user-pwdcheck').css('border', '1px solid #ced4da');
@@ -428,7 +465,8 @@
 						emailInput.attr("readonly", true);
 						$('#email-status').attr('value', 'emailY');
 					}else{
-						alert("이미 사용중인 이메일입니다.");
+						$('#alertMsg-text').text('이미 사용중인 이메일입니다.');
+                		$('#alertMsg').modal('show');
 						emailInput.val('');
 						emailInput.focus();
 					}
@@ -443,7 +481,8 @@
 			const companyCode = $('#company-code');
 
 			if(companyCode.val() == ''){
-				alert("회사코드를 입력하세요.");
+				$('#alertMsg-text').text('회사코드를 입력하세요.');
+                $('#alertMsg').modal('show');
 				companyCode.focus();
 			}else{
 				$.ajax({
@@ -486,19 +525,23 @@
 				emailSend();
 			}else{
 				if($('#user-name').val() ==''){
-					alert('이름을 입력하세요.');
+					$('#alertMsg-text').text('이름을 입력하세요.');
+                	$('#alertMsg').modal('show');
 					$('#company-adminname').focus();
 				}
 				if($('#user-phone').val() ==''){
-					alert('전화번호를 입력하세요.');
+					$('#alertMsg-text').text('전화번호를 입력하세요.');
+                	$('#alertMsg').modal('show');
 					$('#company-phone').focus();
 				}
 				if($('#companyCode-status').val() == 'codeN'){
-					alert("회사코드 중복체크를 해주세요.");
+					$('#alertMsg-text').text('회사코드 중복체크를 해주세요.');
+                	$('#alertMsg').modal('show');
 					$("#company-code").focus();
 				}
 				if($('#form-check').is(":checked")==false){
-					alert('이용약관에 동의해주세요.');
+					$('#alertMsg-text').text('이용약관에 동의해주세요.');
+                	$('#alertMsg').modal('show');
 				}
 			}
 		}

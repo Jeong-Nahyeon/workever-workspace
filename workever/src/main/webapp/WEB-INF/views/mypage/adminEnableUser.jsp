@@ -70,6 +70,9 @@
         text-decoration: none;
         color: lightgray;
     }
+    #userDept{
+        height: 26.5px;
+    }
 
 </style>
 </head>
@@ -205,6 +208,45 @@
             </div>
         </div>
     </div>
+
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" id="alert-status"
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <jsp:include page="../common/scripts.jsp" />
     <!-- jQuery UI 1.11.4 -->
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -231,10 +273,12 @@
                 var userJoinDate = $('#userJoinDate');
 
                 if(userRank.val() == ''){
-                    alert('직급을 입력해주세요.');
+                    $('#alertMsg-text').text('직급을 입력해주세요.');
+                    $('#alertMsg').modal('show');
                     userRank.focus();
                 }else if(userJoinDate.val() == ''){
-                    alert('입사일을 입력해주세요.');
+                    $('#alertMsg-text').text('입사일을 입력해주세요.');
+                    $('#alertMsg').modal('show');
                     userJoinDate.focus();
                 }else{
                     $.ajax({
@@ -249,17 +293,22 @@
                             console.log(result);
                             if(result == 'NNNNY'){
                                 $('#modal-userEnable').modal('hide');
-                                alert('회원상태를 변경했습니다.');
-                                location.reload();
+                                $('#alertMsg-text').text('회원상태를 변경했습니다.');
+                                $('#alertMsg').modal('show');
                             }else{
-                                alert('회원상태 변경에 실패했습니다.');
                                 $('#modal-userEnable').modal('hide');
+                                $('#alertMsg-text').text('회원상태 변경에 실패했습니다.');
+                                $('#alertMsg').modal('show');
                             }
                         },error:function(){
                             console.log("회원상태변경 ajax 통신 실패");
                         }
                     })
                 }
+            })
+
+            $('#alert-status').click(function(){
+                location.reload();
             })
 
             $('#userJoinDate').datepicker({
