@@ -66,6 +66,7 @@
    			<exclude-mapping path="/insert.ad"/>
    			<exclude-mapping path="/insert.us"/>
    			<exclude-mapping path="/findPwd.do"/>
+   			<exclude-mapping path="/findPwd.us"/>
    			<exclude-mapping path="/pwdEmailCheck.do"/>
    			<exclude-mapping path="/findPwd.us"/>
    			<exclude-mapping path="/views/user/main.jsp"/>
