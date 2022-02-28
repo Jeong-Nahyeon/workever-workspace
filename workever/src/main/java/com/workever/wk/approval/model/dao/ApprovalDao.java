@@ -242,6 +242,14 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("approvalMapper.changeStatusFormList", map);
 	}
 	
+	public ArrayList<Approval> mainWriteApvl(SqlSessionTemplate sqlSession, User loginUser){
+		return (ArrayList)sqlSession.selectList("approvalMapper.mainWriteApvl", loginUser);
+	}
+	
+	public ArrayList<Approval> mainReceiveApvl(SqlSessionTemplate sqlSession, User loginUser){
+		return (ArrayList)sqlSession.selectList("approvalMapper.mainReceiveApvl", loginUser);
+	}
+	
 	
 	
 }

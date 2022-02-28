@@ -683,6 +683,39 @@ public class approvalController {
 		ArrayList<ApprovalForm> formList = aService.selectAllFormList(comNo);
 		return new Gson().toJson(formList);
 	}
-
 	
+	// 메인 페이지 작성한 결재 조회
+	@ResponseBody
+	@RequestMapping(value="mainWriteApvl.ap", produces="application/json; charset=utf-8")
+	public String ajaxMainWriteApvl(HttpSession session) {
+		User loginUser = (User)session.getAttribute("loginUser");
+		ArrayList<Approval> apvlList = aService.mainWriteApvl(loginUser);
+		
+		for(Approval a : apvlList) {			
+			switch(a.getApvlStatus()) {
+				case "S": a.setApvlStatus("결재 대기"); break;
+				case "I": a.setApvlStatus("진행중"); break;
+				case "C": a.setApvlStatus("승인"); break;
+				case "R": a.setApvlStatus("반려"); break;
+				case "D": a.setApvlStatus("회수"); break;
+			}
+		}
+		return new Gson().toJson(apvlList);
+	}
+
+	@ResponseBody
+	@RequestMapping(value="mainReceiveApvl.ap", produces="application/json; charset=utf-8")
+	public String ajaxMainReceiveApvl(HttpSession session) {
+		User loginUser = (User)session.getAttribute("loginUser");
+		ArrayList<Approval> apvlList = aService.mainReceiveApvl(loginUser);
+		
+		for(Approval a : apvlList) {
+			switch(a.getApvlStatus()) {
+				case "S": a.setApvlStatus("결재 대기"); break;
+				case "A": a.setApvlStatus("승인 처리"); break;
+				case "R": a.setApvlStatus("반려 처리"); break;
+			}
+		}
+		return new Gson().toJson(apvlList);
+	}
 }

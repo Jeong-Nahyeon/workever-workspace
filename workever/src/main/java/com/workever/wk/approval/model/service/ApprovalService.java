@@ -86,4 +86,8 @@ public interface ApprovalService {
 	int ajaxRemoveForm(Map<String,Object> map); // 전자결재 양식 remove
 	int ajaxAddForm(Map<String,Object> map);
 	ArrayList<ApprovalForm> changeStatusFormList(Map<String,Object> map); // 변경된 양식 정보 조회
+	
+	// 13. 메인페이지 결재 조회 서비스
+	ArrayList<Approval> mainWriteApvl(User loginUser);
+	ArrayList<Approval> mainReceiveApvl(User loginUser);
 }

@@ -244,6 +244,17 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.dayOffCommuteInsert(sqlSession, map);
 	}
 
+	// 휴가 
+	@Override
+	public ArrayList<Approval> mainWriteApvl(User loginUser) {
+		return aDao.mainWriteApvl(sqlSession, loginUser);
+	}
+
+	@Override
+	public ArrayList<Approval> mainReceiveApvl(User loginUser) {
+		return aDao.mainReceiveApvl(sqlSession, loginUser);
+	}
+
 
 	
 
