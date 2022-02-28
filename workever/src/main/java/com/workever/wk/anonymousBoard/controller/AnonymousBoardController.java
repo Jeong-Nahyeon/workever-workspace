@@ -315,13 +315,14 @@ public class AnonymousBoardController {
 		ArrayList<CommunityReply> rlist = aService.selectReplyList(abNo); // 해당 게시글 댓글 목록 조회
 		
 		int result2 = 1;
-		if(rlist != null) { // 삭제할 게시글에 댓글 있을 경우
+		if(!rlist.isEmpty()) { // 삭제할 게시글에 댓글 있을 경우
 			
 			result2 = aService.deleteCommunityReplyList(abNo);
 			
 		}
 		
 		ArrayList<CommunityFiles> flist = new ArrayList<>();
+		
 		flist = aService.selectCommunityFileList(abNo);
 		
 		int result3 = 1;
