@@ -173,8 +173,8 @@ public class UserController {
 		int result = uService.insertCompany(admin);
 		
 		if(result > 0) {
-			//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
-			model.addAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			session.setAttribute("alertMvMsg", "성공적으로 회원가입 되었습니다.");
+			//model.addAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
 			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");
@@ -201,6 +201,7 @@ public class UserController {
 		
 		if(result > 0) {
 			//session.setAttribute("alertMsg", "성공적으로 회원가입 되었습니다.");
+			session.setAttribute("alertMvMsg", "성공적으로 회원가입 되었습니다.");
 			return "user/login";
 		}else {
 			model.addAttribute("errorMsg", "회원가입 실패");
@@ -273,8 +274,10 @@ public class UserController {
 			// 메일 전송
 			emailService.mailSend(setFrom, toMail, title, content);
 			
-			model.addAttribute("alertMvMsg", "입력하신 이메일로 임시비밀번호가 전송되었습니다.");
-			return "redirect:/";
+			//model.addAttribute("alertMvMsg", "입력하신 이메일로 임시비밀번호가 전송되었습니다.");
+			session.setAttribute("alertMvMsg", "입력하신 이메일로 임시비밀번호가 전송되었습니다.");
+			//return "user/login";
+			return "redirect:login.do";
 		}else {
 			model.addAttribute("errorMsg", "임시비밀번호 발급 실패");
 			return "common/errorPage";
@@ -304,11 +307,15 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("checkPwd.do")
 	public String checkBeforePwdCheck(User u) {
+		System.out.println("비번찾기" + u);
 		String userPwd = u.getUserPwd();
+		System.out.println(userPwd);
 		User checkPwd = uService.checkBeforePwdCheck(u);
+		System.out.println("비번" + checkPwd);
 		String result = "NNNNN";
 		
 		if(bcryptPasswordEncoder.matches(userPwd, checkPwd.getUserPwd())) {
+			System.out.println(bcryptPasswordEncoder.matches(userPwd, checkPwd.getUserPwd()));
 			result = "NNNNY";
 		}
 		return result;
@@ -324,9 +331,10 @@ public class UserController {
 		int result = uService.updatePwd(u);
 			
 		if(result > 0) {
-			session.setAttribute("loginUser", uService.loginUser(u));
-			session.setAttribute("alertMsg", "비밀번호를 변경했습니다.");
-			return "redirect:changepwd.do";
+			session.setAttribute("loginUser", uService.loginUser((User)session.getAttribute("loginUser")));
+			session.setAttribute("alertMvMsg", "비밀번호를 변경했습니다.");
+			//return "redirect:mypage/changePwd";
+			return "mypage/changePwd";
 		}else {
 			model.addAttribute("errorMsg", "회원정보 수정 실패");
 			return "common/errorPage";
@@ -361,7 +369,7 @@ public class UserController {
 		
 		if(result > 0) {
 			session.setAttribute("loginUser", uService.loginUser(u));
-			session.setAttribute("alertMsg", "프로필 정보를 수정했습니다.");
+			session.setAttribute("alertMvMsg", "프로필 정보를 수정했습니다.");
 			return "mypage/mypageProfile";
 		}else {
 			model.addAttribute("errorMsg", "회원정보 수정 실패");
@@ -410,7 +418,7 @@ public class UserController {
 		int result = uService.updateAdminProfile(u);
 		if(result > 0) {
 			session.setAttribute("loginUser", uService.loginUser(u));
-			session.setAttribute("alertMsg", "프로필 정보를 수정했습니다.");
+			session.setAttribute("alertMvMsg", "프로필 정보를 수정했습니다.");
 			return "mypage/mypageProfile";
 		}else {
 			model.addAttribute("errorMsg", "회원정보 수정 실패");
@@ -486,7 +494,7 @@ public class UserController {
 		int result = uService.adminUpdateUserInfo(u);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "사원정보를 변경했습니다.");
+			session.setAttribute("alertMvMsg", "사원정보를 변경했습니다.");
 			return "redirect:usermanage.ad";
 		}else {
 			model.addAttribute("errorMsg", "사원정보 수정 실패");

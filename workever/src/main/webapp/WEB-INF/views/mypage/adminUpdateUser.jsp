@@ -105,6 +105,9 @@
         border: 1px solid lightgray;
         width: 180px; font-size: 15px;
     }
+    #modal-userDept, #status-userStatus{
+        height: 26.5px;
+    }
 
     #userResDate{
         border: none;
@@ -412,7 +415,7 @@
                     <div class="modal-content">
         
                         <div class="modal-header">
-                            <h4 class="modal-title">Default Modal</h4>
+                            <h4 class="modal-title">사원 정보</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -466,11 +469,85 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">사원정보변경</button>
+                            <button type="submit" class="btn" style="width: 130px; background-color: rgb(78, 115, 223); color: white;">사원정보변경</button>
                         </div>
         
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- 알림 모달 -->
+        <div class="modal fade" id="alertMsg">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <div style="width: 100%; text-align: center;">
+                            <span style="font-size: 17px; font-weight: 700;">
+                                알림
+                            </span>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div style="text-align: center;">
+                            <span id="alertMsg-text"
+                            style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                                
+                            </span><br>
+                        </div>
+                        <div style="text-align: center; margin-top: 60px;">
+                            <button type="button" class="btn" data-dismiss="modal"
+                            style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                                닫기
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 알림 모달 -->
+        <div class="modal fade" id="alertMsg-status">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <div style="width: 100%; text-align: center;">
+                            <span style="font-size: 17px; font-weight: 700;">
+                                알림
+                            </span>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div style="text-align: center;">
+                            <span id="alertMsg-text-status"
+                            style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                                
+                            </span><br>
+                        </div>
+                        <div style="text-align: center; margin-top: 60px;">
+                            <button type="button" class="btn" id="alertStatus"
+                            style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                                닫기
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -482,6 +559,16 @@
     
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg-text').text('${alertMvMsg}');
+                $('#alertMsg').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
 
     <!-- 검색 키워드 고정 -->
     <c:if test="${not empty group}">
@@ -569,10 +656,16 @@
                     },
                     success:function(result){
                         if(result == 'NNNNY'){
-                            alert("사원상태를 변경했습니다.");
-                            location.reload();
+                            //alert("사원상태를 변경했습니다.");
+                            $('#user-status').modal('hide');
+                            $('#alertMsg-text-status').text('사원상태를 변경했습니다.');
+                            $('#alertMsg-status').modal('show');
+                            //$('#alertStatus-area').children(".btn").attr('id', 'alertStatus');
+                            //location.reload();
                         }else{
-                            alert("사원상태 변경에 실패했습니다.");
+                            //alert("사원상태 변경에 실패했습니다.");
+                            $('#alertMsg-text').text('사원상태 변경에 실패했습니다.');
+                            $('#alertMsg').modal('show');
                             $('.user-modal').modal('hide');
                         }
                     }, error:function(){
@@ -581,9 +674,12 @@
                 })
             })
 
+            $('#alertStatus').click(function(){
+                location.reload();
+            })
+
 
             // 카테고리 유지
-            
             // 카테고리 선택
             $('select[name=category]').change(function(){
                 var category = $(this).children("option:selected").val();

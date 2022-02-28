@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
-
+<jsp:include page="../common/scripts.jsp" />
 <style>
     div{box-sizing: border-box;}
     .content-wrapper{overflow: hidden; position: relative;}
@@ -74,6 +74,16 @@
 
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="mypageSidebar.jsp" />
+
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg-text').text('${alertMvMsg}');
+                $('#alertMsg').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
 
     <div class="content-wrapper">
         
@@ -152,12 +162,42 @@
 
     </div>
     
-    <jsp:include page="../common/scripts.jsp" />
-    <script>
-        $(function(){
-            console.log('${loginUser.comNo}');
-        })
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-    </script>
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>

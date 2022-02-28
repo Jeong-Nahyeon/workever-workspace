@@ -153,7 +153,7 @@
 								존재하지 않는 이메일 입니다.
 							</span><br>
                             <span style="font-size: 15px; font-weight: 600;">
-                                이름과 이메일을 확인해주세요.
+                                전화번호, 이메일을 확인해주세요.
                             </span>
 						</div>
 						<div style="text-align: center; margin-top: 60px;">

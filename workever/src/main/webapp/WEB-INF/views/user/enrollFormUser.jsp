@@ -93,6 +93,13 @@
 		background-color: lightgray;
 		border-radius: 2px;
 	}
+	#btn-formsubmit{
+		border: none;
+		border-radius: 3%;
+		background-color: rgb(78, 115, 223);
+		width: 130px; height: 40px;
+		color: white;
+	}
 </style>
 </head>
 <body>

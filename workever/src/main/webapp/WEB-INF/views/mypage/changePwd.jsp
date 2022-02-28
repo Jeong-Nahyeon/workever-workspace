@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
-
+<jsp:include page="../common/scripts.jsp" />
 <style>
     div{box-sizing: border-box;}
     .content-wrapper{overflow: hidden; position: relative;}
@@ -35,7 +36,16 @@
 
     <jsp:include page="../common/header.jsp" />
 	<jsp:include page="mypageSidebar.jsp" />
-
+    
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg-text').text('${alertMvMsg}');
+                $('#alertMsg').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
     <div class="content-wrapper">
         <div class="changepwd-title">
             <span>비밀번호 설정</span>
@@ -78,9 +88,9 @@
 
                                 </div>
                             </div>
-                            <input type="hidden" id="check-before" value="beforeY">
+                            <input type="hidden" id="check-before" value="beforeN">
                             <input type="hidden" id="check-after" value="afterN">
-                            <input type="hidden" name="userNo" value="${ loginUser.userNo }">
+                            <input type="hidden" name="userNo" id="userNo" value="${ loginUser.userNo }">
                             <div class="form-group" style="float: right;">
                                 <input type="button" class="btn btn-primary" id="pwdFormSubmit" value="변경하기">
                             </div>
@@ -90,7 +100,44 @@
             </form>
         </div>
     </div>
-    <jsp:include page="../common/scripts.jsp" />
+
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     <script>
         // 비밀번호 정규식
@@ -113,14 +160,41 @@
 			if ($('#pwd-checkAfter').val() != $('#pwd-after').val()) {
 				$('#doubleCheckPwd-a').text('비밀번호가 일치하지 않습니다.');
 				$('#doubleCheckPwd-a').css('color', 'red');
-				$('#wd-checkAfter').css('border', '2px solid red');
-				$('#wd-checkAfter').focus();
+				$('#pwd-checkAfter').css('border', '2px solid red');
+				$('#pwd-checkAfter').focus();
 			} else {
 				$('#doubleCheckPwd-a').text('');
 				$('#pwd-checkAfter').css('border', '1px solid #ced4da');
                 $('#check-after').attr('value', 'afterY');
 			}
 		});
+
+        $('#pwd-before').keyup(function(){
+            $.ajax({
+                url:"checkPwd.do",
+                data:{
+                    userPwd:$(this).val(),
+                    userNo:$('#userNo').val()
+                },
+                success:function(result){
+                    if(result == 'NNNNY'){
+                        console.log('비밀번호일치');
+                        $('#pwd-before').css('border', '1px solid #ced4da');
+                        $('#checkPwd-b').text('');
+                        $('#checkPwd-b').css('color', 'red');
+                        $('#check-before').attr('value', 'beforeY');
+                    }else{
+                        console.log('비밀번호불일치');
+                        $('#pwd-before').css('border', '2px solid red');
+                        $('#checkPwd-b').text('비밀번호가 일치하지 않습니다.');
+                        $('#checkPwd-b').css('color', 'red');
+                        $('#pwd-before').focus();
+                    }
+                },error:function(){
+                    console.log('비밀번호 확인 ajax 통신 실패');
+                }
+            })
+        })
 
         
 
@@ -129,15 +203,21 @@
                 $('#changepwdForm').submit();
             }else{
                 if($('#pwd-before').val() == ''){
-                    alert('현재 비밀번호를 입력하세요');
+                    //alert('현재 비밀번호를 입력하세요');
+                    $('#alertMsg-text').text('현재 비밀번호를 입력하세요');
+                    $('#alertMsg').modal('show');
                     $('#pwd-before').focus();
                 }
                 if($('#pwd-after').val() == ''){
-                    alert('새로운 비밀번호를 입력하세요.')
+                    //alert('새로운 비밀번호를 입력하세요.')
+                    $('#alertMsg-text').text('새로운 비밀번호를 입력하세요.');
+                    $('#alertMsg').modal('show');
                     $(this).focus();
                 }
                 if($('#pwd-checkAfter').val() == ''){
-                    alert('새로운 비밀번호를 입력하세요.');
+                    //alert('새로운 비밀번호를 입력하세요.');
+                    $('#alertMsg-text').text('새로운 비밀번호를 입력하세요.');
+                    $('#alertMsg').modal('show');
                     $(this).focus();
                 }
             }

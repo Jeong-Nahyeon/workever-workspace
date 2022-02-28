@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 <jsp:include page="../common/links.jsp" />
 <jsp:include page="startHeader.jsp"></jsp:include>
+<jsp:include page="../common/scripts.jsp" />
 <style>
     div{box-sizing: border-box;}
     /* 헤더스타일 */
@@ -84,12 +85,16 @@
 </style>
 </head>
 <body>
-    <c:if test="${ not empty alertMsg }">
-		<script>
-			alert("${alertMsg}");
-		</script>
-		<c:remove var="alertMsg" scope="request" />
-	</c:if>
+    
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg').text('${alertMvMsg}');
+                $('#after-email').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
     <!--<span>${alertMvMsg}</span>-->
     <div id="start-header">
         <div id="header-font">
@@ -141,8 +146,44 @@
         </div>
     </div>
 
+    <div class="modal fade" id="after-email">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="margin-left:165px;">
+                        <span style="text-align: center; font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <jsp:include page="startFooter.jsp"></jsp:include>
-    <jsp:include page="../common/scripts.jsp" />
+    
 
     <script>
         $(function(){

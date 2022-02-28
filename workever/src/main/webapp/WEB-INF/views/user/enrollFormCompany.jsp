@@ -106,13 +106,18 @@
 		background-color: lightgray;
 		border-radius: 2px;
 	}
+
+	#btn-formsubmit{
+		border: none;
+		border-radius: 3%;
+		background-color: rgb(78, 115, 223);
+		width: 130px; height: 40px;
+		color: white;
+	}
 </style>
 </head>
 
 <body>
-
-	
-
 	<div id="start-header">
         <div id="header-font">
             <a href="${pageContext.request.contextPath}">
@@ -328,8 +333,8 @@
 		</div>
 
 		<!-- 이메일 인증 모달 -->
-		<div class="modal" id="emailcheck">
-			<div class="modal-dialog modal-dialog-centered">
+		<div class="modal fade" id="emailcheck">
+			<div class="modal-dialog">
 				<div class="modal-content">
 	
 					<!-- Modal Header -->
@@ -371,10 +376,49 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- 알림 모달 -->
+		<div class="modal fade" id="alertMsg">
+			<div class="modal-dialog">
+				<div class="modal-content">
+	
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<div style="width: 100%; text-align: center;">
+							<span style="font-size: 17px; font-weight: 700;">
+								알림
+							</span>
+						</div>
+						<button type="button" class="close" data-dismiss="modal">
+							&times;
+						</button>
+					</div>
+	
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div style="text-align: center;">
+							<span id="alertMsg-text"
+							style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+								
+							</span><br>
+						</div>
+						<div style="text-align: center; margin-top: 60px;">
+							<button type="button" class="btn" data-dismiss="modal" 
+							style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+								닫기
+							</button>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<jsp:include page="startFooter.jsp"></jsp:include>
 	<jsp:include page="../common/scripts.jsp" />
+
+	
 
 	<script>
 
@@ -459,7 +503,8 @@
 						$('#email-status').attr('value', 'emailY');
 						
 					} else {
-						alert("이미 사용중인 이메일입니다.");
+						$('#alertMsg-text').text('이미 사용중인 이메일 입니다.');
+						$('#alertMsg').modal('show');
 						emailInput.val('');
 						emailInput.focus();
 					}

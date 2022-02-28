@@ -169,8 +169,44 @@
             </div>
         </form>
     </div>
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
     
     <jsp:include page="../common/scripts.jsp" />
+    
     <script>
         
             // 전화번호 정규식
@@ -216,19 +252,27 @@
             }else{
                 console.log("else실행됨");
                 if($('#userName').val() == ''){
-                    alert('이름을 입력해주세요');
+                    //alert('이름을 입력해주세요');
+                    $('#alertMsg-text').text('이름을 입력해주세요');
+                    $('#alertMsg').modal('show');
                     $(this).focus();
                 }
                 if($('#userPhone').val() == '' && $('#checkPhone').val() == 'phoneN'){
-                    alert('전화번호를 확인해주세요');
+                    //alert('전화번호를 확인해주세요');
+                    $('#alertMsg-text').text('전화번호를 확인해주세요');
+                    $('#alertMsg').modal('show');
                     $(this).focus();
                 }
                 if($('#comName').val() == ''){
-                    alert('회사이름을 입력해주세요');
+                    //alert('회사이름을 입력해주세요');
+                    $('#alertMsg-text').text('회사이름을 입력해주세요');
+                    $('#alertMsg').modal('show');
                     $(this).focus();
                 }
                 if($('#comPhone').val() == '' && $('#checkComPhone').val() == 'phoneN'){
-                    alert('회사전화번호를 확인해주세요');
+                    //alert('회사전화번호를 확인해주세요');
+                    $('#alertMsg-text').text('회사전화번호를 확인해주세요');
+                    $('#alertMsg').modal('show');
                     $('#comPhone').focus();
                 }
             }
