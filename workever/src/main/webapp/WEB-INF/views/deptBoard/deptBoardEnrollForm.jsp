@@ -160,7 +160,7 @@
 												<tr>
 													<th>제목</th>
 													<td colspan="3">
-														<input type="text" name="dbTitle" class="form-control" required>  
+														<input type="text" name="dbTitle" class="form-control" maxlength="65" required>  
 													</td>
 												</tr>
 												<tr>

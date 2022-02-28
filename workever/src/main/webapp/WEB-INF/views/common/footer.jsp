@@ -8,9 +8,9 @@
 </head>
 <body>
 	<footer class="main-footer">
-	  Welcome to <strong><a href="/">Workever</a></strong>!
+	  Work Wherever&nbsp;&nbsp;|&nbsp;&nbsp;<strong><a href="/wk">Workever</a></strong>
 	  <div class="float-right d-none d-sm-inline-block">
-	    KH Final Project Group 5. <b>E1I4</b>
+	    KH Final Project Group 5&nbsp;&nbsp;|&nbsp;&nbsp;<b>E1I4</b>
 	  </div>
 	</footer>
 	

@@ -152,7 +152,7 @@
 							<tr>
 							<th>제목</th>
 							<td>
-								<input type="text" name="abTitle" value="${ ab.abTitle }" class="form-control" required>  
+								<input type="text" name="abTitle" value="${ ab.abTitle }" class="form-control" maxlength="65" required>  
 							</td>
 							</tr>
 							<tr>

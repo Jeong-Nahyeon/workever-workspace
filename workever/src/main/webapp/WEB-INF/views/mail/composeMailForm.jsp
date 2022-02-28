@@ -204,7 +204,7 @@
 			                  <tr>
 			                    <th width="140px">제목</th>
 			                    <td>
-			                      <input type="text" name="msTitle" class="form-control" required>  
+			                      <input type="text" name="msTitle" class="form-control" maxlength="65" required>  
 			                    </td>
 			                  </tr>
 			                  <tr>
