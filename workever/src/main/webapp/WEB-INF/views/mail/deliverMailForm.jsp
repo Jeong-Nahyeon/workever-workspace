@@ -182,7 +182,7 @@
 		    <div class="container-fluid">
 		      <div class="row mb-2">
 		        <div class="col-sm-6">
-		          <h1 id="page-title">메일 답장</h1>
+		          <h1 id="page-title">메일 전달</h1>
 		        </div>
 		      </div>
 		    </div><!-- /.container-fluid -->
