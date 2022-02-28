@@ -110,7 +110,7 @@ public class TodoController {
 	
 	// 메인페이지 todolist 조회
 	@ResponseBody
-	@RequestMapping("mainTodoList.do")
+	@RequestMapping(value="mainTodoList.do", produces="application/json; charset=UTF-8")
 	public String mainTodoList(HttpSession session) {
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yy/MM/dd");

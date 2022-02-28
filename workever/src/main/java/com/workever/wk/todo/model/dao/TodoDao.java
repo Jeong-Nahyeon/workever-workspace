@@ -10,7 +10,7 @@ import com.workever.wk.todo.model.vo.Todo;
 import com.workever.wk.user.model.vo.User;
 
 @Repository
-public class TodoDao {
+public class TodoDao { 
 
 	// todo 목록 조회
 	public ArrayList<Todo> selectTodoList(SqlSessionTemplate sqlSession, HashMap<String, String> user) {

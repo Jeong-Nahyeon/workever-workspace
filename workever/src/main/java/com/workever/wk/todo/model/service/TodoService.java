@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.workever.wk.todo.model.vo.Todo;
 
-public interface TodoService {
+public interface TodoService { 
 	
 	// todo 목록 조회
 	ArrayList<Todo> selectTodoList(HashMap<String, String> user);

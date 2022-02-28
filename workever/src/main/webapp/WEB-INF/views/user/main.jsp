@@ -74,11 +74,23 @@
 		width: 60px;
 		color: white; font-size: 11px;
 	}
-	.todo-link{
+	.todo-link, .noTodo-link{
 		text-decoration: none;
 		color: lightgray;
-		float: right;
 	}
+	.todo-link{float: right;}
+	.noTodo-link{
+		margin-left: 35px;
+	}
+	.todoMemo{
+		font-size: 13px;
+		padding-left: 40px;
+	}
+	.todo-noData{
+		margin: auto;
+		text-align: center;
+	}
+	
 
 	/* 공지사항 스타일 */
 	.table{text-align: center;}
@@ -186,7 +198,6 @@
 				<!-- todo -->
 				<div id="todo-area">
 					<div class="card card-default">
-						<!-- /.card-header -->
 						<div class="card-header">
 							<h3 class="card-title">오늘의 일정</h3>
 							<div class="card-tools">
@@ -195,33 +206,8 @@
 								</button>
 							</div>
 						</div>
-						<!-- /.card-body -->
-						<div class="card-body">
-							<div class="todo-list">
-								<div class="todo-title">
-									<span>오늘의 할 일2</span>
-								</div>
-								<div class="todo-etc">
-									<span class="badge badge-pill badge-warning todo-badge">높음</span>
-									<a href="" class="todo-link">
-										<i class="fas fa-angle-double-right"></i>
-									</a>
-								</div>
-							</div>
-							<div class="todo-line"></div>
-
-							<div class="todo-list">
-								<div class="todo-title">
-									<span>오늘의 할 일2</span>
-								</div>
-								<div class="todo-etc">
-									<span class="badge badge-pill badge-warning todo-badge">높음</span>
-									<a href="" class="todo-link">
-										<i class="fas fa-angle-double-right"></i>
-									</a>
-								</div>
-							</div>
-							<div class="todo-line"></div>
+						<div class="card-body todoContent-area">
+							
 						</div>
 					</div>
 				</div>
@@ -309,13 +295,6 @@
 					</div>
 				</div>
 
-				<div class="project-subarea">
-					
-				</div>
-
-				<div class="project-subarea">
-					
-				</div>
 			</div>
 
 			<div class="content-right">
@@ -396,11 +375,56 @@
 			approvalReceiveList()
 		})
 
+
+		// todo 조회용
 		function todoList(){
 			$.ajax({
 				url:"mainTodoList.do",
 				success:function(result){
 					console.log(result);
+
+					var content = "";
+					if(result.length > 0){
+						for(let t in result){
+							content += '<div class="todo-list">' +
+											'<div class="todo-title">' + 
+												'<span>'+ result[t].todoTitle +'</span>'+
+											'</div>' + 
+											'<div class="todo-etc">';
+
+												if(result[t].todoImp == 'A'){
+													content += '<span class="badge badge-pill badge-danger todo-badge">매우높음</span>';
+												}else if(result[t].todoImp == 'B'){
+													content += '<span class="badge badge-pill badge-warning todo-badge">높음</span>';
+												}else if(result[t].todoImp == 'C'){
+													content += '<span class="badge badge-pill badge-info todo-badge">보통</span>';
+ 												}else{
+													content += '<span class="badge badge-pill badge-success todo-badge">낮음</span>';
+												}
+
+												content +=  '<span class="todoMemo"> memo : ' + result[t].todoMemo + '<span>'+
+															'<a href="todo.do" class="todo-link">' + 
+																'<i class="fas fa-angle-double-right"></i>' +
+														    '</a>' +
+														'</div>' + 
+													'</div>' +
+												'<div class="todo-line"></div>';					  
+						}
+					}else{
+						content += '<div class="todo-list">' + 
+										'<div class="todo-noData" style="margin-top:20px">' +
+											'<span> 오늘의 Todo가 아직 없습니다! </span>' + 
+										'</div>' + 
+										'<div class="todo-noData">' +
+											'<span> Todo를 등록해주세요 </span>' + 
+											'<a href="todo.do" class="noTodo-link">' + 
+												'<i class="fas fa-angle-double-right"></i>' +
+											'</a>' +
+										'</div>' + 
+									'</div>';
+					}
+
+					$('.todoContent-area').html(content);
 				},error:function(){
 					console.log("MainTodoList ajax 통신 실패");
 				}

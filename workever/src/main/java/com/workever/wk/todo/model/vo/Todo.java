@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Setter @Getter
 @ToString
-public class Todo {
+public class Todo { 
 	
 	private String todoNo;
 	private String userNo;

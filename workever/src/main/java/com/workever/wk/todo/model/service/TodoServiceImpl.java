@@ -15,7 +15,7 @@ import com.workever.wk.user.model.vo.User;
 public class TodoServiceImpl implements TodoService{
 
 	@Autowired
-	private TodoDao tDao;
+	private TodoDao tDao; 
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;

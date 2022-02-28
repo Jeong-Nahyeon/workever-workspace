@@ -99,6 +99,7 @@
           )
 		 where user_no = #{userNo}
 		   and todo_date = #{today}
+		   and todo_status in ('S', 'D')
            and ROWNUM between 1 and 5
 	</select>
 </mapper>
