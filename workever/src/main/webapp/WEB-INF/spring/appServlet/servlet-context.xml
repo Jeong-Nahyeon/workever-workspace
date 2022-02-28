@@ -55,8 +55,6 @@
    			
    			<exclude-mapping path="/startPage.jsp"/>
    			<exclude-mapping path="/resources/**"/>
-   			<exclude-mapping path="/views/**"/>
-   			<exclude-mapping path="/views/user/main.jsp"/>
    			<exclude-mapping path="/login.do"/>
    			<exclude-mapping path="/enrollForm.ad"/>
    			<exclude-mapping path="/enrollForm.us"/>
@@ -70,9 +68,12 @@
    			<exclude-mapping path="/findPwd.do"/>
    			<exclude-mapping path="/pwdEmailCheck.do"/>
    			<exclude-mapping path="/findPwd.us"/>
-   			<exclude-mapping path="/main.do"/>
    			<exclude-mapping path="/views/user/main.jsp"/>
    			<exclude-mapping path="/echo"/>
+   			
+   			<exclude-mapping path="changepwd.us"/>
+   			<exclude-mapping path="checkPwd.do"/>
+   			<exclude-mapping path="changepwd.do"/>
    			
    			<beans:bean class="com.workever.wk.common.interceptor.LoginInterceptor" id="loginInterceptor" />
    		</interceptor>
