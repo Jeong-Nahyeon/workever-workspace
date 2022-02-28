@@ -65,10 +65,6 @@
 
 
 	<script>
-		//$("#sendBtn").click(function() {
-		//	sendMessage();
-		//	$('#message').val('');
-		//});
 		
 		$(function(){
 			$('#message').keydown(function(key){
@@ -78,6 +74,7 @@
 					$('#message').focus();
 				}
 			});
+			
 			$('#sendBtn').click(function(){
 				sendMessage();
 				$('#message').val('');
@@ -95,10 +92,10 @@
 		// 메시지 전송
 		function sendMessage() {
 			
-			// textarea태그값 받아오기
 			var msg = document.getElementById("message").value;
+			// ** textarea 사용 시 **
 			// 값에서 엔터를 <br>태그로 변경하기
-			msg = msg.replace(/(?:\r\n|\r|\n)/g, "<br />");
+			// msg = msg.replace(/(?:\r\n|\r|\n)/g, "<br />");
 			
 			var date = new Date();
 			var dateInfo = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
@@ -119,8 +116,9 @@
 			var data = msg.data;
 			
 			$("#messageArea").append(data);
-			
+			$("#messageArea").scrollTop($("#messageArea")[0].scrollHeight); // 스크롤 하단 내리기
 		}
+		
 		
 		// 서버와 연결을 끊었을 때
 		function onClose(evt) {

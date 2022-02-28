@@ -88,7 +88,7 @@
 								
 									<div class="card-footer">
 										<div class="text-right">
-											<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal">
+											<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal chatPopup">
 												<i class="fas fa-comments"></i>
 											</a>
 											
@@ -96,6 +96,34 @@
 												function chatPopup(){
 													window.open("chat.do", "chat", "width=400, height=500");
 												}
+												
+												$(document).ready(function() {
+												      // 팝업 창 크기를 HTML 크기에 맞추어 자동으로 크기를 조정하는 함수.
+												      var strWidth;
+												      var strHeight;
+
+												      //innerWidth / innerHeight / outerWidth / outerHeight 지원 브라우저 
+												      if ( window.innerWidth && window.innerHeight && window.outerWidth && window.outerHeight ) {
+												          strWidth = $('.chatPopup').outerWidth() + (window.outerWidth - window.innerWidth);
+												          strHeight = $('.chatPopup').outerHeight() + (window.outerHeight - window.innerHeight);
+												      }
+												      else {
+												          var strDocumentWidth = $(document).outerWidth();
+												          var strDocumentHeight = $(document).outerHeight();
+
+												          window.resizeTo ( strDocumentWidth, strDocumentHeight );
+
+												          var strMenuWidth = strDocumentWidth - $(window).width();
+												          var strMenuHeight = strDocumentHeight - $(window).height();
+
+												          strWidth = $('.chatPopup').outerWidth() + strMenuWidth;
+												          strHeight = $('.chatPopup').outerHeight() + strMenuHeight;
+												      }
+
+												      //resize 
+												      window.resizeTo( strWidth, strHeight );
+
+												  });
 											</script>
 										</div>
 									</div>

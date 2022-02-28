@@ -21,7 +21,7 @@ import com.workever.wk.commute.model.vo.Commute;
 import com.workever.wk.user.model.vo.User;
 
 @Controller
-public class adCommuteController {
+public class AdCommuteController {
 	
 	@Autowired
 	private CommuteService cService;
