@@ -124,7 +124,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:150px;">
+                    <div style="width: 100%; text-align: center;">
                         <span id="cal-selectDay"
                         style="text-align: center; font-size: 20px; font-weight: 700; ">
                             
@@ -176,7 +176,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:170px;">
+                    <div style="width: 100%; text-align: center;">
                         <span id="modal-title"
                         style="text-align: center; font-size: 17px; font-weight: 700;">
                             Calendar 일정 등록
@@ -272,7 +272,7 @@
                         <input type="hidden" id="checkDate" value="">
                         <div class="form-group" style="margin-top: 30px;">
                             <label for="todoMemo">내용</label><br>
-                            <textarea name="calMemo" id="calMemo" cols="62" rows="3"
+                            <textarea name="calMemo" id="calMemo" cols="55" rows="3"
                             style="border: 1px solid lightgray; border-radius: 2px;"></textarea>
                         </div>
 
@@ -299,7 +299,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:170px;">
+                    <div style="width: 100%; text-align: center;">
                         <span style="text-align: center; font-size: 17px; font-weight: 700;">
                             Calendar 일정 삭제
                         </span>
@@ -336,6 +336,43 @@
         </div>
     </div>
 
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 스크립트 영역 -->
     <jsp:include page="../common/scripts.jsp" />
     <!-- 캘린더 -->
@@ -346,6 +383,16 @@
     <!-- datetimepicker -->
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg-text').text('${alertMvMsg}');
+                $('#alertMsg').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -489,15 +536,19 @@
             // 일정등록, 수정 Submit
             $('#btn-submit').on('click', function(){
                 if($('#calTitle').val() == ''){
-                    alert('일정 제목을 입력하세요.');
+                    $('#alertMsg-text').text('일정 제목을 입력하세요.');
+                    $('#alertMsg').modal('show');
                     $('#calTitle').css('border', '2px solid red');
                 }else if($('#calColor').val() == ''){
-                    alert('색상을 선택하세요.');
+                    $('#alertMsg-text').text('색상을 선택하세요.');
+                    $('#alertMsg').modal('show');
                 }else if($('#startDate>input').val() == ''){
-                    alert('시작일자를 선택하세요.');
+                    $('#alertMsg-text').text('시작일자를 선택하세요.');
+                    $('#alertMsg').modal('show');
                     $('#startDate>input').css('border', '2px solid red');
                 }else if($('#endDate>input').val() == ''){
-                    alert('종료일자를 선택하세요.');
+                    $('#alertMsg-text').text('종료일자를 선택하세요.');
+                    $('#alertMsg').modal('show');
                     $('#endDate>input').css('border', '2px solid red');
                 }else if($('#checkDate').val() == 'true'){
                     if($('#submitCheck').val() == 'insert'){

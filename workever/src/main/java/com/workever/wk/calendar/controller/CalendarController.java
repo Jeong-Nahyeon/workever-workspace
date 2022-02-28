@@ -89,7 +89,7 @@ public class CalendarController {
 		int result = cService.insertCalendar(calendar);
 
 		if(result > 0) {
-			session.setAttribute("alertMsg", "일정을 등록했습니다.");
+			session.setAttribute("alertMvMsg", "일정을 등록했습니다.");
 			if(calendar.getCalCategory().equals("전사")) {
 				return "redirect:/companyCalendar.do";
 			}else if(calendar.getCalCategory().equals("부서")) {
@@ -111,7 +111,7 @@ public class CalendarController {
 		int result = cService.updateCalendar(calendar);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "일정을 수정했습니다.");
+			session.setAttribute("alertMvMsg", "일정을 수정했습니다.");
 			if(calendar.getCalCategory().equals("전사")) {
 				return "redirect:/companyCalendar.do";
 			}else if(calendar.getCalCategory().equals("부서")) {
@@ -134,7 +134,7 @@ public class CalendarController {
 		int result = cService.deleteCalendar(calNo);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "일정을 삭제했습니다.");
+			session.setAttribute("alertMvMsg", "일정을 삭제했습니다.");
 			return "redirect:/companyCalendar.do";
 		}else {
 			model.addAttribute("errorMsg", "일정삭제 실패");
