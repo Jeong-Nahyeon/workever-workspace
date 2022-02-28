@@ -259,7 +259,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:190px;">
+                    <div style="width: 100%; text-align: center;">
                         <span id="modal-title"
                         style="text-align: center; font-size: 17px; font-weight: 700;">
                             
@@ -314,7 +314,7 @@
                 
                         <div class="form-group" style="margin-top: 30px;">
                             <label for="todoMemo">내용</label><br>
-                            <textarea name="todoMemo" id="todoMemo" cols="61" rows="3"
+                            <textarea name="todoMemo" id="todoMemo" cols="55" rows="3"
                                 style="border: 1px solid lightgray; border-radius: 2px;"></textarea>
                         </div>
                 
@@ -340,7 +340,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:195px;">
+                    <div style="width: 100%; text-align: center;">
                         <span style="text-align: center; font-size: 17px; font-weight: 700;">
                             To Do 삭제
                         </span>
@@ -383,7 +383,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:195px;">
+                    <div style="width: 100%; text-align: center;">
                         <span style="text-align: center; font-size: 17px; font-weight: 700;">
                             ToDo 삭제
                         </span>
@@ -412,7 +412,54 @@
         </div>
     </div>
 
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
     <jsp:include page="../common/scripts.jsp" />
+
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg-text').text('${alertMvMsg}');
+                $('#alertMsg').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
 
     <script>
         console.log('${todoList}')
@@ -436,7 +483,8 @@
             // todo 등록, 수정 submit
             $('#btn-submit').click(function(){
                 if($('#todoTitle').val() == ''){
-                    alert('내용을 입력하세요.');
+                    $('#alertMsg-text').text('내용을 입력하세요.');
+                    $('#alertMsg').modal('show');
                     $('#todoTitle').css('border', '2px solid red');
                 }else{
                     if($('#formCheck').val() == 'insert'){
@@ -504,7 +552,8 @@
                             $('#modal-deleteTodo').modal('hide');
                             $('#after-tododel').modal({backdrop: 'static', keyboard: false});
                         }else{
-                            alert("todo 삭제 실패");
+                            $('#alertMsg-text').text('todo 삭제 실패');
+                            $('#alertMsg').modal('show');
                         }
                     }, error:function(){
                         console.log("todo 삭제 ajax 통신 실패");

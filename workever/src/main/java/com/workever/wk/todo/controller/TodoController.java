@@ -56,7 +56,7 @@ public class TodoController {
 		int result = tService.insertTodo(todo);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "Todo를 등록했습니다.");
+			session.setAttribute("alertMvMsg", "Todo를 등록했습니다.");
 			return "redirect:/todo.do";
 		}else {
 			model.addAttribute("errorMsg", "Todo 등록 실패");
@@ -91,7 +91,7 @@ public class TodoController {
 		int result = tService.updateTodo(todo);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "Todo를 수정했습니다.");
+			session.setAttribute("alertMvMsg", "Todo를 수정했습니다.");
 			return "redirect:/todo.do";
 		}else {
 			model.addAttribute("errorMsg", "Todo 수정 실패");
