@@ -113,6 +113,7 @@
 		width: 280px;
 		margin: 15px 35px 0 35px;
 	}
+	.approval-content{height:310px;}
 	#approval-title>span{font-size: 18px; font-weight: 600; margin-right: 155px;}
 	#approval-title a{
 		text-decoration: none;
@@ -349,14 +350,14 @@
 					</div>
 
 					<div class="approval-content">
-						<div id="apvlSendArea">
+						<div id="apvlSendArea" style="height:50%">
 							<span style="font-size: 15px;">보낸결재</span>
 							
 						</div>
 						
 						<div style="height: 10px;"></div>
 						
-						<div id="apvlReceiveArea">
+						<div id="apvlReceiveArea" style="height:50%">
 							<span style="font-size: 15px;">받은결재</span>
 							
 						</div>
@@ -388,8 +389,10 @@
 			// 공지사항 상세조회
 			detailNotice();
 			
+			// 작성한 결재 조회
 			approvalWriteList();
 			
+			// 받은 결재 조회
 			approvalReceiveList()
 		})
 
@@ -473,16 +476,21 @@
 				success:function(result){
 					let value="";
 					
-					for(let i in result){
-						value += "<div class='approval-send'>"
-							  +  	"<i class='fas fa-caret-right'>&nbsp;</i>"
-							  +	 	"<span class='approval-status-title'><a href='detail.ap?apvlNo=" + result[i].apvlNo + "'>" + result[i].apvlFormNo + "</a></span><br>"
-							  +  	"<div class='approval-send-status'>"
-							  +			"<span>결재상태</span>"
-							  +			"<span>&nbsp;|&nbsp;</span>"
-							  +			"<span>" + result[i].apvlStatus + "</span>"
-							  +		 "</div>"
-							  +  "</div>";
+					if(result == ""){
+						value += "<br><br><p>작성한 결재가 없습니다.</p>";
+					}else {
+						
+						for(let i in result){
+							value += "<div class='approval-send'>"
+								  +  	"<i class='fas fa-caret-right'>&nbsp;</i>"
+								  +	 	"<span class='approval-status-title'><a href='detail.ap?apvlNo=" + result[i].apvlNo + "'>" + result[i].apvlFormNo + "</a></span><br>"
+								  +  	"<div class='approval-send-status'>"
+								  +			"<span>결재상태</span>"
+								  +			"<span>&nbsp;|&nbsp;</span>"
+								  +			"<span>" + result[i].apvlStatus + "</span>"
+								  +		 "</div>"
+								  +  "</div>";
+						}
 					}
 					
 					$("#apvlSendArea").append(value);
@@ -493,6 +501,7 @@
 			
 		}
 		
+		// 받은 결재 조회용
 		function approvalReceiveList(){
 			
 			$.ajax({
@@ -500,19 +509,25 @@
 				success:function(result){
 					let value="";
 					
-					for(let i in result){
-						value += "<div class='approval-receive'>"
-							  +		"<i class='fas fa-caret-right'>&nbsp;</i>"
-							  +		"<span class='approval-status-title'><a href='detail.ap?apvlNo=" + result[i].apvlNo + "'>" + result[i].apvlFormNo + "</a></span><br>"
-							  +		"<div class='approval-send-status'>"
-							  +			"<span>결재상태</span>"
-							  +			"<span>&nbsp;|&nbsp;</span>"
-							  +			"<span>" + result[i].apvlStatus + "</span>"
-							  +			"<span>&nbsp;|&nbsp;</span>"
-							  +			"<span>" + result[i].apvlWriterName + "</span>"
-							  +		"</div>"
-							  +	"</div>";
+					if(result == ""){
+						value += "<br><br><p>받은 결재가 없습니다.</p>";
+					}else {
+						
+						for(let i in result){
+							value += "<div class='approval-receive'>"
+								  +		"<i class='fas fa-caret-right'>&nbsp;</i>"
+								  +		"<span class='approval-status-title'><a href='detail.ap?apvlNo=" + result[i].apvlNo + "'>" + result[i].apvlFormNo + "</a></span><br>"
+								  +		"<div class='approval-send-status'>"
+								  +			"<span>결재상태</span>"
+								  +			"<span>&nbsp;|&nbsp;</span>"
+								  +			"<span>" + result[i].apvlStatus + "</span>"
+								  +			"<span>&nbsp;|&nbsp;</span>"
+								  +			"<span>" + result[i].apvlWriterName + "</span>"
+								  +		"</div>"
+								  +	"</div>";
+						}
 					}
+					
 					$("#apvlReceiveArea").append(value);
 				},error:function(){
 					console.log("ajax통신 실패");
