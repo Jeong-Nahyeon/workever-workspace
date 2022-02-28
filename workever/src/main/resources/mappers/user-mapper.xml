@@ -141,6 +141,7 @@
 		    , user_pwd
 		    , user_rank
 		    , user_auth
+		    , user_status
 		    )
 		    values
 		    (
@@ -153,6 +154,7 @@
 		    , #{userPwd}
 		    , '관리자'
 		    , 'A'
+		    , '재직'
 		    )
 		into approval_form
 			(
@@ -224,6 +226,7 @@
 		  into users
 		      (
 		        user_no
+		      , dept_no  
 		      , com_no
 		      , user_email
 		      , user_name
@@ -234,6 +237,7 @@
 		      values
 		      (
 		        SEQ_users.nextval
+		      , 0
 		      , (select com_no from company where com_encode = #{comEncode})
 		      , #{userEmail}
 		      , #{userName}
@@ -314,7 +318,7 @@
   	<select id="selectDisableUser" resultMap="userResult">
   		select
 		       user_email
-		     , user_phone
+		     , REGEXP_REPLACE(user_phone, '(02|.{3})(.+)(.{4})', '\1-\2-\3') user_phone
 		     , user_name
 		     , user_enabled
 		  from users
@@ -330,6 +334,7 @@
   		     , user_rank = #{userRank}
   		     , user_enabled = 'Y'
   		     , user_joindate = #{userJoinDate}
+  		     , user_status = '재직'
   		 where user_email = #{userEmail}
   	</update>
   	
@@ -344,11 +349,25 @@
 	
 	<!-- 전체사원 리스트 수 -->
 	<select id="selectUserListCount" resultType="_int">
-		select 
-			   count(*)
-		  from users
-		 where com_no = #{comNo}
-		   and user_auth = 'S'
+		<choose>
+			<when test="category.equals('전체')">
+				select 
+					   count(*)
+				  from users
+				 where com_no = #{comNo}
+		           and user_status in ('재직','휴직','퇴사')
+				   and user_auth = 'S'
+			</when>
+			<otherwise>
+				select 
+					   count(*)
+				  from users
+				 where com_no = #{comNo}
+				   and user_auth = 'S'
+		           and user_status in ('재직','휴직','퇴사')
+		           and user_status = #{category}
+			</otherwise>
+		</choose>
 	</select>
 	<!-- 전체 사원 조회 -->
 	<select id="selectAllUser" resultMap="userResult">
@@ -357,12 +376,12 @@
 				select
 				       user_email
 				     , user_name
-		             , user_phone
+		             , REGEXP_REPLACE(user_phone, '(02|.{3})(.+)(.{4})', '\1-\2-\3') user_phone
 		             , com_name
 				     , dept_name
 		             , d.dept_no
 				     , user_rank
-		             , com_phone
+		             , REGEXP_REPLACE(com_phone, '(02|.{3})(.+)(.{4})', '\1-\2-\3') com_phone
 				     , user_status
 		             , user_filepath
 		             , user_resdate
@@ -380,12 +399,12 @@
 				select
 				       user_email
 				     , user_name
-		             , user_phone
+		             , REGEXP_REPLACE(user_phone, '(02|.{3})(.+)(.{4})', '\1-\2-\3') user_phone
 		             , com_name
 				     , dept_name
 		             , d.dept_no
 				     , user_rank
-		             , com_phone
+		             , REGEXP_REPLACE(com_phone, '(02|.{3})(.+)(.{4})', '\1-\2-\3') com_phone
 				     , user_status
 		             , user_filepath
 		             , user_resdate
@@ -433,13 +452,13 @@
 		  join dept d using (dept_no)
 		 where u.com_no = #{comNo}
 		 <if test="group == 'user-Name'">
-		 	and user_name = #{keyword}
+		 	and user_name like '%' || #{keyword} || '%'
 		 </if>
 		 <if test="group == 'user-Rank'">
-		 	and user_rank = #{keyword}
+		 	and user_rank like '%' || #{keyword} || '%'
 		 </if>
 		 <if test="group == 'dept-Name'">
-		 	and dept_name = #{keyword}
+		 	and dept_name like '%' || #{keyword} || '%'
 		 </if>
 	</select>
 	
@@ -465,13 +484,13 @@
 				   and user_auth = 'S'
 				   and user_status in ('재직','휴직','퇴사')
 				  	 <if test="group == 'user-Name'">
-					 	and user_name = #{keyword}
+					 	and user_name like '%' || #{keyword} || '%'
 					 </if>
 					 <if test="group == 'user-Rank'">
-					 	and user_rank = #{keyword}
+					 	and user_rank like '%' || #{keyword} || '%'
 					 </if>
 					 <if test="group == 'dept-Name'">
-					 	and dept_name = #{keyword}
+					 	and dept_name like '%' || #{keyword} || '%'
 					 </if>
 				 order
 				    by (case when user_status = '재직' then 1 else 2 end),
@@ -498,13 +517,13 @@
 				   and user_status in ('재직','휴직','퇴사')
 				   and user_status = #{category}
 				   	 <if test="group == 'user-Name'">
-					 	and user_name = #{keyword}
+					 	and user_name like '%' || #{keyword} || '%'
 					 </if>
 					 <if test="group == 'user-Rank'">
-					 	and user_rank = #{keyword}
+					 	and user_rank like '%' || #{keyword} || '%'
 					 </if>
 					 <if test="group == 'dept-Name'">
-					 	and dept_name = #{keyword}
+					 	and dept_name like '%' || #{keyword} || '%'
 					 </if>
 			</otherwise>
 		</choose>
