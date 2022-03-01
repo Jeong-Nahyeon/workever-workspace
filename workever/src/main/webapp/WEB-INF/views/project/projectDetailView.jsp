@@ -229,7 +229,7 @@
 								labels:['진행','완료','보류'],
 								datasets :[{
 									labels: '바울랩매출액',
-									data:[50,20,12],
+									data:[5,2,2],
 									backgroundColor:[
 										'rgb(95, 201, 95)',//초록색
 										'rgb(101, 180, 233)',//파란색
@@ -550,6 +550,8 @@
 			    		        	 }
 									 //$(this).children("div").eq(10).children().eq(1).children().eq(0).html(value);
 									 $(this).find(".z thead").html(value);
+									 $(this).find("#rcount").text(list.length);
+									 
 									 
 									 console.log($(this).children("div").eq(10));
 			    		         },error:function(){
@@ -656,9 +658,7 @@
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<b>전체참여자 &nbsp; ${ list2.get(0).proNumberPeople + 1 }명</b>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-						    초대하기
-						</button>
+
 					</div><hr>
 					<div class="memwrap">
 						<div class="part-title">관리자&nbsp;(1)</div><hr>
@@ -705,47 +705,7 @@
 		
 	</div>    
 		
-			<!-- 모달창 부분 -->
-			<div class="modal" id="myModal">
-			    <div class="modal-dialog modal-dialog-scrollable">
-			      <div class="modal-content">
-			      
-			        <!-- Modal 헤더 부분-->
-			        <div class="modal-header">
-			          <h4 class="modal-title">사원 초대하기</h4>
-			          <button type="button" class="close" data-dismiss="modal">×</button>
-			        </div>
-			        
-			        <!-- Modal 바디부분 -->
-			        <div class="modal-body">
-			        	<!-- 사원 검색구역 -->
-				        <nav class="navbar navbar-expand-sm">
-						  <form class="form-inline">
-						    <div class="input-group">
-						      <div class="input-group-prepend">
-						        <span class="input-group-text">@</span>
-						      </div>
-						      <input type="text" class="form-control" placeholder="초대할 사원을 입력하세요.">
-						    </div>    
-						  </form>
-						</nav>
-						<hr>
-						
-						<!-- 검색한 사원 띄워지게 -->
-						<div class="memList">
-							<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-						
-						</div>
-			        </div>
-			        
-			        <!-- Modal 푸터 부분 -->
-			        <div class="modal-footer">
-			          <button type="button" class="btn btn-primary" data-dismiss="modal">초대하기</button>
-			        </div>
-			        
-			      </div>
-				</div>
-			</div>
+
 		<!-- 모달창 부분끝 -->
 	<jsp:include page="../common/scripts.jsp" />
 	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>

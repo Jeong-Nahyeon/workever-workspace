@@ -200,16 +200,10 @@
 					<input style="margin-left:62px;" type="checkbox" class="dept6" name="proDept" value="6"/> 재무팀 
 				
 					<br><br><br>
+					
+					
 				
-				
-				<button class="EnrollBtn" onclick="update()">프로젝트 수정하기</button>
-				
-				
-				
-				
-				
-				
-				
+				<button class="EnrollBtn">프로젝트 수정하기</button>
 				
 				<br>
 			</form>

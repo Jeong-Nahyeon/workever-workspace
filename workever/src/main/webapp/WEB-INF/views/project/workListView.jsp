@@ -71,13 +71,9 @@
 		        <input type="radio" name="workDivision" value="1" checked>&nbsp;&nbsp;&nbsp;전체업무<br>
 				<input type="radio" name="workDivision" value="2">&nbsp;&nbsp;&nbsp;내 업무<br>
 	
-				<br><br>
+				<br><br><br><br><br><br><br><br>
 				
-				<b style="font-size:17px">상태</b><br>
-				<div style="height: 10px"></div>
-				<input type="radio" name="status" value="progress">&nbsp;&nbsp;&nbsp;진행<br>
-		        <input type="radio" name="status" value="complete">&nbsp;&nbsp;&nbsp;완료<br>
-		        <input type="radio" name="status" value="hold">&nbsp;&nbsp;&nbsp;보류<br>
+			
 			</div>
 			
 			<div class="workList">
