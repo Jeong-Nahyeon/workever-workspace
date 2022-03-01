@@ -502,6 +502,7 @@
 					                    <tr>
 				                    	  <th colspan="2">
 				                          	<textarea id="reply${w.workBoardNo}" cols="55" rows="2" style="resize:none; width:100%"></textarea>
+					                      	<input type="hidden" name="workBoardWriter" value="${w.userNo}">
 					                      </th>
 					                      
 					                      <th style="vertical-align: middle">
@@ -575,6 +576,12 @@
 			    					if(status == "success"){
 			    						selectReplyList();
 			    						$("#reply"+refWorkBoard).val("");//작성란 비워주기
+											if(socket != null){
+												let socketMsg = "pbo,"+$('#reply'+refWorkBoard).parents(".allBoard").find("input[name=workTitle]").val()+",${proNo},"+ $('#reply'+refWorkBoard).next().val() +",${loginUser.userName}";
+												console.log(socketMsg)
+												socket.send(socketMsg);
+											}
+										
 			    					
 			    					}
 			    				},error:function(){
@@ -684,6 +691,8 @@
 										      + "</li>";
 									}
 									$("#proMemberList").html(value);
+									
+									
 								})
 							
 							</script>
