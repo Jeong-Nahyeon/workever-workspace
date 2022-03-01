@@ -17,6 +17,49 @@
 		<result column="dept_name" property="deptName" />
 	</resultMap>
 	
+	<select id="abSelectListCount" resultType="_int">
+		select
+			   count(*)
+	      from users
+	     where user_enabled = 'Y'
+	</select>
+
+	<select id="abSelectList" resultMap="chUserResult">
+		select
+		       user_no
+		     , user_name
+		     , dept_name
+		     , user_email
+		     , user_phone
+		     , user_filepath
+		  from users
+		  join dept using (dept_no)
+		 where user_enabled = 'Y'
+		 order
+    		by user_no desc
+	</select>
+	
+	<select id="abSelectSearchList" resultMap="chUserResult">
+		select
+		       user_no
+		     , user_name
+		     , dept_name
+		     , user_email
+		     , user_phone
+		     , user_filepath
+             , user_enabled
+		  from users
+		  join dept using (dept_no)
+         where user_status = '재직'
+		   and user_enabled = 'Y'
+           and (user_name like '%' || #{ keyword } || '%'
+               or
+               dept_name like '%' || #{ keyword } || '%')
+		 order
+    		by user_no desc
+	</select>
+
+	
 	<select id="ivSelectList" resultMap="chUserResult">
 		select
 		       user_no
