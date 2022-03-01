@@ -205,37 +205,37 @@
                                 <input type="hidden" name="calColor" id="calColor">
                                 <ul class="fc-color-picker"> 
                                     <li>
-                                        <a href="#" style="color: #FE2E2E;">
+                                        <a href="#" style="color: #f7a097;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" style="color: #FE9A2E;">
+                                        <a href="#" style="color: #ffa981;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" style="color: #E4DD14;">
+                                        <a href="#" style="color: #f7d978;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" style="color: #11C013;">
+                                        <a href="#" style="color: #7fd2ae;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" style="color: #00BFFF;">
+                                        <a href="#" style="color: #abe4f8;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" style="color: #3A01DF;">
+                                        <a href="#" style="color: #84b8e0;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" style="color: #CC2EFA;">
+                                        <a href="#" style="color: #cda4cc;">
                                             <i class="fas fa-square"></i>
                                         </a>
                                     </li>
