@@ -73,7 +73,7 @@ public class OrganogramController {
 		int result = oService.insertDept(dept);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "새로운 부서를 추가했습니다.");
+			session.setAttribute("alertMvMsg", "새로운 부서를 추가했습니다.");
 			return "redirect:/organogram.do";
 		}else {
 			model.addAttribute("errorMsg", "부서 추가 실패");
@@ -87,7 +87,7 @@ public class OrganogramController {
 		int result = oService.updateDept(dept);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "부서 이름을 수정했습니다.");
+			session.setAttribute("alertMvMsg", "부서 이름을 수정했습니다.");
 			return "redirect:/organogram.do";
 		}else {
 			model.addAttribute("errorMsg", "부서 수정 실패");
@@ -101,7 +101,7 @@ public class OrganogramController {
 		int result = oService.deleteDept(dept);
 		
 		if(result > 0) {
-			session.setAttribute("alertMsg", "해당 부서를 삭제했습니다.");
+			session.setAttribute("alertMvMsg", "해당 부서를 삭제했습니다.");
 			return "redirect:/organogram.do";
 		}else {
 			model.addAttribute("errorMsg", "부서 삭제 실패");

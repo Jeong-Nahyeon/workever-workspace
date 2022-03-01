@@ -240,7 +240,7 @@
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <div style="margin-left:195px;">
-                        <span style="text-align: center; font-size: 17px; font-weight: 700;">
+                        <span style="text-align: center; font-size: 17px; font-weight: 700;" id="dept-modalTitle">
                             부서 추가
                         </span>
                     </div>
@@ -323,7 +323,54 @@
         </div>
     </div>
 
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="alertMsg">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div style="width: 100%; text-align: center;">
+                        <span style="font-size: 17px; font-weight: 700;">
+                            알림
+                        </span>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align: center;">
+                        <span id="alertMsg-text"
+                        style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
+                            
+                        </span><br>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button type="button" class="btn" data-dismiss="modal" 
+                        style="width: 90px; background-color: rgb(78, 115, 223); color: white;">
+                            닫기
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
     <jsp:include page="../common/scripts.jsp" />
+
+    <c:if test="${not empty alertMvMsg}">
+        <script>
+            $(function(){
+                $('#alertMsg-text').text('${alertMvMsg}');
+                $('#alertMsg').modal('show');
+            })
+        </script>
+        <c:remove var="alertMvMsg" scope="session" />
+    </c:if>
 
     <script>
         $(function(){
@@ -331,6 +378,7 @@
         })
         $('#addDept').click(function(){
             $('#addDeptFormCheck').val('insert');
+            $('#dept-modalTitle').text('부서 추가');
             $('#add-dept').modal();
         })
 
@@ -347,6 +395,7 @@
         })
 
         $('.dept-update').click(function(){
+            $('#dept-modalTitle').text('부서 수정');
             $('#add-deptName').val($(this).siblings().children(".dept-title").text());
             $('#input-deptNo').val($(this).siblings('.deptNo').val());
             $('#addDeptFormCheck').val('update');
@@ -360,7 +409,8 @@
                 $('#deleteDeptNo').val($(this).siblings('.deptNo').val());
                 $('#delete-dept').modal();
             }else{
-                alert('사원이 존재하는 부서는 삭제할 수 없습니다.');
+                $('#alertMsg-text').text('사원이 존재하는 부서는 삭제할 수 없습니다.');
+                $('#alertMsg').modal('show');
             }
         })
     </script>
