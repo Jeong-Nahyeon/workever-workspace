@@ -33,10 +33,6 @@
 </style>
 </head>
 <body>
-
-    <jsp:include page="../common/header.jsp" />
-	<jsp:include page="mypageSidebar.jsp" />
-    
     <c:if test="${not empty alertMvMsg}">
         <script>
             $(function(){
@@ -46,59 +42,66 @@
         </script>
         <c:remove var="alertMvMsg" scope="session" />
     </c:if>
-    <div class="content-wrapper">
-        <div class="changepwd-title">
-            <span>비밀번호 설정</span>
-        </div>
 
-        <div class="changepwd-area">
-            <form action="changepwd.us" id="changepwdForm">
-                <div class="card">
-                    <div class="card-body row">
-                        <div class="col-6 text-center d-flex align-items-center justify-content-center">
-                            <div class="changepwd-sub">
-                                <span>
-                                    비밀번호를 <strong>재설정</strong> 할 수 있습니다.
-                                </span><br>
-                                <span>
-                                    비밀번호는 영어, 숫자, 특수문자 포함 8자리 이상이어야 합니다.
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="col-5">
-                            <div class="form-group">
-                                <label for="inputName">현재 비밀번호</label>
-                                <input type="password" id="pwd-before" class="form-control" />
-                                <div id="checkPwd-b">
-
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+        <jsp:include page="mypageSidebar.jsp" />
+        
+        <div class="content-wrapper">
+            <div class="changepwd-title">
+                <span>비밀번호 설정</span>
+            </div>
+    
+            <div class="changepwd-area">
+                <form action="changepwd.us" id="changepwdForm">
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="col-6 text-center d-flex align-items-center justify-content-center">
+                                <div class="changepwd-sub">
+                                    <span>
+                                        비밀번호를 <strong>재설정</strong> 할 수 있습니다.
+                                    </span><br>
+                                    <span>
+                                        비밀번호는 영어, 숫자, 특수문자 포함 8자리 이상이어야 합니다.
+                                    </span>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="inputEmail">새 비밀번호</label>
-                                <input type="password" id="pwd-after" class="form-control" name="userPwd"/>
-                                <div id="checkPwd-a">
-
+                            
+                            <div class="col-5">
+                                <div class="form-group">
+                                    <label for="inputName">현재 비밀번호</label>
+                                    <input type="password" id="pwd-before" class="form-control" />
+                                    <div id="checkPwd-b">
+    
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputSubject">새 비밀번호 확인</label>
-                                <input type="password" id="pwd-checkAfter" class="form-control" />
-                                <div id="doubleCheckPwd-a">
-
+                                <div class="form-group">
+                                    <label for="inputEmail">새 비밀번호</label>
+                                    <input type="password" id="pwd-after" class="form-control" name="userPwd"/>
+                                    <div id="checkPwd-a">
+    
+                                    </div>
                                 </div>
-                            </div>
-                            <input type="hidden" id="check-before" value="beforeN">
-                            <input type="hidden" id="check-after" value="afterN">
-                            <input type="hidden" name="userNo" id="userNo" value="${ loginUser.userNo }">
-                            <div class="form-group" style="float: right;">
-                                <input type="button" class="btn btn-primary" id="pwdFormSubmit" value="변경하기">
+                                <div class="form-group">
+                                    <label for="inputSubject">새 비밀번호 확인</label>
+                                    <input type="password" id="pwd-checkAfter" class="form-control" />
+                                    <div id="doubleCheckPwd-a">
+    
+                                    </div>
+                                </div>
+                                <input type="hidden" id="check-before" value="beforeN">
+                                <input type="hidden" id="check-after" value="afterN">
+                                <input type="hidden" name="userNo" id="userNo" value="${ loginUser.userNo }">
+                                <div class="form-group" style="float: right;">
+                                    <input type="button" class="btn btn-primary" id="pwdFormSubmit" value="변경하기">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
+        <jsp:include page="../common/footer.jsp" />
     </div>
 
     <!-- 알림 모달 -->

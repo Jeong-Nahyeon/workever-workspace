@@ -10,7 +10,7 @@
 
 <style>
     div{box-sizing: border-box;}
-    .content-wrapper{overflow: hidden; position: relative;}
+    .content-wrapper{overflow: hidden; position: relative; }
     .content-title{
         overflow: hidden;
         margin: 50px 100px;
@@ -24,6 +24,7 @@
     .organogram-content{
         margin-left: 100px; 
         margin-right: 100px;
+        margin-bottom: 100px;
         text-align: center;
     }
     .pagination a{color: rgb(51, 51, 51);}
@@ -91,72 +92,71 @@
 </style>
 </head>
 <body>
-
-    <jsp:include page="../common/header.jsp" />
-	<jsp:include page="../common/sidebar.jsp" />
-
-    <div class="content-wrapper">
-        <div class="content-title">
-            <span>조직도</span>
-        </div>
-
-        <div class="organogram-content">
-            <div class="row">
-                
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <c:choose>
-                                <c:when test="${loginUser.userAuth eq 'A'}">
-                                    <div class="dept-plus">
-                                        <a href="#" id="addDept">
-                                            <span>부서 추가</span>
-                                            <i class="fas fa-plus"></i>
-                                        </a>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="card-title">
-                                        <span>부서 목록</span>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                        <div class="card-body">
-                            <div class="dept-name">
-                                <a href="organogram.do">
-                                    <i class="fas fa-angle-double-right"></i>
-                                    <span>전체사원</span>
-                                </a>
-                            </div>
-
-                            <c:forEach var="d" items="${deptList}">
-                                <div class="dept-name">
-                                    <input type="hidden" class="deptNo" value="${d.deptNo}">
-                                    <input type="hidden" class="userCount" value="${d.userCount}">
-                                    <a href="organogram.do?dept=${d.deptNo}">
-                                        <i class="fas fa-angle-double-right"></i>
-                                        <span class="dept-title">${d.deptName}</span>
-                                    </a>
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+	    <jsp:include page="../common/sidebar.jsp" />
+        <div class="content-wrapper">
+            <div class="content-title">
+                <span>조직도</span>
+            </div>
     
-                                    <c:if test="${loginUser.userAuth eq 'A'}">
-                                        <button class="btn-deptUp dept-delete">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn-deptUp dept-update">
-                                            <i class="fas fa-cog"></i>&nbsp;&nbsp;&nbsp;
-                                        </button>
-                                    </c:if>
+            <div class="organogram-content">
+                <div class="row">
+    
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <c:choose>
+                                    <c:when test="${loginUser.userAuth eq 'A'}">
+                                        <div class="dept-plus">
+                                            <a href="#" id="addDept">
+                                                <span>부서 추가</span>
+                                                <i class="fas fa-plus"></i>
+                                            </a>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="card-title">
+                                            <span>부서 목록</span>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="card-body">
+                                <div class="dept-name">
+                                    <a href="organogram.do">
+                                        <i class="fas fa-angle-double-right"></i>
+                                        <span>전체사원</span>
+                                    </a>
                                 </div>
-                            </c:forEach>
-
+    
+                                <c:forEach var="d" items="${deptList}">
+                                    <div class="dept-name">
+                                        <input type="hidden" class="deptNo" value="${d.deptNo}">
+                                        <input type="hidden" class="userCount" value="${d.userCount}">
+                                        <a href="organogram.do?dept=${d.deptNo}">
+                                            <i class="fas fa-angle-double-right"></i>
+                                            <span class="dept-title">${d.deptName}</span>
+                                        </a>
+    
+                                        <c:if test="${loginUser.userAuth eq 'A'}">
+                                            <button class="btn-deptUp dept-delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                            <button class="btn-deptUp dept-update">
+                                                <i class="fas fa-cog"></i>&nbsp;&nbsp;&nbsp;
+                                            </button>
+                                        </c:if>
+                                    </div>
+                                </c:forEach>
+    
+                            </div>
                         </div>
                     </div>
-                </div>
     
-                <div class="col-sm-8">
-                    <div class="card">
-                        
+                    <div class="col-sm-8">
+                        <div class="card">
+    
                             <div class="card-header">
                                 <c:choose>
                                     <c:when test="${loginUser.orgCategory eq '0'}">
@@ -168,7 +168,7 @@
                                 </c:choose>
                                 <div class="card-tools">
                                     <span>총 인원 : ${pi.listCount}명</span>
-                                    
+    
                                 </div>
                             </div>
                             <div class="card-body user-content">
@@ -184,7 +184,7 @@
                                                     <img src="${u.userFilePath}" alt="">
                                                 </c:otherwise>
                                             </c:choose>
-                                        </div> 
+                                        </div>
                                         <div class="user-rank">
                                             <span>${u.userRank}</span>
                                         </div>
@@ -194,43 +194,52 @@
                                         <div class="user-email">
                                             <span>${u.userEmail}</span>
                                         </div>
-                                        
+    
                                     </div>
                                 </c:forEach>
-                            <!-- 페이징 -->
-                            <div class="card-sub" style="margin-top: 80px;">
-                                <ul class="pagination pagination-sm justify-content-center">
-                                    <c:choose>
-                                        <c:when test="${ pi.currentPage eq 1 }">
-                                            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="page-item"><a class="page-link" href="organogram.do?dept=${loginUser.orgCategory}&opage=${pi.currentPage - 1}">&laquo;</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-                                        <li class="page-item"><a class="page-link" href="organogram.do?dept=${loginUser.orgCategory}&opage=${p}">${p}</a></li>
-                                    </c:forEach>
-
-                                    <c:choose>
-                                        <c:when test="${ pi.currentPage eq pi.maxPage }">
-                                            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="page-item"><a class="page-link" href="organogram.do?dept=${loginUser.orgCategory}&opage=${pi.currentPage + 1}">&raquo;</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </ul>
+                                <!-- 페이징 -->
+                                <div class="card-sub" style="margin-top: 80px;">
+                                    <ul class="pagination pagination-sm justify-content-center">
+                                        <c:choose>
+                                            <c:when test="${ pi.currentPage eq 1 }">
+                                                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="page-item"><a class="page-link"
+                                                        href="organogram.do?dept=${loginUser.orgCategory}&opage=${pi.currentPage - 1}">&laquo;</a>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+    
+                                        <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+                                            <li class="page-item"><a class="page-link"
+                                                    href="organogram.do?dept=${loginUser.orgCategory}&opage=${p}">${p}</a>
+                                            </li>
+                                        </c:forEach>
+    
+                                        <c:choose>
+                                            <c:when test="${ pi.currentPage eq pi.maxPage }">
+                                                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="page-item"><a class="page-link"
+                                                        href="organogram.do?dept=${loginUser.orgCategory}&opage=${pi.currentPage + 1}">&raquo;</a>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
+    
                 </div>
-                
             </div>
         </div>
-        
+        <jsp:include page="../common/footer.jsp" />
     </div>
+    
+    
 
     <!-- 부서 추가 모달 -->
     <div class="modal" id="add-dept">

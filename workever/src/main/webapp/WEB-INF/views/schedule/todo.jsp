@@ -61,196 +61,202 @@
 </style>
 </head>
 <body>
-    <jsp:include page="../common/header.jsp" />
-    <jsp:include page="../common/sidebar.jsp" />
+    <div class="wrapper">
 
-    <div class="content-wrapper kanban">
-        <div class="content-title">
-            <span>ToDo</span>
-            <span style="margin-left: 20px; font-size: 15px">
-                ${today}
-            </span>
-        </div>
+        <jsp:include page="../common/header.jsp" />
+        <jsp:include page="../common/sidebar.jsp" />
 
-        <div class="todo-area">
-            <div class="card card-row todo1 ml-5 mr-5">
-                <div class="card-header todo-header">
-                    <h3 class="card-title">
-                        해야할 일
-                    </h3>
-                    <div >
-                        <a href="#" id="btn-todoAdd">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <c:forEach var="t" items="${todoList}">
-                        <c:if test="${t.todoStatus eq 'S'}">
-                            <div class="card card-light card-outline">
-                                <div class="card-header todoSub-header">
-                                    <input type="hidden" class="todoNo" value="${t.todoNo}">
-                                    <input type="hidden" class="todoStatus" value="${t.todoStatus}">
-                                    <span class="card-title todoSub-title">${t.todoTitle}</span>
-                                    <div class="card-tools">
-                                        <a href="#" class="btn btn-tool btn-todoCheck">
-                                            <i class="fas fa-check"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-tool btn-todoUpdate">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-tool btn-todoDelete">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-body todoSub-memo">
-                                    <c:choose>
-                                        <c:when test="${t.todoImp == 'A'}">
-                                            <span class="badge badge-pill badge-danger todo-badge">매우높음</span>
-                                            <input type="hidden" class="selectImp" value="A">
-                                        </c:when>
-                                        <c:when test="${t.todoImp == 'B'}">
-                                            <span class="badge badge-pill badge-warning todo-badge">높음</span>
-                                            <input type="hidden" class="selectImp" value="B">
-                                        </c:when>
-                                        <c:when test="${t.todoImp == 'C'}">
-                                            <span class="badge badge-pill badge-info todo-badge">보통</span>
-                                            <input type="hidden" class="selectImp" value="C">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge badge-pill badge-success todo-badge">낮음</span>
-                                            <input type="hidden" class="selectImp" value="D">
-                                        </c:otherwise>
-                                    </c:choose>
-                                    
-                                    <c:choose>
-                                        <c:when test="${empty t.todoMemo}">
-                                            <p class="selectMemo">메모없음</p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <p class="selectMemo">${t.todoMemo}</p>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-                        </c:if>
-                    </c:forEach>
-                </div>
-            </div>  <!-- 해야할 일 끝 -->
-
-            <div class="card card-row todo2 ml-5 mr-5">
-                <div class="card-header todo-header">
-                    <h3 class="card-title">
-                        진행중
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <c:forEach var="t" items="${todoList}">
-                        <c:if test="${t.todoStatus eq 'D'}">
-                            <div class="card card-light card-outline">
-                                <div class="card-header todoSub-header">
-                                    <input type="hidden" class="todoNo" value="${t.todoNo}">
-                                    <input type="hidden" class="todoStatus" value="${t.todoStatus}">
-                                    <span class="card-title todoSub-title">${t.todoTitle}</span>
-                                    <div class="card-tools">
-                                        <a href="#" class="btn btn-tool btn-todoCheck">
-                                            <i class="fas fa-check"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-tool btn-todoUpdate">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-tool btn-todoDelete">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-body todoSub-memo">
-                                    <c:choose>
-                                        <c:when test="${t.todoImp == 'A'}">
-                                            <span class="badge badge-pill badge-danger todo-badge">매우높음</span>
-                                            <input type="hidden" class="selectImp" value="A">
-                                        </c:when>
-                                        <c:when test="${t.todoImp == 'B'}">
-                                            <span class="badge badge-pill badge-warning todo-badge">높음</span>
-                                            <input type="hidden" class="selectImp" value="B">
-                                        </c:when>
-                                        <c:when test="${t.todoImp == 'C'}">
-                                            <span class="badge badge-pill badge-info todo-badge">보통</span>
-                                            <input type="hidden" class="selectImp" value="C">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge badge-pill badge-success todo-badge">낮음</span>
-                                            <input type="hidden" class="selectImp" value="D">
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:choose>
-                                        <c:when test="${empty t.todoMemo}">
-                                            <p class="selectMemo">메모없음</p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <p class="selectMemo">${t.todoMemo}</p>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-                        </c:if>
-                    </c:forEach>
-                </div>
+        <div class="content-wrapper kanban">
+            <div class="content-title">
+                <span>ToDo</span>
+                <span style="margin-left: 20px; font-size: 15px">
+                    ${today}
+                </span>
             </div>
-            <div class="card card-row todo3 ml-5 mr-5">
-                <div class="card-header todo-header">
-                    <h3 class="card-title">
-                        완료
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <c:forEach var="t" items="${todoList}">
-                        <c:if test="${t.todoStatus eq 'E'}">
-                            <div class="card card-light card-outline">
-                                <div class="card-header todoSub-header">
-                                    <input type="hidden" class="todoNo" value="${t.todoNo}">
-                                    <input type="hidden" class="todoStatus" value="${t.todoStatus}">
-                                    <span class="card-titleE todoSub-title">${t.todoTitle}</span>
-                                    <div class="card-tools">
-                                        <a href="#" class="btn btn-tool btn-todoDelete">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
+    
+            <div class="todo-area">
+                <div class="card card-row todo1 ml-5 mr-5">
+                    <div class="card-header todo-header">
+                        <h3 class="card-title">
+                            해야할 일
+                        </h3>
+                        <div>
+                            <a href="#" id="btn-todoAdd">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <c:forEach var="t" items="${todoList}">
+                            <c:if test="${t.todoStatus eq 'S'}">
+                                <div class="card card-light card-outline">
+                                    <div class="card-header todoSub-header">
+                                        <input type="hidden" class="todoNo" value="${t.todoNo}">
+                                        <input type="hidden" class="todoStatus" value="${t.todoStatus}">
+                                        <span class="card-title todoSub-title">${t.todoTitle}</span>
+                                        <div class="card-tools">
+                                            <a href="#" class="btn btn-tool btn-todoCheck">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-tool btn-todoUpdate">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-tool btn-todoDelete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-body todoSub-memo">
-                                    <c:choose>
-                                        <c:when test="${t.todoImp == 'A'}">
-                                            <span class="badge badge-pill badge-danger todo-badge">매우높음</span>
-                                        </c:when>
-                                        <c:when test="${t.todoImp == 'B'}">
-                                            <span class="badge badge-pill badge-warning todo-badge">높음</span>
-                                        </c:when>
-                                        <c:when test="${t.todoImp == 'C'}">
-                                            <span class="badge badge-pill badge-info todo-badge">보통</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge badge-pill badge-success todo-badge">낮음</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <p class="card-titleE">
+                                    <div class="card-body todoSub-memo">
                                         <c:choose>
-                                            <c:when test="${empty t.todoMemo}">
-                                                메모없음
+                                            <c:when test="${t.todoImp == 'A'}">
+                                                <span class="badge badge-pill badge-danger todo-badge">매우높음</span>
+                                                <input type="hidden" class="selectImp" value="A">
+                                            </c:when>
+                                            <c:when test="${t.todoImp == 'B'}">
+                                                <span class="badge badge-pill badge-warning todo-badge">높음</span>
+                                                <input type="hidden" class="selectImp" value="B">
+                                            </c:when>
+                                            <c:when test="${t.todoImp == 'C'}">
+                                                <span class="badge badge-pill badge-info todo-badge">보통</span>
+                                                <input type="hidden" class="selectImp" value="C">
                                             </c:when>
                                             <c:otherwise>
-                                                ${t.todoMemo}
+                                                <span class="badge badge-pill badge-success todo-badge">낮음</span>
+                                                <input type="hidden" class="selectImp" value="D">
                                             </c:otherwise>
                                         </c:choose>
-                                    </p>
+    
+                                        <c:choose>
+                                            <c:when test="${empty t.todoMemo}">
+                                                <p class="selectMemo">메모없음</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p class="selectMemo">${t.todoMemo}</p>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
                                 </div>
-                            </div>
-                        </c:if>
-                    </c:forEach>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                </div> <!-- 해야할 일 끝 -->
+    
+                <div class="card card-row todo2 ml-5 mr-5">
+                    <div class="card-header todo-header">
+                        <h3 class="card-title">
+                            진행중
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <c:forEach var="t" items="${todoList}">
+                            <c:if test="${t.todoStatus eq 'D'}">
+                                <div class="card card-light card-outline">
+                                    <div class="card-header todoSub-header">
+                                        <input type="hidden" class="todoNo" value="${t.todoNo}">
+                                        <input type="hidden" class="todoStatus" value="${t.todoStatus}">
+                                        <span class="card-title todoSub-title">${t.todoTitle}</span>
+                                        <div class="card-tools">
+                                            <a href="#" class="btn btn-tool btn-todoCheck">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-tool btn-todoUpdate">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-tool btn-todoDelete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body todoSub-memo">
+                                        <c:choose>
+                                            <c:when test="${t.todoImp == 'A'}">
+                                                <span class="badge badge-pill badge-danger todo-badge">매우높음</span>
+                                                <input type="hidden" class="selectImp" value="A">
+                                            </c:when>
+                                            <c:when test="${t.todoImp == 'B'}">
+                                                <span class="badge badge-pill badge-warning todo-badge">높음</span>
+                                                <input type="hidden" class="selectImp" value="B">
+                                            </c:when>
+                                            <c:when test="${t.todoImp == 'C'}">
+                                                <span class="badge badge-pill badge-info todo-badge">보통</span>
+                                                <input type="hidden" class="selectImp" value="C">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge badge-pill badge-success todo-badge">낮음</span>
+                                                <input type="hidden" class="selectImp" value="D">
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:choose>
+                                            <c:when test="${empty t.todoMemo}">
+                                                <p class="selectMemo">메모없음</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p class="selectMemo">${t.todoMemo}</p>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                </div>
+                <div class="card card-row todo3 ml-5 mr-5">
+                    <div class="card-header todo-header">
+                        <h3 class="card-title">
+                            완료
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <c:forEach var="t" items="${todoList}">
+                            <c:if test="${t.todoStatus eq 'E'}">
+                                <div class="card card-light card-outline">
+                                    <div class="card-header todoSub-header">
+                                        <input type="hidden" class="todoNo" value="${t.todoNo}">
+                                        <input type="hidden" class="todoStatus" value="${t.todoStatus}">
+                                        <span class="card-titleE todoSub-title">${t.todoTitle}</span>
+                                        <div class="card-tools">
+                                            <a href="#" class="btn btn-tool btn-todoDelete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body todoSub-memo">
+                                        <c:choose>
+                                            <c:when test="${t.todoImp == 'A'}">
+                                                <span class="badge badge-pill badge-danger todo-badge">매우높음</span>
+                                            </c:when>
+                                            <c:when test="${t.todoImp == 'B'}">
+                                                <span class="badge badge-pill badge-warning todo-badge">높음</span>
+                                            </c:when>
+                                            <c:when test="${t.todoImp == 'C'}">
+                                                <span class="badge badge-pill badge-info todo-badge">보통</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge badge-pill badge-success todo-badge">낮음</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <p class="card-titleE">
+                                            <c:choose>
+                                                <c:when test="${empty t.todoMemo}">
+                                                    메모없음
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${t.todoMemo}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </p>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
         </div>
+        
     </div>
+    
+    
 
     <!-- todo 등록 모달 -->
     <div class="modal" id="modal-insertTodo">

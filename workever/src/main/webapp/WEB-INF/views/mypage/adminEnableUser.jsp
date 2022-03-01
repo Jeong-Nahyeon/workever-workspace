@@ -77,59 +77,61 @@
 </style>
 </head>
 <body>
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+        <jsp:include page="mypageSidebar.jsp" />
 
-    <jsp:include page="../common/header.jsp" />
-    <jsp:include page="mypageSidebar.jsp" />
-
-    <div class="content-wrapper">
-        <div class="content-title">
-            <span>회원 승인</span>
-        </div>
-
-        <div class="card">
-            <div class="card-body p-0">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th style="width: 10px">
-                                <input type="checkbox" name="" id="">
-                            </th>
-                            <th>사원명</th>
-                            <th>이메일</th>
-                            <th>전화번호</th>
-                            <th style="width: 100px">상태</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="d" items="${disableUser}">
-                            <tr>
-                                <td><input type="checkbox" name="" id=""></td>
-                                <td class="userName">${d.userName}</td>
-                                <td class="userEmail">${d.userEmail}</td>
-                                <td class="userPhone">${d.userPhone}</td>
-                                <td>
-                                    <!--<a href="" id="enable-modal">미승인</a>-->
-                                    <button class="enable-modal">미승인</button>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+        <div class="content-wrapper">
+            <div class="content-title">
+                <span>회원 승인</span>
             </div>
-            <!-- /.card-body -->
-
-            <div class="card-footer clearfix">
-                <div class="card-sub">
-                    <ul class="pagination pagination-sm justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                    </ul>
+    
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">
+                                    <input type="checkbox" name="" id="">
+                                </th>
+                                <th>사원명</th>
+                                <th>이메일</th>
+                                <th>전화번호</th>
+                                <th style="width: 100px">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="d" items="${disableUser}">
+                                <tr>
+                                    <td><input type="checkbox" name="" id=""></td>
+                                    <td class="userName">${d.userName}</td>
+                                    <td class="userEmail">${d.userEmail}</td>
+                                    <td class="userPhone">${d.userPhone}</td>
+                                    <td>
+                                        <!--<a href="" id="enable-modal">미승인</a>-->
+                                        <button class="enable-modal">미승인</button>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+    
+                <div class="card-footer clearfix">
+                    <div class="card-sub">
+                        <ul class="pagination pagination-sm justify-content-center">
+                            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+        <jsp:include page="../common/footer.jsp" />
     </div>
 
     <!-- 가입 승인 모달 -->

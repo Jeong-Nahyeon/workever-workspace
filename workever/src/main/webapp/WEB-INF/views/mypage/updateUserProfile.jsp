@@ -79,68 +79,74 @@
 </head>
 <body>
 
-	<jsp:include page="../common/header.jsp" />
-	<jsp:include page="mypageSidebar.jsp" />
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+	    <jsp:include page="mypageSidebar.jsp" />
 
-    <div class="content-wrapper">
-        <form action="update.us" id="updateUserForm" enctype="multipart/form-data" method="post">
-            <div class="mypage-title">
-                <span>계정 관리</span>
-                <div id="btn-title">
-                    <button id="btn-FormSubmit">저장하기</button>
+        <div class="content-wrapper">
+            <form action="update.us" id="updateUserForm" enctype="multipart/form-data" method="post">
+                <div class="mypage-title">
+                    <span>계정 관리</span>
+                    <div id="btn-title">
+                        <button id="btn-FormSubmit">저장하기</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="mypage-content">
-                <div class="card">
-                    <div class="card-body row">
-                        <div class="col-6 text-center d-flex align-items-center justify-content-center">
-                            <div class="profile-image">
-                                <c:choose>
-                                	<c:when test="${empty loginUser.userFilePath}">
-                                        <img src="resources/images/user-circle-solid.svg" alt="" id="profileImg-img">
-                                        <!--<a href="" class="btn btn-light" id="btn-selectphoto">-->
-                                        <label for="file" class="btn btn-light" id="btn-selectphoto">
-                                            <i class="fas fa-camera-retro fa-lg"></i>
-                                            <input type="file" name="upfile" id="file">
-                                        </label>
-                                        <!--</a>-->
-                                    </c:when>
-                                	<c:otherwise>
-                                        <a href="#" download="">
-                                            <img src="${loginUser.userFilePath}" alt="" id="profileImg-img">
-                                        </a>
-                                        <label for="file" class="btn btn-light" id="btn-selectphoto">
-                                            <i class="fas fa-camera-retro fa-lg"></i>
-                                            <input type="file" name="upfile" id="file">
-                                            <input type="hidden" name="userFilePath" value="${loginUser.userFilePath}">
-                                        </c:otherwise>
-                                </c:choose>
+    
+                <div class="mypage-content">
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="col-6 text-center d-flex align-items-center justify-content-center">
+                                <div class="profile-image">
+                                    <c:choose>
+                                        <c:when test="${empty loginUser.userFilePath}">
+                                            <img src="resources/images/user-circle-solid.svg" alt="" id="profileImg-img">
+                                            <!--<a href="" class="btn btn-light" id="btn-selectphoto">-->
+                                            <label for="file" class="btn btn-light" id="btn-selectphoto">
+                                                <i class="fas fa-camera-retro fa-lg"></i>
+                                                <input type="file" name="upfile" id="file">
+                                            </label>
+                                            <!--</a>-->
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="#" download="">
+                                                <img src="${loginUser.userFilePath}" alt="" id="profileImg-img">
+                                            </a>
+                                            <label for="file" class="btn btn-light" id="btn-selectphoto">
+                                                <i class="fas fa-camera-retro fa-lg"></i>
+                                                <input type="file" name="upfile" id="file">
+                                                <input type="hidden" name="userFilePath" value="${loginUser.userFilePath}">
+                                            </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="mypage-group">
-                                <label for="inputName">이메일</label>
-                                <input type="email" id="userEmail" name="userEmail" class="form-control" value="${loginUser.userEmail}" readonly/>
-                            </div>
-                            <div class="mypage-group">
-                                <label for="inputEmail">이름</label>
-                                <input type="text" id="userName" name="userName" class="form-control" value="${loginUser.userName}"/>
-                            </div>
-                            <div class="mypage-group">
-                                <label for="inputSubject">전화번호</label>
-                                <input type="text" id="userPhone" name="userPhone" class="form-control" value="${loginUser.userPhone}"/>
-                                <input type="hidden" id="checkPhone" value="phoneN" /> 
-                                <div id="checkPhone">
-
+                            <div class="col-5">
+                                <div class="mypage-group">
+                                    <label for="inputName">이메일</label>
+                                    <input type="email" id="userEmail" name="userEmail" class="form-control" value="${loginUser.userEmail}" readonly/>
+                                </div>
+                                <div class="mypage-group">
+                                    <label for="inputEmail">이름</label>
+                                    <input type="text" id="userName" name="userName" class="form-control" value="${loginUser.userName}"/>
+                                </div>
+                                <div class="mypage-group">
+                                    <label for="inputSubject">전화번호</label>
+                                    <input type="text" id="userPhone" name="userPhone" class="form-control" value="${loginUser.userPhone}"/>
+                                    <input type="hidden" id="checkPhone" value="phoneN" /> 
+                                    <div id="checkPhone">
+    
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
+        <jsp:include page="../common/footer.jsp" />
     </div>
+
+
+
     <!-- 알림 모달 -->
     <div class="modal fade" id="alertMsg">
         <div class="modal-dialog">

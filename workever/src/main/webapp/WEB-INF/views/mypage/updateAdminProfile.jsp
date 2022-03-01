@@ -34,7 +34,7 @@
     }
 
     /* 마이페이지 내용 영역 */
-    .mypage-content{margin: 50px 100px;}
+    .mypage-content{margin: 50px 100px; margin-bottom: 100px;}
     .profile-image{
         
         width: 200px; height: 200px;
@@ -61,6 +61,7 @@
     .company-infomation{
         width: 800px;
         float: right;
+        margin-bottom: 100px;
     }
     .company-infomation label{width: 200px;}
     #file{
@@ -72,103 +73,108 @@
 </head>
 <body>
 
-	<jsp:include page="../common/header.jsp" />
-	<jsp:include page="mypageSidebar.jsp" />
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+	    <jsp:include page="mypageSidebar.jsp" />
 
-    <div class="content-wrapper">
-        <form action="update.ad" id="updateAdminForm" enctype="multipart/form-data" method="post">
-            <div class="mypage-title">
-                <span>계정 관리</span>
-                <div id="btn-title">
-                    <button id="btn-FormSubmit">저장하기</button>
+        <div class="content-wrapper">
+            <form action="update.ad" id="updateAdminForm" enctype="multipart/form-data" method="post">
+                <div class="mypage-title">
+                    <span>계정 관리</span>
+                    <div id="btn-title">
+                        <button id="btn-FormSubmit">저장하기</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="mypage-content">
-                <div class="card">
-                    <div class="card-body row">
-                        <div class="col-6 text-center d-flex align-items-center justify-content-center">
-                            <div class="profile-image">
-                                <c:choose>
-                                    <c:when test="${empty loginUser.userFilePath}">
-                                        <img src="resources/images/user-circle-solid.svg" alt="" id="profileImg-img">
-                                        <!--<a href="" class="btn btn-light" id="btn-selectphoto">-->
-                                        <label for="file" class="btn btn-light" id="btn-selectphoto">
-                                            <i class="fas fa-camera-retro fa-lg"></i>
-                                            <input type="file" name="adUpfile" id="file">
-                                        </label>
-                                        <!--</a>-->
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="#" download="">
-                                            <img src="${loginUser.userFilePath}" alt="" id="profileImg-img">
-                                        </a>
-                                        <label for="file" class="btn btn-light" id="btn-selectphoto">
-                                            <i class="fas fa-camera-retro fa-lg"></i>
-                                            <input type="file" name="adUpfile" id="file">
-                                            <input type="hidden" name="userFilePath" value="${loginUser.userFilePath}">
-                                        </label>
-                                   </c:otherwise>
-                                </c:choose>
+    
+                <div class="mypage-content">
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="col-6 text-center d-flex align-items-center justify-content-center">
+                                <div class="profile-image">
+                                    <c:choose>
+                                        <c:when test="${empty loginUser.userFilePath}">
+                                            <img src="resources/images/user-circle-solid.svg" alt="" id="profileImg-img">
+                                            <!--<a href="" class="btn btn-light" id="btn-selectphoto">-->
+                                            <label for="file" class="btn btn-light" id="btn-selectphoto">
+                                                <i class="fas fa-camera-retro fa-lg"></i>
+                                                <input type="file" name="adUpfile" id="file">
+                                            </label>
+                                            <!--</a>-->
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="#" download="">
+                                                <img src="${loginUser.userFilePath}" alt="" id="profileImg-img">
+                                            </a>
+                                            <label for="file" class="btn btn-light" id="btn-selectphoto">
+                                                <i class="fas fa-camera-retro fa-lg"></i>
+                                                <input type="file" name="adUpfile" id="file">
+                                                <input type="hidden" name="userFilePath" value="${loginUser.userFilePath}">
+                                            </label>
+                                       </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <input type="hidden" name="comNo" value="${loginUser.comNo}">
+                                
+                                <div class="form-group">
+                                    <label for="inputName">이메일</label>
+                                    <input type="email" id="userEmail" class="form-control" name="userEmail" value="${loginUser.userEmail}" readonly/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail">이름</label>
+                                    <input type="text" id="userName" class="form-control" name="userName" value="${loginUser.userName}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSubject">전화번호</label>
+                                    <input type="text" id="userPhone" class="form-control" name="userPhone" value="${loginUser.userPhone}"/>
+                                    <input type="hidden" id="checkUserPhone" value="userPhoneN" />
+                                    <div id="checkPhone">
+    
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-5">
-                            <input type="hidden" name="comNo" value="${loginUser.comNo}">
-                            
-                            <div class="form-group">
-                                <label for="inputName">이메일</label>
-                                <input type="email" id="userEmail" class="form-control" name="userEmail" value="${loginUser.userEmail}" readonly/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail">이름</label>
-                                <input type="text" id="userName" class="form-control" name="userName" value="${loginUser.userName}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputSubject">전화번호</label>
-                                <input type="text" id="userPhone" class="form-control" name="userPhone" value="${loginUser.userPhone}"/>
-                                <input type="hidden" id="checkUserPhone" value="userPhoneN" />
-                                <div id="checkPhone">
-
+                    </div>
+                    <div class="card company-infomation">
+                        <div class="card-body row">
+                            <div class="col-1"></div>
+                            <div class="col-9">
+                                <div>&nbsp;</div>
+                                <div class="form-group">
+                                    <label for="inputSubject">회사명</label>
+                                    <input type="text" id="comName" class="form-control" name="comName" value="${loginUser.comName}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSubject">부서</label>
+                                    <select name="deptNo" id="deptName" class="form-control">
+                                        <c:forEach var="d" items="${deptlist}">
+                                            <option value="${d.deptNo}">${d.deptName}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSubject">직급</label>
+                                    <input type="text" id="userRank" class="form-control" name="userRank" value="${loginUser.userRank}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSubject">회사연락처</label>
+                                    <input type="text" id="comPhone" class="form-control" name="comPhone" value="${loginUser.comPhone}"/>
+                                    <input type="hidden" id="checkComPhone" value="comPhoneN" />
+                                    <div id="checkComPhone">
+    
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card company-infomation">
-                    <div class="card-body row">
-                        <div class="col-1"></div>
-                        <div class="col-9">
-                            <div>&nbsp;</div>
-                            <div class="form-group">
-                                <label for="inputSubject">회사명</label>
-                                <input type="text" id="comName" class="form-control" name="comName" value="${loginUser.comName}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputSubject">부서</label>
-                                <select name="deptNo" id="deptName" class="form-control">
-                                    <c:forEach var="d" items="${deptlist}">
-                                        <option value="${d.deptNo}">${d.deptName}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputSubject">직급</label>
-                                <input type="text" id="userRank" class="form-control" name="userRank" value="${loginUser.userRank}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputSubject">회사연락처</label>
-                                <input type="text" id="comPhone" class="form-control" name="comPhone" value="${loginUser.comPhone}"/>
-                                <input type="hidden" id="checkComPhone" value="comPhoneN" />
-                                <div id="checkComPhone">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
+        <jsp:include page="../common/footer.jsp" />
     </div>
+
+
     <div class="modal fade" id="alertMsg">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -38,6 +38,7 @@
   
 
     /*캘린더영역*/
+    .calendar-area{margin-bottom: 100px;}
     #calendar{
         width: 100%;
         margin: auto;
@@ -92,31 +93,36 @@
 </head>
 <body>
 
-    <jsp:include page="../common/header.jsp" />
-    <jsp:include page="../common/sidebar.jsp" />
-
-    <div class="content-wrapper">
-        <div class="content-title">
-            <span>전사캘린더</span>
-            <c:if test="${loginUser.userAuth eq 'A'}">
-                <button id="btn-insertCompanyCal">일정등록하기</button>
-            </c:if>
-        </div>
-        
-
-        <div class="containder-fluid">
-           
-                <div class="col-md-9" style="margin: auto;">
-                    <div class="card">
-                        <div class="card-body p-0">
-                            <div id="calendar"></div>
-                        </div>
-                    </div>
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+        <jsp:include page="../common/sidebar.jsp" />
+        <div class="content-wrapper">
+            <div class="calendar-area">
+                <div class="content-title">
+                    <span>전사캘린더</span>
+                    <c:if test="${loginUser.userAuth eq 'A'}">
+                        <button id="btn-insertCompanyCal">일정등록하기</button>
+                    </c:if>
                 </div>
-            
+                
+        
+                <div class="containder-fluid">
+                        <div class="col-md-8" style="margin: auto;">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div id="calendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
         </div>
+        <jsp:include page="../common/footer.jsp" />
     </div>
 
+    
+    
     <!-- 일정 상세보기 모달 -->
     <div class="modal" id="cal-modal">
         <div class="modal-dialog modal-dialog-centered">
@@ -372,7 +378,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- 스크립트 영역 -->
     <jsp:include page="../common/scripts.jsp" />
     <!-- 캘린더 -->

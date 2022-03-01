@@ -72,9 +72,6 @@
 </head>
 <body>
 
-	<jsp:include page="../common/header.jsp" />
-	<jsp:include page="mypageSidebar.jsp" />
-
     <c:if test="${not empty alertMvMsg}">
         <script>
             $(function(){
@@ -85,81 +82,87 @@
         <c:remove var="alertMvMsg" scope="session" />
     </c:if>
 
-    <div class="content-wrapper">
+    <div class="wrapper">
+        <jsp:include page="../common/header.jsp" />
+	    <jsp:include page="mypageSidebar.jsp" />
+
+        <div class="content-wrapper">
         
-        <div class="mypage-title">
-            <span>계정 관리</span>
-            <c:choose>
-            	<c:when test="${loginUser.userAuth == 'A'}">
-            	    <div class="btn-title">
-                        <button onclick="location.href='updateForm.ad'">수정하기</button>
-                    </div>
-            	</c:when>
-            	<c:otherwise>
-                    <div class="btn-title">
-                        <button onclick="location.href='updateForm.us'">수정하기</button>
-                    </div>
-            	</c:otherwise>
-            </c:choose>
-        </div>
-
-        <div class="mypage-content">
-            <div class="card">
-                <div class="card-body row">
-                    <div class="col-6 text-center d-flex align-items-center justify-content-center">
-                        <div class="profile-image">
-                            <c:choose>
-                                <c:when test="${empty loginUser.userFilePath}">
-                                    <i class="fas fa-user-circle fa-10x"></i>
-                                </c:when>
-                                <c:otherwise>
-                                    <img src="${loginUser.userFilePath}" alt="">
-                                </c:otherwise>
-                            </c:choose>
+            <div class="mypage-title">
+                <span>계정 관리</span>
+                <c:choose>
+                    <c:when test="${loginUser.userAuth == 'A'}">
+                        <div class="btn-title">
+                            <button onclick="location.href='updateForm.ad'">수정하기</button>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="btn-title">
+                            <button onclick="location.href='updateForm.us'">수정하기</button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+    
+            <div class="mypage-content">
+                <div class="card">
+                    <div class="card-body row">
+                        <div class="col-6 text-center d-flex align-items-center justify-content-center">
+                            <div class="profile-image">
+                                <c:choose>
+                                    <c:when test="${empty loginUser.userFilePath}">
+                                        <i class="fas fa-user-circle fa-10x"></i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${loginUser.userFilePath}" alt="">
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group mypage-group">
+                                <label for="inputName">이메일</label>
+                                <span>${ loginUser.userEmail }</span>
+                            </div>
+                            <div class="form-group mypage-group">
+                                <label for="inputEmail">이름</label>
+                                <span>${ loginUser.userName }</span>
+                            </div>
+                            <div class="form-group mypage-group">
+                                <label for="inputSubject">전화번호</label>
+                                <span>${ loginUser.userPhone }</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-5">
-                        <div class="form-group mypage-group">
-                            <label for="inputName">이메일</label>
-                            <span>${ loginUser.userEmail }</span>
-                        </div>
-                        <div class="form-group mypage-group">
-                            <label for="inputEmail">이름</label>
-                            <span>${ loginUser.userName }</span>
-                        </div>
-                        <div class="form-group mypage-group">
-                            <label for="inputSubject">전화번호</label>
-                            <span>${ loginUser.userPhone }</span>
+                </div>
+                <div class="card company-infomation">
+                    <div class="card-body row">
+                        <div class="col-1"></div>
+                        <div class="col-7">
+                            <div>&nbsp;</div>
+                            <div class="form-group">
+                                <label for="inputSubject">회사명</label>
+                                <span class="company-name">${ loginUser.comName }</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubject">부서</label>
+                                <span class="company-name">${ loginUser.deptName }</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubject">직급</label>
+                                <span class="company-name">${ loginUser.userRank }</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubject">회사연락처</label>
+                                <span class="company-name">${ loginUser.comPhone }</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card company-infomation">
-                <div class="card-body row">
-                    <div class="col-1"></div>
-                    <div class="col-7">
-                        <div>&nbsp;</div>
-                        <div class="form-group">
-                            <label for="inputSubject">회사명</label>
-                            <span class="company-name">${ loginUser.comName }</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputSubject">부서</label>
-                            <span class="company-name">${ loginUser.deptName }</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputSubject">직급</label>
-                            <span class="company-name">${ loginUser.userRank }</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputSubject">회사연락처</label>
-                            <span class="company-name">${ loginUser.comPhone }</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    
         </div>
-
+        <jsp:include page="../common/footer.jsp" />
     </div>
     
     <!-- 알림 모달 -->
