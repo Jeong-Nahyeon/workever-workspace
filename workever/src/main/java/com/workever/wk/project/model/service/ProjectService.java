@@ -36,6 +36,7 @@ public interface ProjectService{
 	// 프로젝트 상세조회 서비스
 	ArrayList<workBoard> selectProject(int proNo);
 
+	////////////////////////////////////////////////////
 	
 	// 프로젝트 삭제용 서비스
 	int deleteProject(int proNo);
@@ -44,6 +45,10 @@ public interface ProjectService{
 	// 프로젝트 수정용 서비스
 	int updatetProject(Project p);
 
+	//프로젝트 하나 조회해오는 메소드
+	Project selectOneProject(int proNo);
+	
+	//////////////////////////////////////////////////////
 	// 프로젝트생성란에 있는 부서별 회원 목록 조회
 	ArrayList<Project> selectMem(int num);
 

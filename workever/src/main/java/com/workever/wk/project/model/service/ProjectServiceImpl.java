@@ -85,13 +85,19 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public int updatetProject(Project p) {
-		return 0;
+		return pDao.updatetProject(sqlSession, p);
 	}
 
 	//참여하고있는 인원들하고 참여하고있는 인원수 구해오는 메소드
 	@Override
 	public ArrayList<Project> selectOther(int proNo) {
 		return pDao.selectOther(sqlSession, proNo);
+	}
+
+
+	@Override
+	public Project selectOneProject(int proNo) {
+		return  pDao.selectOneProject(sqlSession, proNo);
 	}
 
 

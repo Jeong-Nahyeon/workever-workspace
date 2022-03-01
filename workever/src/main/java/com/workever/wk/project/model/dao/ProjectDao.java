@@ -81,6 +81,16 @@ public class ProjectDao {
 	}
 
 
+	public Project selectOneProject(SqlSessionTemplate sqlSession, int proNo) {
+		return sqlSession.selectOne("projectMapper.selectOneProject", proNo);
+	}
+
+
+	public int updatetProject(SqlSessionTemplate sqlSession, Project p) {
+		return sqlSession.selectOne("projectMapper.selectOneProject", p);
+	}
+
+
 
 
 

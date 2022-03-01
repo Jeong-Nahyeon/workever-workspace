@@ -79,7 +79,29 @@
 		order
 		  by p.PRO_NO desc
 	</select>
-
+	
+	<select id="selectOneProject" resultMap="projectResult">
+		select
+		    p.PRO_NO
+		  , PRO_TITLE
+		  , PRO_GRANT_WHETHER
+		  , PRO_CREATE_DATE
+		  , PRO_MANAGER
+		  , PRO_NUMBERPEOPLE
+		  , (
+		      select listagg(d.dept_NO, ',') within group(order by d.dept_NO)
+		        from dept d, project_dept pd
+		       where d.dept_no = pd.dept_no
+		         and p.pro_no = pd.pro_no
+		    ) PRODEPT
+		from project p
+		where PRO_STATUS = 'Y'
+        AND p.pro_no = #{proNo}
+	</select>
+	
+	
+	
+	
 	<select id="selectMem" resultMap="projectResult">
 		select
                USER_NAME

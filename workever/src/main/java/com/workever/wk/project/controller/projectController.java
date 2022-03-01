@@ -102,6 +102,49 @@ public class projectController {
 		
 	}
 	
+	@RequestMapping("updateForm.pro")
+	public String updateForm(int proNo, HttpSession session, Model model) {
+		model.addAttribute("p", pService.selectOneProject(proNo));
+		return "project/updateProjectForm";
+		
+	}
+	
+	@RequestMapping("update.pro")
+	public void updateProject(Project p, HttpSession session, Model model) {
+		
+		User loginUser = (User)session.getAttribute("loginUser");
+		String userNo = loginUser.getUserNo();
+		
+		System.out.println(p);
+		/*
+		int result = pService.updatetProject(p);
+		
+		if(result > 0) { 
+			session.setAttribute("alertMsg", "프로젝트가 성공적으로 수정되었습니다.");
+			return "redirect:list.pro?userNo=" + userNo;
+		}else { 
+			// 수정실패 => 에러페이지
+			model.addAttribute("errorMsg","게시글 수정 실패");
+			return "common/errorPage";
+		}*/
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping("detail.pro")
 	public ModelAndView selectProject(@RequestParam(value="cpage", defaultValue="1") int currentPage, int proNo, ModelAndView mv) {
 		

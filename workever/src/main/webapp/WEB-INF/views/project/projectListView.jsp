@@ -35,7 +35,7 @@
 		height:225px;
 		border-radius:20px;
 		background-color: rgb(214, 214, 214);
-		border: 1px solid yellow;
+		/*border: 1px solid yellow;*/
 		
 	}
 	.project>*{
@@ -109,7 +109,7 @@
 				                        	
 											<c:if test="${loginUser.userName.equals(p.proManager)}">
 												<a style="font-size:13px; color: red;" onclick="deleteconfirm(${p.proNo});">삭제하기</a>
-												<a style="font-size:13px; color: blue;" onclick="">수정하기</a> 
+												<a style="font-size:13px; color: blue;" onclick="updateconfirm(${p.proNo});">수정하기</a> 
 											</c:if>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											
@@ -128,6 +128,14 @@
 					</form> 
 					
 					 <script>
+					 function updateconfirm(no){
+		   				  
+		            	  document.getElementById("proNo").value = no;
+		            	  
+		            	  $("#postForm").attr("action","updateForm.pro").submit();
+		            	  
+		            }
+					 
 			            function deleteconfirm(no){
 			            	
 			   				  console.log(no);

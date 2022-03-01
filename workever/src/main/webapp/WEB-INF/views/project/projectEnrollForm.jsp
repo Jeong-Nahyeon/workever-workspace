@@ -189,7 +189,7 @@
 					<input type="checkbox" class="dept3" name="proDept" value="3"/> 인사팀
 					<input type="checkbox" class="dept4" name="proDept" value="4"/> 영업팀<br><br>
 					<input style="margin-left: 132.5px;" class="dept5" type="checkbox" name="proDept" value="5"/> 개발팀 
-					<input style="margin-left:60px;" type="checkbox" class="dept6" name="proDept" value="6"/> 재무팀 
+					<input style="margin-left:62px;" type="checkbox" class="dept6" name="proDept" value="6"/> 재무팀 
 				
 					<br><br><br>
 				
