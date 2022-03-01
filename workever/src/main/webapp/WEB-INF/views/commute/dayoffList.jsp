@@ -14,6 +14,11 @@
 	.do_title {
 		padding: 20px 0 0 20px;
 	}
+	
+	.do_title > a {
+		text-decoration-line: none;
+		color: black;
+	}
 
 	.do_underLine {
 		border: 0px; /* 기본 hr의 border 제거 */
@@ -95,7 +100,7 @@
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 		
-			<h3 class="do_title">휴가 관리</h3>
+			<h3 class="do_title"><a href="commute.do">휴가 관리</a></h3>
 			<hr class="do_underLine">
 
 

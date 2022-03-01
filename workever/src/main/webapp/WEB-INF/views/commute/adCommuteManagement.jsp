@@ -15,6 +15,11 @@
 	.cm_title {
 		padding: 20px 0 0 20px;
 	}
+	
+	.cm_title > a {
+		text-decoration-line: none;
+		color: black;
+	}
 
 	.cm_underLine {
 		border: 0px; /* 기본 hr의 border 제거 */
@@ -123,7 +128,7 @@
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			
-			<h3 class="cm_title">출퇴근 관리</h3>
+			<h3 class="cm_title"><a href="adCommute.cm">출퇴근 관리</a></h3>
 			<hr class="cm_underLine">
 			
 

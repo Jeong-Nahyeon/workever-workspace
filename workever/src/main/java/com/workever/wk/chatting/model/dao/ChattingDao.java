@@ -13,7 +13,7 @@ import com.workever.wk.user.model.vo.User;
 public class ChattingDao {
 
 	public int abSelectListCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("userMapper.abSelectListCount");
+		return sqlSession.selectOne("chattingMapper.abSelectListCount");
 	}
 
 	public ArrayList<User> abSelectList(SqlSessionTemplate sqlSession, PageInfo pi) {
@@ -22,11 +22,20 @@ public class ChattingDao {
 	    int limit = pi.getBoardLimit();
 	    RowBounds rowBounds = new RowBounds(offset, limit);
 	        
-		return (ArrayList)sqlSession.selectList("userMapper.abSelectList", null, rowBounds);
+		return (ArrayList)sqlSession.selectList("chattingMapper.abSelectList", null, rowBounds);
 	}
 
+	public ArrayList<User> abSelectSearchList(SqlSessionTemplate sqlSession, String keyword) {
+		return (ArrayList)sqlSession.selectList("chattingMapper.abSelectSearchList", keyword);
+	}
+	
+	
+	
+	// 채팅
+	
 	public ArrayList<User> ivSelectList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("chattingMapper.ivSelectList");
 	}
+
 	
 }

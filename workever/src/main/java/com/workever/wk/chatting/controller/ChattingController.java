@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.workever.wk.chatting.model.service.ChattingService;
 import com.workever.wk.common.model.vo.PageInfo;
 import com.workever.wk.common.template.Pagination;
@@ -39,6 +41,13 @@ public class ChattingController {
 		return "chatting/addressBook"; 
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="search.ab", produces="application/json; charset=UTF-8")
+	public String ajaxAddressBookSearch(String keyword) {
+		
+		ArrayList<User> searchList = cService.abSelectSearchList(keyword);
+		return new Gson().toJson(searchList);
+	}
 	
 	
 	@RequestMapping("detail.ch")

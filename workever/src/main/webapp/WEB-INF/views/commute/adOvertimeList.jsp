@@ -14,6 +14,11 @@
     .ot_title {
 		padding: 20px 0 0 20px;
 	}
+	
+	.ot_title > a {
+		text-decoration-line: none;
+		color: black;
+	}
 
 	.ot_underLine {
 		border: 0px; /* 기본 hr의 border 제거 */
@@ -78,7 +83,7 @@
 	
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
-            <h3 class="ot_title">연장근무 관리</h3>
+            <h3 class="ot_title"><a href="adCommute.ot">연장근무 관리</a></h3>
 			<hr class="ot_underLine">
 
 

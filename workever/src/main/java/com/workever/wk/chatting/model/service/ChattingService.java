@@ -10,6 +10,10 @@ public interface ChattingService {
 	// 주소록
 	int abSelectListCount();
 	ArrayList<User> abSelectList(PageInfo pi);
+
+	// 주소록 검색
+	ArrayList<User> abSelectSearchList(String keyword);
+	
 	
 	// 채팅 초대 리스트
 	ArrayList<User> ivSelectList();

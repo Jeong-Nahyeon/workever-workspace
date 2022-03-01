@@ -18,6 +18,11 @@
 	.wh_title {
 		padding: 20px 0 0 20px;
 	}
+	
+	.wh_title > a {
+		text-decoration-line: none;
+		color: black;
+	}
 
 	.wh_underLine {
 		border: 0px; /* 기본 hr의 border 제거 */
@@ -70,7 +75,7 @@
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			
-			<h3 class="wh_title">월 근무 내역</h3>
+			<h3 class="wh_title"><a href="commute.wh">월 근무 내역</a></h3>
 			<hr class="wh_underLine">
 
 			<div id="wh_select" style="width: 1000px; margin: auto;">

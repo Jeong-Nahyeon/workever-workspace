@@ -33,6 +33,12 @@ public class ChattingServiceImpl implements ChattingService {
 	}
 	
 	
+	@Override
+	public ArrayList<User> abSelectSearchList(String keyword) {
+		return cDao.abSelectSearchList(sqlSession, keyword);
+	}
+	
+	
 	
 	// 채팅
 	
@@ -40,5 +46,6 @@ public class ChattingServiceImpl implements ChattingService {
 	public ArrayList<User> ivSelectList() {
 		return cDao.ivSelectList(sqlSession);
 	}
+
 
 }
