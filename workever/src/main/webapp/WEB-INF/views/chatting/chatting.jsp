@@ -20,7 +20,7 @@
 	
 	#message {
 		margin: 10px;
-		width: 380px;
+		width: 375px;
 		display: table-cell;
 	}
 	

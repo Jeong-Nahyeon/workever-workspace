@@ -343,6 +343,7 @@
 				
 					$.ajax({
 						url: "search.do",
+						type: "POST",
 						data: {
 							userNo: '${loginUser.userNo}',
 							startday: $('input[name=startday]').val(),

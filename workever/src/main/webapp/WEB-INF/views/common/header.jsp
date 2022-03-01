@@ -157,12 +157,12 @@
 						<!-- 사원 프로필 사진 -->
 						<img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
 						<div class="media-body">
-						<span class="dropdown-item-title">
-							사원 이름
-						</span>
-						<span class="badge badge-danger" style="float: right;">3</span>
+						<h3 class="dropdown-item-title">
+							김형서
+							<span class="badge badge-danger" style="float: right;">1</span>
+						</h3>
 						<p class="text-sm ch-text-overflow">안녕하세요 글 길게 쓰면 글 줄여주세요</p>
-						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 2 Hours Ago</p>
 						</div>
 					</div>
 					<!-- Message End -->
@@ -175,11 +175,11 @@
 						<img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
 						<div class="media-body">
 						<h3 class="dropdown-item-title">
-							John Pierce
-							<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+							최예나
+							<span class="badge badge-danger" style="float: right;">1</span>
 						</h3>
 						<p class="text-sm">I got your message bro</p>
-						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 3 Hours Ago</p>
 						</div>
 					</div>
 					<!-- Message End -->
@@ -191,8 +191,8 @@
 						<img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
 						<div class="media-body">
 						<h3 class="dropdown-item-title">
-							Nora Silvester
-							<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+							박지윤
+							<span class="badge badge-danger" style="float: right;">1</span>
 						</h3>
 						<p class="text-sm">The subject goes here</p>
 						<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>

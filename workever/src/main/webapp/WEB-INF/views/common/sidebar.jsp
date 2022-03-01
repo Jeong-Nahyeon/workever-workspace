@@ -144,7 +144,7 @@
 						  <li class="nav-item">
 							<a href="commute.wh" class="nav-link">
 							  <i class="far fa-circle nav-icon"></i>
-							  <p>월 근무내역</p>
+							  <p>근무내역</p>
 							</a>
 						  </li>
 						  <li class="nav-item">
@@ -169,12 +169,6 @@
 							<a href="adCommute.cm" class="nav-link">
 							  <i class="far fa-circle nav-icon"></i>
 							  <p>출퇴근 관리</p>
-							</a>
-						  </li>
-						  <li class="nav-item">
-							<a href="adCommute.wh" class="nav-link">
-							  <i class="far fa-circle nav-icon"></i>
-							  <p>월 근무내역</p>
 							</a>
 						  </li>
 						  <li class="nav-item">
