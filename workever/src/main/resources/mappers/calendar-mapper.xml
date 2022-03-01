@@ -96,7 +96,7 @@
 	
 	<!-- 부서 휴가 조회 -->
 	<select id="selectDeptDayoff" resultMap="calendarResult">
-		select 
+		select DISTINCT
 		       APVL_WRITER||'dayoff' as "CA_NO"
 		     , concat(off_start_date, ' 09:00') as "CA_STARTDATE"
 		     , concat(off_end_date, ' 18:00') as "CA_ENDDATE"
