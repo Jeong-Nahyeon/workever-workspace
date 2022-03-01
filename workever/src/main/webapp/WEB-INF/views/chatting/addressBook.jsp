@@ -32,16 +32,9 @@
 
 			<!-- 주소록 검색 -->
 			<div class="col-md-8 offset-md-2">
-				<form action="simple-results.html">
 					<div class="input-group">
-						<input type="search" class="form-control form-control-lg" id="keyword" placeholder="사원 이름/부서 검색">
-						<div class="input-group-append">
-							<button type="submit" class="btn btn-lg btn-default">
-								<i class="fa fa-search"></i>
-							</button>
-						</div>
+						<input type="search" class="form-control form-control-lg" id="keyword" name="keyword" autocomplete="off" placeholder="사원 이름/부서 검색">
 					</div>
-				</form>
 			</div>
 
 			<br>
@@ -56,84 +49,87 @@
 							
 							
 							<c:forEach var="u" items="${ list }" >
-							<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-								<div class="card bg-light d-flex flex-fill">
-									<div class="card-header text-muted border-bottom-0">
-									No.${ u.userNo }
-									</div>
-
-									<div class="card-body pt-0">
-										<div class="row">
-											<div class="col-7">
-												<h2 class="lead"><b>${ u.userName }</b></h2>
-												<br>
-												<ul class="ml-4 mb-0 fa-ul text-muted">
-													<li class="small"><span class="fa-li"><i class="fas fa-lg fa-briefcase"></i></span>${ u.deptName }</li> <br>
-													<li class="small"><span class="fa-li"><i class="fas fa-lg fa-envelope"></i></span>${ u.userEmail }</li> <br>
-													<li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>${ u.userPhone }</li> <br>
-												</ul>
-											</div>
-											<div class="col-5 text-center">
-												<c:choose>
-													<c:when test="${ u.userFilePath != null}">
-														<img src="${ u.userFilePath }" alt="user-img" class="img-circle img-fluid user-img">
-													</c:when>
-													<c:otherwise>
-														<img src="resources/images/user-circle-solid.svg" alt="user-img" class="img-circle img-fluid user-img">													
-													</c:otherwise>
-												</c:choose>
+								<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column abContents">
+									<div class="card bg-light d-flex flex-fill">
+										<div class="card-header text-muted border-bottom-0">
+										No.${ u.userNo }
+										</div>
+	
+										<div class="card-body pt-0">
+											<div class="row abList">
+												<div class="col-7">
+													<h2 class="lead"><b>${ u.userName }</b></h2>
+													<br>
+													<ul class="ml-4 mb-0 fa-ul text-muted">
+														<li class="small"><span class="fa-li"><i class="fas fa-lg fa-briefcase"></i></span>${ u.deptName }</li> <br>
+														<li class="small"><span class="fa-li"><i class="fas fa-lg fa-envelope"></i></span>${ u.userEmail }</li> <br>
+														<li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>${ u.userPhone }</li> <br>
+													</ul>
+												</div>
+												<div class="col-5 text-center">
+													<c:choose>
+														<c:when test="${ u.userFilePath != null}">
+															<img src="${ u.userFilePath }" alt="user-img" class="img-circle img-fluid user-img">
+														</c:when>
+														<c:otherwise>
+															<img src="resources/images/user-circle-solid.svg" alt="user-img" class="img-circle img-fluid user-img">													
+														</c:otherwise>
+													</c:choose>
+												</div>
 											</div>
 										</div>
-									</div>
-								
-									<div class="card-footer">
-										<div class="text-right">
-											<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal chatPopup">
-												<i class="fas fa-comments"></i>
-											</a>
-											
-											<script>
-												function chatPopup(){
-													window.open("chat.do", "chat", "width=400, height=500");
-												}
+									
+										<div class="card-footer">
+											<div class="text-right">
+												<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal chatPopup">
+													<i class="fas fa-comments"></i>
+												</a>
 												
-												$(document).ready(function() {
-												      // 팝업 창 크기를 HTML 크기에 맞추어 자동으로 크기를 조정하는 함수.
-												      var strWidth;
-												      var strHeight;
-
-												      //innerWidth / innerHeight / outerWidth / outerHeight 지원 브라우저 
-												      if ( window.innerWidth && window.innerHeight && window.outerWidth && window.outerHeight ) {
-												          strWidth = $('.chatPopup').outerWidth() + (window.outerWidth - window.innerWidth);
-												          strHeight = $('.chatPopup').outerHeight() + (window.outerHeight - window.innerHeight);
-												      }
-												      else {
-												          var strDocumentWidth = $(document).outerWidth();
-												          var strDocumentHeight = $(document).outerHeight();
-
-												          window.resizeTo ( strDocumentWidth, strDocumentHeight );
-
-												          var strMenuWidth = strDocumentWidth - $(window).width();
-												          var strMenuHeight = strDocumentHeight - $(window).height();
-
-												          strWidth = $('.chatPopup').outerWidth() + strMenuWidth;
-												          strHeight = $('.chatPopup').outerHeight() + strMenuHeight;
-												      }
-
-												      //resize 
-												      window.resizeTo( strWidth, strHeight );
-
-												  });
-											</script>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
 							</c:forEach>
-
+							
+							
 						</div>	
 				  	</div>
 				  	<!-- /.card-body -->
+				  	
+				  	
+					<script>
+						function chatPopup(){
+							window.open("chat.do", "chat", "width=400, height=500");
+						}
+						
+						$(document).ready(function() {
+						      // 팝업 창 크기를 HTML 크기에 맞추어 자동으로 크기를 조정하는 함수.
+						      var strWidth;
+						      var strHeight;
+
+						      //innerWidth / innerHeight / outerWidth / outerHeight 지원 브라우저 
+						      if ( window.innerWidth && window.innerHeight && window.outerWidth && window.outerHeight ) {
+						          strWidth = $('.chatPopup').outerWidth() + (window.outerWidth - window.innerWidth);
+						          strHeight = $('.chatPopup').outerHeight() + (window.outerHeight - window.innerHeight);
+						      }
+						      else {
+						          var strDocumentWidth = $(document).outerWidth();
+						          var strDocumentHeight = $(document).outerHeight();
+
+						          window.resizeTo ( strDocumentWidth, strDocumentHeight );
+
+						          var strMenuWidth = strDocumentWidth - $(window).width();
+						          var strMenuHeight = strDocumentHeight - $(window).height();
+
+						          strWidth = $('.chatPopup').outerWidth() + strMenuWidth;
+						          strHeight = $('.chatPopup').outerHeight() + strMenuHeight;
+						      }
+
+						      //resize 
+						      window.resizeTo( strWidth, strHeight );
+
+						  });
+					</script>
 
 					<!-- 페이징바 -->
 					<div class="card-footer">
@@ -174,6 +170,78 @@
 
 		</div>
 		<!-- /.content-wrapper -->
+		
+		
+		<script>
+		
+			let $abSearch = $("Input[name=keyword]");
+			
+			$abSearch.keyup(function(){
+				
+				console.log($abSearch.val());
+				
+				$.ajax({
+					url:"search.ab",
+					data:{
+						keyword: $('input[name=keyword]').val()
+					}, success:function(result){
+						
+						let searchList = "";
+						if($abSearch.val().length > 0) {
+							
+							$(".card-footer").hide();
+							$(".card card-solid").hide();
+							
+							for(let i in result){
+								searchList += "<div class='card bg-light d-flex flex-fill'>"
+										   +  	"<div class='card-header text-muted border-bottom-0'>" + result[i].userNo + "</div>"
+										   
+										   +	"<div class='card-body pt-0'>"
+										   +		"<div class='row abList'>"
+										   
+										   +			"<div class='col-7'>"
+										   +  				"<h2 class='lead'><b>" + result[i].userName + "</b></h2><br>"
+										   
+										   +  				"<ul class='ml-4 mb-0 fa-ul text-muted'>"
+										   +  					"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-briefcase'></i></span>" + result[i].deptName + "</li><br>"
+										   +  					"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-envelope'></i></span>" + result[i].userEmail + "</li><br>"
+										   +  					"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-phone'></i></span>" + result[i].userPhone + "</li><br>"
+										   +				"</ul>"
+										   +  			"</div>"
+										   
+										   +  			"<div class='col-5 text-center'>";
+										   
+										   if(result[i].userFilePath != null) {
+											   searchList += "<img src=" + result[i].userFilePath + " alt='user-img' class='img-circle img-fluid user-img'>";
+										   } else {
+											   searchList += "<img src='resources/images/user-circle-solid.svg' alt='user-img' class='img-circle img-fluid user-img'>";
+										   }
+
+								searchList += 			"</div>"
+										   +		"</div>"
+										   +	"</div>"
+								
+										   +  	"<div class='card-footer'>"
+										   +		"<div class='text-right'>"
+										   +			"<a href='javascript:void(0);' onclick='chatPopup();' class='btn btn-sm bg-teal chatPopup'>"
+										   +				"<i class='fas fa-comments'></i>"
+										   +			"</a>"  
+										   +  		"</div>"
+										   +	"</div>"
+										   + "</div>";
+							}
+							
+						}
+						
+						$(".abContents").html(searchList);
+						
+					}, error:function(){
+						console.log("keyup 검색조회용 ajax통신 실패");
+					}
+				})
+			})
+		
+		</script>
 		
 		
 		<jsp:include page="../common/footer.jsp" />
