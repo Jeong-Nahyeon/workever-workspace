@@ -152,7 +152,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <div style="margin-left:165px;">
+                    <div style="width: 100%; text-align: center;">
                         <span style="text-align: center; font-size: 17px; font-weight: 700;">
                             알림
                         </span>

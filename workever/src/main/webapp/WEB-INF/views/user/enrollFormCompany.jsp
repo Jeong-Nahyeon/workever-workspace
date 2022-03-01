@@ -519,7 +519,8 @@
 			const companyCode = $('#company-code');
 
 			if(companyCode.val() == ''){
-				alert("사용할 회사코드를 입력하세요.");
+				$('#alertMsg-text').text('사용할 회사코드를 입력하세요.');
+				$('#alertMsg').modal('show');
 				companyCode.focus();
 			}else{
 				$.ajax({
@@ -563,26 +564,32 @@
 				emailSend();
 			}else{
 				if($('#company-adminname').val() ==''){
-					alert('이름을 입력하세요.');
+					$('#alertMsg-text').text('이름을 입력하세요.');
+					$('#alertMsg').modal('show');
 					$('#company-adminname').focus();
 				}
 				if($('#company-phone').val() ==''){
-					alert('전화번호를 입력하세요.');
+					$('#alertMsg-text').text('전화번호를 입력하세요.');
+					$('#alertMsg').modal('show');
 					$('#company-phone').focus();
 				}
 				if($('#company-name').val()==''){
-					alert("회사이름을 입력해주세요.");
+					$('#alertMsg-text').text('회사이름을 입력해주세요.');
+					$('#alertMsg').modal('show');
 					$('#company-name').focus();
 				}
 				if($('#companyCode-status').val() == 'codeN'){
-					alert("회사코드 중복체크를 해주세요.");
+					$('#alertMsg-text').text('회사코드 중복체크를 해주세요.');
+					$('#alertMsg').modal('show');
 					$("#company-code").focus();
 				}
 				if($('#form-check').is(":checked")==false){
-					alert('이용약관에 동의해주세요.');
+					$('#alertMsg-text').text('이용약관에 동의해주세요.');
+					$('#alertMsg').modal('show');
 				}
 				if($('#company-class').val() == 'classN'){
-					alert('회사 업종을 선택해주세요.');
+					$('#alertMsg-text').text('회사 업종을 선택해주세요.');
+					$('#alertMsg').modal('show');
 					$('#company-class').focus();
 				}
 

@@ -232,7 +232,7 @@
 	
 					<!-- Modal Header -->
 					<div class="modal-header">
-						<div style="margin-left:180px;">
+						<div style="margin-left:170px;">
 							<span style="text-align: center; font-size: 17px; font-weight: 700;">
 								회사 코드 중복 체크
 							</span>
@@ -246,7 +246,7 @@
 					<div class="modal-body">
 						<div style="text-align: center;">
 							<span style="font-size: 15px; font-weight: 600; display: inline-block; margin-top: 20px;">
-								사용 가능한 회사 코드입니다.
+								가입 가능한 회사 코드입니다.
 							</span><br>
 							<span style="font-size: 13px; display: inline-block; margin: 10px 0 60px 0;">
 								계속 진행하시려면 확인을 클릭해주세요.
