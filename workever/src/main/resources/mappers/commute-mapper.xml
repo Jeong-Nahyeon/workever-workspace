@@ -507,6 +507,26 @@
 		 where u.user_no = #{ userNo }
 	</select>
 	
+	<select id="otSelectReason" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , ot_title
+		     , ot_content
+		  from approval 
+		  join approval_overtime using (apvl_no)
+		 where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="otSelectReturn" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , apvl_status
+             , apvl_return_comment
+		  from approval 
+          join approval_line using (apvl_no)
+		 where apvl_no = #{ apvlNo }
+	</select>
+	
 	
 	<!-- 연장근무 관리 (관리자) -->
 	

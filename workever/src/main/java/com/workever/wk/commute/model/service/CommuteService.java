@@ -84,9 +84,14 @@ public interface CommuteService {
 	int otSelectListCount(int userNo);
 	ArrayList<Approval> otSelectList(int userNo, PageInfo pi);
 	
+	// 연장근무 내용, 반려 사유 모달용
+	Approval otSelectReason(int apvlNo);
+	Approval otSelectReturn(int apvlNo);
+	
 	// Admin 연장근무 조회용
 	int adOtSelectListCount();
 	ArrayList<Approval> adOtSelectList(PageInfo pi);
+	
 	
 	
 	

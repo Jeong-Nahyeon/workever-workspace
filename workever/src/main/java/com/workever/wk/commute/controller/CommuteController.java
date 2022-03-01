@@ -298,6 +298,23 @@ public class CommuteController {
 		return new Gson().toJson(map);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="reason.ot", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Approval ajaxOvertimeReasonModal(int apvlNo) {
+		
+		Approval otReason = cService.otSelectReason(apvlNo);
+		
+		return otReason;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="return.ot", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public Approval ajaxOvertimeReturnModal(int apvlNo) {
+		
+		Approval otReturn = cService.otSelectReturn(apvlNo);
+		
+		return otReturn;
+	}
 	
 	
 }

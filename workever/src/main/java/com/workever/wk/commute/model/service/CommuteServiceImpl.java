@@ -159,6 +159,23 @@ public class CommuteServiceImpl implements CommuteService{
 	}
 	
 	
+	
+	/*
+	 *  휴가 관리 (Admin)
+	 */
+	
+	@Override
+	public int adDoSelectListCount() {
+		return cDao.adDoSelectListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Approval> adDoSelectList(PageInfo pi) {
+		return cDao.adDoSelectList(sqlSession, pi);
+	}
+	
+	
+	
 	/*
 	 *  연장근무 관리 (User)
 	 */
@@ -173,15 +190,17 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.otSelectList(sqlSession, userNo, pi);
 	}
 
+	
 	@Override
-	public int adDoSelectListCount() {
-		return cDao.adDoSelectListCount(sqlSession);
+	public Approval otSelectReason(int apvlNo) {
+		return cDao.otSelectReason(sqlSession, apvlNo);
 	}
 
 	@Override
-	public ArrayList<Approval> adDoSelectList(PageInfo pi) {
-		return cDao.adDoSelectList(sqlSession, pi);
+	public Approval otSelectReturn(int apvlNo) {
+		return cDao.otSelectReturn(sqlSession, apvlNo);
 	}
+
 
 	
 	/*
@@ -198,6 +217,7 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.adOtSelectList(sqlSession, pi);
 	}
 
+	
 	
 
 	

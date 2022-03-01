@@ -130,11 +130,8 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									
-									<div class="modal-body" align="center">
-										<br>
-										<b>연장근무 업무내용</b><br>
-										연장근무 하는 업무내용이 여기에 보여질거에요
-										<button id="otSelBtn" data-dismiss="modal">확인</button>
+									<div class="modal-body" id="ot_reason_content" align="center">
+										
 									</div>
 									
 								</div>
@@ -146,11 +143,8 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									
-									<div class="modal-body" align="center">
-										<br>
-										<b>반려 사유</b><br>
-										반려 사유가 여기에 보여질거에요<br>
-										<button id="otSelBtn" data-dismiss="modal">확인</button>
+									<div class="modal-body" id="ot_return_content" align="center">
+										
 									</div>
 									
 								</div>
@@ -200,7 +194,7 @@
 										   } else if(result.list[i].apvlStatus == 'C') {
 											   value += "<td>완료</td>";
 										   } else if(result.list[i].apvlStatus == 'R') {
-											   value += "<td class='do_return'><a>반려</a></td>";
+											   value += "<td class='ot_return'><a>반려</a></td>";
 										   } else {
 											   value += "<td>회수</td>";
 										   }
@@ -237,6 +231,59 @@
 						}
 					})
 				}
+				
+				
+				$(document).on('click', ".text-overflow > a", function(){
+					console.log($(this).parent().siblings("input[name=apvlNo]").val());
+					
+					$.ajax({
+						url: "reason.ot",
+						type: "POST",
+						data: {
+							apvlNo: $(this).parent().siblings("input[name=apvlNo]").val()
+						}, success:function(data) {
+							
+							console.log(data);
+							
+							let	content = "<br>"
+	    								+  "<b>연장근무 사유</b><br><br>"
+	    								+  data.otContent + "<br>"
+	    								+  "<button id='otSelBtn' data-dismiss='modal'>확인</button>";
+							
+							$("#ot_reason_content").html(content);
+							$("#ot_reason").modal('show');
+							
+						}, error:function() {
+							console.log("연장근무내용 모달 조회용 ajax 통신실패");
+						}
+					})
+				})
+				
+				$(document).on('click', ".ot_return > a", function(){
+					console.log($(this).parent().siblings("input[name=apvlNo]").val());
+					
+					$.ajax({
+						url: "return.ot",
+						type: "POST",
+						data: {
+							apvlNo: $(this).parent().siblings("input[name=apvlNo]").val()
+						}, success:function(data) {
+							
+							console.log(data);
+							
+							let content = "<br>"
+										+  "<b>반려 사유</b><br><br>"
+										+  data.apvlReturnComment + "<br>"
+										+  "<button id='otSelBtn' data-dismiss='modal'>확인</button>";
+										
+							$("#ot_return_content").html(content);
+							$("#ot_return").modal('show');
+							
+						}, error:function() {
+							console.log("반려사유 모달 조회용 ajax 통신실패");
+						}
+					})
+				})
 			</script>
 	
 		</div>

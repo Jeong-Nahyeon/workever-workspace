@@ -163,11 +163,11 @@ public class CommuteDao {
 	}
 
 	public Approval doSelectReason(SqlSessionTemplate sqlSession, int apvlNo) {
-		return (Approval)sqlSession.selectOne("commuteMapper.doSelectReason", apvlNo);
+		return sqlSession.selectOne("commuteMapper.doSelectReason", apvlNo);
 	}
 
 	public Approval doSelectReturn(SqlSessionTemplate sqlSession, int apvlNo) {
-		return (Approval)sqlSession.selectOne("commuteMapper.doSelectReturn", apvlNo);
+		return sqlSession.selectOne("commuteMapper.doSelectReturn", apvlNo);
 	}
 
 	public int doSelectSearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) {
@@ -184,11 +184,25 @@ public class CommuteDao {
 		return (ArrayList)sqlSession.selectList("commuteMapper.doSelectSearchList", map, rowBounds);
 	}
 	
+	
 	/*
 	 * 휴가 관리 (Admin)
 	 */
 	
+	public int adDoSelectListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("commuteMapper.adDoSelectListCount");
+	}
 
+	public ArrayList<Approval> adDoSelectList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("commuteMapper.adDoSelectList", null, rowBounds);
+	}
+	
 	
 	/*
 	 * 연장근무 관리 (User)
@@ -207,19 +221,13 @@ public class CommuteDao {
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.otSelectList", userNo, rowBounds);
 	}
-
-	public int adDoSelectListCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("commuteMapper.adDoSelectListCount");
+	
+	public Approval otSelectReason(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("commuteMapper.otSelectReason", apvlNo);
 	}
-
-	public ArrayList<Approval> adDoSelectList(SqlSessionTemplate sqlSession, PageInfo pi) {
-		
-		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
-		int limit = pi.getBoardLimit();
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return (ArrayList)sqlSession.selectList("commuteMapper.adDoSelectList", null, rowBounds);
+	
+	public Approval otSelectReturn(SqlSessionTemplate sqlSession, int apvlNo) {
+		return sqlSession.selectOne("commuteMapper.otSelectReturn", apvlNo);
 	}
 	
 	
@@ -240,6 +248,7 @@ public class CommuteDao {
 		
 		return (ArrayList)sqlSession.selectList("commuteMapper.adOtSelectList", null, rowBounds);
 	}
+
 
 	
 
