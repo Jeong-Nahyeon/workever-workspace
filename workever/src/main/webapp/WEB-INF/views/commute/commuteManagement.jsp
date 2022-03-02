@@ -487,13 +487,13 @@
 			
 		</script>
 			
-			
-		</div>
-		<!-- /.content-wrapper -->
-		
-				
 		<jsp:include page="../common/footer.jsp" />
+			
 	</div>
+	<!-- /.content-wrapper -->
+	
+			
+</div>
 
 </body>
 </html>

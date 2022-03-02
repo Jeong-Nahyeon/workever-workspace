@@ -79,14 +79,22 @@
 											</div>
 										</div>
 									
-										<div class="card-footer">
-											<div class="text-right">
-												<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal chatPopup">
-													<i class="fas fa-comments"></i>
-												</a>
-												
+									<c:choose>
+										<c:when test="${loginUser.userNo != u.userNo}">
+											<div class="card-footer">
+												<div class="text-right">
+													<a href='javascript:void(0);' onclick="chatPopup();" class="btn btn-sm bg-teal chatPopup">
+														<i class="fas fa-comments"></i>
+													</a>
+												</div>
 											</div>
-										</div>
+										</c:when>
+										<c:otherwise>
+												<div class='card-footer' style='height: 55.45px'>
+												</div>
+										</c:otherwise>
+									</c:choose>
+									
 									</div>
 								</div>
 							</c:forEach>
@@ -175,7 +183,9 @@
 		<script>
 		
 			let $abSearch = $("Input[name=keyword]");
+			let loginUser = ${loginUser.userNo};
 			
+				
 			$abSearch.keyup(function(){
 				
 				console.log($abSearch.val());
@@ -187,59 +197,67 @@
 					}, success:function(result){
 						
 						let searchList = "";
-						if($abSearch.val().length > 0) {
+						//if($abSearch.val().length > 0) { // 검색어 없을 때는 전제 조회
 							
 							$(".card-footer").hide();
-							$(".card card-solid").hide();
 							
 							for(let i in result){
-								searchList += "<div class='card bg-light d-flex flex-fill'>"
-										   +  	"<div class='card-header text-muted border-bottom-0'>" + result[i].userNo + "</div>"
+								searchList += "<div class='col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column abContents'>"
+										   +	"<div class='card bg-light d-flex flex-fill'>"
+										   +  		"<div class='card-header text-muted border-bottom-0'>" + result[i].userNo + "</div>"
 										   
-										   +	"<div class='card-body pt-0'>"
-										   +		"<div class='row abList'>"
+										   +		"<div class='card-body pt-0'>"
+										   +			"<div class='row abList'>"
+										   +				"<div class='col-7'>"
+										   +  					"<h2 class='lead'><b>" + result[i].userName + "</b></h2><br>"
 										   
-										   +			"<div class='col-7'>"
-										   +  				"<h2 class='lead'><b>" + result[i].userName + "</b></h2><br>"
+										   +  					"<ul class='ml-4 mb-0 fa-ul text-muted'>"
+										   +  						"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-briefcase'></i></span>" + result[i].deptName + "</li><br>"
+										   +  						"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-envelope'></i></span>" + result[i].userEmail + "</li><br>"
+										   +  						"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-phone'></i></span>" + result[i].userPhone + "</li><br>"
+										   +					"</ul>"
+										   +  				"</div>"
 										   
-										   +  				"<ul class='ml-4 mb-0 fa-ul text-muted'>"
-										   +  					"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-briefcase'></i></span>" + result[i].deptName + "</li><br>"
-										   +  					"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-envelope'></i></span>" + result[i].userEmail + "</li><br>"
-										   +  					"<li class='small'><span class='fa-li'><i class='fas fa-lg fa-phone'></i></span>" + result[i].userPhone + "</li><br>"
-										   +				"</ul>"
-										   +  			"</div>"
-										   
-										   +  			"<div class='col-5 text-center'>";
+										   +  				"<div class='col-5 text-center'>";
 										   
 										   if(result[i].userFilePath != null) {
-											   searchList += "<img src=" + result[i].userFilePath + " alt='user-img' class='img-circle img-fluid user-img'>";
+										   			searchList += "<img src=" + result[i].userFilePath + " alt='user-img' class='img-circle img-fluid user-img'>";
 										   } else {
-											   searchList += "<img src='resources/images/user-circle-solid.svg' alt='user-img' class='img-circle img-fluid user-img'>";
+										   			searchList += "<img src='resources/images/user-circle-solid.svg' alt='user-img' class='img-circle img-fluid user-img'>";
 										   }
 
-								searchList += 			"</div>"
-										   +		"</div>"
-										   +	"</div>"
+								searchList += 				"</div>"
+										   +			"</div>"
+										   +		"</div>";
 								
-										   +  	"<div class='card-footer'>"
-										   +		"<div class='text-right'>"
-										   +			"<a href='javascript:void(0);' onclick='chatPopup();' class='btn btn-sm bg-teal chatPopup'>"
-										   +				"<i class='fas fa-comments'></i>"
-										   +			"</a>"  
-										   +  		"</div>"
-										   +	"</div>"
-										   + "</div>";
+										   				if(loginUser != result[i].userNo) {
+										  					 searchList	+= "<div class='card-footer'>"
+									  						 			+	"<div class='text-right'>"
+										  						 		+  "<a href='javascript:void(0);' onclick='chatPopup();' class='btn btn-sm bg-teal chatPopup'>"
+									  					 				+  			"<i class='fas fa-comments'></i>"
+										  					 			+  		"</a>"
+										  					 			+ 	"</div>"
+										  					 			+"</div>";
+										   				} else {
+										   					searchList	+= "<div class='card-footer' style='height: 55.45px'>"
+										   								+  "</div>";
+										   				}
+
+								searchList +=			"</div>"
+										   +		"</div>";
+
 							}
 							
-						}
+						//}
 						
-						$(".abContents").html(searchList);
+						$(".row").html(searchList);
 						
 					}, error:function(){
 						console.log("keyup 검색조회용 ajax통신 실패");
 					}
 				})
 			})
+				
 		
 		</script>
 		

@@ -204,14 +204,7 @@
 						</tr>
 				  	</thead>
 				  	<tbody>
-						<tr>
-							<td>2022-01-19</td>
-                            <td>김철수</td>
-							<td>정상</td>
-							<td>09:00:53</td>
-							<td>18:00:10</td>
-							<td>8:00</td>
-						</tr>
+
 				  	</tbody>
 				</table>
 				

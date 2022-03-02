@@ -66,7 +66,7 @@
 		  join users using (user_no)
 		 where user_no = #{ userNo }
 		 order
-		    by cm_no desc
+		    by cm_date desc
 	</select>
 	
 	<insert id="cmInsertEnter">
@@ -162,7 +162,7 @@
 		   and cm_state = #{ cmStatus }
 		</if>
 		 order
-		    by cm_no desc
+		    by cm_date desc
 	</select>
 	
 	
@@ -190,7 +190,7 @@
 		  join users using (user_no)
 		 where user_enabled = 'Y'
 		 order
-		    by cm_no desc
+		    by cm_date desc
 	</select>
 	
 	<insert id="adInsertAbsence">
@@ -244,7 +244,7 @@
 		   and user_name = #{ userName }
 		</if>
 		 order
-		    by cm_no desc
+		    by cm_date desc
 	</select>
 	
 	
@@ -294,7 +294,7 @@
 		          from commute c
 		         where user_no = #{ userNo }
 		         order
-            		by cm_no desc
+            		by cm_date asc
 		  )
 	</select>
 	
@@ -481,6 +481,54 @@
 		    by apvl_no desc
 	</select>
 	
+	<select id="adDoSelectSearchCount" resultType="_int">
+		select
+			   count(*)
+		  from (
+				select
+				       apvl_no
+				     , off_start_date || '~' || off_end_date as "dayoff"
+				     , user_name
+				     , off_kind
+				     , apvl_status
+				  from approval
+				  join approval_dayoff using (apvl_no)
+				  join users on user_no = apvl_writer
+				 where off_kind = #{ offdayKind }
+				 <if test='startday !="" and endday != ""'>
+		           and off_start_date between #{ startday } and #{ endday }
+		           and off_end_date between #{ startday } and #{ endday }
+		         </if>
+		         <if test='userName !=""'>
+		           and user_name like '%' || #{ userName } || '%'
+		         </if>
+				 order
+				    by apvl_no desc
+		  	   )
+	</select>
+	
+	<select id="adDoSelectSearchList" resultMap="ApprovalResult">
+		select
+		       apvl_no
+		     , off_start_date || '~' || off_end_date as "dayoff"
+		     , user_name
+		     , off_kind
+		     , apvl_status
+		  from approval
+		  join approval_dayoff using (apvl_no)
+		  join users on user_no = apvl_writer
+		 where off_kind = #{ offdayKind }
+		 <if test='startday !="" and endday != ""'>
+           and off_start_date between #{ startday } and #{ endday }
+           and off_end_date between #{ startday } and #{ endday }
+         </if>
+         <if test='userName !=""'>
+           and user_name like '%' || #{ userName } || '%'
+         </if>
+		 order
+		    by apvl_no desc
+	</select>
+	
 	
 	<!-- 연장근무 관리 (유저) -->
 	
@@ -505,6 +553,8 @@
 		  join approval_overtime using (apvl_no)
 		  join users u on user_no = apvl_writer
 		 where u.user_no = #{ userNo }
+		 order
+		   			by apvl_no desc
 	</select>
 	
 	<select id="otSelectReason" resultMap="ApprovalResult">
@@ -525,6 +575,58 @@
 		  from approval 
           join approval_line using (apvl_no)
 		 where apvl_no = #{ apvlNo }
+	</select>
+	
+	<select id="otSelectSearchCount" resultType="_int">
+		select
+			   count(*)
+		  from (
+		  		select
+					   distinct apvl_no
+				     , ot_date
+				     , ot_working_hours
+				     , ot_title
+				     , ot_content
+				     , apvl_status
+				     , apvl_return_comment
+				  from approval 
+				  join approval_overtime using (apvl_no)
+				  join users u on user_no = apvl_writer
+		          join approval_line using (apvl_no)
+				 where u.user_no = #{ userNo }
+				 <if test='startday !="" and endday != ""'>
+		           and ot_date between #{ startday } and #{ endday }
+		         </if>
+		         <if test='keyword !=""'>
+		           and ot_content like '%' || #{ keyword } || '%'
+		         </if>
+				 order
+		   			by apvl_no desc
+		       )
+	</select>
+	
+	<select id="otSelectSearchList" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , ot_date
+		     , ot_working_hours
+		     , ot_title
+		     , ot_content
+		     , apvl_status
+		     , apvl_return_comment
+		  from approval 
+		  join approval_overtime using (apvl_no)
+		  join users u on user_no = apvl_writer
+          join approval_line using (apvl_no)
+		 where u.user_no = #{ userNo }
+		 <if test='startday !="" and endday != ""'>
+           and ot_date between #{ startday } and #{ endday }
+         </if>
+         <if test='keyword !=""'>
+           and ot_content like '%' || #{ keyword } || '%'
+         </if>
+		 order
+   			by apvl_no desc
 	</select>
 	
 	
@@ -550,4 +652,47 @@
          order
             by apvl_no desc
 	</select>
+	
+	<select id="adOtSelectSearchCount" resultType="_int">
+		select
+			   count(*)
+		  from (
+		  		select
+					   distinct apvl_no
+				     , ot_date
+		             , user_name
+				     , ot_working_hours
+				     , apvl_status
+				  from approval 
+				  join approval_overtime using (apvl_no)
+				  join users u on user_no = apvl_writer
+		          join approval_line using (apvl_no)
+				 where user_name like '%' || #{ userName } || '%'
+				 <if test='startday !="" and endday != ""'>
+		           and ot_date between #{ startday } and #{ endday }
+		         </if>
+				 order
+		   			by apvl_no desc
+		       )
+	</select>
+	
+	<select id="adOtSelectSearchList" resultMap="ApprovalResult">
+		select
+			   distinct apvl_no
+		     , ot_date
+             , user_name
+		     , ot_working_hours
+		     , apvl_status
+		  from approval 
+		  join approval_overtime using (apvl_no)
+		  join users u on user_no = apvl_writer
+          join approval_line using (apvl_no)
+		 where user_name like '%' || #{ userName } || '%'
+		 <if test='startday !="" and endday != ""'>
+           and ot_date between #{ startday } and #{ endday }
+         </if>
+		 order
+   			by apvl_no desc
+	</select>
+	
 </mapper>

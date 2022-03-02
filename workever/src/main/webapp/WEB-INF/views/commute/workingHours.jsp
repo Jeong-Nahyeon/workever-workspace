@@ -75,7 +75,7 @@
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			
-			<h3 class="wh_title"><a href="commute.wh">월 근무 내역</a></h3>
+			<h3 class="wh_title"><a href="commute.wh">근무 내역</a></h3>
 			<hr class="wh_underLine">
 
 			<div id="wh_select" style="width: 1000px; margin: auto;">
@@ -118,12 +118,7 @@
 						</tr>
 				  	</thead>
 				  	<tbody>
-						<tr>
-							<td>2022-01-19</td>
-							<td>8:00</td>
-							<td>0</td>
-							<td>8:00</td>
-						</tr>
+
 				  	</tbody>
 				</table>
 			</div>

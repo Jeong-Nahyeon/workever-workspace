@@ -48,7 +48,7 @@
 		margin: 50px 50px 50px 60px;
 	}
 
-	.dateInput, #offdayKinds, #offdayReason {
+	.dateInput, #offdayKind, #offdayReason {
 		font-size: 20px;
 		margin: 0 20px 0 0;
 		border: 2px solid lightgray;
@@ -110,30 +110,26 @@
 			<div style="width: 800px; margin: auto;">
 				<div>
 					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
+					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
 				</div>
 
                 <br>
 
 				<div>
 					<span class="sm_title">종류</span>
-					<select id="offdayKinds" name="offday" style="width: 150px; height: 35px;">
-						<option value="annualLeave">연차</option>
-						<option value="sickLeave">병가</option>
-						<option value="officialLeave">공가</option>
-						<option value="regularLeave">정기휴가</option>
-						<option value="maternityLeave">출산휴가</option>
+					<select id="offdayKind" name="offday" style="width: 150px; height: 35px;">
+						<option value="1">연차</option>
+						<option value="2">병가</option>
+						<option value="3">공가</option>
+						<option value="4">정기휴가</option>
+						<option value="5">출산휴가</option>
 					</select>
-                    
-
-					<span class="sm_title">내용</span>
-					<input type="text" class="dateInput" style="height: 35px;" placeholder="키워드 검색">
 
                     <br>
 
                     <span class="sm_title">이름</span>
-					<input type="text" class="dateInput" style="height: 35px;" placeholder="이름">
-					<button id="doSelBtn">조 회</button>
+					<input type="text" class="dateInput" name="userName" style="height: 35px;" placeholder="이름">
+					<button id="doSelBtn" onclick="ajaxAdSelectDayoffSearch(1)">조 회</button>
 				</div>
 
 			</div>
@@ -154,10 +150,7 @@
 				  	</thead>
 				  	<tbody>
 						<tr>
-							<td>2022-01-19 ~ 2022-01-21</td>
-							<td>이훈이</td>
-							<td>연차</td>
-                            <td>승인</td>
+
 						</tr>
 				  	</tbody>
 				</table>
@@ -251,6 +244,85 @@
 						}
 					})
 					
+				}
+				
+				
+				function ajaxAdSelectDayoffSearch(cpageNo) {
+					
+					$.ajax({
+						url: "adSearch.do",
+						type: "POST",
+						data: {
+							startday: $('input[name=startday]').val(),
+							endday: $('input[name=endday]').val(),
+							offdayKind: $('#offdayKind option:selected').val(),
+							userName : $('input[name=userName]').val(),
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.searchList) {
+		    					value += "<tr>"
+	  						   		   +	"<input type='hidden' name='apvlNo' value='" + result.searchList[i].apvlNo + "'>"
+	    						       +	"<td>" + result.searchList[i].dayoff + "</td>"
+	    						       +	"<td>" + result.searchList[i].apvlWriterName + "</td>"
+		    						       
+	    						           if(result.searchList[i].offKind == 1) { 
+		    						    	   value += "<td>연차</td>";
+		    						       } else if(result.searchList[i].offKind == 2) { 
+		    						    	   value += "<td>병가</td>";
+		    						       } else if(result.searchList[i].offKind == 3) { 
+		    						    	   value += "<td>공가</td>"; 
+		    						       } else if(result.searchList[i].offKind == 4) { 
+		    						    	   value += "<td>정기휴가</td>"; 
+		    						       } else { 
+		    						    	   value += "<td>출산휴가</td>"; 
+		    						       }	   	
+		  
+				    					   if(result.searchList[i].apvlStatus == 'S') {
+											   value += "<td>대기</td>";
+										   } else if(result.searchList[i].apvlStatus == 'I') {
+											   value += "<td>진행중</td>";
+										   } else if(result.searchList[i].apvlStatus == 'C') {
+											   value += "<td>완료</td>";
+										   } else if(result.searchList[i].apvlStatus == 'R') {
+											   value += "<td class='do_return'>반려</td>";
+										   } else {
+											   value += "<td>회수</td>";
+										   }
+				    					   
+		    						   + "</tr>";
+		    				}
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.searchCount);
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("휴가 검색용 ajax 통신실패");
+						}
+					})
 				}
 			</script>
 

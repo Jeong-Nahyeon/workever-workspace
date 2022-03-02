@@ -316,5 +316,36 @@ public class CommuteController {
 		return otReturn;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="search.ot", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxSeletOvertimeSearch(int userNo, String startday, String endday, String keyword, int currentPage) {
+		
+		System.out.println("userNo : " + userNo);
+		System.out.println("startday : " + startday);
+		System.out.println("endday :" + endday);
+		System.out.println("keyword : " + keyword);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userNo", userNo);
+		map.put("startday", startday);
+		map.put("endday", endday);
+		map.put("keyword", keyword);
+		
+		int searchCount = cService.otSelectSearchCount(map);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		System.out.println("Count : " + searchCount);
+		
+		ArrayList<Approval> searchList = cService.otSelectSearchList(map, pi);
+		
+		System.out.println("searchList : " + searchList);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("searchCount", searchCount);
+		result.put("searchList", searchList);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result);
+	}
 	
 }

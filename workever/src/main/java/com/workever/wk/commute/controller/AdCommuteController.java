@@ -96,6 +96,7 @@ public class AdCommuteController {
 	}
 	
 	
+	
 	// 근무 내역
 	
 	@RequestMapping("adCommute.wh")
@@ -128,6 +129,39 @@ public class AdCommuteController {
 		return new Gson().toJson(map);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="adSearch.do", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxAdSelectDayoffSearch(String startday, String endday, int offdayKind, String userName, int currentPage) {
+		
+		System.out.println("startday : " + startday);
+		System.out.println("endday :" + endday);
+		System.out.println("offdayKind : " + offdayKind);
+		System.out.println("userName : " + userName);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startday", startday);
+		map.put("endday", endday);
+		map.put("offdayKind", offdayKind);
+		map.put("userName", userName);
+		
+		int searchCount = cService.adDoSelectSearchCount(map);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		System.out.println("Count : " + searchCount);
+		
+		ArrayList<Approval> searchList = cService.adDoSelectSearchList(map, pi);
+		
+		System.out.println("searchList : " + searchList);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("searchCount", searchCount);
+		result.put("searchList", searchList);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result);
+	}
+	
+	
 	
 	// 연장근무 관리
 	
@@ -152,5 +186,35 @@ public class AdCommuteController {
 		
 		return new Gson().toJson(map);
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="adSearch.ot", method=RequestMethod.POST, produces="application/json; charset=UTF-8")
+	public String ajaxAdSelectOvertimeSearch(String startday, String endday, String userName, int currentPage) {
+		
+		System.out.println("startday : " + startday);
+		System.out.println("endday :" + endday);
+		System.out.println("userName : " + userName);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startday", startday);
+		map.put("endday", endday);
+		map.put("userName", userName);
+		
+		int searchCount = cService.adOtSelectSearchCount(map);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		System.out.println("Count : " + searchCount);
+		
+		ArrayList<Approval> searchList = cService.adOtSelectSearchList(map, pi);
+		
+		System.out.println("searchList : " + searchList);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("searchCount", searchCount);
+		result.put("searchList", searchList);
+		result.put("pi", pi);
+		
+		return new Gson().toJson(result);
 	}
 }

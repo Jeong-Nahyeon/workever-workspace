@@ -75,6 +75,10 @@ public interface CommuteService {
 	int adDoSelectListCount();
 	ArrayList<Approval> adDoSelectList(PageInfo pi);
 	
+	// Admin 휴가 검색용
+	int adDoSelectSearchCount(Map<String, Object> map);
+	ArrayList<Approval> adDoSelectSearchList(Map<String, Object> map, PageInfo pi);
+	
 	
 	/*
 	 * 연장근무 관리
@@ -88,9 +92,18 @@ public interface CommuteService {
 	Approval otSelectReason(int apvlNo);
 	Approval otSelectReturn(int apvlNo);
 	
+	// 연장근무 검색용
+	int otSelectSearchCount(Map<String, Object> map);
+	ArrayList<Approval> otSelectSearchList(Map<String, Object> map, PageInfo pi);
+	
 	// Admin 연장근무 조회용
 	int adOtSelectListCount();
 	ArrayList<Approval> adOtSelectList(PageInfo pi);
+	
+	// Admin 연장근무 검색용
+	int adOtSelectSearchCount(Map<String, Object> map);
+	ArrayList<Approval> adOtSelectSearchList(Map<String, Object> map, PageInfo pi);
+	
 	
 	
 	

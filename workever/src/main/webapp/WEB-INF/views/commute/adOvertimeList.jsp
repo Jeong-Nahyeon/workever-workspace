@@ -93,20 +93,13 @@
             <div style="width: 700px; margin: auto;">
 				<div>
 					<span class="sm_title">날짜</span>
-					<input type="date" class="dateInput"> <b>~</b>&emsp; <input type="date" class="dateInput"> 
-				</div>
-
-                <br>
-
-				<div>
-					<span class="sm_title">업무 내용</span>
-					<input type="text" id="overtimeReason" style="height: 35px;" placeholder="키워드 검색">
+					<input type="date" class="dateInput" name="startday"> <b>~</b>&emsp; <input type="date" class="dateInput" name="endday"> 
 				</div>
 
                 <div>
                     <span class="sm_title">이름</span>
-					<input type="text" class="dateInput" style="height: 35px;" placeholder="이름">
-					<button id="otSelBtn">조 회</button>
+					<input type="text" class="dateInput" name="userName" style="height: 35px;" placeholder="이름">
+					<button id="otSelBtn" onclick="ajaxAdSelectOvertimeSearch(1)">조 회</button>
                 </div>
 
 			</div>
@@ -126,12 +119,7 @@
 						</tr>
 				  	</thead>
 				  	<tbody>
-						<tr>
-							<td>2021-01-24</td>
-							<td>맹구</td>
-							<td>1</td>
-							<td>승인</td>
-						</tr>
+
 				  	</tbody>
 				</table>
 			</div>
@@ -209,6 +197,73 @@
 							
 						}, error:function() {
 							console.log("연장근무리스트 조회용 ajax 통신실패");
+						}
+					})
+				}
+				
+				
+				function ajaxAdSelectOvertimeSearch(cpageNo) {
+					
+					$.ajax({
+						url: "adSearch.ot",
+						type: "POST",
+						data: {
+							startday: $('input[name=startday]').val(),
+							endday: $('input[name=endday]').val(),
+							userName : $('input[name=userName]').val(),
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.searchList) {
+		    					value += "<tr>"
+		    						   +	"<input type='hidden' name='apvlNo' value='" + result.searchList[i].apvlNo + "'>"
+		    						   +	"<td>" + result.searchList[i].otDate + "</td>"
+		    					       + 	"<td>" + result.searchList[i].apvlWriterName + "</td>"
+									   +	"<td>" + result.searchList[i].otWorkingHours + "</td>"	   
+		    					 
+										   if(result.searchList[i].apvlStatus == 'S') {
+											   value += "<td>대기</td>";
+										   } else if(result.searchList[i].apvlStatus == 'I') {
+											   value += "<td>진행중</td>";
+										   } else if(result.searchList[i].apvlStatus == 'C') {
+											   value += "<td>완료</td>";
+										   } else if(result.searchList[i].apvlStatus == 'R') {
+											   value += "<td class='do_return'>반려</td>";
+										   } else {
+											   value += "<td>회수</td>";
+										   }
+										   
+		    					value += "</tr>";
+		    				}
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.searchCount);
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("연장근무 검색용 ajax 통신실패");
 						}
 					})
 				}

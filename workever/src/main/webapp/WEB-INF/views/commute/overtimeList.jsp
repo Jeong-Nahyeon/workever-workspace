@@ -98,8 +98,8 @@
 
 				<div>
 					<span class="sm_title">업무 내용</span>
-					<input type="text" id="overtimeReason" style="height: 35px;" placeholder="키워드 검색">
-					<button id="otSelBtn">조 회</button>
+					<input type="text" id="overtimeReason" name="keyword" style="height: 35px;" placeholder="키워드 검색">
+					<button id="otSelBtn" onclick="ajaxSeletOvertimeSearch(1)">조 회</button>
 				</div>
 
 			</div>
@@ -289,6 +289,75 @@
 						}
 					})
 				})
+				
+				
+				function ajaxSeletOvertimeSearch(cpageNo) {
+				
+					$.ajax({
+						url: "search.ot",
+						type: "POST",
+						data: {
+							userNo: '${loginUser.userNo}',
+							startday: $('input[name=startday]').val(),
+							endday: $('input[name=endday]').val(),
+							keyword : $('input[name=keyword]').val(),
+							currentPage: cpageNo
+						}, success:function(result) {
+							
+							console.log(result);
+							
+							let value="";
+		    				for(let i in result.searchList) {
+		    					value += "<tr>"
+		    						   +	"<input type='hidden' name='apvlNo' value='" + result.searchList[i].apvlNo + "'>"
+		    						   +	"<td>" + result.searchList[i].otDate + "</td>"
+									   +	"<td>" + result.searchList[i].otWorkingHours + "</td>"	   
+		    					       + 	"<td class='text-overflow'><a>" + result.searchList[i].otTitle + "</a></td>";
+		    					 
+										   if(result.searchList[i].apvlStatus == 'S') {
+											   value += "<td>대기</td>";
+										   } else if(result.searchList[i].apvlStatus == 'I') {
+											   value += "<td>진행중</td>";
+										   } else if(result.searchList[i].apvlStatus == 'C') {
+											   value += "<td>완료</td>";
+										   } else if(result.searchList[i].apvlStatus == 'R') {
+											   value += "<td class='ot_return'><a>반려</a></td>";
+										   } else {
+											   value += "<td>회수</td>";
+										   }
+										   
+		    					value += "</tr>";
+		    				}
+		    					    				
+		    				$(".select-area tbody").html(value);
+		    				$("#selectCount").text(result.searchCount);
+		    				
+		    				let paging="";
+		    				if(result.pi.currentPage == 1) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Previous</a></li>";
+		    				} else {
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage-1) +")'>Previous</a></li>";
+		    				}
+							
+		    				for(let p=result.pi.startPage; p<=result.pi.endPage; p++) {
+		    					paging += "<li class='page-item' id='currentPage'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + p + ")'>" + p + "</a></li>";
+		    				}
+							
+		    				if(result.pi.currentPage == result.pi.maxPage) {
+		    					paging += "<li class='page-item disabled'><a class='page-link' onclick='#'>Next</a></li>";
+		    				} else {
+		    					
+		    					paging += "<li class='page-item'><a class='page-link' onclick='ajaxSelectDayoffSearch(" + (result.pi.currentPage+1) + ")'>Next</a></li>";
+		    				}
+		    										
+		    				$(".pagination").html(paging);
+							
+						}, error:function() {
+							console.log("연장근무 검색용 ajax 통신실패");
+						}
+					})
+				}
+				
 			</script>
 	
 		</div>

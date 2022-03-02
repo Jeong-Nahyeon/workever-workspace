@@ -174,6 +174,16 @@ public class CommuteServiceImpl implements CommuteService{
 		return cDao.adDoSelectList(sqlSession, pi);
 	}
 	
+	@Override
+	public int adDoSelectSearchCount(Map<String, Object> map) {
+		return cDao.adDoSelectSearchCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Approval> adDoSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.adDoSelectSearchList(sqlSession, map, pi);
+	}
+	
 	
 	
 	/*
@@ -200,7 +210,16 @@ public class CommuteServiceImpl implements CommuteService{
 	public Approval otSelectReturn(int apvlNo) {
 		return cDao.otSelectReturn(sqlSession, apvlNo);
 	}
+	
+	@Override
+	public int otSelectSearchCount(Map<String, Object> map) {
+		return cDao.otSelectSearchCount(sqlSession, map);
+	}
 
+	@Override
+	public ArrayList<Approval> otSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.otSelectSearchList(sqlSession, map, pi);
+	}
 
 	
 	/*
@@ -216,6 +235,20 @@ public class CommuteServiceImpl implements CommuteService{
 	public ArrayList<Approval> adOtSelectList(PageInfo pi) {
 		return cDao.adOtSelectList(sqlSession, pi);
 	}
+
+	@Override
+	public int adOtSelectSearchCount(Map<String, Object> map) {
+		return cDao.adOtSelectSearchCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Approval> adOtSelectSearchList(Map<String, Object> map, PageInfo pi) {
+		return cDao.adOtSelectSearchList(sqlSession, map, pi);
+	}
+
+	
+
+	
 
 	
 	
