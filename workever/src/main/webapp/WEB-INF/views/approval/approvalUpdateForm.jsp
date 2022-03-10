@@ -80,11 +80,17 @@
 		height:40px; 
 		border-radius: 70%;
 		overflow: hidden;
+		margin:auto;
 	}
-	.profile {
+	.profile, .no-img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+	
+	.no-img{
+		color:lightgrey;
+		font-size:40px;
 	}
 	
 	#userTb>tbody>tr input[type=radio]{
@@ -129,7 +135,14 @@
 												<c:forEach var="list" items="${ lineList }">
 													<tr align="center" height="50px">
 														 <td width="20px" style="font-weight:800;"> ${ list.apvlLineTurn } </td>
-														 <td width="50px"><div class="box" style="background: #BDBDBD;"><img class="profile" src="${ list.apvlLineFilePath }"></div></td>
+														 <c:choose>
+														 	<c:when test="${ list.apvlLineFilePath ne null}">
+															 	<td width="50px"><div class="box" style="background: #BDBDBD;"><img class="profile" src="${ list.apvlLineFilePath }"></div></td>
+														 	</c:when>
+														 	<c:otherwise>
+															 	<td width='50px'><i class='fas fa-user-circle no-img'></i></td>
+														 	</c:otherwise>
+														 </c:choose>
 														 <td width="50px"> ${ list.userName } </td>
 														 <td width="50px"> ${ list.userRank } </td>
 														 <td width="100px"> ${ list.apvlLineDeptName } </td>
@@ -336,12 +349,18 @@
 							
 							for(let i in result){
 								userList += "<tr align='center' height='50px'>"
-										 +		"<td><input type='radio' name='userNo' value='" + result[i].userNo + "' required></td>"
-										 +		"<td><div class='box' style='background: #BDBDBD;'><img class='profile' src='" + result[i].userFilePath + "'></div></td>"
-										 +		"<td>" + result[i].userName + "</td>"
-										 +		"<td>" + result[i].deptName + "</td>"
-										 +		"<td>" + result[i].userRank + "</td>"
-										 +	"</tr>";
+									 +		"<td><input type='radio' name='userNo' value='" + result[i].userNo + "' required></td>"
+									 
+									 if(result[i].userFilePath != null){
+										 userList += "<td><div class='box' style='background: #BDBDBD;'><img class='profile' src='" + result[i].userFilePath + "'></div></td>";
+									 }else{
+										 userList += "<td><i class='fas fa-user-circle no-img'></i></td>";
+									 }
+									 
+							userList +=	    "<td>" + result[i].userName + "</td>"
+									 +		"<td>" + result[i].deptName + "</td>"
+									 +		"<td>" + result[i].userRank + "</td>"
+									 +	"</tr>";
 							}
 						}
 						$("#userTb tbody").html(userList);
@@ -362,15 +381,19 @@
 						let userList = "";
 						if($searchInput.val().length > 0){
 							
-							for(let i in result){
-								userList += "<tr align='center' height='50px'>"
-									 +		"<td><input type='radio' name='userNo' value='" + result[i].userNo + "' required></td>"
-									 +		"<td><div class='box' style='background: #BDBDBD;'><img class='profile' src='" + result[i].userFilePath + "'></div></td>"
-									 +		"<td>" + result[i].userName + "</td>"
-									 +		"<td>" + result[i].deptName + "</td>"
-									 +		"<td>" + result[i].userRank + "</td>"
-									 +	"</tr>";
-							}
+							userList += "<tr align='center' height='50px'>"
+								 +		"<td><input type='radio' name='userNo' value='" + result[i].userNo + "' required></td>"
+								 
+								 if(result[i].userFilePath != null){
+									 userList += "<td><div class='box' style='background: #BDBDBD;'><img class='profile' src='" + result[i].userFilePath + "'></div></td>";
+								 }else{
+									 userList += "<td><i class='fas fa-user-circle no-img'></i></td>";
+								 }
+								 
+						userList +=	    "<td>" + result[i].userName + "</td>"
+								 +		"<td>" + result[i].deptName + "</td>"
+								 +		"<td>" + result[i].userRank + "</td>"
+								 +	"</tr>";
 						}
 						$("#userTb tbody").html(userList);
 					},error:function(){
@@ -394,16 +417,22 @@
 							
 							maxLine++;
 							let	user = "<tr align='center' height='50px'>"
-									 +		"<td width='20px' style='font-weight:800;'>" + maxLine + "</td>"
-									 +		"<td width='50px'><div class='box' style='background: #BDBDBD;'><img class='profile' src='" + result.userFilePath + "'></div></td>"
-									 +		"<td width='50px'>" + result.userName + "</td>"
-									 +		"<td width='50px'>" + result.userRank + "</td>"
-									 +		"<td width='100px'>" + result.deptName + "</td>"
-									 +		"<input type='hidden' name='lineUser' value='" + result.userNo + "'>"
-									 +	"</tr>";
-							
-							$("#lineTb tbody").append(user);
-							$("#userTb tbody").html("");
+								 +		"<td width='20px' style='font-weight:800;'>" + maxLine + "</td>";
+								 
+								if(result.userFilePath != null){
+									 user += "<td width='50px'><div class='box' style='background: #BDBDBD;'><img class='profile' src='" + result.userFilePath + "'></div></td>";
+								 }else{
+									 user += "<td width='50px'><i class='fas fa-user-circle no-img'></i></td>";
+								 }
+								
+					 		user +=		"<td width='50px'>" + result.userName + "</td>"
+								 +		"<td width='50px'>" + result.userRank + "</td>"
+								 +		"<td width='100px'>" + result.deptName + "</td>"
+								 +		"<input type='hidden' name='lineUser' value='" + result.userNo + "'>"
+								 +	"</tr>";
+						
+						$("#lineTb tbody").append(user);
+						$("#userTb tbody").html("");
 							/*lineArr.push(result.userNo);*/
 							
 						},error:function(){

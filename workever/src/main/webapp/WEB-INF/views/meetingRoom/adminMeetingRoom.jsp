@@ -303,11 +303,11 @@
               <table>
               	<tr>
               		<th width="100px" height="40px">회의실 명</th>
-              		<td width="180px"><input type="text" name="mrName" required></td>
+              		<td width="180px"><input type="text" name="mrName" size="17" required></td>
               	</tr>
               	<tr>
               		<th height="40px">위치</th>
-              		<td><input type="text" name="mrPlace" required></td>
+              		<td><input type="text" name="mrPlace" size="17" required></td>
               	</tr>
               </table>
             </div>

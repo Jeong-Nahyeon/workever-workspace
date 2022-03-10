@@ -81,17 +81,17 @@
 	                    	</c:when>
 	                    	<c:when test="${ category eq 'title' }">
 	                    		<button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='receiveList.ap'">전체보기</button><br><br>
-	                    		<p class="searchResult"> "${ keyword }"(으)로 제목 검색 결과<p>
+	                    		<p class="searchResult"> 제목으로 "${ keyword }" 검색 결과<p>
 	                    		<br>
 	                    	</c:when>
 	                    	<c:when test="${ category eq 'kind' }">
 	                    		<button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='receiveList.ap'">전체보기</button><br><br>
-	                    		<p class="searchResult"> "${ keyword }"(으)로 결재 종류 검색 결과<p>
+	                    		<p class="searchResult"> 결재 종류로 "${ keyword }" 검색 결과<p>
 	                    		<br>
 	                    	</c:when>
 	                    	<c:otherwise>
 	                    		<button class="btn a" style="background: #4E73DF; color:white;" onclick="location.href='receiveList.ap'">전체보기</button><br><br>
-	                    		<p class="searchResult">"${ keyword }"(으)로 기안자 이름 검색 결과<p>
+	                    		<p class="searchResult"> 기안자 이름으로 "${ keyword }" 검색 결과<p>
 	                    		<br>
 	                    	</c:otherwise>
 	                    </c:choose>
