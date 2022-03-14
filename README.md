@@ -95,5 +95,5 @@
     + 보낸메일 / 받은메일 삭제
 
 ## :computer:주요기능
-[Workever_주요기능.pdf](https://github.com/Yun-Nakyung/workever-workspace/files/8246700/220303_Workever_._.pdf)
+
 ## :clipboard:Document
