@@ -1,6 +1,9 @@
 # :office:Workever
 > 코로나로 인한 재택근무 증가와 페이퍼리스 시스템의 중요성 증가에 따라 누구나 쉽고 간편하게 사용할 수 있는 그룹웨어 구축 목적
 
+
+![메인페이지](https://user-images.githubusercontent.com/93471500/158441250-35c185cd-0dfa-4195-8a5d-a907300201ea.png)
+
 ## :family:Team
 + 김가연
 + 김란
@@ -95,5 +98,7 @@
     + 보낸메일 / 받은메일 삭제
 
 ## :computer:주요기능
-
+[Workever_주요기능.pdf](https://github.com/Yun-Nakyung/workever-workspace/files/8255970/220303_Workever_.pdf)
 ## :clipboard:Document
+![유스케이스](https://user-images.githubusercontent.com/93471500/158441269-3ef0bfc7-5370-413e-a1aa-1e0f8113b1b1.png)
+![ERD](https://user-images.githubusercontent.com/93471500/158441281-26d74e1f-f1d4-490c-802f-962b00912993.png)
