@@ -28,6 +28,9 @@
 
 
 ## :hammer:사용기술 및 개발환경
+![사용기술](https://user-images.githubusercontent.com/93471500/158441260-9586c81d-a455-4ba1-b691-37b268bc57ae.png)
+
+
 
 ## :heavy_check_mark:프로젝트 기능 구현
 + 공통
@@ -99,6 +102,9 @@
 
 ## :computer:주요기능
 [Workever_주요기능.pdf](https://github.com/Yun-Nakyung/workever-workspace/files/8255970/220303_Workever_.pdf)
+
+
+
 ## :clipboard:Document
 ![유스케이스](https://user-images.githubusercontent.com/93471500/158441269-3ef0bfc7-5370-413e-a1aa-1e0f8113b1b1.png)
 ![ERD](https://user-images.githubusercontent.com/93471500/158441281-26d74e1f-f1d4-490c-802f-962b00912993.png)
