@@ -106,5 +106,9 @@
 
 
 ## :clipboard:Document
++ Usecase Diagram
 ![유스케이스](https://user-images.githubusercontent.com/93471500/158441269-3ef0bfc7-5370-413e-a1aa-1e0f8113b1b1.png)
+
+
++ ER Diagram
 ![ERD](https://user-images.githubusercontent.com/93471500/158441281-26d74e1f-f1d4-490c-802f-962b00912993.png)
