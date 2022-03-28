@@ -123,100 +123,100 @@
 		
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
-		<!-- Content Header (Page header) -->
-		<section class="content-header">
-			<div class="container-fluid">
-			<div class="row mb-2">
-				<div class="col-sm-6">
-				<h1 id="page-title">공지사항 게시글 수정</h1>
-				</div>
-			</div>
-			</div><!-- /.container-fluid -->
-		</section>
-
-		<!-- Main content -->
-		<section class="content">
-			<div class="container-fluid">
-			<div class="row">
-				<div class="col-12">
-				<div class="card"> 
-					
-					<div class="card-body">
-					<form id="board-update-form" action="update.nbo" method="post" enctype="multipart/form-data">
-						
-						<input type="hidden" name="userNo" value="${ loginUser.userNo }" />
-						<input type="hidden" name="nbNo" value="${ nb.nbNo }" />
-						
-						<table id="board-insert-form">
-						<thead>
-							<tr>
-							<th>제목</th>
-							<td>
-								<input type="text" class="form-control" name="nbTitle" value="${ nb.nbTitle }" maxlength="65" required>  
-							</td>
-							</tr>
-							<tr>
-							<th>첨부파일</th>
-							<td style="padding:0">
-								<!-- 히든영역 -->
-      						    <div class="attach-hidden-area"></div>
-      						    
-								<button type="button" id="add-file-btn" class="btn btn-sm">파일추가</button>
-								<span id="attach-comment">첨부파일은 최대 5개까지만 등록 가능합니다</span>
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 id="page-title">공지사항 게시글 수정</h1>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+	
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-12">
+							<div class="card"> 
 								
-								<div class="attach-preview-area">
-									<c:if test="${ not empty list }">
-										<c:forEach var="cf" items="${ list }">
-											<div class="preview">
-									        	<p class="origin-name">${ cf.cfOriginName }</p> 
-									        	<a href="#" name="${ cf.cfNo }" class="existing-file"><i class="fas fa-times"></i></a>
-									        </div>
-									    </c:forEach>    
-							        </c:if>
+								<div class="card-body">
+									<form id="board-update-form" action="update.nbo" method="post" enctype="multipart/form-data">
+										
+										<input type="hidden" name="userNo" value="${ loginUser.userNo }" />
+										<input type="hidden" name="nbNo" value="${ nb.nbNo }" />
+										
+										<table id="board-insert-form">
+											<thead>
+												<tr>
+													<th>제목</th>
+													<td>
+														<input type="text" class="form-control" name="nbTitle" value="${ nb.nbTitle }" maxlength="65" required>  
+													</td>
+												</tr>
+												<tr>
+													<th>첨부파일</th>
+													<td style="padding:0">
+														<!-- 히든영역 -->
+						      						    <div class="attach-hidden-area"></div>
+						      						    
+														<button type="button" id="add-file-btn" class="btn btn-sm">파일추가</button>
+														<span id="attach-comment">첨부파일은 최대 5개까지만 등록 가능합니다</span>
+														
+														<div class="attach-preview-area">
+															<c:if test="${ not empty list }">
+																<c:forEach var="cf" items="${ list }">
+																	<div class="preview">
+															        	<p class="origin-name">${ cf.cfOriginName }</p> 
+															        	<a href="#" name="${ cf.cfNo }" class="existing-file"><i class="fas fa-times"></i></a>
+															        </div>
+															    </c:forEach>    
+													        </c:if>
+														</div>
+													</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr align="center">
+													<th colspan="2" style="padding:10px;">내용</th>
+												</tr>
+												<tr>
+													<td colspan="2">
+														<div class="form-group">
+															<textarea id="board-textarea" class="form-control" name="nbContent" required>${ nb.nbContent }</textarea>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</form>  
 								</div>
-							</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr align="center">
-							<th colspan="2" style="padding:10px;">내용</th>
-							</tr>
-							<tr>
-							<td colspan="2">
-								<div class="form-group">
-								<textarea id="board-textarea" class="form-control" name="nbContent" required>${ nb.nbContent }</textarea>
+								<!-- /.card-body -->
+			
+			
+								<!-- 취소/등록 버튼 영역 -->
+								<div class="card-footer">
+								
+								<div class="board-btns-area">
+									<button type="button" class="btn btn-sm" onclick="location.href = 'detail.nbo?nbno=${ nb.nbNo }';">취소</button>
+									<button type="submit" class="btn btn-sm" form="board-update-form">수정</button>
+								</div>
+			
+								</div>
+								<!-- /.card-footer -->
+			
 							</div>
-							</td>
-							</tr>
-						</tbody>
-						</table>
-					</form>  
+							<!-- /.card -->
+		
+						</div>
+						<!-- /.col -->
 					</div>
-					<!-- /.card-body -->
-
-
-					<!-- 취소/등록 버튼 영역 -->
-					<div class="card-footer">
-					
-					<div class="board-btns-area">
-						<button type="button" class="btn btn-sm" onclick="location.href = 'detail.nbo?nbno=${ nb.nbNo }';">취소</button>
-						<button type="submit" class="btn btn-sm" form="board-update-form">수정</button>
-					</div>
-
-					</div>
-					<!-- /.card-footer -->
-
+					<!-- /.row -->
 				</div>
-				<!-- /.card -->
-
-				</div>
-				<!-- /.col -->
-			</div>
-			<!-- /.row -->
-			</div>
-			<!-- /.container-fluid -->
-		</section>
-		<!-- /.content -->
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
 		</div>
 		<!-- /.content-wrapper -->
 		

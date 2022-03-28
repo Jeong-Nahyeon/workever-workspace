@@ -128,7 +128,7 @@ public class AnonymousBoardDao {
 		
 	}
 	
-	/** 부서별 게시글 수정
+	/** 익명 게시글 수정
 	 * @param sqlSession
 	 * @param nb
 	 * @return
@@ -139,7 +139,7 @@ public class AnonymousBoardDao {
 		
 	}
 	
-	/** 부서별 게시글 수정 시 새로운 첨부파일 등록
+	/** 익명 게시글 수정 시 새로운 첨부파일 등록
 	 * @param sqlSession
 	 * @param list
 	 * @return

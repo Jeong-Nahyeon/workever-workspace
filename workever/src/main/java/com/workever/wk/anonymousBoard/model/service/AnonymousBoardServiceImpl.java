@@ -94,7 +94,7 @@ public class AnonymousBoardServiceImpl implements AnonymousBoardService {
 	}
 
 	/**
-	 * 파일번호로 부서별 게시글 첨부파일 조회 
+	 * 파일번호로 익명 게시글 첨부파일 조회 
 	 */
 	@Override
 	public CommunityFiles selectCommunityFile(int cfNo) {
@@ -104,7 +104,7 @@ public class AnonymousBoardServiceImpl implements AnonymousBoardService {
 	}
 
 	/**
-	 * 파일번호로 부서별 게시글 첨부파일 삭제
+	 * 파일번호로 익명 게시글 첨부파일 삭제
 	 */
 	@Override
 	public int deleteCommunityFile(int cfNo) {
@@ -114,7 +114,7 @@ public class AnonymousBoardServiceImpl implements AnonymousBoardService {
 	}
 
 	/**
-	 * 부서별 게시글 수정 및 새로운 첨부파일 등록
+	 * 익명 게시글 수정 및 새로운 첨부파일 등록
 	 */
 	@Override
 	public int updateAnonymousBoard(AnonymousBoard ab, ArrayList<CommunityFiles> list) {

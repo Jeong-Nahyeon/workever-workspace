@@ -192,10 +192,10 @@
 		            <!-- 관리자일 경우에만 보임 -->
 		            <div class="card-header board-btns-area"> 
 		            
-		            <c:if test="${ loginUser.userRank eq '관리자' }">
-		              <button type="button" class="btn btn-sm btn-default update-btn" onclick="postFormSubmit(1);">수정</button>
-		              <button type="button" id="delete-modal-btn" class="btn btn-sm delete-btn" onclick="postFormSubmit(2);">삭제</button>
-		            </c:if>  
+			            <c:if test="${ loginUser.userRank eq '관리자' }">
+			              <button type="button" class="btn btn-sm btn-default update-btn" onclick="postFormSubmit(1);">수정</button>
+			              <button type="button" id="delete-modal-btn" class="btn btn-sm delete-btn" onclick="postFormSubmit(2);">삭제</button>
+			            </c:if>  
 		            
 		            </div>
 		            <!-- /.card-header -->

@@ -126,11 +126,11 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<div class="container-fluid">
-				<div class="row mb-2">
-					<div class="col-sm-6">
-					<h1 id="page-title">${ deptName } 게시글 수정</h1>
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 id="page-title">${ deptName } 게시글 수정</h1>
+						</div>
 					</div>
-				</div>
 				</div><!-- /.container-fluid -->
 			</section>
 	
@@ -154,12 +154,12 @@
 													<th>작성자</th>
 													<td width="50%">${ db.userName }</td> 
 													<th>카테고리</th>
-												<td>
-													<select name="dbCategory" class="form-control">
-														<option>카테고리 선택</option>
-														<option value="N">공지</option>
-													</select>
-												</td>
+													<td>
+														<select name="dbCategory" class="form-control">
+															<option>카테고리 선택</option>
+															<option value="N">공지</option>
+														</select>
+													</td>
 												</tr>
 												<tr>
 													<th>제목</th>
