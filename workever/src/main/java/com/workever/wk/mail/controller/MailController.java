@@ -700,7 +700,7 @@ public class MailController {
 			
 		}
 		
-		return result1 * result2 > 0 ? new Gson().toJson("success") : new Gson().toJson("success");
+		return result1 * result2 > 0 ? new Gson().toJson("success") : new Gson().toJson("fail");
 		
 	}
 	
