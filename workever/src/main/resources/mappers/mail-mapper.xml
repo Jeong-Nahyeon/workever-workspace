@@ -228,7 +228,7 @@
 		  join users u on (ms_user_no = user_no)
 		  join dept d on (u.dept_no = d.dept_no)
 		 where mr_status = 'Y' 
-		   and mr_no = ${mrNo}
+		   and mr_no = #{mrNo}
 	</select>
 	
 	<select id="selectCcList" resultMap="mailResult">
